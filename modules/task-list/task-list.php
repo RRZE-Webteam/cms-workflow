@@ -93,7 +93,7 @@ class Workflow_Task_List extends Workflow_Module {
     }
         
     public function metabox_post() {
-        global  $wpdb, $post_id; 
+        global $post_id; 
         
         $post = get_post($post_id);
         $current_user = wp_get_current_user();
@@ -173,25 +173,24 @@ class Workflow_Task_List extends Workflow_Module {
         
         $data = get_post_meta($post_id, self::postmeta_key);
         
-        $data = json_decode(json_encode($data), false);
-        
-        $data = $this->task_list_order_page_result( $data );
-        
-        if( count( $data ) == 0 ) {
-            echo '<p id="task-list-no-tasks-available">'.__('Keine Aufgaben gefunden.', CMS_WORKFLOW_TEXTDOMAIN).'</p>';
-        } else {
+        if(!empty($data) ) {
+            $data = json_decode(json_encode($data), false);
+            $data = $this->task_list_order_page_result( $data );
             
             foreach( $data as $task ) {
                 $this->task_list_print_task( $task );
             }
+            
+        } else { 
+            echo '<p id="task-list-no-tasks-available">'.__('Keine Aufgaben gefunden.', CMS_WORKFLOW_TEXTDOMAIN).'</p>';
         }
     }
     
-    private function task_list_order_page_result( $data ) {
-        global $current_user;
+    private function task_list_order_page_result( $data ) {                
+        $current_user = wp_get_current_user();
         
         $return_array = array();
-        
+                
         foreach( $data as $value ) {           
             if( $value->task_author == $current_user->ID && empty($value->task_done) )
                 $return_array[] = $value;
@@ -388,8 +387,6 @@ class Workflow_Task_List extends Workflow_Module {
 
         $post_id = (int) $_REQUEST['post_id'];
         $task_id = (int) $_REQUEST['task_id'];
-
-        $current_user = wp_get_current_user();
         
         $data = get_post_meta($post_id, self::postmeta_key);
         
@@ -496,4 +493,3 @@ class Workflow_Task_List extends Workflow_Module {
     
     
 }
-    
