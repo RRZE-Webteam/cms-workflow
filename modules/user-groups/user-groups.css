@@ -1,0 +1,97 @@
+.workflow-groups-list {
+}
+
+.workflow-groups-list li {
+    padding: 10px 5px 5px 5px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.workflow-groups-list li:hover {
+    background: #EAF2FA;
+}
+
+.workflow-groups-list li input {
+    float: right;
+}
+
+.workflow-groups-list .workflow-user-displayname,
+.workflow-groups-list .workflow-usergroup-name {
+    display: block;
+    font-size: 14px;
+}
+
+.workflow-groups-list .workflow-user-useremail,
+.workflow-groups-list .workflow-usergroup-description {
+    display: block;
+    color: #ccc;
+    font-size: 12px;
+}
+
+#workflow-groups-box {
+    margin: 10px 0;
+}
+
+#workflow-groups-box h4 {
+    background: #F1F1F1;
+    font-weight: bold;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid #DFDFDF;
+    -moz-border-radius: 3px;
+}
+
+#workflow-groups-box label.workflow-select-all-box {
+    float: right;
+    margin: -20px 10px;
+}
+
+#workflow-groups-box label.workflow-select-all-box input {
+    margin-bottom: 5px;
+}
+
+#workflow-groups-users-box,
+#workflow-groups-usergroups-box {
+    width: 49%;
+}
+
+#workflow-groups-users-box {
+    float: left;
+    margin-right: 10px;
+}
+
+#workflow-groups-usergroups-box {
+    float: right;
+}
+
+#workflow-groups-users-box .workflow-groups-list,
+#workflow-groups-usergroups-box .workflow-groups-list {
+    height: 300px;
+    overflow: auto;
+}
+
+#workflow-groups-users-box .list-filterizer-tools,
+#workflow-groups-usergroups-box .list-filterizer-tools {
+    margin-top: 5px;
+}
+
+#profile-page #groups-usergroups {
+    width: 300px;
+}
+
+#workflow-usergroup-users form.quicksearch,
+#workflow-groups-users-box form.quicksearch {
+    display: none;
+}
+
+#workflow-usergroup-users h4 {
+    margin-top: 0;
+}
+
+.inline-edit-row fieldset label span.title {
+    width: 7em !important;
+}
+
+.inline-edit-row fieldset label span.input-text-wrap {
+    margin-left: 7em !important;
+}

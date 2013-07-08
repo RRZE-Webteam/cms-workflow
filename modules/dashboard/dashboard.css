@@ -1,0 +1,89 @@
+#workflow-recent-drafts ul {
+    list-style: none outside none;
+}
+
+#workflow-recent-drafts ul, #workflow-recent-drafts p {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+#workflow-recent-drafts ul li {
+    margin-bottom: 1em;
+}
+
+#workflow-recent-drafts h4 {
+    line-height: 1.7em;
+    word-wrap: break-word;
+}
+
+#workflow-recent-drafts abbr {
+    color: #999999;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 3px;
+}
+
+#workflow-pending-drafts ul {
+    list-style: none outside none;
+}
+
+#workflow-pending-drafts ul, #workflow-pending-drafts p {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+#workflow-pending-drafts ul li {
+    margin-bottom: 1em;
+}
+
+#workflow-pending-drafts h4 {
+    line-height: 1.7em;
+    word-wrap: break-word;
+}
+
+#workflow-pending-drafts abbr {
+    color: #999999;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 3px;
+}
+
+#workflow-task-list ul {
+    list-style: none outside none;
+}
+
+#workflow-task-list ul, #workflow-task-list p {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+}
+
+#workflow-task-list ul li {
+    margin-bottom: 1em;
+}
+
+#workflow-task-list h4 {
+    line-height: 1.7em;
+    word-wrap: break-word;
+}
+
+#workflow-task-list abbr {
+    color: #999999;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 3px;
+}
+
+.priority-2 {
+    background-color: #E9F2D3 !important;
+}
+
+.priority-3 {
+    background-color: #FFECE6 !important;
+}
+

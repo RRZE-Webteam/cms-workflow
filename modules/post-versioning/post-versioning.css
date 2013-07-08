@@ -1,0 +1,26 @@
+.status-draft {
+    background: #ffffe0 !important;
+}
+
+.version .check-column {
+    background-color: #797979 !important;
+}
+
+.status-future {
+    background-color: #E9F2D3 !important;
+}
+
+.status-publish {
+}
+
+.status-pending {
+    background-color: #D3E4ED !important;
+}
+
+.status-private {
+    background-color: #FFECE6 !important;
+}
+
+.post-password-required {
+    background-color: #ff9894 !important;
+}
