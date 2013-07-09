@@ -223,7 +223,7 @@ jQuery(document).ready(function($) {
                     task_title:     $("#new-task-title").val(),
                     task_adder:     task_list_vars.current_user_id,
                     task_description:     $("#new-task-description").val(),
-                    task_author:    0,
+                    task_author:    task_author,
                     task_priority:  $("#task-priority").val(),
                     post_id:        task_list_vars.post_id,
                     nonce:          task_list_vars.nonce_task_list_ajax_print_after_new_task
