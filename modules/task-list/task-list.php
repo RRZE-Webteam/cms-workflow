@@ -61,6 +61,9 @@ class Workflow_Task_List extends Workflow_Module {
     public function post_page_metabox( ) {
         global $post;
         
+        if($post->post_status == 'auto-draft')
+            return;
+        
         $current_user = wp_get_current_user(); 
         
         wp_enqueue_style( 'workflow-task-list', $this->module->module_url . 'task-list.css', false, CMS_WORKFLOW_VERSION );
@@ -217,17 +220,14 @@ class Workflow_Task_List extends Workflow_Module {
         $task_title_style   = ' style="text-decoration: none;"';
         $task_date_added    = date_i18n(get_option('date_format'), $task->task_timestamp );
         $task_adder         = get_userdata( $task->task_adder )->display_name;
-        $task_description         = stripslashes( $task->task_description );
-        $task_author        = __('Alle Autoren', CMS_WORKFLOW_TEXTDOMAIN);
+        $task_description   = stripslashes( $task->task_description );
+        $task_author        = !empty($task->task_author) ? get_userdata( $task->task_author )->display_name : __('Alle Autoren', CMS_WORKFLOW_TEXTDOMAIN);
         $task_priority      = self::task_list_get_textual_priority( $task->task_priority );
         $task_done_details  = @unserialize( $task->task_done );
         
         if( $current_user->ID == $task->task_author )
             $task_title_display = '* '.$task_title;
-        
-        if( $task->task_author != 0 )
-            $task_author    = get_userdata( $task->task_author )->display_name;
-        
+               
         if( is_array( $task_done_details) ) {
             $done_checked       = ' checked="checked"';
             $task_title_style   = ' style="text-decoration: line-through;"';
@@ -280,7 +280,6 @@ class Workflow_Task_List extends Workflow_Module {
     }
         
     public function task_list_ajax_print_after_new_task() {
-        global $wpdb;
         
         check_ajax_referer( 'task_list_ajax_print_after_new_task', 'nonce' );
         
@@ -309,7 +308,7 @@ class Workflow_Task_List extends Workflow_Module {
         foreach( $_REQUEST as $key => $value ) {
             $data->$key = $value;
         }
-        
+
         echo $this->task_list_print_task( $data );
         exit;
     }
@@ -402,7 +401,6 @@ class Workflow_Task_List extends Workflow_Module {
     }
     
     public function task_list_ajax_new_task() {
-        global $wpdb;
         
         check_ajax_referer( 'task_list_ajax_new_task', 'nonce' );
         
