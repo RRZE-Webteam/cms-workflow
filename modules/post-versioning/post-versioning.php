@@ -481,7 +481,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
 
             wp_delete_post( $post_id, true ); // Bypass trash and force deletion (default: false)
-            wp_safe_redirect( admin_url( '/post.php?post=' . $org_id . '&action=edit&message=1' ) );
+            wp_safe_redirect( admin_url( 'post.php?post=' . $org_id . '&action=edit&message=1' ) );
             exit;
         }
     }

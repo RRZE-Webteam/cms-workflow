@@ -147,7 +147,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 					<span id="workflow-replybtn"><?php _e('Senden', CMS_WORKFLOW_TEXTDOMAIN) ?></span>
 				</a>
 				<a class="workflow-replycancel button-secondary alignright" href="#comments-form"><?php _e( 'Abbrechen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
-				<img alt="Kommentar hinzufügen" src="<?php echo admin_url('/images/wpspin_light.gif') ?>" class="alignright" style="display: none;" id="workflow-comment_loading" />
+				<img alt="Kommentar hinzufügen" src="<?php echo admin_url('images/wpspin_light.gif') ?>" class="alignright" style="display: none;" id="workflow-comment_loading" />
 				<br class="clear" style="margin-bottom:35px;" />
 				<span style="display: none;" class="error"></span>
 			</p>

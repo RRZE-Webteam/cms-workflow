@@ -258,7 +258,7 @@ class Workflow_Notifications extends Workflow_Module {
 		$body .= "\r\n \r\n";
 		$body .= sprintf( __( 'Sie erhalten diese E-Mail, weil Sie Autor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN ), $this->draft_or_post_title($post->ID ) );
 		$body .= "\r\n \r\n";
-		$body .= get_option('blogname') ."\r\n". get_bloginfo('url') . "\r\n" . admin_url('/') . "\r\n";
+		$body .= get_option('blogname') ."\r\n". get_bloginfo('url') . "\r\n" . admin_url() . "\r\n";
 		return $body;
 	} 
 	
