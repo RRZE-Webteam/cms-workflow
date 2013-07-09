@@ -37,7 +37,7 @@ class Workflow_Task_List extends Workflow_Module {
         self::$priorities = array(
                 '1' => _('Niedrig', CMS_WORKFLOW_TEXTDOMAIN),
                 '2' => _('Normal', CMS_WORKFLOW_TEXTDOMAIN),
-                '3' => _('Hoch', CMS_WORKFLOW_TEXTDOMAIN)        
+                '3' => _('Hoch', CMS_WORKFLOW_TEXTDOMAIN)
         );
         
 		$this->module = $cms_workflow->register_module( 'task_list', $args );
@@ -148,11 +148,19 @@ class Workflow_Task_List extends Workflow_Module {
                     <label for="task-priority"><?php _e('Priorität', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                     <br />
                     <?php
+                    $priorities = array_keys(self::$priorities);
+                    sort($priorities);
+                    $size = sizeof($priorities);
+                    if($size % 2 == 0)
+                        $default_priority = $priorities[$size / 2 - 1];
+                    else
+                        $default_priority = $priorities[floor( $size / 2)];
+                    
                     echo '<select id="task-priority">';
-                    foreach ( self::$priorities as $value => $label ) {
-                        echo '<option value="' . esc_attr( $value ) . '"';
-                        echo selected( _('Normal', CMS_WORKFLOW_TEXTDOMAIN), self::$priorities[$value] );			
-                        echo '>' . esc_html( $label ) . '</option>';
+                    foreach ( self::$priorities as $key => $value ) {
+                        echo '<option value="' . esc_attr( $key ) . '"';
+                        echo selected( $default_priority, $key );			
+                        echo '>' . esc_html( $value ) . '</option>';
                     }
                     echo '</select>';
                     ?>
