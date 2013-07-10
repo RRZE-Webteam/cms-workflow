@@ -115,11 +115,11 @@ class Workflow_Task_List extends Workflow_Module {
                 <form method="post">
                     <label for="new-task-title" id="new-task-title-label"><?php _e('Titel', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                     <br />
-                    <input type="text" name="new-task-title" id="new-task-title" style="width: 250px;" />
+                    <input type="text" name="new-task-title" id="new-task-title" />
                     <br />
                     <label for="new-task-description"><?php _e('Beschreibung', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                     <br />
-                    <textarea rows="2" name="new-task-description" id="new-task-description" style="width: 250px;" /></textarea>
+                    <textarea rows="2" name="new-task-description" id="new-task-description" /></textarea>
                     <br />
                 <?php
                 $authors = array();
@@ -241,7 +241,7 @@ class Workflow_Task_List extends Workflow_Module {
             $task_title_style   = ' style="text-decoration: line-through;"';
         } 
         ?>        
-        <div class="task-item" style="margin-bottom: 5px;">
+        <div class="task-item">
             <a class="task-item-link" href="#" title="<?php echo $task_title; ?>"<?php echo @$task_title_style; ?>><?php echo $task_title_display; ?></a>
             <div class="task-item-content">
                 <div class="task-content-body">
@@ -251,11 +251,11 @@ class Workflow_Task_List extends Workflow_Module {
                     <p class="task-description"><?php echo $task_description; ?></p>
                 
                     <?php if( is_array( $task_done_details ) ): ?>
-                    <p class="marked-as-done" style="font-style: italic;"><?php printf(__('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN), get_userdata( $task_done_details['marker'] )->display_name, date_i18n(get_option('date_format'), $task_done_details['date'] ));?></p>
+                    <p class="marked-as-done"><?php printf(__('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN), get_userdata( $task_done_details['marker'] )->display_name, date_i18n(get_option('date_format'), $task_done_details['date'] ));?></p>
                     <?php endif;?>
                 </div>
-                <div style="margin-top: 8px;">
-                    <div style="float: left; width: 50%;">
+                <div class="task-actions">
+                    <div class="task-actions-left">
                     <?php if( $task->task_author != $current_user->ID ): ?>                        
                         <p>
                             <a href="#" class="task-self-assignment" rel="<?php echo $task->task_id; ?>"><?php _e('Aufgabe annehmen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
@@ -271,7 +271,7 @@ class Workflow_Task_List extends Workflow_Module {
                         </p>                     
                     <?php endif; ?>                                                                          
                     </div>
-                    <div style="float: right; width: 50%;">
+                    <div class="task-actions-right">
                         <p>
                             <input type="checkbox" name="mark-as-done" class="mark-as-done" value="<?php echo $task->task_id; ?>"<?php echo @$done_checked; ?> /> <?php _e('Aufgabe erledigt', CMS_WORKFLOW_TEXTDOMAIN);?>
                         </p>                        

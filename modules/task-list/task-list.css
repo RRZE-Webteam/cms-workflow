@@ -1,3 +1,12 @@
+#new-task-form input[type="text"],
+#new-task-form textarea {
+    width: 250px;
+}
+
+.task-item {
+    margin-bottom: 5px;
+}
+
 .task-item-content {
     display: none; 
     margin-left: 10px;
@@ -11,8 +20,20 @@
     margin-top: 2px;
 }
 
-p.task-description {
-    margin-right: 0.2em;
+.task-description,
+.marked-as-done,
+.task-actions {
+    margin-top: 8px !important;
+}
+
+.task-actions-left {
+    float: left;
+    width: 50%;
+}
+
+.task-actions-right {
+    float: right;
+    width: 50%;
 }
 
 .task-added {
@@ -26,7 +47,7 @@ p.task-description {
     font-weight: bold;
 }
 
-.marked_as_done {
+.marked-as-done {
     font-style: italic;
 }
 
