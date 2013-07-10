@@ -95,29 +95,21 @@ class Workflow_Authors extends Workflow_Module {
     public function deactivation($networkwide) {
         global $cms_workflow;
         
-        $options = $this->module->options->role_caps;
         $role =& get_role( self::role );
 
-        foreach($options as $key => $value) {
+        foreach($this->module->options->role_caps as $key => $value) {
             $role->remove_cap( $key );
         }
 
         foreach($this->system_caps as $key => $value) {
             $role->add_cap( $key );
         }
-           
-        $cms_workflow->update_module_option( $this->module->name, 'role_caps', $system_caps );
+        
     }
   
     public function set_role_caps() {
         global $cms_workflow;
-        
-        if (empty( $this->module->options->role_caps ) ) {
-            $system_caps = array_map(function($item) { return true; }, $this->system_caps);
-            $cms_workflow->update_module_option( $this->module->name, 'role_caps', $system_caps );
-            $this->module->options->role_caps = $system_caps;
-        }
-        
+                
         $all_post_types = $this->get_available_post_types();
 
         $this->role_caps = $this->system_caps;
@@ -129,6 +121,25 @@ class Workflow_Authors extends Workflow_Module {
             $this->role_caps[$args->cap->delete_published_posts] = sprintf('Veröffentlichte %s löschen', $args->label);
         }
 
+        if (empty( $this->module->options->role_caps ) ) {
+            
+            $system_caps = array_map(function($item) { return true; }, $this->system_caps);
+            $cms_workflow->update_module_option( $this->module->name, 'role_caps', $system_caps );
+            $this->module->options->role_caps = $system_caps;
+            
+        } else {
+            
+            $role =& get_role( self::role );
+
+            foreach($this->role_caps as $key => $value) {
+                $role->remove_cap( $key );
+            }
+
+            foreach($this->module->options->role_caps as $key => $value) {
+                $role->add_cap( $key );
+            }
+        }
+        
     }
     
 	public function register_taxonomies() {
