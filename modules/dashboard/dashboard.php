@@ -101,11 +101,12 @@ class Workflow_Dashboard extends Workflow_Module {
                 $url = get_edit_post_link( $post->ID );
                 $title = _draft_or_post_title( $post->ID );
                 $last_id = get_post_meta( $post->ID, '_edit_last', true);
-                $last_user = get_userdata($last_id);
-                $last_modified = esc_html( $last_user->display_name );
+                if($last_id)
+                    $last_modified = esc_html( get_userdata($last_id)->display_name );
                 
                 $item  = sprintf('<h4><a href="%1$s">%2$s</a><abbr> (%3$s)</abbr></h4>', $url, esc_html($title), $post_type->labels->singular_name);
-                $item .= sprintf('<abbr>'.__('Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN).'</abbr>', $last_modified, mysql2date(get_option('date_format'), $post->post_modified), mysql2date(get_option('time_format'), $post->post_modified));
+                if(isset($last_modified))
+                    $item .= sprintf('<abbr>'.__('Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN).'</abbr>', $last_modified, mysql2date(get_option('date_format'), $post->post_modified), mysql2date(get_option('time_format'), $post->post_modified));
                 
                 $the_content = preg_split( '#\s#', strip_shortcodes(strip_tags( $post->post_content ), 11, PREG_SPLIT_NO_EMPTY ));
                 if ( $the_content )
@@ -161,11 +162,12 @@ class Workflow_Dashboard extends Workflow_Module {
                 $url = get_edit_post_link( $post->ID );
                 $title = _draft_or_post_title( $post->ID );
                 $last_id = get_post_meta( $post->ID, '_edit_last', true);
-                $last_user = get_userdata($last_id);
-                $last_modified = esc_html( $last_user->display_name );
+                if($last_id)
+                    $last_modified = esc_html( get_userdata($last_id)->display_name );
                 
                 $item  = sprintf('<h4><a href="%1$s">%2$s</a><abbr> (%3$s)</abbr></h4>', $url, esc_html($title), $post_type->labels->singular_name);
-                $item .= sprintf('<abbr>'.__('Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN).'</abbr>', $last_modified, mysql2date(get_option('date_format'), $post->post_modified), mysql2date(get_option('time_format'), $post->post_modified));
+                if(isset($last_modified))
+                    $item .= sprintf('<abbr>'.__('Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN).'</abbr>', $last_modified, mysql2date(get_option('date_format'), $post->post_modified), mysql2date(get_option('time_format'), $post->post_modified));
                 
                 $the_content = preg_split( '#\s#', strip_shortcodes(strip_tags( $post->post_content ), 11, PREG_SPLIT_NO_EMPTY ));
                 if ( $the_content )
