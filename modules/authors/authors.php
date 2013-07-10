@@ -107,19 +107,10 @@ class Workflow_Authors extends Workflow_Module {
         
     }
   
-    public function set_role_caps() {
+    public function activation() {
         global $cms_workflow;
-                
-        $all_post_types = $this->get_available_post_types();
-
-        $this->role_caps = $this->system_caps;
-        foreach( $all_post_types as $post_type => $args ) {
-            $this->role_caps[$args->cap->edit_posts] = sprintf('%s bearbeiten', $args->label);
-            $this->role_caps[$args->cap->publish_posts] = sprintf('%s veröffentlich', $args->label);
-            $this->role_caps[$args->cap->delete_posts] = sprintf('%s löschen', $args->label);
-            $this->role_caps[$args->cap->edit_published_posts] = sprintf('Veröffentlichte %s bearbeiten', $args->label);
-            $this->role_caps[$args->cap->delete_published_posts] = sprintf('Veröffentlichte %s löschen', $args->label);
-        }
+        
+        $this->set_role_caps();
 
         if (empty( $this->module->options->role_caps ) ) {
             
@@ -138,6 +129,22 @@ class Workflow_Authors extends Workflow_Module {
             foreach($this->module->options->role_caps as $key => $value) {
                 $role->add_cap( $key );
             }
+        }
+        
+    }
+    
+    public function set_role_caps() {
+        
+        $all_post_types = $this->get_available_post_types();
+
+        $this->role_caps = $this->system_caps;
+        
+        foreach( $all_post_types as $post_type => $args ) {
+            $this->role_caps[$args->cap->edit_posts] = sprintf('%s bearbeiten', $args->label);
+            $this->role_caps[$args->cap->publish_posts] = sprintf('%s veröffentlich', $args->label);
+            $this->role_caps[$args->cap->delete_posts] = sprintf('%s löschen', $args->label);
+            $this->role_caps[$args->cap->edit_published_posts] = sprintf('Veröffentlichte %s bearbeiten', $args->label);
+            $this->role_caps[$args->cap->delete_published_posts] = sprintf('Veröffentlichte %s löschen', $args->label);
         }
         
     }
