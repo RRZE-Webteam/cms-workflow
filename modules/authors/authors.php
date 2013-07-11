@@ -93,8 +93,6 @@ class Workflow_Authors extends Workflow_Module {
 	}
 	
     public function deactivation($networkwide) {
-        global $cms_workflow;
-        
         $role =& get_role( self::role );
 
         foreach($this->module->options->role_caps as $key => $value) {
@@ -114,9 +112,8 @@ class Workflow_Authors extends Workflow_Module {
 
         if (empty( $this->module->options->role_caps ) ) {
             
-            $system_caps = array_map(function($item) { return true; }, $this->system_caps);
-            $cms_workflow->update_module_option( $this->module->name, 'role_caps', $system_caps );
-            $this->module->options->role_caps = $system_caps;
+            $this->module->options->role_caps = array_map(function($item) { return true; }, $this->system_caps);
+            $cms_workflow->update_module_option( $this->module->name, 'role_caps', $this->module->options->role_caps );
             
         } else {
             
@@ -139,7 +136,7 @@ class Workflow_Authors extends Workflow_Module {
 
         $this->role_caps = $this->system_caps;
         
-        foreach( $all_post_types as $post_type => $args ) {
+        foreach( $all_post_types as $args ) {
             $this->role_caps[$args->cap->edit_posts] = sprintf('%s bearbeiten', $args->label);
             $this->role_caps[$args->cap->publish_posts] = sprintf('%s veröffentlich', $args->label);
             $this->role_caps[$args->cap->delete_posts] = sprintf('%s löschen', $args->label);
@@ -191,7 +188,7 @@ class Workflow_Authors extends Workflow_Module {
 	}
 	
 	public function authors_meta_box() {
-		global $post, $post_ID, $cms_workflow;
+		global $post, $cms_workflow;
 
 		?>
 		<div id="workflow-post-authors-box">
@@ -318,8 +315,6 @@ class Workflow_Authors extends Workflow_Module {
 	}
 
     public function delete_post_user( $post, $user = 0 ) {
-		global $current_user;
-		
 		$post_id = $post->ID;
 
         if(!$post_id || !$user || $user->ID == 0)
@@ -329,7 +324,7 @@ class Workflow_Authors extends Workflow_Module {
 		
 		if( term_exists($name, self::taxonomy_key) ) {
 			$set = wp_set_object_terms( $post->ID, $name, self::taxonomy_key, true );
-			$old_term_ids =  wp_get_object_terms($post_id, self::taxonomy_key, array('fields' => 'ids', 'orderby' => 'none'));
+			$old_term_ids = wp_get_object_terms($post_id, self::taxonomy_key, array('fields' => 'ids', 'orderby' => 'none'));
 	
 		}
 		
@@ -398,7 +393,7 @@ class Workflow_Authors extends Workflow_Module {
 		if($reassign_id) {
 			$reassign_user = get_user_by( 'id', $reassign_id );
 			if( is_object( $reassign_user ) ) {
-				$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_author = %d", $delete_id ) );
+				$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_author = %d", $id ) );
 
 				if ( $post_ids ) {
 					foreach ( $post_ids as $post_id ) {
@@ -656,9 +651,9 @@ class Workflow_Authors extends Workflow_Module {
 	}
     
 	public function filter_views( $views ) {
-        global $locked_post_status;
-            
-		if ( !empty($locked_post_status) )
+        global $wpdb;
+        
+        if ( empty( $views ) )
 			return $views;
         
         $post_type = get_post_type();
@@ -674,28 +669,39 @@ class Workflow_Authors extends Workflow_Module {
         if( !$user)
             return $views;
         
+        $user_id = $user->ID;
+        
         $mine_args = array();
         if($post_type != 'post')
             $mine_args['post_type'] = $post_type;
         
-        $mine_args['author'] = $user->ID;
-	
-		$post_args = array(
-            'post_type' => $post_type,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => self::taxonomy_key,
-                    'field' => 'slug',
-                    'terms' => $user->user_login
-                )
-            )
+        $mine_args['author'] = $user_id;
 
-		);
+        $terms = array();
+        $coauthor = $this->get_coauthor_by( 'id', $user_id );
+
+        $author_term = $this->get_author_term( $coauthor );                    
+        if ( $author_term )
+            $terms[] = $author_term;
         
-        $query = new WP_Query( $post_args );
+        if ( !empty( $terms ) ) {
+            $terms_implode = '';
+            foreach( $terms as $term ) {
+                $terms_implode .= '(' . $wpdb->term_taxonomy . '.taxonomy = \''. self::taxonomy_key.'\' AND '. $wpdb->term_taxonomy .'.term_id = \''. $term->term_id .'\') OR ';
+            }
+            $terms_implode = 'OR (' . rtrim( $terms_implode, ' OR' ) . ')';
+        }
+        
+        $post_count = $wpdb->get_var(
+            "SELECT COUNT( DISTINCT $wpdb->posts.ID ) AS post_count
+            FROM $wpdb->posts 
+            LEFT JOIN $wpdb->term_relationships ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id) 
+            LEFT JOIN $wpdb->term_taxonomy ON ( $wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id ) 
+            WHERE 1=1 
+            AND ($wpdb->posts.post_author = $user_id $terms_implode) 
+            AND $wpdb->posts.post_type = 'post' 
+            AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
 
-		$count = $query->post_count;
- 
         $match = array_filter($views, function($views) { return(strpos($views, 'class="current"')); });
         if ( !empty( $_REQUEST['author'] ) || array_key_exists('mine', $match) )
 			$class = ' class="current"';		
@@ -704,10 +710,10 @@ class Workflow_Authors extends Workflow_Module {
         
         $labels = $this->get_post_type_labels();
         
-        if($current_user_id == $user->ID)
-            $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%3$s)</span>', 'Meine %2$s <span class="count">(%3$s)</span>', $count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $count ) );
+        if($current_user_id == $user_id)
+            $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%3$s)</span>', 'Meine %2$s <span class="count">(%3$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $post_count ) );
         else
-            $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $count ), $user->display_name );
+            $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $post_count ), $user->display_name );
         
 		$mine_view['mine'] = '<a' . $class . ' href="' . add_query_arg( $mine_args, admin_url( 'edit.php' ) ) . '">' . $mine . '</a>';
         
@@ -928,8 +934,7 @@ class Workflow_Authors extends Workflow_Module {
 			'order' => 'DESC',
 		);
         
-		$post_args = apply_filters( 'workflow_user_authors_posts_query_args', $post_args );
-		$posts = get_posts( $post_args );
+		$posts = get_posts( apply_filters( 'workflow_user_authors_posts_query_args', $post_args ) );
 		return $posts;
 
 	}
