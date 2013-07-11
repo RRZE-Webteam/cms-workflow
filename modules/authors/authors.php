@@ -535,7 +535,6 @@ class Workflow_Authors extends Workflow_Module {
 
 		$caps_to_modify = array(
 				$obj->cap->edit_post,
-				//'edit_post',
 				$obj->cap->edit_others_posts
 			);
         
@@ -615,12 +614,12 @@ class Workflow_Authors extends Workflow_Module {
 
 			$count = 1;
 			foreach( $authors as $author ) :
-				$args = array(
-                    'author_name' => $author->user_nicename,
-				);
+				$args = array();
             
 				if ( 'post' != $post->post_type )
 					$args['post_type'] = $post->post_type;
+                
+                $args['author'] = $author->ID;
                 
 				$author_filter_url = add_query_arg( $args, admin_url( 'edit.php' ) );
                 $separator = $count < count( $authors ) ? ', ' : '';
@@ -657,37 +656,60 @@ class Workflow_Authors extends Workflow_Module {
 	}
     
 	public function filter_views( $views ) {
- 		//if ( array_key_exists( 'mine', $views ) )
-		//	return $views;
-       
-		$mine_args = array( 'author_name' => wp_get_current_user()->user_nicename );
+        global $locked_post_status;
+            
+		if ( !empty($locked_post_status) )
+			return $views;
+        
+        $post_type = get_post_type();
 
-        $mine_args['post_type'] = get_post_type();
+        $current_user_id = get_current_user_id();
+        
+        if ( empty( $_REQUEST['author'] ) )
+            $user = wp_get_current_user();
+        
+        else
+            $user = get_userdata( (int) $_REQUEST['author'] );
+        
+        if( !$user)
+            return $views;
+        
+        $mine_args = array();
+        if($post_type != 'post')
+            $mine_args['post_type'] = $post_type;
+        
+        $mine_args['author'] = $user->ID;
 	
 		$post_args = array(
-            'post_type' => $mine_args['post_type'],
+            'post_type' => $post_type,
             'tax_query' => array(
                 array(
                     'taxonomy' => self::taxonomy_key,
                     'field' => 'slug',
-                    'terms' => wp_get_current_user()->user_login
+                    'terms' => $user->user_login
                 )
             )
 
 		);
         
-        $query = new WP_Query( $post_args ); 
+        $query = new WP_Query( $post_args );
 
 		$count = $query->post_count;
-        
-        if ( ! empty( $_REQUEST['author_name'] ) && wp_get_current_user()->user_nicename == $_REQUEST['author_name'] )
+ 
+        $match = array_filter($views, function($views) { return(strpos($views, 'class="current"')); });
+        if ( !empty( $_REQUEST['author'] ) || array_key_exists('mine', $match) )
 			$class = ' class="current"';		
         else
 			$class = '';
         
         $labels = $this->get_post_type_labels();
         
-		$mine_view['mine'] = '<a' . $class . ' href="' . add_query_arg( $mine_args, admin_url( 'edit.php' ) ) . '">' . sprintf( _nx( 'Mein %1$s: <span class="count">(%3$s)</span>', 'Meine %2$s: <span class="count">(%3$s)</span>', $count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $count ) ) . '</a>';
+        if($current_user_id == $user->ID)
+            $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%3$s)</span>', 'Meine %2$s <span class="count">(%3$s)</span>', $count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $count ) );
+        else
+            $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $count ), $user->display_name );
+        
+		$mine_view['mine'] = '<a' . $class . ' href="' . add_query_arg( $mine_args, admin_url( 'edit.php' ) ) . '">' . $mine . '</a>';
         
         $views['all'] = str_replace( $class, '', $views['all'] );
         $views = $mine_view + $views;
@@ -745,14 +767,10 @@ class Workflow_Authors extends Workflow_Module {
 			if ( !empty( $wp_query->query_vars['post_type'] ) && !is_object_in_taxonomy( $wp_query->query_vars['post_type'], self::taxonomy_key ) )
 				return $where;
 
-			if ( $wp_query->get( 'author_name' ) )
-				$author_name = sanitize_title( $wp_query->get( 'author_name' ) );
+            $author = get_userdata( $wp_query->get( 'author' ) )->ID;
             
-			else
-				$author_name = get_userdata( $wp_query->get( 'author' ) )->user_nicename;
-
 			$terms = array();
-			$coauthor = $this->get_coauthor_by( 'user_nicename', $author_name );
+			$coauthor = $this->get_coauthor_by( 'id', $author );
             
             $author_term = $this->get_author_term( $coauthor );                    
 			if ( $author_term )
@@ -928,6 +946,7 @@ class Workflow_Authors extends Workflow_Module {
 	}
 
 	public function settings_role_caps_option() {
+        natsort($this->role_caps);
         foreach($this->role_caps as $key => $value) {
             echo '<label for="' . esc_attr( $this->module->workflow_options_name ) . '_' . esc_attr( $key ) . '">';
             echo '<input id="' . esc_attr( $this->module->workflow_options_name ) . '_' . esc_attr( $key ) . '" name="'
