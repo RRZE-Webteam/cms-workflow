@@ -669,36 +669,39 @@ class Workflow_Authors extends Workflow_Module {
         if( !$user)
             return $views;
         
-        $user_id = $user->ID;
-        
         $mine_args = array();
         if($post_type != 'post')
             $mine_args['post_type'] = $post_type;
         
-        $mine_args['author'] = $user_id;
+        $mine_args['author'] = $user->ID;
 
         $terms = array();
-        $coauthor = $this->get_coauthor_by( 'id', $user_id );
+        $coauthor = $this->get_coauthor_by( 'id', $user->ID );
 
         $author_term = $this->get_author_term( $coauthor );                    
         if ( $author_term )
             $terms[] = $author_term;
         
+        $join = '';
         $terms_implode = '';
         if ( !empty( $terms ) ) {
+            $join =
+               "LEFT JOIN $wpdb->term_relationships ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id) 
+                LEFT JOIN $wpdb->term_taxonomy ON ( $wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id )";
+                        
             foreach( $terms as $term ) {
                 $terms_implode .= '(' . $wpdb->term_taxonomy . '.taxonomy = \''. self::taxonomy_key.'\' AND '. $wpdb->term_taxonomy .'.term_id = \''. $term->term_id .'\') OR ';
             }
+            
             $terms_implode = 'OR (' . rtrim( $terms_implode, ' OR' ) . ')';
         }
         
         $post_count = $wpdb->get_var(
             "SELECT COUNT( DISTINCT $wpdb->posts.ID ) AS post_count
             FROM $wpdb->posts 
-            LEFT JOIN $wpdb->term_relationships ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id) 
-            LEFT JOIN $wpdb->term_taxonomy ON ( $wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id ) 
+            $join
             WHERE 1=1 
-            AND ($wpdb->posts.post_author = $user_id $terms_implode) 
+            AND ($wpdb->posts.post_author = $user->ID $terms_implode) 
             AND $wpdb->posts.post_type = 'post' 
             AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
 
@@ -710,7 +713,7 @@ class Workflow_Authors extends Workflow_Module {
         
         $labels = $this->get_post_type_labels();
         
-        if($current_user_id == $user_id)
+        if($current_user_id == $user->ID)
             $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%3$s)</span>', 'Meine %2$s <span class="count">(%3$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $post_count ) );
         else
             $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $post_count ), $user->display_name );
