@@ -684,8 +684,8 @@ class Workflow_Authors extends Workflow_Module {
         if ( $author_term )
             $terms[] = $author_term;
         
+        $terms_implode = '';
         if ( !empty( $terms ) ) {
-            $terms_implode = '';
             foreach( $terms as $term ) {
                 $terms_implode .= '(' . $wpdb->term_taxonomy . '.taxonomy = \''. self::taxonomy_key.'\' AND '. $wpdb->term_taxonomy .'.term_id = \''. $term->term_id .'\') OR ';
             }
