@@ -657,7 +657,10 @@ class Workflow_Authors extends Workflow_Module {
 			return $views;
         
         $post_type = get_post_type();
-
+        $allowed_post_types = $this->get_post_types( $this->module );
+        if( $post_type === false || !in_array($post_type, $allowed_post_types))
+            return $views;
+        
         $current_user_id = get_current_user_id();
         
         if ( empty( $_REQUEST['author'] ) )
@@ -702,7 +705,7 @@ class Workflow_Authors extends Workflow_Module {
             $join
             WHERE 1=1 
             AND ($wpdb->posts.post_author = $user->ID $terms_implode) 
-            AND $wpdb->posts.post_type = 'post' 
+            AND $wpdb->posts.post_type = '$post_type' 
             AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
 
         $match = array_filter($views, function($views) { return(strpos($views, 'class="current"')); });
