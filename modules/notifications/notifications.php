@@ -193,7 +193,7 @@ class Workflow_Notifications extends Workflow_Module {
 		$body .= sprintf( __( 'Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link ) . "\r\n";
 		$body .= sprintf( __( 'Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $view_link ) . "\r\n";
 		
-		$body .= "\r\n" . __( 'Sie können alle redaktionellen Kommentare zu diesem Dukument hier finden: ', CMS_WORKFLOW_TEXTDOMAIN ). "\r\n";		
+		$body .= "\r\n" . __( 'Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: ', CMS_WORKFLOW_TEXTDOMAIN ). "\r\n";		
 		$body .= $edit_link . "#editorial-comments" . "\r\n\r\n";
 		
 		$body .= $this->get_notification_footer($post);
@@ -204,6 +204,10 @@ class Workflow_Notifications extends Workflow_Module {
     public function notification_task_list( $task ) {
                 
         $post = get_post( $task['post_id'] );
+        
+		$allowed_post_types = $this->get_post_types( $this->module );
+		if ( !isset($post->post_type) || !in_array( $post->post_type, $allowed_post_types ) )
+			return;		
         
         $post_id = $post->ID;
         
@@ -256,7 +260,7 @@ class Workflow_Notifications extends Workflow_Module {
 	public function get_notification_footer( $post ) {
 		$body  = "";
 		$body .= "\r\n \r\n";
-		$body .= sprintf( __( 'Sie erhalten diese E-Mail, weil Sie Autor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN ), $this->draft_or_post_title($post->ID ) );
+		$body .= sprintf( __( 'Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN ), $this->draft_or_post_title($post->ID ) );
 		$body .= "\r\n \r\n";
 		$body .= get_option('blogname') ."\r\n". get_bloginfo('url') . "\r\n" . admin_url() . "\r\n";
 		return $body;
