@@ -4,7 +4,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
     public $module;
     
-    private static $source_blog = null;
+    public $source_blog = null;
     
     public function __construct() {
 		global $cms_workflow;
@@ -40,12 +40,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
         
-        add_filter( 'post_row_actions', array( $this, 'filter_post_row_actions'), 10, 2);
-        add_filter( 'page_row_actions', array( $this, 'filter_post_row_actions'), 10, 2);
+		$allowed_post_types = $this->get_post_types( $this->module );
+		foreach ( $allowed_post_types as $post_type ) {        
+            add_filter( $post_type . '_row_actions', array( $this, 'filter_post_row_actions'), 10, 2);
+            add_action( 'publish_' . $post_type, array( $this, 'version_save_post'), 999, 2 );                  
+        }  
+        
         add_action( 'admin_action_copy_as_new_post_draft', array( $this, 'copy_as_new_post_draft'));
         add_action( 'admin_action_version_as_new_post_draft', array( $this, 'version_as_new_post_draft'));
-        add_action( 'publish_page', array( $this, 'version_save_post'), 999, 2 );
-        add_action( 'publish_post', array( $this, 'version_save_post'), 999, 2 );        
         add_action( 'admin_notices', array( $this, 'version_admin_notice' ) );
         add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 3 );
         
@@ -197,14 +199,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             update_site_option( 'cms_workflow_site_connections', $all_blogs );
 
-            self::update_site_connections();
+            $this->update_site_connections();
             
         }
         
 		return $new_options;
 	}	
 
-    private static function update_site_connections() {
+    private function update_site_connections() {
         $all_blogs = get_site_option( 'cms_workflow_site_connections' );
 
         if ( ! $all_blogs )
@@ -263,32 +265,29 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		<?php
 	}	
 	
-    public static function filter_post_row_actions($actions, $post) {
-        
-        if (current_user_can('edit_posts')) {
+    public function filter_post_row_actions($actions, $post) {
             
+        $cap = $this->get_available_post_types($post->post_type)->cap;
+
+        if (current_user_can($cap->edit_posts))
             $actions['edit_as_new_draft'] = '<a href="'. admin_url( 'admin.php?action=copy_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
             . esc_attr(__('Dieses Element als neuer Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
             . '">' .  __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
-            
-            if( $post->post_status == 'publish' )
-                $actions['edit_as_version'] = '<a href="'. admin_url( 'admin.php?action=version_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
-                . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
-                . '">' .  __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
-            
-        }
-        
+
+        if( current_user_can($cap->edit_posts) && $post->post_status == 'publish' )
+            $actions['edit_as_version'] = '<a href="'. admin_url( 'admin.php?action=version_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
+            . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
+            . '">' .  __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
+    
         return $actions;
     }
 
-    public static function version_as_new_post_draft() {
-        self::version_as_new_post();
+    public function version_as_new_post_draft() {
+        $this->version_as_new_post();
     }    
     
-    private static function version_as_new_post() {
-        if (!current_user_can('edit_posts'))
-            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
-
+    private function version_as_new_post() {
+        
         if (! ( isset( $_GET['post']) || isset( $_POST['post']) ) ) {
             wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
         }
@@ -296,9 +295,17 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $post_id = (int) isset($_GET['post']) ? $_GET['post'] : $_POST['post'];
         $post = get_post( $post_id, ARRAY_A );
 
+        $cap = $this->get_available_post_types($post['post_type'])->cap;
+        
+        if ( !current_user_can($cap->edit_posts) || $post['post_status'] != 'publish' ) 
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+        
         if (is_null($post))
             wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
-        
+
+        if ( !$this->is_post_type_enabled($post['post_type']))
+            wp_die(__('Diese Aktion ist nicht erlaubt.', CMS_WORKFLOW_TEXTDOMAIN));
+                    
         if( $post['post_status'] != 'publish' )
             wp_die(__('Nur veröffentlichte Dokumente können als neue Version erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN));
         
@@ -315,6 +322,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             $values = get_post_custom_values($key, $post_id );
             foreach ( $values as $value ) {
+                if ( apply_filters( 'workflow_post_versioning_skip_add_post_meta', $key ) === true)
+                    continue;
+                
                 add_post_meta( $draft_id, $key, $value );
             }
         }
@@ -378,7 +388,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
         exit;      
     }
     
-    public static function version_save_post( $post_id, $post ) {
+    public function version_save_post( $post_id, $post ) {
+        
+        $cap = $this->get_available_post_types($post->post_type)->cap;
+
+        if (!current_user_can($cap->edit_others_posts)) 
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+        
         $org_id = get_post_meta( $post_id, '_version_post_id', true );
                 
         if ( $org_id ) {
@@ -421,9 +437,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
                                 
                 $key = apply_filters( 'draft_to_publish_postmeta_filter', $key );
 
-                delete_post_meta( $org_id, $key );
+                if ( apply_filters( 'workflow_post_versioning_skip_delete_post_meta', $key ) !== true)
+                    delete_post_meta( $org_id, $key );
+                
                 $values = get_post_custom_values($key, $post_id );
                 foreach ( $values as $value ) {
+                    if ( apply_filters( 'workflow_post_versioning_skip_add_post_meta', $key ) === true)
+                        continue;
+                    
                     add_post_meta( $org_id, $key, $value );
                 }
             }
@@ -486,7 +507,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
     }
     
-    public static function version_admin_notice() {
+    public function version_admin_notice() {
         if ( isset($_REQUEST['post']) ) {           
             $post_id = $_REQUEST['post'];
             $old_post_id = get_post_meta( $post_id, '_version_post_id', true );                    
@@ -496,13 +517,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
     }
     
-    public static function copy_as_new_post_draft() {
-        self::copy_as_new_post();
+    public function copy_as_new_post_draft() {
+        $this->copy_as_new_post();
     }    
     
-    private static function copy_as_new_post() {
-        if (!current_user_can('edit_posts')) 
-            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+    private function copy_as_new_post() {
 
         if (! ( isset( $_GET['post']) || isset( $_POST['post']) ) ) {
             wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
@@ -514,6 +533,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if (is_null($post))
             wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
 
+        $cap = $this->get_available_post_types($post->post_type)->cap;
+        
+        if (!current_user_can($cap->edit_posts)) 
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+        
         if (in_array($post->post_type, array('revision', 'attachment')))
             wp_die(__('Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte kehren Sie zurück und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN));
         
@@ -559,6 +583,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             return;      
         
 		$allowed_post_types = $this->get_post_types( $this->module );
+        
 		foreach ( $allowed_post_types as $post_type ) {
             add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'side', 'high');
         }
@@ -566,7 +591,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
     public function network_connections_inner_box( $post ) {
 
-        wp_nonce_field( plugin_basename( __FILE__ ), 'myplugin_noncename' );
+        wp_nonce_field( plugin_basename( __FILE__ ), 'network_connections_noncename' );
         
         $network_connections = $this->module->options->network_connections;
         
@@ -602,15 +627,15 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     public function network_connections_save_postmeta( $post_id ) {
 
-        if ( isset($_POST['post_type']) && 'page' == $_POST['post_type'] ) {
-            if ( ! current_user_can( 'edit_page', $post_id ) )
-                return;
-        } else {
-            if ( ! current_user_can( 'edit_post', $post_id ) )
-                return;
-        }
+        if ( !isset($_POST['post_type']))
+            return;
+        
+        $cap = $this->get_available_post_types($_POST['post_type'])->cap;
+        
+        if ( !empty($cap) && !current_user_can( $cap->edit_posts, $post_id ) )
+            return;        
 
-        if ( ! isset($_POST['myplugin_noncename']) || ! wp_verify_nonce( $_POST['myplugin_noncename'], plugin_basename( __FILE__ ) ) )
+        if ( !isset($_POST['network_connections_noncename']) || ! wp_verify_nonce( $_POST['network_connections_noncename'], plugin_basename( __FILE__ ) ) )
             return;
 
         $connections = isset($_POST['network_connections']) ? $_POST['network_connections'] : array();        
@@ -640,8 +665,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if ( $post_status != 'publish' )
             return;
 
-        if ( is_null(self::$source_blog) )
-            self::$source_blog = get_current_blog_id();
+        if ( is_null($this->source_blog) )
+            $this->source_blog = get_current_blog_id();
         else
             return;
 
@@ -683,7 +708,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         foreach ( $blogs as $key => $blogid ) {
 
-            if ( $blogid != self::$source_blog ) {
+            if ( $blogid != $this->source_blog ) {
 
                 switch_to_blog( $blogid );
 
