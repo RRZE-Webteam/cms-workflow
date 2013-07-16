@@ -135,8 +135,8 @@ class CMS_Workflow {
         define( 'CMS_WORKFLOW_FILE_PATH' , CMS_WORKFLOW_ROOT . '/' . basename(__FILE__) );
         define( 'CMS_WORKFLOW_URL' , plugins_url( '/', __FILE__ ) );
         define( 'CMS_WORKFLOW_SETTINGS_PAGE' , add_query_arg( 'page', 'workflow-settings', get_admin_url( null, 'admin.php' ) ) );
-        
-        load_plugin_textdomain( CMS_WORKFLOW_TEXTDOMAIN, null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
+        load_plugin_textdomain( CMS_WORKFLOW_TEXTDOMAIN, false, sprintf( '%s/languages/', dirname( plugin_basename( __FILE__ ) ) ) );
     }
     
 	public function set_modules() {
@@ -190,8 +190,6 @@ class CMS_Workflow {
 		wp_register_script( 'jquery-listfilterizer', CMS_WORKFLOW_URL . 'js/jquery.listfilterizer.js', array( 'jquery' ), CMS_WORKFLOW_VERSION, true );
 		wp_register_style( 'jquery-listfilterizer', CMS_WORKFLOW_URL . 'css/jquery.listfilterizer.css', false, CMS_WORKFLOW_VERSION, 'all' );
 
-		wp_register_script( 'jquery-quicksearch', CMS_WORKFLOW_URL . 'js/jquery.quicksearch.js', array( 'jquery' ), CMS_WORKFLOW_VERSION, true );
-		
         wp_register_script( 'sprintf', CMS_WORKFLOW_URL . 'js/sprintf.js', false, CMS_WORKFLOW_VERSION, true );
 	}
 	
@@ -214,7 +212,7 @@ class CMS_Workflow {
 				'form-error' => __( 'Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN ),
 				'nonce-failed' => __( 'Schummeln, was?', CMS_WORKFLOW_TEXTDOMAIN ),
 				'invalid-permissions' => __( 'Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen.', CMS_WORKFLOW_TEXTDOMAIN ),
-				'missing-post' => __( 'Der Beitrag existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN ),
+				'missing-post' => __( 'Das Dokument existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN ),
 			),
 			'autoload' => false,
 		);
