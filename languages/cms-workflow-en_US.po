@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 15:34+0100\n"
+"POT-Creation-Date: 2013-07-16 16:45+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -160,6 +160,31 @@ msgstr ""
 "de/cms\">Documentation</a></p><p><a href=\"http://blogs.fau.de/webworking"
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
+
+#: ../modules/authors/authors.php:140
+#, php-format
+msgid "%s bearbeiten"
+msgstr "Edit %s"
+
+#: ../modules/authors/authors.php:141
+#, php-format
+msgid "%s veröffentlich"
+msgstr "Publish %s"
+
+#: ../modules/authors/authors.php:142
+#, php-format
+msgid "%s löschen"
+msgstr "Delete %s"
+
+#: ../modules/authors/authors.php:143
+#, php-format
+msgid "Veröffentlichte %s bearbeiten"
+msgstr "Edit published %s"
+
+#: ../modules/authors/authors.php:144
+#, php-format
+msgid "Veröffentlichte %s löschen"
+msgstr "Delete published %s"
 
 #: ../modules/authors/authors.php:173
 #: ../modules/user-groups/user-groups.php:87
@@ -674,7 +699,7 @@ msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
-"The document may be duplicated as a new version (draft) in this web sites."
+"The document can be duplicated as a new version (draft) in this web sites."
 
 #: ../modules/settings/settings.php:13
 #: ../modules/user-groups/user-groups.php:372
