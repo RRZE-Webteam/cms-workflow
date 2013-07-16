@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 15:34+0100\n"
+"POT-Creation-Date: 2013-07-16 16:49+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -151,6 +151,31 @@ msgid ""
 "de/cms\">Dokumentation</a></p><p><a href=\"http://blogs.fau.de/webworking"
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
+msgstr ""
+
+#: ../modules/authors/authors.php:140
+#, php-format
+msgid "%s bearbeiten"
+msgstr ""
+
+#: ../modules/authors/authors.php:141
+#, php-format
+msgid "%s veröffentlich"
+msgstr ""
+
+#: ../modules/authors/authors.php:142
+#, php-format
+msgid "%s löschen"
+msgstr ""
+
+#: ../modules/authors/authors.php:143
+#, php-format
+msgid "Veröffentlichte %s bearbeiten"
+msgstr ""
+
+#: ../modules/authors/authors.php:144
+#, php-format
+msgid "Veröffentlichte %s löschen"
 msgstr ""
 
 #: ../modules/authors/authors.php:173
