@@ -140,6 +140,16 @@ class Workflow_Module {
 		return $post_type;
 	}
 			
+	public function is_post_type_enabled( $post_type = null ) {
+
+        $allowed_post_types = $this->get_post_types( $this->module );
+        
+		if ( ! $post_type )
+			$post_type = get_post_type();
+
+		return (bool) in_array( $post_type, $allowed_post_types );
+	}
+    
 	public function get_encoded_description( $args = array() ) {
 		return base64_encode( maybe_serialize( $args ) );
 	}
