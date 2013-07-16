@@ -4,6 +4,8 @@ class Workflow_Dashboard extends Workflow_Module {
 
     public $module;
     
+    public $allowed_post_type = array();
+    
     public function __construct() {
 		global $cms_workflow;
 		
@@ -29,15 +31,15 @@ class Workflow_Dashboard extends Workflow_Module {
 		);
         
 		$this->module = $cms_workflow->register_module( 'dashboard', $args );
+        
 	}
 	
 	public function init() {
         
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-        
-        add_action( 'wp_dashboard_setup', array( $this, 'dashboard_setup') );
-        
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );        
+        add_action( 'wp_dashboard_setup', array( $this, 'dashboard_setup') );       
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+        
 	}
 
 	public function admin_enqueue_scripts( ) {
@@ -45,13 +47,19 @@ class Workflow_Dashboard extends Workflow_Module {
 	}
     
 	public function dashboard_setup() {
-		        
+       
+        $all_post_types = $this->get_available_post_types();
+        foreach($all_post_types as $key => $post_type) {
+            if ( current_user_can($post_type->cap->edit_posts) ) 
+                $this->allowed_post_types[$key] = $post_type;
+        }
+        
         remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
         remove_meta_box('dashboard_recent_drafts', 'dashboard', 'normal');
+                
+        if(empty($this->allowed_post_types))
+            return;
         
-		if ( !current_user_can('edit_posts') ) 
-			return;
-				        
 		if ( $this->module->options->recent_drafts_widget )
 			wp_add_dashboard_widget( 'workflow-recent-drafts', __( 'Aktuelle Entwürfe', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'recent_drafts_widget' ) );
 
@@ -66,7 +74,7 @@ class Workflow_Dashboard extends Workflow_Module {
     public function recent_drafts_widget( $posts = false ) {
         if ( ! $posts ) {
             $posts_query = new WP_Query( array(
-                'post_type' => 'any',
+                'post_type' => array_keys($this->allowed_post_types),
                 'post_status' => 'draft',
                 'posts_per_page' => 50,
                 'orderby' => 'modified',
@@ -81,21 +89,18 @@ class Workflow_Dashboard extends Workflow_Module {
         if ( $posts && is_array( $posts ) ) {
             $list = array();		
             foreach ( $posts as $post ) {
-                $post_type = $this->get_available_post_types($post->post_type);
-                if(!$post_type)
-                    continue;
                 
-                if ( !current_user_can( 'manage_categories' ) ) {
-                    $authors = array();
-
-                    if ( $this->module_activated( 'authors' ))
-                        $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
-
-                    $authors[$post->post_author] = $post->post_author;
-                    $authors = array_unique( $authors );
-                }
+                $post_type = $this->allowed_post_types[$post->post_type];
                 
-                if(!current_user_can( 'manage_categories' ) && !in_array($current_user->ID, $authors))
+                $authors = array();
+
+                if ( $this->module_activated( 'authors' ))
+                    $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
+
+                $authors[$post->post_author] = $post->post_author;
+                $authors = array_unique( $authors );
+
+                if( !current_user_can( 'manage_categories' ) && !in_array($current_user->ID, $authors))
                     continue;
                 
                 $url = get_edit_post_link( $post->ID );
@@ -127,7 +132,7 @@ class Workflow_Dashboard extends Workflow_Module {
     public function recent_pending_widget( $posts = false ) {
         if ( ! $posts ) {
             $posts_query = new WP_Query( array(
-                'post_type' => 'any',
+                'post_type' => array_keys($this->allowed_post_types),
                 'post_status' => 'pending',
                 'posts_per_page' => 50,
                 'orderby' => 'modified',
@@ -142,21 +147,18 @@ class Workflow_Dashboard extends Workflow_Module {
         if ( $posts && is_array( $posts ) ) {
             $list = array();		
             foreach ( $posts as $post ) {
-                $post_type = $this->get_available_post_types($post->post_type);
-                if(!$post_type)
-                    continue;
-
-                if ( !current_user_can( 'manage_categories' ) ) {
-                    $authors = array();
-
-                    if ( $this->module_activated( 'authors' ))
-                        $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
-
-                    $authors[$post->post_author] = $post->post_author;
-                    $authors = array_unique( $authors );
-                }
                 
-                if(!current_user_can( 'manage_categories' ) && !in_array($current_user->ID, $authors))
+                $post_type = $this->allowed_post_types[$post->post_type];
+                
+                $authors = array();
+
+                if ( $this->module_activated( 'authors' ))
+                    $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
+
+                $authors[$post->post_author] = $post->post_author;
+                $authors = array_unique( $authors );
+
+                if( !current_user_can( 'manage_categories' ) && !in_array($current_user->ID, $authors))
                     continue;
                 
                 $url = get_edit_post_link( $post->ID );
@@ -188,7 +190,7 @@ class Workflow_Dashboard extends Workflow_Module {
     public function task_list_widget( $posts = false ) {
         if ( ! $posts ) {
             $posts_query = new WP_Query( array(
-                'post_type' => 'any',
+                'post_type' => array_keys($this->allowed_post_types),
                 'meta_key' => Workflow_Task_List::postmeta_key,
                 'posts_per_page' => 50
             ) );
@@ -212,23 +214,18 @@ class Workflow_Dashboard extends Workflow_Module {
                     if($post->ID != $value['post_id'])
                         continue;
                     
-                    $post_type = $this->get_available_post_types($post->post_type);
-                    if(!$post_type)
+                    $post_type = $this->allowed_post_types[$post->post_type];
+                    
+                    $authors = array();
+
+                    if ( $this->module_activated( 'authors' ))
+                        $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
+
+                    $authors[$post->post_author] = $post->post_author;
+                    $authors = array_unique( $authors );
+
+                    if( !current_user_can( 'manage_categories' )&& !in_array($current_user->ID, $authors))
                         continue;
-
-                    if ( !current_user_can( 'manage_categories' ) ) {
-                        $authors = array();
-
-                        if ( $this->module_activated( 'authors' ))
-                            $authors = Workflow_Authors::get_authors( $post->ID, 'id' );
-
-                        $authors[$post->post_author] = $post->post_author;
-                        $authors = array_unique( $authors );
-                    }
-
-                    if(!current_user_can( 'manage_categories' ) && !in_array($current_user->ID, $authors))
-                        continue;
-
 
                     $url = get_edit_post_link( $post->ID );
                     $title = _draft_or_post_title( $post->ID );
