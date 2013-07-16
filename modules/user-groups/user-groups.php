@@ -15,7 +15,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		
 		$args = array(
 			'title' => __( 'Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN ),
-			'description' => __( 'Organisation der Beteiligter in Gruppen.', CMS_WORKFLOW_TEXTDOMAIN ),
+			'description' => __( 'Benutzer nach Abteilung oder Funktion organisieren.', CMS_WORKFLOW_TEXTDOMAIN ),
 			'module_url' => $this->module_url,
 			'slug' => 'user-groups',
 			'default_options' => array(
@@ -78,11 +78,17 @@ class Workflow_User_Groups extends Workflow_Module {
 	
 	public function enqueue_admin_scripts() {
         wp_enqueue_script( 'jquery-listfilterizer' );
-        wp_enqueue_script( 'jquery-quicksearch' );
-        wp_enqueue_script( 'workflow-user-groups', $this->module_url . 'user-groups.js', array( 'jquery', 'jquery-listfilterizer', 'jquery-quicksearch' ), CMS_WORKFLOW_VERSION, true );
+        wp_enqueue_script( 'workflow-user-groups', $this->module_url . 'user-groups.js', array( 'jquery', 'jquery-listfilterizer' ), CMS_WORKFLOW_VERSION, true );
         
         if($this->is_settings_view())
             wp_enqueue_script( 'workflow-user-groups-inline-edit', $this->module_url . 'inline-edit.js', array( 'jquery' ), CMS_WORKFLOW_VERSION, true );
+        
+        wp_localize_script( 'workflow-user-groups', 'user_groups_vars', array(
+            'filters_label_1'   => __('Alle', CMS_WORKFLOW_VERSION),
+            'filters_label_2'   => __('Ausgewählt', CMS_WORKFLOW_VERSION),
+            'placeholder'       => __('Suchen...', CMS_WORKFLOW_VERSION),
+        ) );
+        
 	}
 	
 	public function enqueue_admin_styles() {
@@ -415,11 +421,6 @@ class Workflow_User_Groups extends Workflow_Module {
 			</th>
 			<td>
 				<?php $this->usergroups_select_form( $selected_usergroups, $usergroups_form_args ); ?>
-				<script type="text/javascript">
-				jQuery(document).ready(function(){
-					jQuery('#workflow-user-usergroups ul').listFilterizer();
-				});
-				</script>
 			</td>
 		</tr></tbody></table>
 		<?php wp_nonce_field( 'workflow_edit_profile_usergroups_nonce', 'workflow_edit_profile_usergroups_nonce' ); ?>
@@ -466,7 +467,6 @@ class Workflow_User_Groups extends Workflow_Module {
 
 		$defaults = array(
 			'list_class' => 'workflow-groups-list',
-			'list_id' => 'workflow-groups-usergroups',
 			'input_id' => 'groups-usergroups',
             'input_name' => 'groups_usergroups'
 		);
@@ -481,7 +481,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		} else {
 
 			?>
-			<ul id="<?php echo $list_id ?>" class="<?php echo $list_class ?>">
+			<ul class="<?php echo $list_class ?>">
 			<?php
 			foreach( $usergroups as $usergroup ) {
 				$checked = ( in_array( $usergroup->term_id, $selected ) ) ? ' checked="checked"' : '';
