@@ -137,11 +137,11 @@ class Workflow_Authors extends Workflow_Module {
         $this->role_caps = $this->system_caps;
         
         foreach( $all_post_types as $args ) {
-            $this->role_caps[$args->cap->edit_posts] = sprintf('%s bearbeiten', $args->label);
-            $this->role_caps[$args->cap->publish_posts] = sprintf('%s veröffentlich', $args->label);
-            $this->role_caps[$args->cap->delete_posts] = sprintf('%s löschen', $args->label);
-            $this->role_caps[$args->cap->edit_published_posts] = sprintf('Veröffentlichte %s bearbeiten', $args->label);
-            $this->role_caps[$args->cap->delete_published_posts] = sprintf('Veröffentlichte %s löschen', $args->label);
+            $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+            $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlich', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+            $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+            $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+            $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
         }
         
     }
