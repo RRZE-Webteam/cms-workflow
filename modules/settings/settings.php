@@ -22,7 +22,7 @@ class Workflow_Settings extends Workflow_Module {
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
 				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
 				),
-			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms/version/">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
+			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);
         
 		$this->module = $cms_workflow->register_module( 'settings', $args );
@@ -77,7 +77,7 @@ class Workflow_Settings extends Workflow_Module {
 		$requested_module_name = $requested_module->name;	
 		
 		if ( !$this->module_activated( $requested_module_name ) ) {
-			echo '<div class="message error"><p>' . sprintf( __( 'Modul nicht aktiviert. Bitte aktivieren Sie es in die <a href="%1$s">Allgemeine Einstellungen des Workflows</a>.', CMS_WORKFLOW_TEXTDOMAIN ), CMS_WORKFLOW_SETTINGS_PAGE ) . '</p></div>';
+			echo '<div class="message error"><p>' . sprintf( __( 'Modul nicht aktiviert. Bitte aktivieren Sie es in die <a href="%1$s">Einstellungen des Workflows</a>.', CMS_WORKFLOW_TEXTDOMAIN ), CMS_WORKFLOW_SETTINGS_PAGE ) . '</p></div>';
 			return;
 		}	
 		
@@ -234,8 +234,9 @@ class Workflow_Settings extends Workflow_Module {
 			echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html( $args->label ) . '</label>';
 
 			if ( post_type_supports( $post_type, $module->post_type_support ) )
-				echo '&nbsp&nbsp;&nbsp;<span class="description">' . sprintf( __( 'Deaktiviert, da die Variable add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN ), $post_type, $module->post_type_support ) . '</span>';
-			echo '<br />';
+				echo '&nbsp;<span class="description">' . sprintf( __( 'Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN ), $post_type, $module->post_type_support ) . '</span>';
+			
+            echo '<br />';
 		}
 		
 	}
