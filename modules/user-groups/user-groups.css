@@ -79,11 +79,6 @@
     width: 300px;
 }
 
-#workflow-usergroup-users form.quicksearch,
-#workflow-groups-users-box form.quicksearch {
-    display: none;
-}
-
 #workflow-usergroup-users h4 {
     margin-top: 0;
 }
