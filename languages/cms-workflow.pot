@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-07 22:56+0100\n"
+"POT-Creation-Date: 2013-07-16 15:34+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -14,48 +14,48 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cms-workflow.php:75
+#: ../cms-workflow.php:73
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
 "PHP-Version %s."
 msgstr ""
 
-#: ../cms-workflow.php:78
+#: ../cms-workflow.php:76
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
 "auf die Wordpress-Version %s."
 msgstr ""
 
-#: ../cms-workflow.php:217
+#: ../cms-workflow.php:209
 msgid "Konfigurieren"
 msgstr ""
 
-#: ../cms-workflow.php:219
+#: ../cms-workflow.php:211
 msgid "Einstellungen gespeichert."
 msgstr ""
 
-#: ../cms-workflow.php:220
+#: ../cms-workflow.php:212
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr ""
 
-#: ../cms-workflow.php:221 ../modules/settings/settings.php:255
+#: ../cms-workflow.php:213 ../modules/settings/settings.php:256
 msgid "Schummeln, was?"
 msgstr ""
 
-#: ../cms-workflow.php:222
-#: ../modules/editorial-comments/editorial-comments.php:224
+#: ../cms-workflow.php:214
+#: ../modules/editorial-comments/editorial-comments.php:225
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr ""
 
-#: ../cms-workflow.php:223
-msgid "Der Beitrag existiert nicht."
+#: ../cms-workflow.php:215
+msgid "Das Dokument existiert nicht."
 msgstr ""
 
 #: ../includes/workflow-module.php:67
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Papierkorb"
 msgstr ""
 
-#: ../includes/workflow-module.php:196
+#: ../includes/workflow-module.php:206
 msgid "Kein Benutzer gefunden."
 msgstr ""
 
@@ -95,7 +95,7 @@ msgid "Dateien hochladen"
 msgstr ""
 
 #: ../modules/authors/authors.php:29
-msgid " Beitrag veröffentlichen"
+msgid "Beitrag veröffentlichen"
 msgstr ""
 
 #: ../modules/authors/authors.php:30
@@ -110,8 +110,8 @@ msgstr ""
 msgid "Beiträge löschen"
 msgstr ""
 
-#: ../modules/authors/authors.php:36 ../modules/authors/authors.php:172
-#: ../modules/authors/authors.php:581
+#: ../modules/authors/authors.php:36 ../modules/authors/authors.php:192
+#: ../modules/authors/authors.php:605
 msgid "Autoren"
 msgstr ""
 
@@ -119,9 +119,9 @@ msgstr ""
 msgid "Verwaltung der Autoren."
 msgstr ""
 
-#: ../modules/authors/authors.php:51 ../modules/dashboard/dashboard.php:25
+#: ../modules/authors/authors.php:50 ../modules/dashboard/dashboard.php:27
 #: ../modules/editorial-comments/editorial-comments.php:29
-#: ../modules/notifications/notifications.php:30
+#: ../modules/notifications/notifications.php:29
 #: ../modules/post-versioning/post-versioning.php:30
 #: ../modules/settings/settings.php:22 ../modules/task-list/task-list.php:31
 #: ../modules/translation/translation.php:26
@@ -129,9 +129,9 @@ msgstr ""
 msgid "Übersicht"
 msgstr ""
 
-#: ../modules/authors/authors.php:52 ../modules/dashboard/dashboard.php:26
+#: ../modules/authors/authors.php:51 ../modules/dashboard/dashboard.php:28
 #: ../modules/editorial-comments/editorial-comments.php:30
-#: ../modules/notifications/notifications.php:31
+#: ../modules/notifications/notifications.php:30
 #: ../modules/post-versioning/post-versioning.php:31
 #: ../modules/settings/settings.php:23 ../modules/task-list/task-list.php:32
 #: ../modules/translation/translation.php:27
@@ -139,11 +139,11 @@ msgstr ""
 msgid "<p></p>"
 msgstr ""
 
-#: ../modules/authors/authors.php:54 ../modules/dashboard/dashboard.php:28
+#: ../modules/authors/authors.php:53 ../modules/dashboard/dashboard.php:30
 #: ../modules/editorial-comments/editorial-comments.php:32
-#: ../modules/notifications/notifications.php:33
+#: ../modules/notifications/notifications.php:32
 #: ../modules/post-versioning/post-versioning.php:33
-#: ../modules/task-list/task-list.php:34
+#: ../modules/settings/settings.php:25 ../modules/task-list/task-list.php:34
 #: ../modules/translation/translation.php:29
 #: ../modules/user-groups/user-groups.php:40
 msgid ""
@@ -153,103 +153,123 @@ msgid ""
 "\">RRZE-Webteam in Github</a></p>"
 msgstr ""
 
-#: ../modules/authors/authors.php:182
+#: ../modules/authors/authors.php:173
+#: ../modules/user-groups/user-groups.php:87
+msgid "Alle"
+msgstr ""
+
+#: ../modules/authors/authors.php:174
+#: ../modules/user-groups/user-groups.php:88
+msgid "Ausgewählt"
+msgstr ""
+
+#: ../modules/authors/authors.php:175
+#: ../modules/user-groups/user-groups.php:89
+msgid "Suchen..."
+msgstr ""
+
+#: ../modules/authors/authors.php:202
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr ""
 
-#: ../modules/authors/authors.php:184
-#: ../modules/user-groups/user-groups.php:319
+#: ../modules/authors/authors.php:204
+#: ../modules/user-groups/user-groups.php:325
 #: ../modules/user-groups/user-groups.php:727
 msgid "Benutzer"
 msgstr ""
 
-#: ../modules/authors/authors.php:197
+#: ../modules/authors/authors.php:217
 #: ../modules/user-groups/user-groups.php:17
-#: ../modules/user-groups/user-groups.php:409
+#: ../modules/user-groups/user-groups.php:415
 msgid "Benutzergruppen"
 msgstr ""
 
-#: ../modules/authors/authors.php:578
+#: ../modules/authors/authors.php:602
 msgid "Nr."
 msgstr ""
 
-#: ../modules/authors/authors.php:670
+#: ../modules/authors/authors.php:722
 #, php-format
-msgid "Mein %1$s: <span class=\"count\">(%3$s)</span>"
-msgid_plural "Meine %2$s: <span class=\"count\">(%3$s)</span>"
+msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
+msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/authors/authors.php:901
-#: ../modules/editorial-comments/editorial-comments.php:281
-#: ../modules/notifications/notifications.php:373
-#: ../modules/post-versioning/post-versioning.php:88
-#: ../modules/task-list/task-list.php:462
-#: ../modules/translation/translation.php:63
-#: ../modules/user-groups/user-groups.php:283
+#: ../modules/authors/authors.php:724
+#, php-format
+msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
+msgstr ""
+
+#: ../modules/authors/authors.php:961
+#: ../modules/editorial-comments/editorial-comments.php:282
+#: ../modules/notifications/notifications.php:376
+#: ../modules/post-versioning/post-versioning.php:90
+#: ../modules/task-list/task-list.php:476
+#: ../modules/translation/translation.php:60
+#: ../modules/user-groups/user-groups.php:289
 msgid "Freigabe"
 msgstr ""
 
-#: ../modules/authors/authors.php:902
+#: ../modules/authors/authors.php:962
 msgid "Autorenrechte"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:13
+#: ../modules/dashboard/dashboard.php:15
 msgid "Dashboard"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:14
+#: ../modules/dashboard/dashboard.php:16
 msgid "Inhalte aus dem Dashboard verfolgen."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:56
-#: ../modules/dashboard/dashboard.php:295
+#: ../modules/dashboard/dashboard.php:64
+#: ../modules/dashboard/dashboard.php:294
 msgid "Aktuelle Entwürfe"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:59
-#: ../modules/dashboard/dashboard.php:296
+#: ../modules/dashboard/dashboard.php:67
+#: ../modules/dashboard/dashboard.php:295
 msgid "Aktuelle ausstehende Reviews"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:62
-#: ../modules/dashboard/dashboard.php:299
-#: ../modules/task-list/task-list.php:17 ../modules/task-list/task-list.php:89
+#: ../modules/dashboard/dashboard.php:70
+#: ../modules/dashboard/dashboard.php:298
+#: ../modules/task-list/task-list.php:17 ../modules/task-list/task-list.php:97
 msgid "Aufgabenliste"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:108
-#: ../modules/dashboard/dashboard.php:168
+#: ../modules/dashboard/dashboard.php:114
+#: ../modules/dashboard/dashboard.php:172
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:122
+#: ../modules/dashboard/dashboard.php:128
 msgid "Zurzeit gibt es keine Entwürfe."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:182
+#: ../modules/dashboard/dashboard.php:186
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:238
+#: ../modules/dashboard/dashboard.php:237
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:254
+#: ../modules/dashboard/dashboard.php:253
 msgid "Zurzeit gibt es keine Aufgaben."
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:303
+#: ../modules/dashboard/dashboard.php:317
+#: ../modules/dashboard/dashboard.php:331 ../modules/settings/settings.php:156
+msgid "Deaktiviert"
 msgstr ""
 
 #: ../modules/dashboard/dashboard.php:304
 #: ../modules/dashboard/dashboard.php:318
-#: ../modules/dashboard/dashboard.php:332 ../modules/settings/settings.php:156
-msgid "Deaktiviert"
-msgstr ""
-
-#: ../modules/dashboard/dashboard.php:305
-#: ../modules/dashboard/dashboard.php:319
-#: ../modules/dashboard/dashboard.php:333 ../modules/settings/settings.php:157
+#: ../modules/dashboard/dashboard.php:332 ../modules/settings/settings.php:157
 msgid "Aktiviert"
 msgstr ""
 
@@ -265,51 +285,51 @@ msgstr ""
 msgid "Wählen Sie &bdquo;Post Types&rdquo;"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:73
+#: ../modules/editorial-comments/editorial-comments.php:74
 msgid "Redaktionelle Diskussion"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:123
+#: ../modules/editorial-comments/editorial-comments.php:124
 msgid ""
 "Sie können redaktionelle Kommentare zu einem Beitrag hinzufügen, wenn Sie "
 "dem Beitrag schon gespeichert haben."
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:137
+#: ../modules/editorial-comments/editorial-comments.php:138
 msgid "Kommentar hinzufügen"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:146
+#: ../modules/editorial-comments/editorial-comments.php:147
 msgid "Senden"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:148
+#: ../modules/editorial-comments/editorial-comments.php:149
 #: ../modules/user-groups/user-groups.php:792
 msgid "Abbrechen"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:177
+#: ../modules/editorial-comments/editorial-comments.php:178
 msgid "Antworten"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:198
+#: ../modules/editorial-comments/editorial-comments.php:199
 #, php-format
 msgid ""
 "<span class=\"comment-author\">%1$s</span><span class=\"meta\"> am %2$s um "
 "%3$s Uhr</span>"
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:216
+#: ../modules/editorial-comments/editorial-comments.php:217
 msgid "Bitte stellen Sie sicher, dass Sie Kommentaren hinzufügen dürfen."
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:228
+#: ../modules/editorial-comments/editorial-comments.php:229
 msgid "Bitte geben Sie ein Kommentar ein."
 msgstr ""
 
-#: ../modules/editorial-comments/editorial-comments.php:275
-#: ../modules/task-list/task-list.php:291
-#: ../modules/task-list/task-list.php:442
+#: ../modules/editorial-comments/editorial-comments.php:276
+#: ../modules/task-list/task-list.php:308
+#: ../modules/task-list/task-list.php:456
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgstr ""
 
@@ -321,222 +341,222 @@ msgstr ""
 msgid "Benachrichtigungen auf wichtige Änderungen eines Dokuments."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:75
-#: ../modules/notifications/notifications.php:227
+#: ../modules/notifications/notifications.php:74
+#: ../modules/notifications/notifications.php:230
 msgid "CMS-Workflow"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:93
+#: ../modules/notifications/notifications.php:92
 #, php-format
 msgid "%1$s - Neues Dokument wurde erstellt: \"%2$s\""
 msgstr ""
 
-#: ../modules/notifications/notifications.php:94
+#: ../modules/notifications/notifications.php:93
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:97
+#: ../modules/notifications/notifications.php:96
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:98
+#: ../modules/notifications/notifications.php:97
 #, php-format
 msgid ""
 "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:101
+#: ../modules/notifications/notifications.php:100
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:102
+#: ../modules/notifications/notifications.php:101
 #, php-format
 msgid ""
 "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb "
 "wiederhergestellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:105
+#: ../modules/notifications/notifications.php:104
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde zeitlich geplant."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:106
+#: ../modules/notifications/notifications.php:105
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s zeitlich geplant."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:109
+#: ../modules/notifications/notifications.php:108
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde veröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:110
+#: ../modules/notifications/notifications.php:109
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:113
+#: ../modules/notifications/notifications.php:112
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde unveröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:114
+#: ../modules/notifications/notifications.php:113
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:117
+#: ../modules/notifications/notifications.php:116
 #, php-format
 msgid "%1$s - Der Status des Dokuments „%2$s“ hat sich geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:118
+#: ../modules/notifications/notifications.php:117
 #, php-format
 msgid "Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:121
+#: ../modules/notifications/notifications.php:120
 #, php-format
 msgid "Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:128
+#: ../modules/notifications/notifications.php:127
 #, php-format
 msgid "%1$s  >>>  %2$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:131
+#: ../modules/notifications/notifications.php:130
 msgid "Dokumenteinzelheiten"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:132
+#: ../modules/notifications/notifications.php:131
 #, php-format
 msgid "Titel: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:134
+#: ../modules/notifications/notifications.php:133
 #, php-format
 msgid "Autor: %1$s"
 msgid_plural "Autoren: %1$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/notifications/notifications.php:135
+#: ../modules/notifications/notifications.php:134
 #, php-format
 msgid "Art: %1$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:136
+#: ../modules/notifications/notifications.php:135
 #, php-format
 msgid "Status: %1$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:147
-#: ../modules/notifications/notifications.php:191
-#: ../modules/notifications/notifications.php:246
+#: ../modules/notifications/notifications.php:146
+#: ../modules/notifications/notifications.php:190
+#: ../modules/notifications/notifications.php:249
 msgid "Weitere Aktionen"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:148
-#: ../modules/notifications/notifications.php:247
+#: ../modules/notifications/notifications.php:147
+#: ../modules/notifications/notifications.php:250
 #, php-format
 msgid "Redaktionelles Kommentar hinzufügen: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:149
-#: ../modules/notifications/notifications.php:194
-#: ../modules/notifications/notifications.php:248
+#: ../modules/notifications/notifications.php:148
+#: ../modules/notifications/notifications.php:193
+#: ../modules/notifications/notifications.php:251
 #, php-format
 msgid "Dokument bearbeiten: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:150
-#: ../modules/notifications/notifications.php:195
-#: ../modules/notifications/notifications.php:249
+#: ../modules/notifications/notifications.php:149
+#: ../modules/notifications/notifications.php:194
+#: ../modules/notifications/notifications.php:252
 #, php-format
 msgid "Dokument ansehen: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:179
+#: ../modules/notifications/notifications.php:178
 #, php-format
 msgid "%1$s - Neues redaktionelles Kommentar zum \"%2$s\""
 msgstr ""
 
-#: ../modules/notifications/notifications.php:181
+#: ../modules/notifications/notifications.php:180
 #, php-format
 msgid ""
 "Ein neues redaktionelles Kommentar wurde zum Dokument %1$s „%2$s“ "
 "hinzugefügt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:182
+#: ../modules/notifications/notifications.php:181
 #, php-format
 msgid "%1$s (%2$s) kommentiert am %3$s um %4$s:"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:192
+#: ../modules/notifications/notifications.php:191
 #, php-format
 msgid "Antworten: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:193
+#: ../modules/notifications/notifications.php:192
 #, php-format
 msgid "Redaktionelle Komentar hinzufügen: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:197
+#: ../modules/notifications/notifications.php:196
 msgid ""
-"Sie können alle redaktionellen Kommentare zu diesem Dukument hier finden: "
+"Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: "
 msgstr ""
 
-#: ../modules/notifications/notifications.php:211
-#: ../modules/notifications/notifications.php:424
+#: ../modules/notifications/notifications.php:214
+#: ../modules/notifications/notifications.php:427
 msgid "(Kein Titel)"
-msgstr ""
-
-#: ../modules/notifications/notifications.php:231
-#, php-format
-msgid "%1$s - Neue Aufgabe für „%2$s“ wurde hinzugefügt."
-msgstr ""
-
-#: ../modules/notifications/notifications.php:232
-#, php-format
-msgid "Eine neue Aufgabe wurde zum Dokument %1$s „%2$s“ hinzugefügt."
 msgstr ""
 
 #: ../modules/notifications/notifications.php:234
 #, php-format
+msgid "%1$s - Neue Aufgabe für „%2$s“ wurde hinzugefügt."
+msgstr ""
+
+#: ../modules/notifications/notifications.php:235
+#, php-format
+msgid "Eine neue Aufgabe wurde zum Dokument %1$s „%2$s“ hinzugefügt."
+msgstr ""
+
+#: ../modules/notifications/notifications.php:237
+#, php-format
 msgid "Diese Aktion wurde von %1$s %2$s am %3$s um %4$s %5$s ausgeführt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:238
+#: ../modules/notifications/notifications.php:241
 #, php-format
 msgid "Aufgabe: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:239
+#: ../modules/notifications/notifications.php:242
 #, php-format
 msgid "Priorität: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:260
+#: ../modules/notifications/notifications.php:263
 #, php-format
-msgid "Sie erhalten diese E-Mail, weil Sie Autor zum Dokument „%s“ sind."
+msgid "Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:374
+#: ../modules/notifications/notifications.php:377
 msgid "Administrator benachrichtigen?"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:384
+#: ../modules/notifications/notifications.php:387
 msgid "Nein"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:385
+#: ../modules/notifications/notifications.php:388
 msgid "Ja"
 msgstr ""
 
@@ -548,61 +568,65 @@ msgstr ""
 msgid "Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:71
+#: ../modules/post-versioning/post-versioning.php:73
 msgid "Lokale Freigabe"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:73
+#: ../modules/post-versioning/post-versioning.php:75
 msgid "Netzwerkweite Freigabe"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:83
+#: ../modules/post-versioning/post-versioning.php:85
 msgid "Vorhandenen Webseiten"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:129
+#: ../modules/post-versioning/post-versioning.php:131
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "dupliziert werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:271
+#: ../modules/post-versioning/post-versioning.php:274
 msgid "Dieses Element als neuer Entwurf kopieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:272
+#: ../modules/post-versioning/post-versioning.php:275
 msgid "Kopieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:276
+#: ../modules/post-versioning/post-versioning.php:279
 msgid "Dieses Element als neue Version duplizieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:277
+#: ../modules/post-versioning/post-versioning.php:280
 msgid "Neue Version"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:290
-#: ../modules/post-versioning/post-versioning.php:505
+#: ../modules/post-versioning/post-versioning.php:292
+#: ../modules/post-versioning/post-versioning.php:527
+msgid "Es wurde kein Element geliefert."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:301
+#: ../modules/post-versioning/post-versioning.php:396
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:293
-#: ../modules/post-versioning/post-versioning.php:508
-msgid "Es wurde kein Element geliefert."
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:300
-#: ../modules/post-versioning/post-versioning.php:515
+#: ../modules/post-versioning/post-versioning.php:304
+#: ../modules/post-versioning/post-versioning.php:534
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:303
+#: ../modules/post-versioning/post-versioning.php:307
+msgid "Diese Aktion ist nicht erlaubt."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:310
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:494
+#: ../modules/post-versioning/post-versioning.php:515
 #, php-format
 msgid ""
 "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. "
@@ -610,38 +634,35 @@ msgid ""
 "Veröffentlichen&rdquo; klicken."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:518
+#: ../modules/post-versioning/post-versioning.php:539
+msgid ""
+"Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:542
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:569
-#: ../modules/post-versioning/post-versioning.php:643
+#: ../modules/post-versioning/post-versioning.php:588
+#: ../modules/post-versioning/post-versioning.php:657
 msgid "Netzwerkweit Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:610
+#: ../modules/post-versioning/post-versioning.php:624
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 
 #: ../modules/settings/settings.php:13
-#: ../modules/user-groups/user-groups.php:366
+#: ../modules/user-groups/user-groups.php:372
 msgid "Einstellungen"
 msgstr ""
 
 #: ../modules/settings/settings.php:14
 msgid "Auf dieser Seite können Sie grundlegende Einstellungen vornehmen."
-msgstr ""
-
-#: ../modules/settings/settings.php:25
-msgid ""
-"<p><strong>Für mehr Information:</strong></p><p><a href=\"http://blogs.fau."
-"de/cms/version/\">Dokumentation</a></p><p><a href=\"http://blogs.fau.de/"
-"webworking\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-"
-"Webteam\">RRZE-Webteam in Github</a></p>"
 msgstr ""
 
 #: ../modules/settings/settings.php:74
@@ -652,7 +673,7 @@ msgstr ""
 #, php-format
 msgid ""
 "Modul nicht aktiviert. Bitte aktivieren Sie es in die <a href=\"%1$s"
-"\">Allgemeine Einstellungen des Workflows</a>."
+"\">Einstellungen des Workflows</a>."
 msgstr ""
 
 #: ../modules/settings/settings.php:123
@@ -667,7 +688,7 @@ msgstr ""
 #: ../modules/settings/settings.php:237
 #, php-format
 msgid ""
-"Deaktiviert, da die Variable add_post_type_support( '%1$s', '%2$s' ) in "
+"Deaktiviert, da die Funktion add_post_type_support( '%1$s', '%2$s' ) in "
 "einer geladenen Datei enthalten ist."
 msgstr ""
 
@@ -682,7 +703,6 @@ msgid "Niedrig"
 msgstr ""
 
 #: ../modules/task-list/task-list.php:39
-#: ../modules/task-list/task-list.php:148
 msgid "Normal"
 msgstr ""
 
@@ -690,82 +710,82 @@ msgstr ""
 msgid "Hoch"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:78
+#: ../modules/task-list/task-list.php:84
 msgid ""
 "Sie sind dabei, die ausgewählte Aufgabe dauerhaft zu löschen. Sind Sie "
 "sicher, dass Sie fortfahren möchten?"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:79
-#: ../modules/task-list/task-list.php:244
+#: ../modules/task-list/task-list.php:85
+#: ../modules/task-list/task-list.php:262
 #, php-format
 msgid "Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert."
 msgstr ""
 
-#: ../modules/task-list/task-list.php:105
+#: ../modules/task-list/task-list.php:119
 msgid " + Neue Aufgabe hinzufügen"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:110
+#: ../modules/task-list/task-list.php:124
 msgid "Titel"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:114
-#: ../modules/user-groups/user-groups.php:344
-#: ../modules/user-groups/user-groups.php:383
+#: ../modules/task-list/task-list.php:128
+#: ../modules/user-groups/user-groups.php:350
+#: ../modules/user-groups/user-groups.php:389
 #: ../modules/user-groups/user-groups.php:726
 #: ../modules/user-groups/user-groups.php:787
 msgid "Beschreibung"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:130
+#: ../modules/task-list/task-list.php:144
 msgid "Aufgabe zuweisen an"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:133
-#: ../modules/task-list/task-list.php:219
+#: ../modules/task-list/task-list.php:147
+#: ../modules/task-list/task-list.php:240
 msgid "Alle Autoren"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:142
-#: ../modules/task-list/task-list.php:240
+#: ../modules/task-list/task-list.php:156
+#: ../modules/task-list/task-list.php:258
 msgid "Priorität"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:155
+#: ../modules/task-list/task-list.php:177
 msgid "Laden..."
 msgstr ""
 
-#: ../modules/task-list/task-list.php:159
+#: ../modules/task-list/task-list.php:181
 msgid "Neue Aufgabe hinzufügen"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:178
+#: ../modules/task-list/task-list.php:204
 msgid "Keine Aufgaben gefunden."
 msgstr ""
 
-#: ../modules/task-list/task-list.php:239
+#: ../modules/task-list/task-list.php:257
 msgid "Besitzer"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:251
+#: ../modules/task-list/task-list.php:269
 msgid "Aufgabe annehmen"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:255
+#: ../modules/task-list/task-list.php:273
 msgid "Aufgabe ablehnen"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:260
+#: ../modules/task-list/task-list.php:278
 msgid "Aufgabe löschen"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:266
+#: ../modules/task-list/task-list.php:284
 msgid "Aufgabe erledigt"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:299
-#: ../modules/task-list/task-list.php:415
+#: ../modules/task-list/task-list.php:316
+#: ../modules/task-list/task-list.php:429
 msgid "Der Titel wird benötigt."
 msgstr ""
 
@@ -777,22 +797,22 @@ msgstr ""
 msgid "Import und Export von Xiff-Dateien."
 msgstr ""
 
-#: ../modules/translation/translation.php:132
+#: ../modules/translation/translation.php:129
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr ""
 
-#: ../modules/translation/translation.php:137
-#: ../modules/translation/translation.php:141
+#: ../modules/translation/translation.php:134
+#: ../modules/translation/translation.php:138
 #, php-format
 msgid "Die Xliff-Datei (%s) konnte nicht gelesen werden."
 msgstr ""
 
-#: ../modules/translation/translation.php:149
+#: ../modules/translation/translation.php:146
 msgid "Die hochgeladene Xliff-Datei ist nicht für dieses Dokument geeignet."
 msgstr ""
 
 #: ../modules/user-groups/user-groups.php:18
-msgid "Organisation der Beteiligter in Gruppen."
+msgid "Benutzer nach Abteilung oder Funktion organisieren."
 msgstr ""
 
 #: ../modules/user-groups/user-groups.php:28
@@ -816,89 +836,89 @@ msgstr ""
 msgid "Gruppen verwalten"
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:111
-#: ../modules/user-groups/user-groups.php:167
-#: ../modules/user-groups/user-groups.php:242
+#: ../modules/user-groups/user-groups.php:117
+#: ../modules/user-groups/user-groups.php:173
+#: ../modules/user-groups/user-groups.php:248
 msgid "Bitte geben Sie einen Namen für die Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:114
-#: ../modules/user-groups/user-groups.php:171
-#: ../modules/user-groups/user-groups.php:248
+#: ../modules/user-groups/user-groups.php:120
+#: ../modules/user-groups/user-groups.php:177
+#: ../modules/user-groups/user-groups.php:254
 msgid "Name wird bereits verwendet. Bitte wählen Sie einen anderen."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:117
-#: ../modules/user-groups/user-groups.php:175
-#: ../modules/user-groups/user-groups.php:254
+#: ../modules/user-groups/user-groups.php:123
+#: ../modules/user-groups/user-groups.php:181
+#: ../modules/user-groups/user-groups.php:260
 msgid ""
 "Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:120
-#: ../modules/user-groups/user-groups.php:178
-#: ../modules/user-groups/user-groups.php:259
+#: ../modules/user-groups/user-groups.php:126
+#: ../modules/user-groups/user-groups.php:184
+#: ../modules/user-groups/user-groups.php:265
 msgid ""
 "Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie "
 "einen kürzeren Namen."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:134
+#: ../modules/user-groups/user-groups.php:140
 msgid "Fehler beim Hinzufügen einer Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:196
+#: ../modules/user-groups/user-groups.php:202
 msgid "Fehler beim Aktualisierung der Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:219
+#: ../modules/user-groups/user-groups.php:225
 msgid "Fehler beim Löschen der Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:275
+#: ../modules/user-groups/user-groups.php:281
 #, php-format
 msgid ""
 "Die Benutzergruppe <strong>&bdquo;%s&rdquo;</strong> konnte nicht "
 "aktualisiert werden."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:339
-#: ../modules/user-groups/user-groups.php:378
+#: ../modules/user-groups/user-groups.php:345
+#: ../modules/user-groups/user-groups.php:384
 #: ../modules/user-groups/user-groups.php:725
 #: ../modules/user-groups/user-groups.php:783
 msgid "Name"
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:341
+#: ../modules/user-groups/user-groups.php:347
 msgid "Der Name der Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:346
+#: ../modules/user-groups/user-groups.php:352
 msgid "Die Beschreibung der Benutzergruppe."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:349
+#: ../modules/user-groups/user-groups.php:355
 msgid "Aktualisieren"
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:365
-#: ../modules/user-groups/user-groups.php:389
+#: ../modules/user-groups/user-groups.php:371
+#: ../modules/user-groups/user-groups.php:395
 msgid "Neuer Benutzergruppe hinzufügen"
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:380
+#: ../modules/user-groups/user-groups.php:386
 msgid "Der Name wird verwendet um die Benutzergruppe zu identifizieren."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:385
+#: ../modules/user-groups/user-groups.php:391
 msgid "Die Beschreibung ist für administrative Zwecke vorhanden."
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:411
+#: ../modules/user-groups/user-groups.php:417
 msgid "Wählen Sie die Benutzergruppen, die Sie gerne teilnehmen würde:"
 msgstr ""
 
-#: ../modules/user-groups/user-groups.php:413
+#: ../modules/user-groups/user-groups.php:419
 msgid "Wählen Sie die Benutzergruppen, die dieser Benutzer teilnehmen sollte:"
 msgstr ""
 
