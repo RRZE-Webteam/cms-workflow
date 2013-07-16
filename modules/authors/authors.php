@@ -26,7 +26,7 @@ class Workflow_Authors extends Workflow_Module {
         $this->system_caps = array(
             'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), 
             'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),  
-            'publish_posts' => __(' Beitrag veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), 
+            'publish_posts' => __('Beitrag veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), 
             'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN), 
             'edit_posts' => __('Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
@@ -167,8 +167,14 @@ class Workflow_Authors extends Workflow_Module {
 	
 	public function enqueue_admin_scripts() {
         wp_enqueue_script( 'jquery-listfilterizer' );
-        wp_enqueue_script( 'jquery-quicksearch' );
-        wp_enqueue_script( 'workflow-authors', $this->module_url . 'authors.js', array( 'jquery', 'jquery-listfilterizer', 'jquery-quicksearch' ), CMS_WORKFLOW_VERSION, true );
+        wp_enqueue_script( 'workflow-authors', $this->module_url . 'authors.js', array( 'jquery', 'jquery-listfilterizer' ), CMS_WORKFLOW_VERSION, true );
+
+        wp_localize_script( 'workflow-authors', 'authors_vars', array(
+            'filters_label_1'   => __('Alle', CMS_WORKFLOW_VERSION),
+            'filters_label_2'   => __('Ausgewählt', CMS_WORKFLOW_VERSION),
+            'placeholder'       => __('Suchen...', CMS_WORKFLOW_VERSION),
+        ) );
+        
 	}
 	
 	public function enqueue_admin_styles() {
@@ -212,7 +218,7 @@ class Workflow_Authors extends Workflow_Module {
 				<?php              
 				$authors_usergroups = $this->get_authors_usergroups( $post->ID, 'ids' );
                 $args = array(
-                    'list_class' => 'workflow-post-authors-list',
+                    'list_class' => 'workflow-groups-list',
                     'input_id' => 'authors-usergroups',
                     'input_name' => 'authors_usergroups'
                 );              
@@ -524,18 +530,25 @@ class Workflow_Authors extends Workflow_Module {
 		$user_id = isset( $args[1] ) ? $args[1] : 0;
 		$post_id = isset( $args[2] ) ? $args[2] : 0;
 
-		$obj = get_post_type_object( get_post_type( $post_id ) );
+        $post_type = get_post_type( $post_id );
+        
+        if ( !$this->is_post_type_enabled($post_type))
+            return $allcaps;
+        
+		$obj = get_post_type_object( $post_type );
+   
 		if ( ! $obj )
 			return $allcaps;
-
-		$caps_to_modify = array(
-				$obj->cap->edit_post,
-				$obj->cap->edit_others_posts
-			);
         
+		$caps_to_modify = array(
+            $obj->cap->edit_post,
+            $obj->cap->edit_others_posts,
+            $obj->cap->edit_published_posts
+        );
+
 		if ( ! in_array( $cap, $caps_to_modify ) )
 			return $allcaps;
-
+        
 		if( ! is_user_logged_in() || ! $this->is_coauthor_for_post( $user_id, $post_id ) )
 			return $allcaps;
 
@@ -635,21 +648,10 @@ class Workflow_Authors extends Workflow_Module {
 	public function load_edit() {
 		$screen = get_current_screen();
         
-        $allowed_post_types = $this->get_post_types( $this->module );
-		if ( in_array( $screen->post_type, $allowed_post_types ) )
+		if ( $this->is_post_type_enabled($screen->post_type) )
 			add_filter( 'views_' . $screen->id, array( $this, 'filter_views' ) );
 	}
- 
-	public function is_post_type_enabled( $post_type = null ) {
-
-        $allowed_post_types = $this->get_post_types( $this->module );
-        
-		if ( ! $post_type )
-			$post_type = get_post_type();
-
-		return (bool) in_array( $post_type, $allowed_post_types );
-	}
-    
+     
 	public function filter_views( $views ) {
         global $wpdb;
         
@@ -657,8 +659,8 @@ class Workflow_Authors extends Workflow_Module {
 			return $views;
         
         $post_type = get_post_type();
-        $allowed_post_types = $this->get_post_types( $this->module );
-        if( $post_type === false || !in_array($post_type, $allowed_post_types))
+        
+        if( $post_type === false )
             return $views;
         
         $current_user_id = get_current_user_id();
@@ -717,7 +719,7 @@ class Workflow_Authors extends Workflow_Module {
         $labels = $this->get_post_type_labels();
         
         if($current_user_id == $user->ID)
-            $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%3$s)</span>', 'Meine %2$s <span class="count">(%3$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->singular_name, $labels->name, number_format_i18n( $post_count ) );
+            $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%2$s)</span>', 'Meine %1$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), ($post_count == 1 ? $labels->singular_name : $labels->name), number_format_i18n( $post_count ) );
         else
             $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $post_count ), $user->display_name );
         
@@ -779,6 +781,9 @@ class Workflow_Authors extends Workflow_Module {
 			if ( !empty( $wp_query->query_vars['post_type'] ) && !is_object_in_taxonomy( $wp_query->query_vars['post_type'], self::taxonomy_key ) )
 				return $where;
 
+            if ( !$this->is_post_type_enabled($wp_query->query_vars['post_type']) )
+                return $where;
+            
             $author = get_userdata( $wp_query->get( 'author' ) )->ID;
             
 			$terms = array();
@@ -817,6 +822,9 @@ class Workflow_Authors extends Workflow_Module {
 			if ( !empty( $wp_query->query_vars['post_type'] ) && !is_object_in_taxonomy( $wp_query->query_vars['post_type'], self::taxonomy_key ) )
 				return $join;
 
+            if ( !$this->is_post_type_enabled($wp_query->query_vars['post_type']) )
+                return $join;
+            
 			if ( empty( $this->having_terms ) )
 				return $join;
 
@@ -843,6 +851,9 @@ class Workflow_Authors extends Workflow_Module {
 			if ( !empty( $wp_query->query_vars['post_type'] ) && !is_object_in_taxonomy( $wp_query->query_vars['post_type'], self::taxonomy_key ) )
 				return $groupby;
 
+            if ( !$this->is_post_type_enabled($wp_query->query_vars['post_type']) )
+                return $groupby;
+           
 			if ( $this->having_terms ) {
 				$having = 'MAX( IF( ' . $wpdb->term_taxonomy . '.taxonomy = \''. self::taxonomy_key.'\', IF( ' . $this->having_terms . ',2,1 ),0 ) ) <> 1 ';
 				$groupby = $wpdb->posts . '.ID HAVING ' . $having;
