@@ -79,15 +79,6 @@
     width: 300px;
 }
 
-#workflow-usergroup-users form.quicksearch,
-#workflow-post-authors-inside form.quicksearch {
-    display: none;
-}
-
-#workflow-usergroup-users h4 {
-    margin-top: 0;
-}
-
 th.column-id {
     width:4em;
     text-align: center;
