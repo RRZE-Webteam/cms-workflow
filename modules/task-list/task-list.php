@@ -56,6 +56,9 @@ class Workflow_Task_List extends Workflow_Module {
         add_action( 'wp_ajax_task_list_ajax_self_unassignment', array( $this, 'task_list_ajax_self_unassignment' ) );
         
         add_action( 'admin_init', array( $this, 'register_settings' ) );
+        
+        add_filter( 'workflow_post_versioning_skip_delete_post_meta', array( $this, 'post_versioning_skip_post_meta'));
+        add_filter( 'workflow_post_versioning_skip_add_post_meta', array( $this, 'post_versioning_skip_post_meta'));
 	}
         
     public function post_page_metabox( ) {
@@ -95,6 +98,11 @@ class Workflow_Task_List extends Workflow_Module {
         }
     }
         
+    public function post_versioning_skip_post_meta($key) {
+        if( $key === self::postmeta_key)
+            return true;
+    }
+    
     public function metabox_post() {
         global $post_id; 
         
