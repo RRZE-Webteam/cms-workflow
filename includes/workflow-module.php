@@ -189,7 +189,7 @@ class Workflow_Module {
 		if ( !is_array($selected) ) 
             $selected = array();
 		?>
-		<?php if( count($users) > 1 ) : ?>
+		<?php if( count($users) ) : ?>
 			<ul class="<?php echo esc_attr( $list_class ) ?>">
 				<?php foreach( $users as $user ) : ?>
 					<?php $checked = ( in_array($user->ID, $selected) ) ? 'checked="checked"' : ''; ?>
