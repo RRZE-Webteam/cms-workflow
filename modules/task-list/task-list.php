@@ -57,7 +57,6 @@ class Workflow_Task_List extends Workflow_Module {
         
         add_action( 'admin_init', array( $this, 'register_settings' ) );
         
-        add_filter( 'workflow_post_versioning_skip_delete_post_meta', array( $this, 'post_versioning_skip_post_meta'));
         add_filter( 'workflow_post_versioning_skip_add_post_meta', array( $this, 'post_versioning_skip_post_meta'));
 	}
         
