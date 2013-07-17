@@ -2,6 +2,8 @@
 
 class Workflow_Post_Versioning extends Workflow_Module {
 
+    const postmeta_key = '_version_post_id';
+    
     public $module;
     
     public $source_blog = null;
@@ -269,12 +271,12 @@ class Workflow_Post_Versioning extends Workflow_Module {
             
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
-        if (current_user_can($cap->edit_posts))
+        if ( current_user_can($cap->edit_posts) && !get_post_meta( $post->ID, self::postmeta_key, true ) && $post->post_status != 'trash')
             $actions['edit_as_new_draft'] = '<a href="'. admin_url( 'admin.php?action=copy_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
             . esc_attr(__('Dieses Element als neuer Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
             . '">' .  __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
 
-        if( current_user_can($cap->edit_posts) && $post->post_status == 'publish' )
+        if ( current_user_can($cap->edit_posts) && $post->post_status == 'publish' )
             $actions['edit_as_version'] = '<a href="'. admin_url( 'admin.php?action=version_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
             . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
             . '">' .  __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
@@ -315,7 +317,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $draft_id = wp_insert_post( $post );
 
         $keys = get_post_custom_keys( $post_id );
-        $custom_field = array();
+
         foreach ( (array) $keys as $key ) {
             if ( preg_match( '/_wp_old_slug/', $key ) )
                 continue;
@@ -361,7 +363,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 $attachment_newid = wp_insert_post( $new );
                 $keys = get_post_custom_keys( $attachment->ID );
 
-                $custom_field = array();
                 foreach ( (array) $keys as $key ) {
                     $value = get_post_meta( $attachment->ID, $key, true );
 
@@ -382,7 +383,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_set_object_terms($draft_id, $terms, $taxonomy);
         }
 
-        add_post_meta($draft_id, '_version_post_id', $post_id);
+        add_post_meta($draft_id, self::postmeta_key, $post_id);
 
         wp_safe_redirect( admin_url( 'post.php?post=' . $draft_id . '&action=edit' ) );
         exit;      
@@ -392,10 +393,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
-        if (!current_user_can($cap->edit_others_posts)) 
+        if (!current_user_can($cap->edit_posts)) 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         
-        $org_id = get_post_meta( $post_id, '_version_post_id', true );
+        $org_id = get_post_meta( $post_id, self::postmeta_key, true );
                 
         if ( $org_id ) {
             $new = array(
@@ -424,30 +425,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
             );
             
             wp_update_post($new);
-
-            $keys = get_post_custom_keys( $post_id );
-
-            $custom_field = array();
-            foreach ( (array) $keys as $key ) {
-                if ( preg_match( '/_wp_old_slug/', $key ) )
-                    continue;
-
-                if ( preg_match( '/_version_post_id/', $key ) )
-                    continue;
-                                
-                $key = apply_filters( 'draft_to_publish_postmeta_filter', $key );
-
-                if ( apply_filters( 'workflow_post_versioning_skip_delete_post_meta', $key ) !== true)
-                    delete_post_meta( $org_id, $key );
-                
-                $values = get_post_custom_values($key, $post_id );
-                foreach ( $values as $value ) {
-                    if ( apply_filters( 'workflow_post_versioning_skip_add_post_meta', $key ) === true)
-                        continue;
-                    
-                    add_post_meta( $org_id, $key, $value );
-                }
-            }
 
             $args = array( 'post_type' => 'attachment', 'numberposts' => -1, 'post_status' => null, 'post_parent' => $post_id ); 
             $attachments = get_posts( $args );
@@ -481,7 +458,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $attachment_newid = wp_insert_post( $new );
                     $keys = get_post_custom_keys( $attachment->ID );
 
-                    $custom_field = array();
                     foreach ( (array) $keys as $key ) {
                         $value = get_post_meta( $attachment->ID, $key, true );
 
@@ -502,6 +478,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
 
             wp_delete_post( $post_id, true ); // Bypass trash and force deletion (default: false)
+            
             wp_safe_redirect( admin_url( 'post.php?post=' . $org_id . '&action=edit&message=1' ) );
             exit;
         }
@@ -510,7 +487,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
     public function version_admin_notice() {
         if ( isset($_REQUEST['post']) ) {           
             $post_id = $_REQUEST['post'];
-            $old_post_id = get_post_meta( $post_id, '_version_post_id', true );                    
+            $old_post_id = get_post_meta( $post_id, self::postmeta_key, true );                    
             if ( $old_post_id ) {
                 echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';
             }
@@ -535,7 +512,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
         
-        if (!current_user_can($cap->edit_posts)) 
+        if ( !current_user_can($cap->edit_posts) || get_post_meta( $post_id, self::postmeta_key, true ) || $post->post_status == 'trash') 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         
         if (in_array($post->post_type, array('revision', 'attachment')))
@@ -568,7 +545,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
     
     public function filter_post_class( $classes, $class, $post_id ) {
-        if( get_post_meta($post_id, '_version_post_id', true) )
+        if( get_post_meta($post_id, self::postmeta_key, true) )
             $classes[] = 'version';
 
         return $classes;
