@@ -21,11 +21,11 @@ class Workflow_Authors extends Workflow_Module {
         
 		$this->module_url = $this->get_module_url( __FILE__ );
         
-        $this->wp_role_caps = array(
-            'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), 
-            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),  
-            'publish_posts' => __('Beitrag veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), 
-            'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN), 
+        $this->wp_role_caps = array( 
+            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),
+            'publish_posts' => __('Beitrag veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
+            'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
+            'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_posts' => __('Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
@@ -38,9 +38,15 @@ class Workflow_Authors extends Workflow_Module {
 			'default_options' => array(
 				'post_types' => array(
 					'post' => true,
-					'page' => true,
+					'page' => true
 				),
-                'role_caps' => array()
+                'role_caps' => array(
+                    'upload_files' => true,
+                    'edit_posts' => true,
+                    'delete_posts' => true,
+                    'edit_pages' => true,
+                    'delete_pages' => true                    
+                )
 			),
 			'configure_callback' => 'print_configure_view',
 			'settings_help_tab' => array(
@@ -552,9 +558,12 @@ class Workflow_Authors extends Workflow_Module {
             elseif ( 'private' == get_post_status( $post_id ) && ! empty( $current_user->allcaps[$obj->cap->edit_private_posts] ) )
                 $allcaps[$obj->cap->edit_private_posts] = true;
         }
-                
-		$allcaps[$obj->cap->edit_others_posts] = true;
-        $allcaps[$obj->cap->delete_others_posts] = true;
+        
+        if(isset($obj->cap->edit_others_posts) && ! empty( $current_user->allcaps[$obj->cap->edit_posts] ))
+            $allcaps[$obj->cap->edit_others_posts] = true;
+        
+        if(isset($obj->cap->delete_others_posts) && ! empty( $current_user->allcaps[$obj->cap->edit_posts] ))
+            $allcaps[$obj->cap->delete_others_posts] = true;
         
 		return $allcaps;
 	}
@@ -930,38 +939,20 @@ class Workflow_Authors extends Workflow_Module {
 		return $usergroups;
 	}
 	
-	public function get_user_authors_posts( $user = 0, $args = null ) {
-		if ( !$user )
-			$user = (int) wp_get_current_user()->ID;
-
-		if ( is_int($user) )
-			$user = get_userdata($user)->user_login;
-
-		$post_args = array(
-			self::taxonomy_key => $user,
-			'posts_per_page' => '10',
-			'orderby' => 'modified',
-			'order' => 'DESC',
-		);
-        
-		$posts = get_posts( apply_filters( 'workflow_user_authors_posts_query_args', $post_args ) );
-		return $posts;
-
-	}
-	    
-    public function is_post_author( $user, $post_id = 0 ) {
+    public function is_post_author( $user = 0, $post_id = 0 ) {
         global $post;
 
-        if( ! $post_id && $post )
+        if( !$post_id && $post )
             $post_id = $post->ID;
         
-        if( ! $post_id )
+        if( !$post_id )
             return false;
 
-        if ( ! $user )
-            return false;
+		if ( !$user )
+			$user = wp_get_current_user()->ID;
 
         $authors = $this->get_post_authors( $post_id );
+        
         if ( is_numeric( $user ) ) {
             $user = get_userdata( $user );
             $user = $user->user_login;
