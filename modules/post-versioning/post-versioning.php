@@ -389,15 +389,15 @@ class Workflow_Post_Versioning extends Workflow_Module {
         exit;      
     }
     
-    public function version_save_post( $post_id, $post ) {
-        
+    public function version_save_post( $post_id, $post ) {  
+                
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (!current_user_can($cap->edit_posts)) 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
-        
-        $org_id = get_post_meta( $post_id, self::postmeta_key, true );
                 
+        $org_id = get_post_meta( $post_id, self::postmeta_key, true );
+        
         if ( $org_id ) {
             $new = array(
                 'ID' => $org_id,
@@ -477,7 +477,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 wp_set_object_terms($org_id, $terms, $taxonomy);
             }
 
-            wp_delete_post( $post_id, true ); // Bypass trash and force deletion (default: false)
+            $post->post_status = 'draft';
+            wp_update_post($post);
+            
+            wp_delete_post( $post_id );
+                    
+            if (defined('DOING_AJAX') && DOING_AJAX)
+                return;
             
             wp_safe_redirect( admin_url( 'post.php?post=' . $org_id . '&action=edit&message=1' ) );
             exit;
