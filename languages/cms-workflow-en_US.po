@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 17:53+0100\n"
+"POT-Creation-Date: 2013-08-16 12:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -90,32 +90,32 @@ msgstr "Trash"
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
 
-#: ../modules/authors/authors.php:25
-msgid "Veröffentlichte Beiträge bearbeiten"
-msgstr "Edit published posts"
-
-#: ../modules/authors/authors.php:26
+#: ../modules/authors/authors.php:25 ../modules/editors/editors.php:40
 msgid "Dateien hochladen"
 msgstr "Upload Files"
 
-#: ../modules/authors/authors.php:27
+#: ../modules/authors/authors.php:26
 msgid "Beitrag veröffentlichen"
 msgstr "Publish Posts"
 
-#: ../modules/authors/authors.php:28
+#: ../modules/authors/authors.php:27 ../modules/editors/editors.php:39
+msgid "Veröffentlichte Beiträge bearbeiten"
+msgstr "Edit Published Posts"
+
+#: ../modules/authors/authors.php:28 ../modules/editors/editors.php:42
 msgid "Veröffentlichte Beiträge löschen"
 msgstr "Delete Published Posts"
 
-#: ../modules/authors/authors.php:29
+#: ../modules/authors/authors.php:29 ../modules/editors/editors.php:43
 msgid "Beiträge bearbeiten"
 msgstr "Edit Posts"
 
-#: ../modules/authors/authors.php:30
+#: ../modules/authors/authors.php:30 ../modules/editors/editors.php:44
 msgid "Beiträge löschen"
 msgstr "Delete Posts"
 
-#: ../modules/authors/authors.php:34 ../modules/authors/authors.php:194
-#: ../modules/authors/authors.php:598
+#: ../modules/authors/authors.php:34 ../modules/authors/authors.php:200
+#: ../modules/authors/authors.php:607
 msgid "Autoren"
 msgstr "Authors"
 
@@ -123,8 +123,9 @@ msgstr "Authors"
 msgid "Verwaltung der Autoren."
 msgstr "Authors administration."
 
-#: ../modules/authors/authors.php:48 ../modules/dashboard/dashboard.php:27
+#: ../modules/authors/authors.php:54 ../modules/dashboard/dashboard.php:27
 #: ../modules/editorial-comments/editorial-comments.php:29
+#: ../modules/editors/editors.php:87
 #: ../modules/notifications/notifications.php:29
 #: ../modules/post-versioning/post-versioning.php:32
 #: ../modules/settings/settings.php:22 ../modules/task-list/task-list.php:31
@@ -133,8 +134,9 @@ msgstr "Authors administration."
 msgid "Übersicht"
 msgstr "Overall view"
 
-#: ../modules/authors/authors.php:49 ../modules/dashboard/dashboard.php:28
+#: ../modules/authors/authors.php:55 ../modules/dashboard/dashboard.php:28
 #: ../modules/editorial-comments/editorial-comments.php:30
+#: ../modules/editors/editors.php:88
 #: ../modules/notifications/notifications.php:30
 #: ../modules/post-versioning/post-versioning.php:33
 #: ../modules/settings/settings.php:23 ../modules/task-list/task-list.php:32
@@ -143,8 +145,9 @@ msgstr "Overall view"
 msgid "<p></p>"
 msgstr "<p></p>"
 
-#: ../modules/authors/authors.php:51 ../modules/dashboard/dashboard.php:30
+#: ../modules/authors/authors.php:57 ../modules/dashboard/dashboard.php:30
 #: ../modules/editorial-comments/editorial-comments.php:32
+#: ../modules/editors/editors.php:90
 #: ../modules/notifications/notifications.php:32
 #: ../modules/post-versioning/post-versioning.php:35
 #: ../modules/settings/settings.php:25 ../modules/task-list/task-list.php:34
@@ -161,79 +164,79 @@ msgstr ""
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
 
-#: ../modules/authors/authors.php:144
+#: ../modules/authors/authors.php:150 ../modules/editors/editors.php:155
 #, php-format
 msgid "%s bearbeiten"
 msgstr "Edit %s"
 
-#: ../modules/authors/authors.php:145
+#: ../modules/authors/authors.php:151 ../modules/editors/editors.php:156
 #, php-format
-msgid "%s veröffentlich"
+msgid "%s veröffentlichen"
 msgstr "Publish %s"
 
-#: ../modules/authors/authors.php:146
+#: ../modules/authors/authors.php:152 ../modules/editors/editors.php:157
 #, php-format
 msgid "%s löschen"
 msgstr "Delete %s"
 
-#: ../modules/authors/authors.php:147
+#: ../modules/authors/authors.php:153 ../modules/editors/editors.php:158
 #, php-format
 msgid "Veröffentlichte %s bearbeiten"
-msgstr "Edit published %s"
+msgstr "Edit Published %s"
 
-#: ../modules/authors/authors.php:148
+#: ../modules/authors/authors.php:154 ../modules/editors/editors.php:159
 #, php-format
 msgid "Veröffentlichte %s löschen"
-msgstr "Delete published %s"
+msgstr "Delete Published %s"
 
-#: ../modules/authors/authors.php:175
+#: ../modules/authors/authors.php:181
 #: ../modules/user-groups/user-groups.php:87
 msgid "Alle"
 msgstr "All"
 
-#: ../modules/authors/authors.php:176
+#: ../modules/authors/authors.php:182
 #: ../modules/user-groups/user-groups.php:88
 msgid "Ausgewählt"
 msgstr "Selected"
 
-#: ../modules/authors/authors.php:177
+#: ../modules/authors/authors.php:183
 #: ../modules/user-groups/user-groups.php:89
 msgid "Suchen..."
 msgstr "Search..."
 
-#: ../modules/authors/authors.php:205
+#: ../modules/authors/authors.php:211
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr "Select the authors for this document"
 
-#: ../modules/authors/authors.php:207
+#: ../modules/authors/authors.php:213
 #: ../modules/user-groups/user-groups.php:325
 #: ../modules/user-groups/user-groups.php:727
 msgid "Benutzer"
 msgstr "User"
 
-#: ../modules/authors/authors.php:223
+#: ../modules/authors/authors.php:229
 #: ../modules/user-groups/user-groups.php:17
 #: ../modules/user-groups/user-groups.php:415
 msgid "Benutzergruppen"
 msgstr "User Groups"
 
-#: ../modules/authors/authors.php:595
+#: ../modules/authors/authors.php:604
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/authors/authors.php:715
+#: ../modules/authors/authors.php:724
 #, php-format
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
 msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] "My %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[1] "My %1$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:717
+#: ../modules/authors/authors.php:726
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:980
+#: ../modules/authors/authors.php:971
 #: ../modules/editorial-comments/editorial-comments.php:282
 #: ../modules/notifications/notifications.php:376
 #: ../modules/post-versioning/post-versioning.php:92
@@ -243,7 +246,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 msgid "Freigabe"
 msgstr "Allowed Post Types"
 
-#: ../modules/authors/authors.php:981
+#: ../modules/authors/authors.php:972
 msgid "Autorenrechte"
 msgstr "Authors Capabilities"
 
@@ -312,7 +315,7 @@ msgstr "Editorial Comments"
 
 #: ../modules/editorial-comments/editorial-comments.php:16
 msgid "Diskussion bzgl. eine Dokumentsbearbeitung."
-msgstr "Editorial comments regarding a document."
+msgstr "Editorial Comments regarding a document."
 
 #: ../modules/editorial-comments/editorial-comments.php:26
 msgid "Wählen Sie &bdquo;Post Types&rdquo;"
@@ -368,6 +371,123 @@ msgstr "Please enter a comment."
 #: ../modules/task-list/task-list.php:455
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgstr "An unexpected error has occurred. Please try again."
+
+#: ../modules/editors/editors.php:21
+msgid "Kommentare moderieren"
+msgstr "Moderate Comments"
+
+#: ../modules/editors/editors.php:22
+msgid "Taxonomien verwalten"
+msgstr "Manage Taxonomies"
+
+#: ../modules/editors/editors.php:23
+msgid "Links verwalten"
+msgstr "Manage Links"
+
+#: ../modules/editors/editors.php:24
+msgid "Andere Beiträge bearbeiten"
+msgstr "Edit Others Posts"
+
+#: ../modules/editors/editors.php:25
+msgid "Seiten bearbeiten"
+msgstr "Edit Pages"
+
+#: ../modules/editors/editors.php:26
+msgid "Andere Seiten bearbeiten"
+msgstr "Edit Others Pages"
+
+#: ../modules/editors/editors.php:27
+msgid "Veröffentlichte Seiten bearbeiten"
+msgstr "Edit Published Pages"
+
+#: ../modules/editors/editors.php:28
+msgid "Seiten veröffentlichen"
+msgstr "Publish Pages"
+
+#: ../modules/editors/editors.php:29
+msgid "Seiten löschen"
+msgstr "Delete Pages"
+
+#: ../modules/editors/editors.php:30
+msgid "Andere Seiten löschen"
+msgstr "Delete Others Pages"
+
+#: ../modules/editors/editors.php:31
+msgid "Veröffentlichte Seiten löschen"
+msgstr "Delete Published Pages"
+
+#: ../modules/editors/editors.php:32
+msgid "Andere Beiträge löschen"
+msgstr "Delete Others Posts"
+
+#: ../modules/editors/editors.php:33
+msgid "Private Beiträge löschen"
+msgstr "Delete Private Posts"
+
+#: ../modules/editors/editors.php:34
+msgid "Private Beiträge bearbeiten"
+msgstr "Edit Private Posts"
+
+#: ../modules/editors/editors.php:35
+msgid "Private Beiträge lesen"
+msgstr "Read Private Posts"
+
+#: ../modules/editors/editors.php:36
+msgid "Private Seiten löschen"
+msgstr "Delete Private Pages"
+
+#: ../modules/editors/editors.php:37
+msgid "Private Seiten bearbeiten"
+msgstr "Edit Private Pages"
+
+#: ../modules/editors/editors.php:38
+msgid "Private Seiten lesen"
+msgstr "Read Private Pages"
+
+#: ../modules/editors/editors.php:41
+msgid "Beiträge veröffentlichen"
+msgstr "Publish Posts"
+
+#: ../modules/editors/editors.php:48
+msgid "Design bearbeiten"
+msgstr "Edit Appearance"
+
+#: ../modules/editors/editors.php:52
+msgid "Redakteure"
+msgstr "Editors"
+
+#: ../modules/editors/editors.php:53
+msgid "Verwaltung der Redakteure."
+msgstr "Editors administration."
+
+#: ../modules/editors/editors.php:160
+#, php-format
+msgid "Andere %s bearbeiten"
+msgstr "Edit Others %s"
+
+#: ../modules/editors/editors.php:161
+#, php-format
+msgid "Andere %s löschen"
+msgstr "Delete Others %s"
+
+#: ../modules/editors/editors.php:162
+#, php-format
+msgid "Private %s bearbeiten"
+msgstr "Edit Private %s"
+
+#: ../modules/editors/editors.php:163
+#, php-format
+msgid "Private %s löschen"
+msgstr "Delete Private %s"
+
+#: ../modules/editors/editors.php:164
+#, php-format
+msgid "Private %s lesen"
+msgstr "Read Private %s"
+
+#: ../modules/editors/editors.php:171
+msgid "Redakteurerechte"
+msgstr "Editors Capabilities"
 
 #: ../modules/notifications/notifications.php:15
 msgid "Benachrichtigungen"
@@ -643,7 +763,7 @@ msgid "Neue Version"
 msgstr "New version"
 
 #: ../modules/post-versioning/post-versioning.php:294
-#: ../modules/post-versioning/post-versioning.php:504
+#: ../modules/post-versioning/post-versioning.php:510
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
@@ -654,7 +774,7 @@ msgid ""
 msgstr "You do not have the necessary rights to create a new version."
 
 #: ../modules/post-versioning/post-versioning.php:306
-#: ../modules/post-versioning/post-versioning.php:511
+#: ../modules/post-versioning/post-versioning.php:517
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
@@ -666,7 +786,7 @@ msgstr "This action is not allowed."
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:492
+#: ../modules/post-versioning/post-versioning.php:498
 #, php-format
 msgid ""
 "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. "
@@ -676,12 +796,12 @@ msgstr ""
 "New version of the document <a href='%s' target='__blank'>%s</a>. Click on "
 "\"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:516
+#: ../modules/post-versioning/post-versioning.php:522
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:519
+#: ../modules/post-versioning/post-versioning.php:525
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -689,12 +809,12 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:565
-#: ../modules/post-versioning/post-versioning.php:634
+#: ../modules/post-versioning/post-versioning.php:571
+#: ../modules/post-versioning/post-versioning.php:640
 msgid "Netzwerkweit Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:601
+#: ../modules/post-versioning/post-versioning.php:607
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
