@@ -148,7 +148,7 @@ class Workflow_Authors extends Workflow_Module {
         
         foreach( $all_post_types as $args ) {
             $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-            $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlich', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+            $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
             $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
             $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
             $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
