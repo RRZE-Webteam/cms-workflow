@@ -2,7 +2,7 @@
 
 class Workflow_Settings extends Workflow_Module {
 	
-	public static $module;
+	public $module;
     
 	public function __construct() {	  
         global $cms_workflow;
