@@ -8,7 +8,9 @@ class Workflow_Authors extends Workflow_Module {
     
     const role = 'author';
     
-    private $wp_role_caps = array();             
+    private $wp_role_caps = array();  
+    
+    private $more_role_caps = array();    
 
     public $role_caps = array();
     
@@ -30,6 +32,10 @@ class Workflow_Authors extends Workflow_Module {
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
+        $this->more_role_caps = array( 
+            'unfiltered_html' => __('Ungefilterten HTML', CMS_WORKFLOW_TEXTDOMAIN)
+        );
+        
 		$args = array(
 			'title' => __( 'Autoren', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'Verwaltung der Autoren.', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -144,8 +150,8 @@ class Workflow_Authors extends Workflow_Module {
         
         $all_post_types = $this->get_available_post_types();
 
-        $this->role_caps = $this->wp_role_caps;
-        
+        $this->role_caps = array_merge($this->wp_role_caps, $this->more_role_caps);
+                
         foreach( $all_post_types as $args ) {
             $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
             $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
