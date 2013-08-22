@@ -32,9 +32,7 @@ class Workflow_Authors extends Workflow_Module {
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
-        $this->more_role_caps = array( 
-            'unfiltered_html' => __('Ungefilterten HTML', CMS_WORKFLOW_TEXTDOMAIN)
-        );
+        $this->more_role_caps = array();
         
 		$args = array(
 			'title' => __( 'Autoren', CMS_WORKFLOW_TEXTDOMAIN ),

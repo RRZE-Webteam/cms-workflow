@@ -45,8 +45,7 @@ class Workflow_Editors extends Workflow_Module {
         );
 
         $this->more_role_caps = array( 
-            'edit_theme_options' => __('Design bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'unfiltered_html' => __('Ungefilterten HTML', CMS_WORKFLOW_TEXTDOMAIN)
+            'edit_theme_options' => __('Design bearbeiten', CMS_WORKFLOW_TEXTDOMAIN)
         );
         
 		$args = array(
