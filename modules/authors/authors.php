@@ -101,7 +101,7 @@ class Workflow_Authors extends Workflow_Module {
 	}
 	
     public function deactivation() {
-        $role =& get_role( self::role );
+        $role = get_role( self::role );
 
         $role_caps = array_keys($this->module->options->role_caps);
         
@@ -127,7 +127,7 @@ class Workflow_Authors extends Workflow_Module {
             
         } else {
             
-            $role =& get_role( self::role );
+            $role = get_role( self::role );
 
             $role_caps = array_keys($this->role_caps);
             
@@ -1012,7 +1012,7 @@ class Workflow_Authors extends Workflow_Module {
                 unset($new_options['role_caps']);
         
             if(isset( $new_options['role_caps'])) {
-                $role =& get_role( self::role );
+                $role = get_role( self::role );
                 $role_caps = array_keys($this->module->options->role_caps);
                 
                 foreach($role_caps as $cap) {
