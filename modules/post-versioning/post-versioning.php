@@ -558,6 +558,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }    
     
     public function network_connections_meta_box() {
+		$post_type = $this->get_current_post_type();
+        
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
+        
         $connections = $this->module->options->network_connections;
         
         $current_blog_id = get_current_blog_id();
@@ -565,11 +570,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if( empty( $connections ) )
             return;      
         
-		$allowed_post_types = $this->get_post_types( $this->module );
-        
-		foreach ( $allowed_post_types as $post_type ) {
-            add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'side', 'high');
-        }
+		add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'side', 'high');
     }
 
     public function network_connections_inner_box( $post ) {
