@@ -36,25 +36,24 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 	}
 
 	public function init() {
-
-		add_action( 'add_meta_boxes', array ( $this, 'add_post_meta_box' ) );
-		add_action( 'admin_init', array( $this, 'register_settings' ) );		
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_scripts' ) );
+        add_action( 'admin_init', array( $this, 'register_settings' ) );
+        
+		add_action( 'add_meta_boxes', array ( $this, 'add_post_meta_box' ) );		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'wp_ajax_workflow_ajax_insert_comment', array( $this, 'ajax_insert_comment' ) );
 	}
 
-	public function add_admin_scripts( ) {
-		global $pagenow;
-		
-		$post_type = $this->get_current_post_type();
-		$allowed_post_types = $this->get_post_types( $this->module );
+	public function admin_enqueue_scripts() {
+        global $pagenow;
         
-		if ( !in_array( $post_type, $allowed_post_types ) )
-			return;
-			
 		if ( !in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'page-new.php' ) ) )
 			return;
 		
+		$post_type = $this->get_current_post_type();
+        
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
+			        
 		wp_enqueue_script( 'workflow-editorial-comments', $this->module_url . 'editorial-comments.js', array( 'jquery','post' ), CMS_WORKFLOW_VERSION, true );
 		wp_enqueue_style( 'workflow-editorial-comments', $this->module_url . 'editorial-comments.css', false, CMS_WORKFLOW_VERSION, 'all' );
 				
@@ -64,15 +63,16 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 			var workflow_thread_comments = <?php echo ($thread_comments) ? $thread_comments : 0; ?>;
 		</script>
 		<?php
-		
+        
 	}
 	
 	public function add_post_meta_box() {
-		
-		$allowed_post_types = $this->get_post_types( $this->module );
-		foreach ( $allowed_post_types as $post_type ) {
-			add_meta_box('workflow-editorial-comments', __('Redaktionelle Diskussion', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'editorial_comments_meta_box'), $post_type, 'normal' );
-        }
+		$post_type = $this->get_current_post_type();
+        
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
+
+        add_meta_box('workflow-editorial-comments', __('Redaktionelle Diskussion', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'editorial_comments_meta_box'), $post_type, 'normal' );
 	}
 	
 	public function get_editorial_comment_count( $id ) {
@@ -84,8 +84,8 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 		return $comment_count;
 	}
 	
-	public function editorial_comments_meta_box( ) {
-		global $post, $post_ID;
+	public function editorial_comments_meta_box() {
+		global $post;
 		?>
 		<div id="workflow-comments_wrapper">
 			<a name="editorial-comments"></a>

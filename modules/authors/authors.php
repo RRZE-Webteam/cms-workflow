@@ -195,20 +195,16 @@ class Workflow_Authors extends Workflow_Module {
 	}
 	
 	public function add_post_meta_box() {
-
-		if ( !current_user_can( 'manage_categories' ) ) 
+        $post_type = $this->get_current_post_type();
+        
+		if ( !$this->is_post_type_enabled($post_type) || !current_user_can( 'manage_categories' ) ) 
 			return;		
 		
-		$allowed_post_types = $this->get_post_types( $this->module );
-		foreach ( $allowed_post_types as $post_type ) {
-			add_meta_box( 'workflow-authors', __( 'Autoren', CMS_WORKFLOW_TEXTDOMAIN), array( $this, 'authors_meta_box'), $post_type, 'advanced' );
-		}
+		add_meta_box( 'workflow-authors', __( 'Autoren', CMS_WORKFLOW_TEXTDOMAIN), array( $this, 'authors_meta_box'), $post_type, 'advanced' );
 	}
 	
 	public function authors_meta_box() {
-		global $cms_workflow;
-        
-        $post = get_post();
+		global $cms_workflow, $post;
 		?>
 		<div id="workflow-post-authors-box">
 
