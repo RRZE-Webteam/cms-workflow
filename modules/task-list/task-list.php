@@ -44,8 +44,10 @@ class Workflow_Task_List extends Workflow_Module {
 	}
 	
 	public function init() {
+        add_action( 'admin_init', array( $this, 'register_settings' ) );
         
-        add_action( 'add_meta_boxes', array( $this, 'post_page_metabox' ) );
+		add_action( 'add_meta_boxes', array ( $this, 'add_post_meta_box' ) );		
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
         
         add_action( 'wp_ajax_task_list_ajax_new_task_submit', array( $this, 'task_list_ajax_new_task' ) );
         add_action( 'wp_ajax_task_list_ajax_print_after_new_task', array( $this, 'task_list_ajax_print_after_new_task' ) );
@@ -55,17 +57,20 @@ class Workflow_Task_List extends Workflow_Module {
         add_action( 'wp_ajax_task_list_ajax_self_assignment', array( $this, 'task_list_ajax_self_assignment' ) );
         add_action( 'wp_ajax_task_list_ajax_self_unassignment', array( $this, 'task_list_ajax_self_unassignment' ) );
         
-        add_action( 'admin_init', array( $this, 'register_settings' ) );
-        
         add_filter( 'workflow_post_versioning_skip_add_post_meta', array( $this, 'post_versioning_skip_post_meta'));
 	}
+       
+	public function admin_enqueue_scripts() {
+        global $pagenow, $post;
         
-    public function post_page_metabox( ) {
-        global $post;
+		if ( !in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'page-new.php' ) ) )
+			return;
+		
+		$post_type = $this->get_current_post_type();
         
-        if($post->post_status == 'auto-draft')
-            return;
-        
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
+			        
         $current_user = wp_get_current_user(); 
         
         wp_enqueue_style( 'workflow-task-list', $this->module->module_url . 'task-list.css', false, CMS_WORKFLOW_VERSION );
@@ -74,27 +79,31 @@ class Workflow_Task_List extends Workflow_Module {
         
         wp_enqueue_script( 'workflow-task-list', $this->module_url . 'task-list.js', 'jquery' );
         wp_localize_script( 'workflow-task-list', 'task_list_vars', array(
-            'ajax_url'                                      => admin_url( 'admin-ajax.php' ),
-            'ajax_loader'                                   => admin_url( 'images/wpspin_light.gif' ),
-            'current_user_id'                               => $current_user->ID,
-            'post_id'                                       => $post->ID,
-            'current_user_display_name'                     => $current_user->display_name,
-            'current_date'                                  => date_i18n(get_option('date_format')),
-            'message_1'                                     => __('Sie sind dabei, die ausgewählte Aufgabe dauerhaft zu löschen. Sind Sie sicher, dass Sie fortfahren möchten?', CMS_WORKFLOW_TEXTDOMAIN),
-            'message_2'                                     => __('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN),
-            'nonce_task_list_ajax_mark_as_done'             => wp_create_nonce( 'task_list_ajax_mark_as_done' ),
-            'nonce_task_list_ajax_self_assignment'             => wp_create_nonce( 'task_list_ajax_self_assignment' ),
-            'nonce_task_list_ajax_self_unassignment'   => wp_create_nonce( 'task_list_ajax_self_unassignment' ),
-            'nonce_task_list_ajax_delete_task'              => wp_create_nonce( 'task_list_ajax_delete_task' ),
-            'nonce_task_list_ajax_get_page'                 => wp_create_nonce( 'task_list_ajax_get_page' ),
+            'ajax_url'                                  => admin_url( 'admin-ajax.php' ),
+            'ajax_loader'                               => admin_url( 'images/wpspin_light.gif' ),
+            'current_user_id'                           => $current_user->ID,
+            'post_id'                                   => $post->ID,
+            'current_user_display_name'                 => $current_user->display_name,
+            'current_date'                              => date_i18n(get_option('date_format')),
+            'message_1'                                 => __('Sie sind dabei, die ausgewählte Aufgabe dauerhaft zu löschen. Sind Sie sicher, dass Sie fortfahren möchten?', CMS_WORKFLOW_TEXTDOMAIN),
+            'message_2'                                 => __('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN),
+            'nonce_task_list_ajax_mark_as_done'         => wp_create_nonce( 'task_list_ajax_mark_as_done' ),
+            'nonce_task_list_ajax_self_assignment'      => wp_create_nonce( 'task_list_ajax_self_assignment' ),
+            'nonce_task_list_ajax_self_unassignment'    => wp_create_nonce( 'task_list_ajax_self_unassignment' ),
+            'nonce_task_list_ajax_delete_task'          => wp_create_nonce( 'task_list_ajax_delete_task' ),
+            'nonce_task_list_ajax_get_page'             => wp_create_nonce( 'task_list_ajax_get_page' ),
             'nonce_task_list_ajax_new_task'             => wp_create_nonce( 'task_list_ajax_new_task' ),
-            'nonce_task_list_ajax_print_after_new_task'  => wp_create_nonce( 'task_list_ajax_print_after_new_task' )
+            'nonce_task_list_ajax_print_after_new_task' => wp_create_nonce( 'task_list_ajax_print_after_new_task' )
         ) );
-       
-		$allowed_post_types = $this->get_post_types( $this->module );
-		foreach ( $allowed_post_types as $post_type ) {
-            add_meta_box( 'workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array( $this, 'metabox_post' ), $post_type, 'side', 'high' );
-        }
+	}
+    
+    public function add_post_meta_box( ) {
+		$post_type = $this->get_current_post_type();
+        
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
+        
+        add_meta_box( 'workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array( $this, 'metabox_post' ), $post_type, 'side', 'high' );
     }
         
     public function post_versioning_skip_post_meta($key) {
