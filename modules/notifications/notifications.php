@@ -50,13 +50,12 @@ class Workflow_Notifications extends Workflow_Module {
 	public function notification_status_change( $new_status, $old_status, $post ) {
 		global $cms_workflow;
 
-		if ( ! apply_filters( 'workflow_notification_status_change', $new_status, $old_status, $post ) || ! apply_filters( "workflow_notification_{$post->post_type}_status_change", $new_status, $old_status, $post ) )
-			return false;
-		
-		$allowed_post_types = $this->get_post_types( $this->module );
-		if ( !in_array( $post->post_type, $allowed_post_types ) )
+        if ( !$this->is_post_type_enabled($post->post_type))
 			return;
 		
+		if ( !apply_filters( 'workflow_notification_status_change', $new_status, $old_status, $post ) || ! apply_filters( "workflow_notification_{$post->post_type}_status_change", $new_status, $old_status, $post ) )
+			return false;
+		        
 		$ignored_statuses = apply_filters( 'workflow_notification_ignored_statuses', array( $old_status, 'inherit', 'auto-draft' ), $post->post_type );
 		
 		if ( !in_array( $new_status, $ignored_statuses ) ) {
@@ -159,11 +158,10 @@ class Workflow_Notifications extends Workflow_Module {
 		
 		$post = get_post($comment->comment_post_ID);
 		
-		$allowed_post_types = $this->get_post_types( $this->module );
-		if ( !in_array( $post->post_type, $allowed_post_types ) )
-			return;		
+        if ( !$this->is_post_type_enabled($post->post_type))
+			return;
 		
-		if ( ! apply_filters( 'workflow_notification_editorial_comment', $comment, $post ) )
+		if ( !apply_filters( 'workflow_notification_editorial_comment', $comment, $post ) )
 			return false;
 		
 		$user = get_userdata( $post->post_author );
