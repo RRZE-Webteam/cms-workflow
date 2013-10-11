@@ -268,7 +268,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
 	}	
 	
     public function filter_post_row_actions($actions, $post) {
-            
+        if(!is_object($this->get_available_post_types($post->post_type)))
+            return $actions;
+        
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if ( current_user_can($cap->edit_posts) && !get_post_meta( $post->ID, self::postmeta_key, true ) && $post->post_status != 'trash')
@@ -491,11 +493,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
     
     public function version_admin_notice() {
-        if ( isset($_REQUEST['post']) ) {           
-            $post_id = $_REQUEST['post'];
-            $old_post_id = get_post_meta( $post_id, self::postmeta_key, true );                    
+        if ( isset($_REQUEST['post']) ) {
+            global $post;
+            $old_post_id = get_post_meta( $post->ID, self::postmeta_key, true );                    
             if ( $old_post_id ) {
-                echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';
+                if (current_user_can('manage_categories')) 
+                    echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';
+                else
+                    echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';                    
             }
         }
     }
