@@ -59,8 +59,6 @@ class Workflow_Module {
 	}
 		
 	public function get_post_status_name( $status ) {
-        global $cms_workflow;
-        
 		$status_friendly_name = '';
 		
 		$builtin_status = array(
@@ -92,12 +90,11 @@ class Workflow_Module {
 			}
 		}    
         
-        if(is_null($post_type))
+        if(is_null($post_type) || !isset($all_post_types[$post_type]))
             return $all_post_types;
         
         else
             return $all_post_types[$post_type];
-        
     }
         
     public function get_post_type_labels() {
