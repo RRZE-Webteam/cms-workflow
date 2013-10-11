@@ -2,6 +2,10 @@
     padding: 0;
 }
 
+#workflow-comments_wrapper a {
+    text-decoration: none;
+}
+
 #workflow-comments {
     margin-bottom: 10px;
     border-top: 1px solid #e5e5e5;
@@ -11,18 +15,18 @@
 #workflow-comments li {
     padding: 5px;
     margin: 0px 0;
-    border-left: 5px solid #e5e5e5;
-    border-right: 5px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
     background: #fff;
 }
 
-#workflow-comments li:hover p.row-actions {
+#workflow-comments li:hover div.row-actions {
     visibility: visible;
 }
 
-#workflow-comments li p.row-actions {
-    text-align: right;
+#workflow-comments li div.row-actions {
+    margin-left: 70px;
 }
 
 #workflow-comments ul.children {
@@ -31,7 +35,7 @@
 }
 
 #workflow-comments ul.children li {
-    border-left: 5px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
 }
 
@@ -52,10 +56,9 @@
 }
 
 #workflow-comments h5 span.meta {
-    color: #666666;
-    font-size: 0.85em;
+    color: #777777;
     margin: 0 0 1.5em;
-    font-style: normal;
+    font-weight: normal;
 }
 
 #workflow-comments .comment-content {
