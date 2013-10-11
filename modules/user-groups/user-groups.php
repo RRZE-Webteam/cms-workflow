@@ -321,7 +321,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		<form method="post" action="<?php echo esc_url( $this->get_link( array( 'action' => 'edit-usergroup', 'usergroup-id' => $usergroup_id ) ) ); ?>">
 		<div id="col-right">
             <div class="col-wrap">
-                <div id="workflow-usergroup-users" class="form-wrap">
+                <div id="workflow-usergroup-users" class="wrap">
                     <h4><?php _e( 'Benutzer', CMS_WORKFLOW_TEXTDOMAIN ); ?></h4>
                     <?php 
                         $select_form_args = array(
@@ -367,10 +367,10 @@ class Workflow_User_Groups extends Workflow_Module {
                 </div>
             </div>
 			<div id="col-left"><div class="col-wrap"><div class="form-wrap">
-				<h3 class="nav-tab-wrapper">
+				<h2 class="nav-tab-wrapper">
 					<a href="<?php echo esc_url( $this->get_link() ); ?>" class="nav-tab<?php if ( !isset( $_GET['action'] ) || $_GET['action'] != 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Neuer Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
 					<a href="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" class="nav-tab<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Einstellungen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
-				</h3>
+				</h2>
 				<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ): ?>
 				<form class="basic-settings" action="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" method="post">
 					<?php settings_fields( $this->module->workflow_options_name ); ?>
