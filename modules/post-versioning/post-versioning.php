@@ -44,8 +44,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
         
 		$allowed_post_types = $this->get_post_types( $this->module );
 		foreach ( $allowed_post_types as $post_type ) {        
-            add_filter( $post_type . '_row_actions', array( $this, 'filter_post_row_actions'), 10, 2);
-            add_action( 'publish_' . $post_type, array( $this, 'version_save_post'), 999, 2 );                  
+            $filter_row_actions = is_post_type_hierarchical($post_type) ? 'page_row_actions' : 'post_row_actions';
+            add_filter( $filter_row_actions, array( $this, 'filter_post_row_actions'), 10, 2);                 
         }  
         
         add_action( 'admin_action_copy_as_new_post_draft', array( $this, 'copy_as_new_post_draft'));
@@ -268,8 +268,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
 	}	
 	
     public function filter_post_row_actions($actions, $post) {
-        if(!is_object($this->get_available_post_types($post->post_type)))
+        if(!is_object($this->get_available_post_types($post->post_type)) || !in_array($post->post_type, $this->get_post_types( $this->module )))
             return $actions;
+        
+        add_action( 'publish_' . $post->post_type, array( $this, 'version_save_post'), 999, 2 );
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
