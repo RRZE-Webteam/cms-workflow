@@ -78,12 +78,3 @@
 #profile-page #post-authors-usergroups {
     width: 300px;
 }
-
-th.column-id {
-    width:4em;
-    text-align: center;
-}
-
-td.column-id {
-    text-align: right;
-}

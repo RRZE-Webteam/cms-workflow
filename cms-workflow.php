@@ -187,6 +187,8 @@ class CMS_Workflow {
             
 		}
 
+        wp_enqueue_style( 'workflow-common', CMS_WORKFLOW_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all' );
+        
 		wp_register_script( 'jquery-listfilterizer', CMS_WORKFLOW_URL . 'js/jquery.listfilterizer.js', array( 'jquery' ), CMS_WORKFLOW_VERSION, true );
 		wp_register_style( 'jquery-listfilterizer', CMS_WORKFLOW_URL . 'css/jquery.listfilterizer.css', false, CMS_WORKFLOW_VERSION, 'all' );
 
