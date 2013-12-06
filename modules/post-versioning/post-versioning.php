@@ -877,8 +877,15 @@ class Workflow_Post_Versioning extends Workflow_Module {
         
         if( get_post_meta($post_id, self::version_post_id, true) ) {
             $permalink = get_permalink($post_id);
+            $translate_to_lang = get_post_meta($post_id, '_translate_to_lang_post_meta', true);
+            if(empty($translate_to_lang)) {
+                $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+            }
+
+            $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+
             $post_title = get_the_title($post_id);
-            $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title );          
+            $documents[] = sprintf( __( '<a href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );         
         }   
         
         $remote_post_meta = get_post_meta( $post_id, self::version_remote_post_meta, true );
@@ -886,11 +893,16 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if(isset($remote_post_meta['post_id']) && isset($remote_post_meta['blog_id'])) {
             if(switch_to_blog( $remote_post_meta['blog_id'] )) {
                 $permalink = get_permalink($remote_post_meta['post_id']);
-                if($permalink) {
-                    $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                    $blog_lang = $this->get_lang_name($blog_lang);                   
+                if($permalink) {  
+                    $translate_to_lang = get_post_meta($remote_post_meta['post_id'], '_translate_to_lang_post_meta', true);
+                    if(empty($translate_to_lang)) {
+                        $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                    }
+
+                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+                    
                     $post_title = get_the_title($remote_post_meta['post_id']);
-                    $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
+                    $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
                 }                
                 restore_current_blog();
             }
@@ -914,15 +926,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 if( $blog_id != $current_blog && $blog_id == $remote_parent_post_meta['blog_id'] )  {
 
                     if(switch_to_blog( $blog_id )) {
-
                         $permalink = get_permalink($remote_parent_post_meta['post_id']);
                         if($permalink) {
-                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                            $blog_lang = $this->get_lang_name($blog_lang);                                       
-                            $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                            $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
-                        }
+                            $translate_to_lang = get_post_meta($remote_parent_post_meta['post_id'], '_translate_to_lang_post_meta', true);
+                            if(empty($translate_to_lang)) {
+                                $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                            }
+                            
+                            $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
+                            $post_title = get_the_title($remote_parent_post_meta['post_id']);
+                            $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
+                        }                
                         restore_current_blog();
                     }
 
@@ -933,21 +948,24 @@ class Workflow_Post_Versioning extends Workflow_Module {
         } elseif(isset($remote_parent_post_meta['post_id']) && isset($remote_parent_post_meta['blog_id'])) {
 
             if(switch_to_blog( $remote_parent_post_meta['blog_id'] )) {
-
                 $permalink = get_permalink($remote_parent_post_meta['post_id']);
                 if($permalink) {
-                    $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                    $blog_lang = $this->get_lang_name($blog_lang);                                       
-                    $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                    $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
-                }
+                    $translate_to_lang = get_post_meta($remote_parent_post_meta['post_id'], '_translate_to_lang_post_meta', true);
+                    if(empty($translate_to_lang)) {
+                        $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                    }
 
+                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+
+                    $post_title = get_the_title($remote_parent_post_meta['post_id']);
+                    $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
+                }                
                 restore_current_blog();
             }
 
         }
         
-        return implode(', ', $documents);
+        return implode('<br>', $documents);
     }
     
 }
