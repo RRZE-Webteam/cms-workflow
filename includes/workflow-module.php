@@ -2,10 +2,10 @@
 	
 class Workflow_Module {
     
-	public function module_activated( $slug ) {
+	public function module_activated( $name ) {
         global $cms_workflow;
         
-		return isset( $cms_workflow->$slug ) && $cms_workflow->$slug->module->options->activated;
+		return isset( $cms_workflow->$name ) && $cms_workflow->$name->module->options->activated;
 	}
 
 	public function clean_post_type_options( $module_post_types = array(), $post_type_support = null ) {
@@ -243,6 +243,71 @@ class Workflow_Module {
 			return false;
 			
 		return true;
+	}
+    
+    public function show_admin_notice($message, $class = '') {
+        
+        $default_allowed_classes = array('error', 'updated');
+        $allowed_classes = apply_filters('admin_notices_allowed_classes', $default_allowed_classes);
+        $default_class = apply_filters('admin_notices_default_class', 'updated');
+
+        if(!in_array($class, $allowed_classes))
+            $class = $default_class;
+        
+        ?><div class="<?php echo $class; ?>"><p><?php echo $message; ?></p></div><?php
+    }   
+        
+    public function flash_admin_notice($message, $class = '') {        
+        $default_allowed_classes = array('error', 'updated');
+        $allowed_classes = apply_filters('admin_notices_allowed_classes', $default_allowed_classes);
+        $default_class = apply_filters('admin_notices_default_class', 'updated');
+
+        if(!in_array($class, $allowed_classes)) 
+            $class = $default_class;
+        
+        $transient = 'flash_admin_notices_' . get_current_user_id();
+        $transient_value = get_transient($transient);
+        $flash_notices = maybe_unserialize($transient_value ? $transient_value : array());
+        $flash_notices[$class][] = $message;
+
+        set_transient( $transient, $flash_notices, 60 );
+    }
+    
+    public function show_flash_admin_notices() {
+        $transient = 'flash_admin_notices_' . get_current_user_id();
+        $transient_value = get_transient($transient);
+        $flash_notices = maybe_unserialize($transient_value ? $transient_value : '');
+
+        if(is_array($flash_notices)) {
+            foreach($flash_notices as $class => $messages) {
+                foreach($messages as $message) {
+                    ?><div class="<?php echo $class; ?>"><p><?php echo $message; ?></p></div><?php
+                }
+            }
+        }
+
+        delete_transient($transient);
+    }
+
+    public function get_lang_name($lang_code = '') {
+        $lang_codes = $this->lang_codes();
+        if(isset($lang_codes[$lang_code]))
+            return $lang_codes[$lang_code];
+        
+        return $lang_code;
+    }
+    
+	public function lang_codes() {
+
+		$lang_codes[ 'de_DE' ] = __( 'Deutsch', CMS_WORKFLOW_TEXTDOMAIN );
+		$lang_codes[ 'en_EN' ] = __( 'Englisch', CMS_WORKFLOW_TEXTDOMAIN );        
+		$lang_codes[ 'es_ES' ] = __( 'Spanisch', CMS_WORKFLOW_TEXTDOMAIN );
+
+		asort( $lang_codes );
+
+		$lang_codes = apply_filters( 'workflow_language_codes', $lang_codes );
+
+		return $lang_codes;
 	}
     
 }
