@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-11 14:52+0100\n"
+"POT-Creation-Date: 2013-12-05 16:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../cms-workflow.php:73
@@ -35,30 +35,30 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../cms-workflow.php:209
+#: ../cms-workflow.php:211
 msgid "Konfigurieren"
 msgstr "Configure"
 
-#: ../cms-workflow.php:211
+#: ../cms-workflow.php:213
 msgid "Einstellungen gespeichert."
 msgstr "Settings saved."
 
-#: ../cms-workflow.php:212
+#: ../cms-workflow.php:214
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:213 ../modules/settings/settings.php:256
+#: ../cms-workflow.php:215 ../modules/settings/settings.php:256
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
-#: ../cms-workflow.php:214
+#: ../cms-workflow.php:216
 #: ../modules/editorial-comments/editorial-comments.php:290
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr "You do not have the required permissions to perform this action."
 
-#: ../cms-workflow.php:215
+#: ../cms-workflow.php:217
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
@@ -89,6 +89,18 @@ msgstr "Trash"
 #: ../includes/workflow-module.php:203
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
+
+#: ../includes/workflow-module.php:302
+msgid "Deutsch"
+msgstr "German"
+
+#: ../includes/workflow-module.php:303
+msgid "Englisch"
+msgstr "English"
+
+#: ../includes/workflow-module.php:304
+msgid "Spanisch"
+msgstr "Spanish"
 
 #: ../modules/authors/authors.php:27 ../modules/editors/editors.php:40
 msgid "Dateien hochladen"
@@ -127,9 +139,9 @@ msgstr "Authors administration."
 #: ../modules/editorial-comments/editorial-comments.php:29
 #: ../modules/editors/editors.php:87
 #: ../modules/notifications/notifications.php:29
-#: ../modules/post-versioning/post-versioning.php:32
+#: ../modules/post-versioning/post-versioning.php:36
 #: ../modules/settings/settings.php:22 ../modules/task-list/task-list.php:31
-#: ../modules/translation/translation.php:26
+#: ../modules/translation/translation.php:29
 #: ../modules/user-groups/user-groups.php:37
 msgid "Übersicht"
 msgstr "Overall view"
@@ -138,9 +150,9 @@ msgstr "Overall view"
 #: ../modules/editorial-comments/editorial-comments.php:30
 #: ../modules/editors/editors.php:88
 #: ../modules/notifications/notifications.php:30
-#: ../modules/post-versioning/post-versioning.php:33
+#: ../modules/post-versioning/post-versioning.php:37
 #: ../modules/settings/settings.php:23 ../modules/task-list/task-list.php:32
-#: ../modules/translation/translation.php:27
+#: ../modules/translation/translation.php:30
 #: ../modules/user-groups/user-groups.php:38
 msgid "<p></p>"
 msgstr "<p></p>"
@@ -149,9 +161,9 @@ msgstr "<p></p>"
 #: ../modules/editorial-comments/editorial-comments.php:32
 #: ../modules/editors/editors.php:90
 #: ../modules/notifications/notifications.php:32
-#: ../modules/post-versioning/post-versioning.php:35
+#: ../modules/post-versioning/post-versioning.php:39
 #: ../modules/settings/settings.php:25 ../modules/task-list/task-list.php:34
-#: ../modules/translation/translation.php:29
+#: ../modules/translation/translation.php:32
 #: ../modules/user-groups/user-groups.php:40
 msgid ""
 "<p><strong>Für mehr Information:</strong></p><p><a href=\"http://blogs.fau."
@@ -239,9 +251,9 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 #: ../modules/authors/authors.php:971
 #: ../modules/editorial-comments/editorial-comments.php:347
 #: ../modules/notifications/notifications.php:374
-#: ../modules/post-versioning/post-versioning.php:92
+#: ../modules/post-versioning/post-versioning.php:99
 #: ../modules/task-list/task-list.php:484
-#: ../modules/translation/translation.php:60
+#: ../modules/translation/translation.php:70
 #: ../modules/user-groups/user-groups.php:289
 msgid "Freigabe"
 msgstr "Allowed Post Types"
@@ -785,27 +797,27 @@ msgstr "No"
 msgid "Ja"
 msgstr "Yes"
 
-#: ../modules/post-versioning/post-versioning.php:17
+#: ../modules/post-versioning/post-versioning.php:21
 msgid "Versionierung"
 msgstr "Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:18
+#: ../modules/post-versioning/post-versioning.php:22
 msgid "Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen."
 msgstr "Create a new version or a copy of an existing document."
 
-#: ../modules/post-versioning/post-versioning.php:75
+#: ../modules/post-versioning/post-versioning.php:82
 msgid "Lokale Freigabe"
 msgstr "Local allowance"
 
-#: ../modules/post-versioning/post-versioning.php:77
+#: ../modules/post-versioning/post-versioning.php:84
 msgid "Netzwerkweite Freigabe"
 msgstr "Network-Wide allowance"
 
-#: ../modules/post-versioning/post-versioning.php:87
+#: ../modules/post-versioning/post-versioning.php:94
 msgid "Vorhandenen Webseiten"
 msgstr "Existing Web sites"
 
-#: ../modules/post-versioning/post-versioning.php:133
+#: ../modules/post-versioning/post-versioning.php:142
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "dupliziert werden."
@@ -813,67 +825,80 @@ msgstr ""
 "Local documents can be as a new version (draft) duplicated in these web "
 "sites."
 
-#: ../modules/post-versioning/post-versioning.php:278
+#: ../modules/post-versioning/post-versioning.php:288
 msgid "Dieses Element als neuer Entwurf kopieren"
 msgstr "Copy this item as a new draft"
 
-#: ../modules/post-versioning/post-versioning.php:279
+#: ../modules/post-versioning/post-versioning.php:289
 msgid "Kopieren"
 msgstr "Copy"
 
-#: ../modules/post-versioning/post-versioning.php:283
+#: ../modules/post-versioning/post-versioning.php:293
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
-#: ../modules/post-versioning/post-versioning.php:284
+#: ../modules/post-versioning/post-versioning.php:294
 msgid "Neue Version"
 msgstr "New version"
 
-#: ../modules/post-versioning/post-versioning.php:296
-#: ../modules/post-versioning/post-versioning.php:515
+#: ../modules/post-versioning/post-versioning.php:301
+#: ../modules/post-versioning/post-versioning.php:555
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
-#: ../modules/post-versioning/post-versioning.php:305
-#: ../modules/post-versioning/post-versioning.php:399
+#: ../modules/post-versioning/post-versioning.php:310
+#: ../modules/post-versioning/post-versioning.php:415
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr "You do not have the necessary rights to create a new version."
 
-#: ../modules/post-versioning/post-versioning.php:308
-#: ../modules/post-versioning/post-versioning.php:522
+#: ../modules/post-versioning/post-versioning.php:313
+#: ../modules/post-versioning/post-versioning.php:562
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
-#: ../modules/post-versioning/post-versioning.php:311
+#: ../modules/post-versioning/post-versioning.php:316
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr "This action is not allowed."
 
-#: ../modules/post-versioning/post-versioning.php:314
+#: ../modules/post-versioning/post-versioning.php:319
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:501
+#: ../modules/post-versioning/post-versioning.php:519
 #, php-format
 msgid ""
-"Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. "
-"Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;"
-"Veröffentlichen&rdquo; klicken."
+"Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
+"a>&ldquo;. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf "
+"&bdquo;Veröffentlichen&rdquo; klicken."
 msgstr ""
-"New version of the document <a href='%s' target='__blank'>%s</a>. Click on "
-"\"Publish\" to overwrite the original document."
+"Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
+"\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:503
+#: ../modules/post-versioning/post-versioning.php:521
 #, php-format
-msgid "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>."
-msgstr "New version of the document <a href='%s' target='__blank'>%s</a>."
+msgid ""
+"Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
+"a>&ldquo;."
+msgstr ""
+"Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
+"\"."
 
-#: ../modules/post-versioning/post-versioning.php:527
+#: ../modules/post-versioning/post-versioning.php:535
+#, php-format
+msgid ""
+"Netzwerweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
+"\"__blank\">%2$s</a>&ldquo; - %3$s - %4$s."
+msgstr ""
+"Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
+"\">%2$s</a>\" - %3$s - %4$s."
+
+#: ../modules/post-versioning/post-versioning.php:567
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:530
+#: ../modules/post-versioning/post-versioning.php:570
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -881,17 +906,61 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:578
-#: ../modules/post-versioning/post-versioning.php:646
+#: ../modules/post-versioning/post-versioning.php:615
+#: ../modules/post-versioning/post-versioning.php:702
 msgid "Netzwerkweit Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:613
+#: ../modules/post-versioning/post-versioning.php:662
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
+
+#: ../modules/post-versioning/post-versioning.php:768
+#, php-format
+msgid ""
+"Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
+"%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt."
+msgstr ""
+"A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
+"a>\" - %3$s - %4$s has been added."
+
+#: ../modules/post-versioning/post-versioning.php:772
+msgid ""
+"Zieldokument ist nicht veröffentlicht. Netzwerkweit Versionierung "
+"fehlgeschlagen."
+msgstr "Target document is not published. Network Versioning failed."
+
+#: ../modules/post-versioning/post-versioning.php:813
+#, php-format
+msgid ""
+"Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
+"- %3$s - %4$s wurde erfolgreich erstellt."
+msgstr ""
+"A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
+"%2$s</a>\"  - %3$s - %4$s has been added."
+
+#: ../modules/post-versioning/post-versioning.php:862
+msgid "Version"
+msgstr "Version"
+
+#: ../modules/post-versioning/post-versioning.php:878
+#, php-format
+msgid "<a class=\"import\" href=\"%1$s\" target=\"__blank\">%2$s</a>"
+msgstr "<a class=\"import\" href=\"%1$s\" target=\"__blank\">%2$s</a>"
+
+#: ../modules/post-versioning/post-versioning.php:890
+#, php-format
+msgid "<a class=\"import\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
+msgstr "<a class=\"import\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
+
+#: ../modules/post-versioning/post-versioning.php:920
+#: ../modules/post-versioning/post-versioning.php:939
+#, php-format
+msgid "<a class=\"export\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
+msgstr "<a class=\"export\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
 
 #: ../modules/settings/settings.php:13
 #: ../modules/user-groups/user-groups.php:372
@@ -1032,27 +1101,68 @@ msgstr "Mark as done"
 msgid "Der Titel wird benötigt."
 msgstr "The title is required."
 
-#: ../modules/translation/translation.php:13
+#: ../modules/translation/translation.php:16
+#: ../modules/translation/translation.php:121
 msgid "Übersetzung"
 msgstr "Translation"
 
-#: ../modules/translation/translation.php:14
+#: ../modules/translation/translation.php:17
 msgid "Import und Export von Xiff-Dateien."
 msgstr "Import and export of XIFF files."
 
-#: ../modules/translation/translation.php:129
+#: ../modules/translation/translation.php:166
+#, php-format
+msgid "Übersetzung von <i>%1$s</i> nach <i>%2$s</i>."
+msgstr "Translation from <i>%1$s</i> to <i>%2$s</i>."
+
+#: ../modules/translation/translation.php:176
+msgid "Aus der Sprache:"
+msgstr "From the language:"
+
+#: ../modules/translation/translation.php:178
+#: ../modules/translation/translation.php:188
+msgid "Wählen"
+msgstr "Select"
+
+#: ../modules/translation/translation.php:186
+msgid "In die Sprache:"
+msgstr "To the language:"
+
+#: ../modules/translation/translation.php:196
+msgid "Bitte wählen Sie die Übersetzungssprachen aus"
+msgstr "Please select the translation of languages ​​from"
+
+#: ../modules/translation/translation.php:205
+msgid "XLIFF-Datei herunterladen"
+msgstr "Download XLIFF file"
+
+#: ../modules/translation/translation.php:207
+msgid "XLIFF-Datei hochladen:"
+msgstr "Upload XLIFF file"
+
+#: ../modules/translation/translation.php:254
+msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
+msgstr "The type of file you have uploaded is not a XLIFF."
+
+#: ../modules/translation/translation.php:278
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr "The \"Simple XML\" library is missing."
 
-#: ../modules/translation/translation.php:134
-#: ../modules/translation/translation.php:138
+#: ../modules/translation/translation.php:283
+#: ../modules/translation/translation.php:287
 #, php-format
 msgid "Die Xliff-Datei (%s) konnte nicht gelesen werden."
 msgstr "The Xliff file (%s) could not be read."
 
-#: ../modules/translation/translation.php:146
+#: ../modules/translation/translation.php:293
 msgid "Die hochgeladene Xliff-Datei ist nicht für dieses Dokument geeignet."
 msgstr "The uploaded Xliff file is not suitable for this document."
+
+#: ../modules/translation/translation.php:312
+msgid ""
+"Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
+"gespeichert werden."
+msgstr "An unexpected error has occurred. The document could not be saved."
 
 #: ../modules/user-groups/user-groups.php:18
 msgid "Benutzer nach Abteilung oder Funktion organisieren."
@@ -1200,3 +1310,26 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:793
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#~ msgid "Verknüpfen"
+#~ msgstr "Interlink"
+
+#~ msgid "Übersetzung aus der Sprache"
+#~ msgstr "Translation from"
+
+#~ msgid "in der Sprache"
+#~ msgstr "in the language"
+
+#~ msgid ""
+#~ "Netzwerkweit-Version vom Dokument <a href='%s' target='__blank'>%s</a> "
+#~ "der &bdquo;%s&ldquo; -Webseite."
+#~ msgstr ""
+#~ "Network Version of the document <a href='%s' target='__blank'>%s</a> from "
+#~ "the '%s' Website."
+
+#~ msgid ""
+#~ "Das Zieldokument <a href='%s' target='__blank'>%s</a> wurde in der &bdquo;"
+#~ "%s&ldquo; -Webseite erfolgreich erstellt."
+#~ msgstr ""
+#~ "The target document <a href='%s' target='__blank'>%s</a> at '%s'  "
+#~ "Webseite have been successfully added."
