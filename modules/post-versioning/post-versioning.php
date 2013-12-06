@@ -2,7 +2,11 @@
 
 class Workflow_Post_Versioning extends Workflow_Module {
 
-    const postmeta_key = '_version_post_id';
+    const version_post_id = '_version_post_id';
+    
+    const version_remote_parent_post_meta = '_version_remote_parent_post_meta';
+    
+    const version_remote_post_meta = '_version_remote_post_meta';
     
     public $module;
     
@@ -38,26 +42,29 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		$this->module = $cms_workflow->register_module( 'post_versioning', $args );
 	}
 	
-	public function init() {
-		
+	public function init() {        
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
         
 		$allowed_post_types = $this->get_post_types( $this->module );
-		foreach ( $allowed_post_types as $post_type ) {        
+		foreach ( $allowed_post_types as $post_type ) {     
+            add_action( 'publish_' . $post_type, array( $this, 'version_save_post'), 999, 2 );
+            
             $filter_row_actions = is_post_type_hierarchical($post_type) ? 'page_row_actions' : 'post_row_actions';
-            add_filter( $filter_row_actions, array( $this, 'filter_post_row_actions'), 10, 2);                 
+            add_filter( $filter_row_actions, array( $this, 'filter_post_row_actions'), 10, 2);     
+            
+            add_filter( "manage_edit-{$post_type}_columns", array( $this, 'custom_columns' ) );
+            add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'posts_custom_column' ), 10, 2 );            
         }  
         
         add_action( 'admin_action_copy_as_new_post_draft', array( $this, 'copy_as_new_post_draft'));
         add_action( 'admin_action_version_as_new_post_draft', array( $this, 'version_as_new_post_draft'));
-        add_action( 'admin_notices', array( $this, 'version_admin_notice' ) );
-        add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 3 );
+        add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+        //add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 3 );
         
         if (is_multisite()) {
-            add_action( 'add_meta_boxes', array( $this, 'network_connections_meta_box' ), 1);
+            add_action( 'add_meta_boxes', array( $this, 'network_connections_meta_box' ), 10, 2);
             add_action( 'save_post', array( $this, 'network_connections_save_postmeta' ));
             
-            add_action( 'post_submitbox_start', array( $this, 'network_connections_version_input') );
             add_action( 'save_post', array( $this, 'network_connections_save_post') );                   
         }
                 
@@ -115,10 +122,12 @@ class Workflow_Post_Versioning extends Workflow_Module {
             return;
         
         foreach ( $connections as $blog_id => $data ) {
-            if ( $current_blog_id === $blog_id )
+            if ( $current_blog_id == $blog_id )
                 continue;
 
-            switch_to_blog( $blog_id );
+            if(!switch_to_blog( $blog_id ))
+                continue;
+
             $blog_name = get_bloginfo( 'name' );
             restore_current_blog();
 
@@ -137,10 +146,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
 	public function settings_validate( $new_options ) {
 		$current_blog_id = get_current_blog_id();
         
-		if ( !isset( $new_options['post_types'] ) )
+		if ( !isset( $new_options['post_types'] ) ) {
 			$new_options['post_types'] = array();
-        
-		$new_options['post_types'] = $this->clean_post_type_options( $new_options['post_types'], $this->module->post_type_support );
+        } else {
+            $new_options['post_types'] = $this->clean_post_type_options( $new_options['post_types'], $this->module->post_type_support );
+        }
         
         if (is_multisite()) {
             
@@ -271,11 +281,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if(!is_object($this->get_available_post_types($post->post_type)) || !in_array($post->post_type, $this->get_post_types( $this->module )))
             return $actions;
         
-        add_action( 'publish_' . $post->post_type, array( $this, 'version_save_post'), 999, 2 );
-        
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
-        if ( current_user_can($cap->edit_posts) && !get_post_meta( $post->ID, self::postmeta_key, true ) && $post->post_status != 'trash')
+        if ( current_user_can($cap->edit_posts) && !get_post_meta( $post->ID, self::version_post_id, true ) && $post->post_status != 'trash')
             $actions['edit_as_new_draft'] = '<a href="'. admin_url( 'admin.php?action=copy_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
             . esc_attr(__('Dieses Element als neuer Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
             . '">' .  __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
@@ -289,11 +297,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function version_as_new_post_draft() {
-        $this->version_as_new_post();
-    }    
-    
-    private function version_as_new_post() {
-        
         if (! ( isset( $_GET['post']) || isset( $_POST['post']) ) ) {
             wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
         }
@@ -314,6 +317,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     
         if( $post['post_status'] != 'publish' )
             wp_die(__('Nur veröffentlichte Dokumente können als neue Version erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN));
+        
+        $draft_id = $this->version_as_new_post($post_id, $post);
+        
+        wp_safe_redirect( admin_url( 'post.php?post=' . $draft_id . '&action=edit' ) );
+        exit;        
+    }    
+    
+    private function version_as_new_post($post_id, $post, $blog_id = 0) {   
+        $remote = false;
+        $current_blog_id = get_current_blog_id();
+        if($blog_id != $current_blog_id)
+            $remote = true;
         
         unset( $post['ID'] );
         $post['post_status'] = 'draft';
@@ -387,20 +402,19 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_set_object_terms($draft_id, $terms, $taxonomy);
         }
 
-        add_post_meta($draft_id, self::postmeta_key, $post_id);
+        add_post_meta($draft_id, self::version_post_id, $post_id);
 
-        wp_safe_redirect( admin_url( 'post.php?post=' . $draft_id . '&action=edit' ) );
-        exit;      
+        return $draft_id;     
     }
     
     public function version_save_post( $post_id, $post ) {  
                 
         $cap = $this->get_available_post_types($post->post_type)->cap;
-
+        
         if (!current_user_can($cap->edit_posts)) 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
                 
-        $org_id = get_post_meta( $post_id, self::postmeta_key, true );
+        $org_id = get_post_meta( $post_id, self::version_post_id, true );
         
         if ( $org_id ) {
             $new = array(
@@ -475,7 +489,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             foreach ($taxonomies as $taxonomy) {
                 $post_terms = wp_get_object_terms($post_id, $taxonomy, array( 'orderby' => 'term_order' ));
                 $terms = array();
-                for ($i=0; $i<count($post_terms); $i++) {
+                for ($i = 0; $i < count($post_terms); $i++) {
                     $terms[] = $post_terms[$i]->slug;
                 }
                 wp_set_object_terms($org_id, $terms, $taxonomy);
@@ -494,17 +508,44 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
     }
     
-    public function version_admin_notice() {
+    public function admin_notices() {
         if ( isset($_REQUEST['post']) ) {
             global $post;
-            $old_post_id = get_post_meta( $post->ID, self::postmeta_key, true );                    
+            
+            $old_post_id = get_post_meta( $post->ID, self::version_post_id, true );  
+            
             if ( $old_post_id ) {
+                $permalink = get_permalink($old_post_id);                  
+                $post_title = get_the_title($old_post_id);              
+                
                 if (current_user_can('manage_categories')) 
-                    echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';
+                    $this->show_admin_notice(sprintf( __( 'Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title ));
                 else
-                    echo '<div class="updated fade"><p>' . sprintf( __( "Neue Version vom Dokument <a href='%s' target='__blank'>%s</a>.", CMS_WORKFLOW_TEXTDOMAIN ),  get_permalink($old_post_id), $old_post_id ) . '</p></div>';                    
+                    $this->show_admin_notice(sprintf( __( 'Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title ));                    
+            } else {
+            
+                $remote_post_meta = get_post_meta( $post->ID, self::version_remote_post_meta, true );
+
+                if(isset($remote_post_meta['post_id']) && isset($remote_post_meta['blog_id'])) {
+                    if(switch_to_blog( $remote_post_meta['blog_id'] )) {
+
+                        $permalink = get_permalink($remote_post_meta['post_id']);
+                        if($permalink) {
+                            $blog_name = get_bloginfo( 'name' );
+                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                            $blog_lang = $this->get_lang_name($blog_lang);                   
+                            $post_title = get_the_title($remote_post_meta['post_id']);
+                            echo $this->show_admin_notice(sprintf( __( 'Netzwerweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_name, $blog_lang ));                        
+                        }                
+
+                        restore_current_blog();
+
+                    }
+                }
             }
         }
+        
+        $this->show_flash_admin_notices();
     }
     
     public function copy_as_new_post_draft() {
@@ -525,7 +566,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
         
-        if ( !current_user_can($cap->edit_posts) || get_post_meta( $post_id, self::postmeta_key, true ) || $post->post_status == 'trash') 
+        if ( !current_user_can($cap->edit_posts) || get_post_meta( $post_id, self::version_post_id, true ) || $post->post_status == 'trash') 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         
         if (in_array($post->post_type, array('revision', 'attachment')))
@@ -558,26 +599,23 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
     
     public function filter_post_class( $classes, $class, $post_id ) {
-        if( get_post_meta($post_id, self::postmeta_key, true) )
+        if( get_post_meta($post_id, self::version_post_id, true) )
             $classes[] = 'version';
 
         return $classes;
     }    
     
-    public function network_connections_meta_box() {
-		$post_type = $this->get_current_post_type();
-        
+    public function network_connections_meta_box( $post_type, $post ) {
 		if ( !$this->is_post_type_enabled($post_type))
 			return;
         
         $connections = $this->module->options->network_connections;
         
-        $current_blog_id = get_current_blog_id();
-        
-        if( empty( $connections ) )
+        if( empty( $connections ) || !in_array( $post->post_status, array('publish', 'future', 'private') ) )
             return;      
         
-		add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'side', 'high');
+        add_action( 'post_submitbox_start', array( $this, 'network_connections_version_input') );
+		add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
     }
 
     public function network_connections_inner_box( $post ) {
@@ -587,8 +625,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $network_connections = $this->module->options->network_connections;
         
         $connections = get_post_meta( $post->ID, $this->module->workflow_options_name . '_network_connections' );
-        if( !empty($connections))
-            $connections = (array) array_shift(array_values($connections));
+        if( !empty($connections)) {
+            $connections = array_values($connections);
+            $connections = (array) array_shift($connections);
+        }
         
         $current_blog_id = get_current_blog_id();
         
@@ -598,16 +638,26 @@ class Workflow_Post_Versioning extends Workflow_Module {
         <ul id="page_connections_checklist" class="form-no-clear">
         <?php
         foreach ( $network_connections as $key => $blog_id ) :
-            if ( $current_blog_id === $blog_id )
+            if ( $current_blog_id == $blog_id )
                 continue;
 
-            switch_to_blog( $blog_id );
+            if(!switch_to_blog( $blog_id ))
+                continue;
+
             $blog_name = get_bloginfo( 'name' );
+            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+            $blog_lang = $this->get_lang_name($blog_lang);
+
             restore_current_blog();
 
-            $connected = in_array( $blog_id, $connections ) ? true : false;        
+            $connected = in_array( $blog_id, $connections ) ? true : false;
              ?>
-            <li id="network_connections_<?php echo $blog_id; ?>"><label class="selectit"><input id="connected_blog_<?php echo $blog_id; ?>" type="checkbox" <?php checked( $connected, true ); ?> name="network_connections[]" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?></label></li>
+            <li id="network_connections_<?php echo $blog_id; ?>">
+                <label class="selectit">
+                    <input id="connected_blog_<?php echo $blog_id; ?>" type="checkbox" <?php checked( $connected, true ); ?> name="network_connections[]" value="<?php echo $blog_id ?>" />
+                        <?php printf('%1$s - %2$s', $blog_name, $blog_lang);?>
+                </label>
+            </li>
         <?php
         endforeach;
         ?>
@@ -629,20 +679,27 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if ( !isset($_POST['network_connections_noncename']) || ! wp_verify_nonce( $_POST['network_connections_noncename'], plugin_basename( __FILE__ ) ) )
             return;
 
-        $connections = isset($_POST['network_connections']) ? $_POST['network_connections'] : array();        
+        $connections = isset($_POST['network_connections']) ? (array)$_POST['network_connections'] : array();   
         $network_connections = $this->module->options->network_connections;
-        foreach($network_connections as $key => $value) {
-            if(!in_array( $value, $connections ))
-                 unset($network_connections[$key]);
+
+        foreach($connections as $key => $value) {
+            if(!in_array( $value, $network_connections ))
+                 unset($connections[$key]);
         }
         
-        update_post_meta($_POST['post_ID'], $this->module->workflow_options_name . '_network_connections', $network_connections);
+        update_post_meta($post_id, $this->module->workflow_options_name . '_network_connections', $connections);
     }    
     
     public function network_connections_version_input() {
         global $post;
-
-        if( in_array( $post->post_status, array('publish', 'future', 'private') ) && 0 != $post->ID && !empty($this->module->options->network_connections) ): ?>      
+        
+        $network_connections = get_post_meta( $post->ID, $this->module->workflow_options_name . '_network_connections' );
+        if( !empty($network_connections)) {
+            $array_values = array_values($network_connections);
+            $network_connections = (array) array_shift($array_values);
+        }
+        
+        if( ! empty($post->ID) && in_array( $post->post_status, array('publish', 'future', 'private') ) && !empty($network_connections)): ?>      
         <p>
             <input type="checkbox" id="network_connections_version" name="network_connections_version" <?php checked( false, true ); ?> />
             <label for="network_connections_version"><?php _e( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ); ?></label>
@@ -669,41 +726,97 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if ( 'post' != $postdata[ 'post_type'] && 'page' != $postdata[ 'post_type'] ) 
             return;
 
-        $file = '';
-
-        if ( current_theme_supports( 'post-thumbnails' ) ) {
-            $thumb_id = get_post_thumbnail_id( $post_id );
-            if ( $thumb_id > 0 ) {
-                $path = wp_upload_dir();
-                $file = get_post_meta( $thumb_id, '_wp_attached_file', true );
-                $fileinfo = pathinfo( $file );
-            }
+        $blogs = get_post_meta( $post_id, $this->module->workflow_options_name . '_network_connections' );
+        if( !empty($blogs)) {
+            $array_values = array_values($blogs);
+            $blogs = array_shift($array_values);
+        }
+        
+        $blogs = (array)$blogs;
+        
+        if ( ! ( count( $blogs ) > 0 ) ) {
+            return '';
         }
 
-        $newpost = array(
-            'post_title'	=> $postdata[ 'post_title' ],
-            'post_content'	=> $postdata[ 'post_content' ],
-            'post_status'	=> 'draft',
-            'post_author'	=> $postdata[ 'post_author' ],
-            'post_excerpt'	=> $postdata[ 'post_excerpt' ],
-            'post_date'		=> $postdata[ 'post_date' ],
-            'post_type'		=> $postdata[ 'post_type' ]
-        );
+        $remote_parent_post_meta = get_post_meta( $post_id, self::version_remote_parent_post_meta, true );
+        
+        foreach ( $blogs as $blog_id ) {
 
-        $blogs = get_post_meta( $post_id, $this->module->workflow_options_name . '_network_connections' );
-        if( !empty($blogs))
-            $blogs = array_shift(array_values($blogs));
+            if ( $blog_id == $this->source_blog )
+                continue;
+            
+            if(!switch_to_blog( $blog_id ))
+                continue;
+            
+            if( isset($remote_parent_post_meta['post_id']) && isset($remote_parent_post_meta['blog_id']) && $blog_id == $remote_parent_post_meta['blog_id'] )  {
+                            
+                $remote_post = get_post( $remote_parent_post_meta['post_id'], ARRAY_A );
 
-        if ( ! ( count( $blogs ) > 0 ) )
-            return;
+                if(!isset($remote_post['post_status'])) {
+                    restore_current_blog();
+                    delete_post_meta($post_id, self::version_remote_parent_post_meta);     
+                    switch_to_blog( $blog_id );
+                } else {
 
-        foreach ( $blogs as $key => $blogid ) {
+                    if($remote_post['post_status'] == 'publish' ) {
+                        $draft_id = self::version_as_new_post($remote_parent_post_meta['post_id'], $remote_post);
+                        
+                        $permalink = get_permalink($draft_id);
+                        if($permalink) {
+                            $blog_name = get_bloginfo( 'name' );
+                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                            $blog_lang = $this->get_lang_name($blog_lang);                   
+                            $post_title = get_the_title($draft_id);
+                            restore_current_blog();
+                            $this->flash_admin_notice(sprintf( __( 'Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_name, $blog_lang ));                            
+                        }                
+                    } else {
+                        restore_current_blog();
+                        $this->flash_admin_notice(__('Zieldokument ist nicht veröffentlicht. Netzwerkweit Versionierung fehlgeschlagen.', CMS_WORKFLOW_TEXTDOMAIN), 'error');                        
+                    }
 
-            if ( $blogid != $this->source_blog ) {
+                    return;                    
+                }
 
-                switch_to_blog( $blogid );
+            }
+                                             
+            $file = '';
 
-                $remote_post_id = wp_insert_post( $newpost );
+            if ( current_theme_supports( 'post-thumbnails' ) ) {
+                $thumb_id = get_post_thumbnail_id( $post_id );
+                if ( $thumb_id > 0 ) {
+                    $path = wp_upload_dir();
+                    $file = get_post_meta( $thumb_id, '_wp_attached_file', true );
+                    $fileinfo = pathinfo( $file );
+                }
+            }
+
+            $newpost = array(
+                'post_title'	=> $postdata[ 'post_title' ],
+                'post_content'	=> $postdata[ 'post_content' ],
+                'post_status'	=> 'draft',
+                'post_author'	=> $postdata[ 'post_author' ],
+                'post_excerpt'	=> $postdata[ 'post_excerpt' ],
+                'post_date'		=> $postdata[ 'post_date' ],
+                'post_type'		=> $postdata[ 'post_type' ]
+            );
+            
+            $remote_post_id = wp_insert_post( $newpost );
+
+            if($remote_post_id) {
+
+                $permalink = get_permalink($remote_post_id);
+                $blog_name = get_bloginfo( 'name' );
+                $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                $blog_lang = $this->get_lang_name($blog_lang);                   
+                $post_title = get_the_title($remote_post_id);
+                
+                restore_current_blog();
+                add_post_meta($post_id, self::version_remote_parent_post_meta, array('blog_id' => $blog_id, 'post_id' => $remote_post_id));
+                $this->flash_admin_notice(sprintf( __( 'Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_name, $blog_lang ));                            
+                
+                switch_to_blog( $blog_id );
+                add_post_meta($remote_post_id, self::version_remote_post_meta, array('blog_id' => $this->source_blog, 'post_id' => $post_id));
 
                 if ( $file != '' ) {
                     include_once ( ABSPATH . 'wp-admin/includes/image.php' );
@@ -736,10 +849,105 @@ class Workflow_Post_Versioning extends Workflow_Module {
                         }
                     }
                 }
+                                        
+            }
+                       
+            restore_current_blog();
 
+        }
+    }
+    
+    public function custom_columns( $columns ) {
+        $position = array_search('comments', array_keys($columns));
+        if($position !== false)
+            $columns = array_slice( $columns, 0, $position, true) + array( 'version' => '') + array_slice($columns, $position, count($columns) - $position, true);
+        
+        $columns['version'] = __( 'Version', CMS_WORKFLOW_TEXTDOMAIN );
+        
+        return $columns;
+    }
+
+    public function posts_custom_column( $column, $post_id ) {
+        if($column == 'version')
+            echo $this->get_versions( $post_id );
+    }
+    
+    private function get_versions( $post_id ) {
+        $documents = array();
+        
+        if( get_post_meta($post_id, self::version_post_id, true) ) {
+            $permalink = get_permalink($post_id);
+            $post_title = get_the_title($post_id);
+            $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title );          
+        }   
+        
+        $remote_post_meta = get_post_meta( $post_id, self::version_remote_post_meta, true );
+        
+        if(isset($remote_post_meta['post_id']) && isset($remote_post_meta['blog_id'])) {
+            if(switch_to_blog( $remote_post_meta['blog_id'] )) {
+                $permalink = get_permalink($remote_post_meta['post_id']);
+                if($permalink) {
+                    $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                    $blog_lang = $this->get_lang_name($blog_lang);                   
+                    $post_title = get_the_title($remote_post_meta['post_id']);
+                    $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
+                }                
                 restore_current_blog();
             }
         }
+        
+        $remote_parent_post_meta = get_post_meta( $post_id, self::version_remote_parent_post_meta, true );
+        
+        $current_blog = get_current_blog_id();
+        $blogs = get_post_meta( $post_id, $this->module->workflow_options_name . '_network_connections' );
+        
+        if( !empty($blogs)) {
+            $array_values = array_values($blogs);
+            $blogs = array_shift($array_values);
+        }
+        
+        $blogs = (array)$blogs;
+        
+        if ( count( $blogs ) > 0 && isset($remote_parent_post_meta['post_id']) && isset($remote_parent_post_meta['blog_id'])) {
+
+            foreach ( $blogs as $blog_id ) {
+                if( $blog_id != $current_blog && $blog_id == $remote_parent_post_meta['blog_id'] )  {
+
+                    if(switch_to_blog( $blog_id )) {
+
+                        $permalink = get_permalink($remote_parent_post_meta['post_id']);
+                        if($permalink) {
+                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                            $blog_lang = $this->get_lang_name($blog_lang);                                       
+                            $post_title = get_the_title($remote_parent_post_meta['post_id']);
+                            $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
+                        }
+
+                        restore_current_blog();
+                    }
+
+                }
+
+            }
+            
+        } elseif(isset($remote_parent_post_meta['post_id']) && isset($remote_parent_post_meta['blog_id'])) {
+
+            if(switch_to_blog( $remote_parent_post_meta['blog_id'] )) {
+
+                $permalink = get_permalink($remote_parent_post_meta['post_id']);
+                if($permalink) {
+                    $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                    $blog_lang = $this->get_lang_name($blog_lang);                                       
+                    $post_title = get_the_title($remote_parent_post_meta['post_id']);
+                    $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s - %3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_lang );
+                }
+
+                restore_current_blog();
+            }
+
+        }
+        
+        return implode(', ', $documents);
     }
     
 }
