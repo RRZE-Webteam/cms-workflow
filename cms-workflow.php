@@ -2,7 +2,7 @@
 /**
  * Plugin Name: CMS-Workflow
  * Description: Redaktioneller Workflow.
- * Version: 1.2
+ * Version: 1.3
  * Author: Rolf v. d. Forst
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook( __FILE__, array( 'CMS_Workflow', 'deactivation_hook'
 
 class CMS_Workflow {
     
-    const version = '1.2'; // Plugin-Version
+    const version = '1.3'; // Plugin-Version
         
     const textdomain = 'cms-workflow';
     
@@ -142,7 +142,7 @@ class CMS_Workflow {
 	public function set_modules() {
 
 		$this->load_modules();
-		
+        
 		$this->load_module_options();
 		
 		foreach ( $this->modules as $mod_name => $mod_data ) {
