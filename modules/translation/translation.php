@@ -140,8 +140,8 @@ class Workflow_Translation extends Workflow_Module {
 
                 if(isset($remote_post_meta['post_id']) && isset($remote_post_meta['blog_id'])) {
                     if(switch_to_blog( $remote_post_meta['blog_id'] )) {
-
-                        if(!is_null(get_post($remote_post_meta['post_id']))) {
+                        $remote_post = get_post($remote_post_meta['post_id']);
+                        if(!is_null($remote_post)) {
                             $translate_from_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
                         }                
 
