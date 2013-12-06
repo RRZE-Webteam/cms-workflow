@@ -25,7 +25,8 @@
     background-color: #FFEBE8 !important;
 }
 
-.version a:before {
+.version a:before,
+.version span:before {
     display: inline-block;
     -webkit-font-smoothing: antialiased;
     font: normal 16px/1 'dashicons';
@@ -39,4 +40,8 @@
 
 .version a.export:before {
     content: "\f344";
+}
+
+.version span.translation:before {
+    content: "\f326";
 }
