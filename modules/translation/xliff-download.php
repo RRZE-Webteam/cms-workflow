@@ -19,6 +19,7 @@ require( ABSPATH . WPINC . '/user.php' );
 require( ABSPATH . WPINC . '/meta.php' );
 require( ABSPATH . WPINC . '/post.php' );
 require( ABSPATH . WPINC . '/kses.php' );
+require( ABSPATH . WPINC . '/ms-functions.php' );
 require_once( ABSPATH . WPINC . '/general-template.php' );
 
 wp_plugin_directory_constants( );
