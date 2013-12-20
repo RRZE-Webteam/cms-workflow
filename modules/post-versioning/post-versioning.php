@@ -42,10 +42,16 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		$this->module = $cms_workflow->register_module( 'post_versioning', $args );
 	}
 	
-	public function init() {        
+	public function init() {
+        add_action( 'admin_init', array( $this, 'register_settings' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
         
+        add_action( 'admin_action_copy_as_new_post_draft', array( $this, 'copy_as_new_post_draft'));
+        add_action( 'admin_action_version_as_new_post_draft', array( $this, 'version_as_new_post_draft'));
+        add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+        
 		$allowed_post_types = $this->get_post_types( $this->module );
+        
 		foreach ( $allowed_post_types as $post_type ) {     
             add_action( 'publish_' . $post_type, array( $this, 'version_save_post'), 999, 2 );
             
@@ -56,19 +62,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'posts_custom_column' ), 10, 2 );            
         }  
         
-        add_action( 'admin_action_copy_as_new_post_draft', array( $this, 'copy_as_new_post_draft'));
-        add_action( 'admin_action_version_as_new_post_draft', array( $this, 'version_as_new_post_draft'));
-        add_action( 'admin_notices', array( $this, 'admin_notices' ) );
-        //add_filter( 'post_class', array( $this, 'filter_post_class' ), 10, 3 );
+        $post_type = $this->get_current_post_type();
         
-        if (is_multisite()) {
+        if (is_multisite() && $this->is_post_type_enabled($post_type)) {
             add_action( 'add_meta_boxes', array( $this, 'network_connections_meta_box' ), 10, 2);
             add_action( 'save_post', array( $this, 'network_connections_save_postmeta' ));
-            
-            add_action( 'save_post', array( $this, 'network_connections_save_post') );                   
-        }
-                
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
+            add_action( 'save_post', array( $this, 'network_connections_save_post') );          
+        }                       
 	}
 
 	public function admin_enqueue_scripts( ) {
@@ -597,14 +597,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         exit;
         
     }
-    
-    public function filter_post_class( $classes, $class, $post_id ) {
-        if( get_post_meta($post_id, self::version_post_id, true) )
-            $classes[] = 'version';
-
-        return $classes;
-    }    
-    
+        
     public function network_connections_meta_box( $post_type, $post ) {
 		if ( !$this->is_post_type_enabled($post_type))
 			return;
@@ -885,7 +878,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
             $post_title = get_the_title($post_id);
-            $documents[] = sprintf( __( '<a href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );         
+            $documents[] = sprintf( '<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );         
         }   
         
         $remote_post_meta = get_post_meta( $post_id, self::version_remote_post_meta, true );
@@ -902,7 +895,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
                     
                     $post_title = get_the_title($remote_post_meta['post_id']);
-                    $documents[] = sprintf( __( '<a class="import" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
+                    $documents[] = sprintf('<a class="import" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
                 }                
                 restore_current_blog();
             }
@@ -936,7 +929,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                             $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
                             $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                            $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
+                            $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
                         }                
                         restore_current_blog();
                     }
@@ -958,7 +951,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
                     $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                    $documents[] = sprintf( __( '<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $translate_to_lang );
+                    $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
                 }                
                 restore_current_blog();
             }
