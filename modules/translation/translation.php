@@ -38,15 +38,19 @@ class Workflow_Translation extends Workflow_Module {
 	public function init() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
         
-        add_filter( 'upload_mimes', array( $this, 'xliff_mime_type') );
-        
-        add_action('post_edit_form_tag', array( $this, 'update_edit_form'));
-        
-        add_action('add_meta_boxes', array( $this, 'translate_meta_box'));
-        
-        add_action('save_post', array( $this, 'save_translate_meta_data'));
-        
         add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+        
+        $post_type = $this->get_current_post_type();
+        
+        if ($this->is_post_type_enabled($post_type)) {
+            add_filter( 'upload_mimes', array( $this, 'xliff_mime_type') );
+
+            add_action('post_edit_form_tag', array( $this, 'update_edit_form'));
+
+            add_action('add_meta_boxes', array( $this, 'translate_meta_box'));
+
+            add_action('save_post', array( $this, 'save_translate_meta_data'));          
+        }                               
 	}
 
     public static function update_post_content( $post_id, $post ) {
@@ -216,17 +220,17 @@ class Workflow_Translation extends Workflow_Module {
     public function save_translate_meta_data($post_id) {
 
         if(!isset($_POST['translate_fields_nonce']) || !wp_verify_nonce($_POST['translate_fields_nonce'], plugin_basename(__FILE__))) {
-            return $post_id;
+            return;
         }
 
         if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return $post_id;
+            return;
         }
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
         
         if(!current_user_can($cap->edit_posts)) {
-            return $post_id;
+            return;
         }
         
         if(!$this->module_activated( 'post_versioning' ) || !in_array( $post->post_status, array('publish', 'future', 'private') )) {
