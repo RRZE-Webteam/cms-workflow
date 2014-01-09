@@ -956,6 +956,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 restore_current_blog();
             }
 
+        } else {
+            echo '&#8212;';
         }
         
         return implode('<br>', $documents);
