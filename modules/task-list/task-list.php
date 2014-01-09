@@ -35,9 +35,9 @@ class Workflow_Task_List extends Workflow_Module {
 		);
         
         self::$priorities = array(
-                '1' => _('Niedrig', CMS_WORKFLOW_TEXTDOMAIN),
-                '2' => _('Normal', CMS_WORKFLOW_TEXTDOMAIN),
-                '3' => _('Hoch', CMS_WORKFLOW_TEXTDOMAIN)
+                '1' => __('Niedrig', CMS_WORKFLOW_TEXTDOMAIN),
+                '2' => __('Normal', CMS_WORKFLOW_TEXTDOMAIN),
+                '3' => __('Hoch', CMS_WORKFLOW_TEXTDOMAIN)
         );
         
 		$this->module = $cms_workflow->register_module( 'task_list', $args );
