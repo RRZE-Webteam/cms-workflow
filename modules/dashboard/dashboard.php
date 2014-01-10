@@ -10,6 +10,11 @@ class Workflow_Dashboard extends Workflow_Module {
 		global $cms_workflow;
 		
 		$this->module_url = $this->get_module_url( __FILE__ );
+                
+                $content_help_tab = array(
+                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Dashboardinhalte aktiviert haben, können Sie hier angeben, welche Inhalte im Dashboard verfügbar sind (aktuelle Entwürfe, aktuell ausstehende Reviews, Aufgabenliste).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Auf der Dashboard-Seite hat jeder Nutzer die Möglichkeit, über die Registerkarte "Optionen einblenden" in der rechten oberen Ecke die entsprechenden Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                );
         
 		$args = array(
 			'title' => __( 'Dashboard', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -26,7 +31,7 @@ class Workflow_Dashboard extends Workflow_Module {
 			'settings_help_tab' => array(
 				'id' => 'workflow-dashboard-overview',
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
+				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);

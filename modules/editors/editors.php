@@ -47,6 +47,11 @@ class Workflow_Editors extends Workflow_Module {
         $this->more_role_caps = array( 
             'edit_theme_options' => __('Design bearbeiten', CMS_WORKFLOW_TEXTDOMAIN)
         );
+
+        $content_help_tab = array(
+            '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Redakteureverwaltung aktiviert haben, können Sie hier angeben, welche Rechte ein Redakteur erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>'. __('Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die standardmäßig von WordPress vorgegebenen Rechte.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+        );
         
 		$args = array(
 			'title' => __( 'Redakteure', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -85,7 +90,7 @@ class Workflow_Editors extends Workflow_Module {
 			'settings_help_tab' => array(
 				'id' => 'workflow-editors-overview',
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
+				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);

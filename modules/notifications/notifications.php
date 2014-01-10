@@ -11,6 +11,14 @@ class Workflow_Notifications extends Workflow_Module {
 		
 		$this->module_url = $this->get_module_url( __FILE__ );
         
+                $content_help_tab = array(
+                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Benachrichtigungen aktiviert haben, können Sie hier festlegen', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('bei Änderungen in welchen Bereichen die jeweiligen Autoren benachrichtigt werden sollen (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('ob zusätzlich der Administrator der Website per E-Mail benachrichtigt werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>'
+                );
+                
 		$args = array(
 			'title' => __( 'Benachrichtigungen', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'Benachrichtigungen auf wichtige Änderungen eines Dokuments.', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -27,7 +35,7 @@ class Workflow_Notifications extends Workflow_Module {
 			'settings_help_tab' => array(
 				'id' => 'workflow-notifications-overview',
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
+				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);
