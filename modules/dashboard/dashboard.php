@@ -18,7 +18,7 @@ class Workflow_Dashboard extends Workflow_Module {
         
 		$args = array(
 			'title' => __( 'Dashboard', CMS_WORKFLOW_TEXTDOMAIN ),
-			'description' => __( 'Inhalte aus dem Dashboard verfolgen.', CMS_WORKFLOW_TEXTDOMAIN ),
+			'description' => __( 'Inhalte im Dashboard verfolgen.', CMS_WORKFLOW_TEXTDOMAIN ),
 			'module_url' => $this->module_url,
 			'slug' => 'dashboard',
 			'default_options' => array(

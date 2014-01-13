@@ -21,7 +21,7 @@ class Workflow_Notifications extends Workflow_Module {
                 
 		$args = array(
 			'title' => __( 'Benachrichtigungen', CMS_WORKFLOW_TEXTDOMAIN ),
-			'description' => __( 'Benachrichtigungen auf wichtige Änderungen eines Dokuments.', CMS_WORKFLOW_TEXTDOMAIN ),
+			'description' => __( 'Benachrichtigungen über wichtige Änderungen an einem Dokument.', CMS_WORKFLOW_TEXTDOMAIN ),
 			'module_url' => $this->module_url,
 			'slug' => 'notifications',
 			'default_options' => array(
@@ -151,7 +151,7 @@ class Workflow_Notifications extends Workflow_Module {
             
 			$body .= "\r\n \r\n";
 			$body .= __( 'Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN ) . "\r\n";
-			$body .= sprintf( __( 'Redaktionelles Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
+			$body .= sprintf( __( 'Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
 			$body .= sprintf( __( 'Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link ) . "\r\n";
 			$body .= sprintf( __( 'Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $view_link ) . "\r\n";
 				
@@ -181,9 +181,9 @@ class Workflow_Notifications extends Workflow_Module {
 	
 		$blogname = get_option('blogname');
 	
-		$subject = sprintf( __( '%1$s - Neues redaktionelles Kommentar zum "%2$s"', CMS_WORKFLOW_TEXTDOMAIN ), $blogname, $post_title );
+		$subject = sprintf( __( '%1$s - Neuer redaktioneller Kommentar zum "%2$s"', CMS_WORKFLOW_TEXTDOMAIN ), $blogname, $post_title );
 
-		$body  = sprintf( __( 'Ein neues redaktionelles Kommentar wurde zum Dokument %1$s „%2$s“ hinzugefügt.', CMS_WORKFLOW_TEXTDOMAIN ), $post_id, $post_title ) . "\r\n\r\n";
+		$body  = sprintf( __( 'Ein neuer redaktioneller Kommentar wurde zum Dokument %1$s „%2$s“ hinzugefügt.', CMS_WORKFLOW_TEXTDOMAIN ), $post_id, $post_title ) . "\r\n\r\n";
 		$body .= sprintf( __( '%1$s (%2$s) kommentiert am %3$s um %4$s:', CMS_WORKFLOW_TEXTDOMAIN ), $current_user->display_name, $current_user->user_email, mysql2date(get_option('date_format'), $comment->comment_date), mysql2date(get_option('time_format'), $comment->comment_date) ) . "\r\n";
 		$body .= "\r\n" . $comment->comment_content . "\r\n";
 
@@ -195,7 +195,7 @@ class Workflow_Notifications extends Workflow_Module {
 		$body .= "\r\n";
 		$body .= __( 'Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN ) . "\r\n";
 		$body .= sprintf( __( 'Antworten: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/reply/' . $comment->comment_ID ) . "\r\n";
-		$body .= sprintf( __( 'Redaktionelle Komentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
+		$body .= sprintf( __( 'Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
 		$body .= sprintf( __( 'Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link ) . "\r\n";
 		$body .= sprintf( __( 'Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $view_link ) . "\r\n";
 		
@@ -253,7 +253,7 @@ class Workflow_Notifications extends Workflow_Module {
 		
 		$body .= "\r\n";
         $body .= __( 'Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN ) . "\r\n";
-        $body .= sprintf( __( 'Redaktionelles Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
+        $body .= sprintf( __( 'Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link . '#editorial-comments/add' ) . "\r\n";
         $body .= sprintf( __( 'Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN ), $edit_link ) . "\r\n";
         $body .= sprintf( __( 'Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN ), $view_link ) . "\r\n";
         

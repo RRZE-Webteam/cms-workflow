@@ -71,7 +71,7 @@ class Workflow_Settings extends Workflow_Module {
         
 		$requested_module = $cms_workflow->get_module_by( 'settings_slug', $_GET['page'] );
 		if ( !$requested_module )
-			wp_die( __( 'Nicht ein aktiviertes Workflow-Modul', CMS_WORKFLOW_TEXTDOMAIN ) );
+			wp_die( __( 'Kein aktiviertes Workflow-Modul', CMS_WORKFLOW_TEXTDOMAIN ) );
         
 		$configure_callback = $requested_module->configure_callback;
 		$requested_module_name = $requested_module->name;	

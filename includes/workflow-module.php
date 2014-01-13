@@ -66,7 +66,7 @@ class Workflow_Module {
 			'draft' => __( 'Entwurf', CMS_WORKFLOW_TEXTDOMAIN ),
 			'future' => __( 'Geplant', CMS_WORKFLOW_TEXTDOMAIN ),
 			'private' => __( 'Privat', CMS_WORKFLOW_TEXTDOMAIN ),
-			'pending' => __( 'Austehender Review', CMS_WORKFLOW_TEXTDOMAIN ),
+			'pending' => __( 'Ausstehender Review', CMS_WORKFLOW_TEXTDOMAIN ),
 			'trash' => __( 'Papierkorb', CMS_WORKFLOW_TEXTDOMAIN ),
 		);
 		

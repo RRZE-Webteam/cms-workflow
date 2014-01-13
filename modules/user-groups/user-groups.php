@@ -13,6 +13,15 @@ class Workflow_User_Groups extends Workflow_Module {
 		
 		$this->module_url = $this->get_module_url( __FILE__ );
 		
+                $content_help_tab = array(
+                    '<p>'. __('Mit der Verwendung von Benutzergruppen haben Sie die Möglichkeit, Personengruppen zur Bearbeitung Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>',
+                    '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+                );
+                
 		$args = array(
 			'title' => __( 'Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'Benutzer nach Abteilung oder Funktion organisieren.', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -35,7 +44,7 @@ class Workflow_User_Groups extends Workflow_Module {
 			'settings_help_tab' => array(
 				'id' => 'workflow-user-groups-overview',
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
+				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);
