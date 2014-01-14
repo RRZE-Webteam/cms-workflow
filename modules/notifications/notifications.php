@@ -12,11 +12,13 @@ class Workflow_Notifications extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
         
                 $content_help_tab = array(
-                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Benachrichtigungen aktiviert haben, können Sie hier festlegen', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Über die Benachrichtigungsfunktion können Sie sich informieren lassen, sobald Änderungen an Ihren Dokumenten durchgeführt wurden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Geben Sie hierzu an', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
-                    '<li>' . __('bei Änderungen in welchen Bereichen die jeweiligen Autoren benachrichtigt werden sollen (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('ob zusätzlich der Administrator der Website per E-Mail benachrichtigt werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '</ol>'
+                    '<li>' . __('bei Änderungen in welchen Bereichen die jeweiligen Autoren benachrichtigt werden sollen und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('ob zusätzlich der Administrator der Webseite per E-Mail benachrichtigt werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>',
+                    '<p>' . __('Der Autor der Dokumente (bzw. je nach Einstellung zusätzlich der Administrator) erhält dann die entsprechenden Änderungen in einer E-Mail an die Adresse, die in seinem Benutzerprofil (bzw. den Webseiten-Einstellungen) angegeben ist.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
                 );
                 
 		$args = array(

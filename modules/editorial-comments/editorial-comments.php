@@ -12,12 +12,14 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
 
         $content_help_tab = array(
-            '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>'. __('Über die redaktionelle Diskussion können sich die Autoren eines Dokumentes über die weitere Bearbeitung austauschen. Sie können auf dieser Seite auswählen, in welchen Bereichen redaktionelle Kommentare freigegeben werden sollen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>'. __('So fügen Sie einen redaktionellen Kommentar hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
-            '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich. Bevor Sie einen redaktionellen Kommentar hinzufügen können, muss das Dokument bereits einmal gespeichert worden sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Wählen Sie "Kommentar hinzufügen" im Kästchen "Redaktionelle Kommentare" aus (wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit "Senden".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
-            '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+            '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
         );                
 
         $args = array(
@@ -143,7 +145,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
         
         add_action('pre_get_comments', array( $this, 'display_comments_only' ));
         
-        add_meta_box('workflow-editorial-comments', __('Redaktionelle Diskussion', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'editorial_comments_meta_box'), $post_type, 'normal' );
+        add_meta_box('workflow-editorial-comments', __('Redaktionelle Kommentare', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'editorial_comments_meta_box'), $post_type, 'normal' );
 	}
 
     public function display_comments_only($query) {       
@@ -195,7 +197,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 			<?php
 			else :
 			?>
-				<p><?php _e( 'Sie können redaktionelle Kommentare zu einem Beitrag hinzufügen, wenn Sie dem Beitrag schon gespeichert haben.', CMS_WORKFLOW_TEXTDOMAIN ); ?></p>
+				<p><?php _e( 'Sie können redaktionelle Kommentare zu einem Beitrag hinzufügen, sobald Sie diesen gespeichert haben.', CMS_WORKFLOW_TEXTDOMAIN ); ?></p>
 			<?php
 			endif;
 			?>
@@ -288,7 +290,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 		global $current_user, $user_ID, $wpdb;
 		
 		if ( !wp_verify_nonce( $_POST['_nonce'], 'comment') )
-			die( __( "Bitte stellen Sie sicher, dass Sie Kommentaren hinzufügen dürfen.", CMS_WORKFLOW_TEXTDOMAIN ) );
+			die( __( "Bitte stellen Sie sicher, dass Sie Kommentare hinzufügen dürfen.", CMS_WORKFLOW_TEXTDOMAIN ) );
 		
       	get_currentuserinfo();
       	
@@ -300,7 +302,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 		
 		$comment_content = trim($_POST['content']);
 		if( !$comment_content )
-			die( __( "Bitte geben Sie ein Kommentar ein.", CMS_WORKFLOW_TEXTDOMAIN ) );
+			die( __( "Bitte geben Sie einen Kommentar ein.", CMS_WORKFLOW_TEXTDOMAIN ) );
 		
 		if( $post_id && $current_user ) {
 			

@@ -14,12 +14,19 @@ class Workflow_Task_List extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
         
                 $content_help_tab = array(
-                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen. Sie können auf dieser Seite auswählen, für welche Bereiche die Aufgabenliste freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('So fügen Sie eine neue Aufgabe hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
-                    '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich. ', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie "+ Neue Aufgabe hinzufügen" im Kästchen "Aufgabenliste" aus (wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Sie können jetzt folgende Informationen angeben oder auswählen:', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Titel</strong> und <strong>Beschreibung</strong> der Aufgabe', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Aufgabe zuweisen an</strong> - um den Autor auszuwählen, der diese Aufgabe erledigen soll. Erscheint nur bei aktivierter Autorenverwaltung und wenn mehrere Autoren dem Dokument zugeordnet sind. Aufgaben können keinen Benutzergruppen zugewiesen werden.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Priorität</strong> - auswählbar sind: hoch, normal oder niedrig. Je nach Priorität wird die Reihenfolge und Farbe der Aufgaben im Dashboard angezeigt.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Speichern Sie mit "Neue Aufgabe hinzufügen".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>',
-                    '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Priorität werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                   
+                    '<p class="priority-3">' . __('<strong>Priorität hoch</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-2">'. __('<strong>Priorität normal</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-1">'. __('<strong>Priorität niedrig</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
                 );
                         
 		$args = array(

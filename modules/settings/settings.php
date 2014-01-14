@@ -77,7 +77,7 @@ class Workflow_Settings extends Workflow_Module {
 		$requested_module_name = $requested_module->name;	
 		
 		if ( !$this->module_activated( $requested_module_name ) ) {
-			echo '<div class="message error"><p>' . sprintf( __( 'Modul nicht aktiviert. Bitte aktivieren Sie es in die <a href="%1$s">Einstellungen des Workflows</a>.', CMS_WORKFLOW_TEXTDOMAIN ), CMS_WORKFLOW_SETTINGS_PAGE ) . '</p></div>';
+			echo '<div class="message error"><p>' . sprintf( __( 'Modul nicht aktiviert. Bitte aktivieren Sie es in den <a href="%1$s">Einstellungen des Workflows</a>.', CMS_WORKFLOW_TEXTDOMAIN ), CMS_WORKFLOW_SETTINGS_PAGE ) . '</p></div>';
 			return;
 		}	
 		

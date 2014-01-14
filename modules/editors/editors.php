@@ -49,7 +49,7 @@ class Workflow_Editors extends Workflow_Module {
         );
 
         $content_help_tab = array(
-            '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Redakteureverwaltung aktiviert haben, können Sie hier angeben, welche Rechte ein Redakteur erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>'. __('Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure detaillierter vergeben zu könnnen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>'. __('Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die standardmäßig von WordPress vorgegebenen Rechte.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
         );
         

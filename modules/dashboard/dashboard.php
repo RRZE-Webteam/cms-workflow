@@ -12,8 +12,8 @@ class Workflow_Dashboard extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
                 
                 $content_help_tab = array(
-                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Dashboardinhalte aktiviert haben, können Sie hier angeben, welche Inhalte im Dashboard verfügbar sind (aktuelle Entwürfe, aktuell ausstehende Reviews, Aufgabenliste).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>'. __('Auf der Dashboard-Seite hat jeder Nutzer die Möglichkeit, über die Registerkarte "Optionen einblenden" in der rechten oberen Ecke die entsprechenden Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Je nachdem, was Sie auf dieser Seite aktivieren, können Sie im Dashboard unterschiedliche Inhalte verfolgen: aktuelle Entwürfe, aktuell ausstehende Reviews oder die Aufgabenliste.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Auf der Dashboard-Seite hat dann jeder Nutzer die Möglichkeit, über die Registerkarte "Optionen einblenden" in der rechten oberen Ecke die gewünschten Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                 );
         
 		$args = array(

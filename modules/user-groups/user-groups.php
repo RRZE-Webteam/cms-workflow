@@ -14,12 +14,16 @@ class Workflow_User_Groups extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
 		
                 $content_help_tab = array(
-                    '<p>'. __('Mit der Verwendung von Benutzergruppen haben Sie die Möglichkeit, Personengruppen zur Bearbeitung Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um komfortabler mehrere Personen einer Abteilung oder mit der gleichen Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche die Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
-                    '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '</ol>',
-                    '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+                    '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen (wenn die Box "Autor" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>'
                 );
                 
 		$args = array(
@@ -123,7 +127,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		$_REQUEST['form-errors'] = array();
 		
 		if ( empty( $name ) )
-			$_REQUEST['form-errors']['name'] = __( 'Bitte geben Sie einen Namen für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN );
+			$_REQUEST['form-errors']['name'] = __( 'Bitte geben Sie einen Namen für die Benutzergruppe an.', CMS_WORKFLOW_TEXTDOMAIN );
 
 		if ( $this->get_usergroup_by( 'name', $name ) )
 			$_REQUEST['form-errors']['name'] = __( 'Name wird bereits verwendet. Bitte wählen Sie einen anderen.', CMS_WORKFLOW_TEXTDOMAIN );
@@ -132,7 +136,7 @@ class Workflow_User_Groups extends Workflow_Module {
 			$_REQUEST['form-errors']['name'] = __( 'Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', CMS_WORKFLOW_TEXTDOMAIN );
 		
         if ( strlen( $name ) > 40 )
-			$_REQUEST['form-errors']['name'] = __( 'Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie einen kürzeren Namen.', CMS_WORKFLOW_TEXTDOMAIN );			
+			$_REQUEST['form-errors']['name'] = __( 'Der Name einer Benutzergruppe darf maximal 40 Zeichen lang sein. Bitte verwenden Sie einen kürzeren Namen.', CMS_WORKFLOW_TEXTDOMAIN );			
 
 		if ( count( $_REQUEST['form-errors'] ) ) {
 			$_REQUEST['error'] = 'form-error';
@@ -208,7 +212,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		$usergroup = $this->update_usergroup( $existing_usergroup->term_id, $args, $users );
 		
         if ( is_wp_error( $usergroup ) )
-			wp_die( __( 'Fehler beim Aktualisierung der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN ) );
+			wp_die( __( 'Fehler bei der Aktualisierung der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN ) );
 
 		$args = array(
 			'message' => 'usergroup-updated',
@@ -377,7 +381,7 @@ class Workflow_User_Groups extends Workflow_Module {
             </div>
 			<div id="col-left"><div class="col-wrap"><div class="form-wrap">
 				<h2 class="nav-tab-wrapper">
-					<a href="<?php echo esc_url( $this->get_link() ); ?>" class="nav-tab<?php if ( !isset( $_GET['action'] ) || $_GET['action'] != 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Neuer Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
+					<a href="<?php echo esc_url( $this->get_link() ); ?>" class="nav-tab<?php if ( !isset( $_GET['action'] ) || $_GET['action'] != 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
 					<a href="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" class="nav-tab<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Einstellungen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
 				</h2>
 				<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ): ?>
@@ -401,7 +405,7 @@ class Workflow_User_Groups extends Workflow_Module {
 					</div>
 					<?php wp_nonce_field( 'add-usergroup' ); ?>
 					<?php echo '<input id="form-action" name="form_action" type="hidden" value="add-usergroup" />'; ?>
-					<p class="submit"><?php submit_button( __( 'Neuer Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN ), 'primary', 'submit', false ); ?></p>
+					<p class="submit"><?php submit_button( __( 'Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN ), 'primary', 'submit', false ); ?></p>
 					</form>
 				<?php endif; ?>
 			</div></div></div>
@@ -423,9 +427,9 @@ class Workflow_User_Groups extends Workflow_Module {
 			<th>
 				<h3><?php _e( 'Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN ) ?></h3>
 				<?php if ( $user_id === wp_get_current_user()->ID ) : ?>
-				<p><?php _e( 'Wählen Sie die Benutzergruppen, die Sie gerne teilnehmen würde:', CMS_WORKFLOW_TEXTDOMAIN ) ?></p>
+				<p><?php _e( 'Wählen Sie die Benutzergruppen, an denen Sie gerne teilnehmen würden:', CMS_WORKFLOW_TEXTDOMAIN ) ?></p>
 				<?php else : ?>
-				<p><?php _e( 'Wählen Sie die Benutzergruppen, die dieser Benutzer teilnehmen sollte:', CMS_WORKFLOW_TEXTDOMAIN ) ?></p>
+				<p><?php _e( 'Wählen Sie die Benutzergruppen, an denen dieser Benutzer teilnehmen sollte:', CMS_WORKFLOW_TEXTDOMAIN ) ?></p>
 				<?php endif; ?>
 			</th>
 			<td>
@@ -550,7 +554,7 @@ class Workflow_User_Groups extends Workflow_Module {
 	public function add_usergroup( $args = array(), $user_ids = array() ) {
 
 		if ( !isset( $args['name'] ) )
-			return new WP_Error( 'invalid', __( 'Eine neue Benutzergruppe muss einen Name haben.', CMS_WORKFLOW_TEXTDOMAIN ) );
+			return new WP_Error( 'invalid', __( 'Eine neue Benutzergruppe muss einen Namen haben.', CMS_WORKFLOW_TEXTDOMAIN ) );
 			
 		$name = $args['name'];			
 		$default = array(
@@ -602,7 +606,7 @@ class Workflow_User_Groups extends Workflow_Module {
 	public function add_users_to_usergroup( $user_ids_or_logins, $id, $reset = true ) {
 		
 		if ( !is_array( $user_ids_or_logins ) )
-			return new WP_Error( 'invalid', __( 'Ungültige Benutzervariabel.', CMS_WORKFLOW_TEXTDOMAIN ) );
+			return new WP_Error( 'invalid', __( 'Ungültige Benutzervariable.', CMS_WORKFLOW_TEXTDOMAIN ) );
 		
 		$usergroup = $this->get_usergroup_by( 'id', $id );		
 		if ( $reset ) {

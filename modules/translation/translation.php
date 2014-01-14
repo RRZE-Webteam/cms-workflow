@@ -23,7 +23,7 @@ class Workflow_Translation extends Workflow_Module {
                         
 		$args = array(
 			'title' => __( 'Übersetzung', CMS_WORKFLOW_TEXTDOMAIN ),
-			'description' => __( 'Import und Export von Xiff-Dateien.', CMS_WORKFLOW_TEXTDOMAIN ),
+			'description' => __( 'Import und Export von XLIFF-Dateien.', CMS_WORKFLOW_TEXTDOMAIN ),
 			'module_url' => $this->module_url,
 			'slug' => 'translation',
 			'default_options' => array(
@@ -293,16 +293,16 @@ class Workflow_Translation extends Workflow_Module {
         $xml = simplexml_load_string($data);
 
         if (!$xml)
-            return new WP_Error('not_xml_file', sprintf(__('Die Xliff-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
 
         $file_attributes = $xml->file->attributes();
         if (!$file_attributes || !isset($file_attributes['original']))
-            return new WP_Error('not_xml_file', sprintf(__('Die Xliff-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
 
         $original = (string)$file_attributes['original'];
 
         if ($original != md5(sprintf('%d - %d', $blog_id, $post_id)))
-            return new WP_Error('xliff_doesnt_match', __('Die hochgeladene Xliff-Datei ist nicht für dieses Dokument geeignet.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('xliff_doesnt_match', __('Die hochgeladene XLIFF-Datei ist nicht für dieses Dokument geeignet.', CMS_WORKFLOW_TEXTDOMAIN));
 
         $post_array = array('ID' => $post_id);
         

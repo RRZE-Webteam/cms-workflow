@@ -100,7 +100,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 unset($connections[$current_blog_id]);                    
 
             if( !empty( $connections ) )
-                add_settings_field( 'network_connections', __( 'Vorhandenen Webseiten', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'settings_network_connections_option' ), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general' );
+                add_settings_field( 'network_connections', __( 'Vorhandene Webseiten', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'settings_network_connections_option' ), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general' );
 	
         }
         
@@ -294,7 +294,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         if ( current_user_can($cap->edit_posts) && !get_post_meta( $post->ID, self::version_post_id, true ) && $post->post_status != 'trash')
             $actions['edit_as_new_draft'] = '<a href="'. admin_url( 'admin.php?action=copy_as_new_post_draft&amp;post='.$post->ID ) .'" title="'
-            . esc_attr(__('Dieses Element als neuer Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
+            . esc_attr(__('Dieses Element als neuen Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
             . '">' .  __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
 
         if ( current_user_can($cap->edit_posts) && $post->post_status == 'publish' )
@@ -528,7 +528,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 $post_title = get_the_title($old_post_id);              
                 
                 if (current_user_can('manage_categories')) 
-                    $this->show_admin_notice(sprintf( __( 'Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie dem ursprünglichen Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title ));
+                    $this->show_admin_notice(sprintf( __( 'Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie das ursprüngliche Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title ));
                 else
                     $this->show_admin_notice(sprintf( __( 'Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title ));                    
             } else {
@@ -544,7 +544,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                             $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
                             $blog_lang = $this->get_lang_name($blog_lang);                   
                             $post_title = get_the_title($remote_post_meta['post_id']);
-                            echo $this->show_admin_notice(sprintf( __( 'Netzwerweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_name, $blog_lang ));                        
+                            echo $this->show_admin_notice(sprintf( __( 'Netzwerkweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN ), $permalink, $post_title, $blog_name, $blog_lang ));                        
                         }                
 
                         restore_current_blog();
@@ -617,7 +617,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             return;      
         
         add_action( 'post_submitbox_start', array( $this, 'network_connections_version_input') );
-		add_meta_box('network-connections', __( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
+		add_meta_box('network-connections', __( 'Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
     }
 
     public function network_connections_inner_box( $post ) {
@@ -704,7 +704,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if( ! empty($post->ID) && in_array( $post->post_status, array('publish', 'future', 'private') ) && !empty($network_connections)): ?>      
         <p>
             <input type="checkbox" id="network_connections_version" name="network_connections_version" <?php checked( false, true ); ?> />
-            <label for="network_connections_version"><?php _e( 'Netzwerkweit Versionierung', CMS_WORKFLOW_TEXTDOMAIN ); ?></label>
+            <label for="network_connections_version"><?php _e( 'Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN ); ?></label>
         </p>
         <?php endif;
     }
@@ -774,7 +774,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                         }                
                     } else {
                         restore_current_blog();
-                        $this->flash_admin_notice(__('Zieldokument ist nicht veröffentlicht. Netzwerkweit Versionierung fehlgeschlagen.', CMS_WORKFLOW_TEXTDOMAIN), 'error');                        
+                        $this->flash_admin_notice(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen.', CMS_WORKFLOW_TEXTDOMAIN), 'error');                        
                     }
 
                     return;                    
