@@ -70,13 +70,12 @@ class Workflow_Authors extends Workflow_Module {
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);
         
-		$this->module = $cms_workflow->register_module( 'authors', $args );   
-        
-        $this->set_role_caps();
- 
+		$this->module = $cms_workflow->register_module( 'authors', $args );
 	}
 	
 	public function init() {
+        
+        $this->set_role_caps();
         
         $this->register_taxonomies();
         
@@ -154,19 +153,32 @@ class Workflow_Authors extends Workflow_Module {
     }
     
     public function set_role_caps() {
-        
+
         $all_post_types = $this->get_available_post_types();
+        
+        $allowed_post_types = $this->get_post_types( $this->module );
 
         $this->role_caps = array_merge($this->wp_role_caps, $this->more_role_caps);
-                
-        foreach( $all_post_types as $args ) {
-            $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-            $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-            $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-            $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-            $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
-        }
         
+        foreach( $all_post_types as $post_type => $args ) {
+            if(!in_array($post_type, $allowed_post_types))
+                continue;
+            
+            if($post_type == $args->capability_type) {
+                $label = $args->label;
+            } elseif($post_type != $args->capability_type && isset($all_post_types[$args->capability_type])) {
+                $label = $all_post_types[$args->capability_type]->label;
+            }
+            
+            if(isset($label)) {
+                $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $args->label);
+                $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+            }
+        }
+
     }
     
 	public function register_taxonomies() {
