@@ -158,24 +158,41 @@ class Workflow_Editors extends Workflow_Module {
         
         foreach( $all_post_types as $post_type => $args ) {
             
-            if($post_type == $args->capability_type) {
-                $label = $args->label;
-            } elseif($post_type != $args->capability_type && isset($all_post_types[$args->capability_type])) {
-                $label = $all_post_types[$args->capability_type]->label;
-            }
+            $label = $args->label;
             
-            if(isset($label)) {
+            if($post_type != $args->capability_type && isset($all_post_types[$args->capability_type]))
+                $label = $all_post_types[$args->capability_type]->label;
+
+            if(isset($args->cap->edit_posts))
                 $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->publish_posts))
                 $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_posts))
                 $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->edit_published_posts))
                 $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_published_posts))
                 $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->edit_others_posts))
                 $this->role_caps[$args->cap->edit_others_posts] = sprintf(__('Andere %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_others_posts))
                 $this->role_caps[$args->cap->delete_others_posts] = sprintf(__('Andere %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->edit_private_posts))
                 $this->role_caps[$args->cap->edit_private_posts] = sprintf(__('Private %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_private_posts))
                 $this->role_caps[$args->cap->delete_private_posts] = sprintf(__('Private %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->read_private_posts))
                 $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
+
         }
         
     }

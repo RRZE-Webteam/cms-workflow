@@ -153,30 +153,37 @@ class Workflow_Authors extends Workflow_Module {
     }
     
     public function set_role_caps() {
-
+        
         $all_post_types = $this->get_available_post_types();
         
-        $allowed_post_types = $this->get_post_types( $this->module );
-
         $this->role_caps = array_merge($this->wp_role_caps, $this->more_role_caps);
+        
+        $allowed_post_types = $this->get_post_types( $this->module );
         
         foreach( $all_post_types as $post_type => $args ) {
             if(!in_array($post_type, $allowed_post_types))
                 continue;
             
-            if($post_type == $args->capability_type) {
-                $label = $args->label;
-            } elseif($post_type != $args->capability_type && isset($all_post_types[$args->capability_type])) {
-                $label = $all_post_types[$args->capability_type]->label;
-            }
+            $label = $args->label;
             
-            if(isset($label)) {
+            if($post_type != $args->capability_type && isset($all_post_types[$args->capability_type]))
+                $label = $all_post_types[$args->capability_type]->label;
+            
+            if(isset($args->cap->edit_posts))
                 $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->publish_posts))
                 $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_posts))
                 $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->edit_published_posts))
                 $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+
+            if(isset($args->cap->delete_published_posts))
                 $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
+                      
         }
 
     }
@@ -1014,10 +1021,26 @@ class Workflow_Authors extends Workflow_Module {
 	}
     
 	public function settings_validate( $new_options ) {
-		if ( !isset( $new_options['post_types'] ) )
+
+        if ( !isset($new_options['post_types']))
 			$new_options['post_types'] = array();
         
 		$new_options['post_types'] = $this->clean_post_type_options( $new_options['post_types'], $this->module->post_type_support );
+
+        if ( empty($new_options['post_types']['post']))
+            $new_options['post_types']['post'] = true;
+                
+        $all_post_types = $this->get_available_post_types();
+        
+        foreach( $all_post_types as $post_type => $args ) {
+            if($post_type == $args->capability_type && empty($new_options['post_types'][$post_type])) {  
+                unset($new_options['role_caps'][$args->cap->edit_posts]);
+                unset($new_options['role_caps'][$args->cap->publish_posts]);
+                unset($new_options['role_caps'][$args->cap->delete_posts]);
+                unset($new_options['role_caps'][$args->cap->edit_published_posts]);
+                unset($new_options['role_caps'][$args->cap->delete_published_posts]);   
+            }
+        }
 
 		if ( isset( $new_options['role_caps'])) {
             foreach($new_options['role_caps'] as $key => $value) {

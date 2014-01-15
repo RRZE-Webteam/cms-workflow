@@ -86,8 +86,7 @@ class Workflow_Module {
         $custom_post_types = $this->get_custom_post_types();
 		if ( count( $custom_post_types ) ) {
 			foreach( $custom_post_types as $custom_post_type => $args ) {
-                if(in_array($args->capability_type, array('post', 'page')))
-                    $all_post_types[$custom_post_type] = $args;
+				$all_post_types[$custom_post_type] = $args;
 			}
 		}    
         
