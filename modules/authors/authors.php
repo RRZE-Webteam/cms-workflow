@@ -135,6 +135,8 @@ class Workflow_Authors extends Workflow_Module {
             
         } else {
             
+            $this->role_caps = array_merge($this->wp_role_caps, $this->more_role_caps);
+            
             $role = get_role( self::role );
 
             $role_caps = array_keys($this->role_caps);
@@ -153,10 +155,23 @@ class Workflow_Authors extends Workflow_Module {
     }
     
     public function set_role_caps() {
-        
-        $all_post_types = $this->get_available_post_types();
-        
         $this->role_caps = array_merge($this->wp_role_caps, $this->more_role_caps);
+
+        $role = get_role( self::role );
+
+        $role_caps = array_keys($this->role_caps);
+
+        foreach($role_caps as $cap) {
+            $role->remove_cap( $cap );
+        }
+
+        $role_caps = array_keys($this->module->options->role_caps);
+
+        foreach($role_caps as $cap) {
+            $role->add_cap( $cap );
+        }
+
+        $all_post_types = $this->get_available_post_types();
         
         $allowed_post_types = $this->get_post_types( $this->module );
         
