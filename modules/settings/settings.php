@@ -42,9 +42,9 @@ class Workflow_Settings extends Workflow_Module {
 	}
 	
 	public function action_admin_menu() {
-		global $cms_workflow;
+		global $cms_workflow, $settings_page;
         
-		add_menu_page( 'Workflow', 'Workflow', 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ) ) ;
+		$settings_page = add_menu_page( 'Workflow', 'Workflow', 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ) ) ;
 		
         add_submenu_page( $this->module->settings_slug, $this->module->title, $this->module->title, 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ) ) ;
         
@@ -52,8 +52,32 @@ class Workflow_Settings extends Workflow_Module {
 			if ( $mod_data->options->activated && $mod_data->configure_callback && $mod_name != $this->module->name )
 				add_submenu_page( $this->module->settings_slug, $mod_data->title, $mod_data->title, 'manage_options', $mod_data->settings_slug, array( $this, 'settings_page_controller' ) ) ;
   		}
+        
+		if ( !empty( $this->module->settings_help_tab) )
+			add_action( sprintf('load-%s', $settings_page), array( $this, 'action_add_help_tab' ) );
+
 	}
-			
+		
+	public function action_add_help_tab() {
+        global $settings_page;
+
+		$screen = get_current_screen();
+
+		if ( !method_exists( $screen, 'add_help_tab' ) ) 
+			return;
+        
+		if ( $screen->id != $settings_page ) 
+			return;
+
+		if ( isset( $this->module->settings_help_tab['id'], $this->module->settings_help_tab['title'], $this->module->settings_help_tab['content'] ) ) {
+			$screen->add_help_tab( $this->module->settings_help_tab );
+		
+			if ( isset( $this->module->settings_help_sidebar ) ) {
+				$screen->set_help_sidebar( $this->module->settings_help_sidebar );
+			}
+		}
+	}
+    
 	public function action_admin_print_styles() {		
 			wp_enqueue_style( 'workflow-settings', $this->module_url . 'settings.css', false, CMS_WORKFLOW_VERSION );	
 	}
