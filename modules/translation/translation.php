@@ -13,13 +13,26 @@ class Workflow_Translation extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
         
                 $content_help_tab = array(
-                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Mit dem Übersetzungsmodul haben Sie die Möglichkeit ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>',
                     '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
                 );
+                
+                /*Kontexthilfe, einzubinden in den Bearbeitungsseiten und neuen Seiten zu posts und pages (evtl. auch in Übersichtsseiten) über       
+                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+                 *  
+                 * add_action( 'admin_head-post-new.php', array( __CLASS__, 'add_post_new_help_tab'));     
+                 * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
+                 * 
+                 * 
+                */
+                $context_help_tab = array(
+                    '<p></p>'
+                );
+        
                         
 		$args = array(
 			'title' => __( 'Übersetzung', CMS_WORKFLOW_TEXTDOMAIN ),

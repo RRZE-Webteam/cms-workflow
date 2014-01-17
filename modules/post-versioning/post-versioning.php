@@ -25,6 +25,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     '</ol>',
                     '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
                 );
+
+                 /*Kontexthilfe, einzubinden in den Übersichtsseiten, Bearbeitungsseiten und neuen Seiten zu posts und pages über 
+                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+                 * 
+                  * add_action( 'admin_head-edit.php', array( __CLASS__, 'add_pages_help_tab')); 
+                 * add_action( 'admin_head-post-new.php', array( __CLASS__, 'add_post_new_help_tab'));     
+                 * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
+                 *  
+                 */
+                 $context_help_tab = array(
+                    '<p></p>'
+                );
         
 		$args = array(
 			'title' => __( 'Versionierung', CMS_WORKFLOW_TEXTDOMAIN ),

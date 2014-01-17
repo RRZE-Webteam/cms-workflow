@@ -26,6 +26,18 @@ class Workflow_User_Groups extends Workflow_Module {
                     '</ol>'
                 );
                 
+                 /*Kontexthilfe, einzubinden in den Bearbeitungsseiten und neuen Seiten zu posts und pages über 
+                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+                 *  
+                 * add_action( 'admin_head-post-new.php', array( __CLASS__, 'add_post_new_help_tab'));     
+                 * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
+                 *
+                 */
+                 $context_help_tab = array(
+                    '<p></p>'
+                );
+        
+                
 		$args = array(
 			'title' => __( 'Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'Benutzer nach Abteilung oder Funktion organisieren.', CMS_WORKFLOW_TEXTDOMAIN ),

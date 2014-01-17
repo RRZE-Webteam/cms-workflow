@@ -28,6 +28,18 @@ class Workflow_Task_List extends Workflow_Module {
                     '<p class="priority-2">'. __('<strong>Priorität normal</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p class="priority-1">'. __('<strong>Priorität niedrig</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
                 );
+                
+                /*Kontexthilfe, einzubinden in den Bearbeitungsseiten und neuen Seiten zu posts und pages über 
+                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+                 *  
+                 * add_action( 'admin_head-post-new.php', array( __CLASS__, 'add_post_new_help_tab'));     
+                 * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
+                 *   
+                */
+                $context_help_tab = array(
+                    '<p></p>'
+                );
+        
                         
 		$args = array(
 			'title' => __( 'Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN ),

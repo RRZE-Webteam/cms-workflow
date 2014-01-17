@@ -20,7 +20,19 @@ class Workflow_Editorial_Comments extends Workflow_Module {
             '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit "Senden".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
             '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
-        );                
+        );    
+        
+        /*Kontexthilfe, einzubinden in der Kommentare-Hilfe über 
+         * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+         *  
+         * add_action( 'admin_head-edit-comments.php', array( __CLASS__, 'add_comment_help_tab'));     
+        * 
+        * 
+        */
+        $context_help_tab = array(
+            '<p></p>'
+        );
+        
 
         $args = array(
 			'title' => __( 'Redaktionelle Diskussion', CMS_WORKFLOW_TEXTDOMAIN ),

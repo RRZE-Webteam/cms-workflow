@@ -15,6 +15,18 @@ class Workflow_Dashboard extends Workflow_Module {
                     '<p>'. __('Je nachdem, was Sie auf dieser Seite aktivieren, können Sie im Dashboard unterschiedliche Inhalte verfolgen: aktuelle Entwürfe, aktuell ausstehende Reviews oder die Aufgabenliste.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>'. __('Auf der Dashboard-Seite hat dann jeder Nutzer die Möglichkeit, über die Registerkarte "Optionen einblenden" in der rechten oberen Ecke die gewünschten Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                 );
+                
+                /*Kontexthilfe, einzubinden in der Dashboard-Hilfe über 
+                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
+                 *  
+                 * add_action( 'admin_head-index.php', array( __CLASS__, 'add_dashboard_help_tab'));    
+                 * 
+                 * 
+                 */
+                 $context_help_tab = array(
+                    '<p></p>'
+                );
+        
         
 		$args = array(
 			'title' => __( 'Dashboard', CMS_WORKFLOW_TEXTDOMAIN ),
