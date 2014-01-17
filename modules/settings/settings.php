@@ -51,8 +51,10 @@ class Workflow_Settings extends Workflow_Module {
         
 		add_action( 'admin_menu', array( $this, 'action_admin_menu' ) );
 		
-		add_action( 'admin_init', array( $this, 'register_settings' ) );        
-		
+		add_action( 'admin_init', array( $this, 'register_settings' ) );  
+        
+		add_action( 'contextual_help', array( $this, 'action_contextual_help_menu' ), 10, 3 );
+        
 	}
 	
 	public function action_admin_menu() {
@@ -91,6 +93,48 @@ class Workflow_Settings extends Workflow_Module {
 			}
 		}
 	}
+    
+	public function action_contextual_help_menu( $contextual_help, $screen_id, $screen ) {
+		if ( !method_exists( $screen, 'add_help_tab' ) ) 
+			return $contextual_help;
+        
+        $contextual_help_menu = $this->contextual_help_menu();
+   
+        foreach ( $contextual_help_menu as $context_help ) {
+            foreach( $context_help as $context_page => $context_help_tab) {
+                if( $screen_id == $context_page ) {
+                    $screen->add_help_tab( array(
+                        'id'      => $context_help_tab['id'],
+                        'title'   => $context_help_tab['title'],
+                        'content' => $context_help_tab['content'],
+                    ));              
+                }
+            }
+        }
+                
+        return $contextual_help;
+	}
+    
+    private function contextual_help_menu() {
+        global $cms_workflow;
+        
+        $contextual_help = array();
+        
+		foreach ( $cms_workflow->modules as $mod_name => $mod_data ) {
+            
+			if ( !empty( $mod_data->context_page ) && !empty( $mod_data->context_help_tab ) ) {
+                
+                foreach( $mod_data->context_page as $screen_id ) {
+
+                    if ( isset( $mod_data->context_help_tab['id'], $mod_data->context_help_tab['title'], $mod_data->context_help_tab['content'] ) )
+                        $contextual_help[] = array($screen_id => $mod_data->context_help_tab);
+                
+                }
+            }
+  		}
+        
+        return $contextual_help;
+    }
     
 	public function action_admin_print_styles() {		
 			wp_enqueue_style( 'workflow-settings', $this->module_url . 'settings.css', false, CMS_WORKFLOW_VERSION );	

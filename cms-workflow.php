@@ -224,17 +224,22 @@ class CMS_Workflow {
         
 		$args = array_merge( $defaults, $args );
 		$args['name'] = $name;
-		$args['workflow_options_name'] = sprintf('%s%s_options', $this->workflow_options, $name);
+		$args['workflow_options_name'] = sprintf('%s%s_options', $this->workflow_options, $name );
         
 		if ( !isset( $args['settings_slug'] ) )
-			$args['settings_slug'] = sprintf('workflow-%s-settings', $args['slug']);
+			$args['settings_slug'] = sprintf('workflow-%s-settings', $args['slug'] );
         
 		if ( empty( $args['post_type_support'] ) )
 			$args['post_type_support'] = sprintf('workflow_%s', $name);
         
 		if ( !empty( $args['settings_help_tab'] ) )
-			add_action( sprintf('load-workflow_page_%s', $args['settings_slug']), array( &$this->$name, 'action_settings_help_menu' ) );
+			add_action( sprintf( 'load-workflow_page_%s', $args['settings_slug'] ), array( &$this->$name, 'action_settings_help_menu' ) );
 		
+		if ( !empty( $args['context_page'] ) ) {
+            if( !is_array($args['context_page']) )
+                $args['context_page'] = array($args['context_page']);
+        }
+        
 		$this->modules->$name = (object) $args;
         
         return $this->modules->$name;
