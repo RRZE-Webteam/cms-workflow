@@ -19,10 +19,21 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
                 $content_help_tab = array(
                     '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<ol>',
-                    '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll (Beiträge, Seiten, Termine) und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '</ol>',
+
+                    '<p>' . __('für welche Bereiche die Unterstützung mehrerer Versionnen freigegeben werden soll', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ul>',
+                    '<li>' . __('innerhalb des gleichen Webauftritts ("Lokale Freigabe") oder', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('im Austausch mit einem anderen, normalerweise anderssprachigen Webauftritt ("Netzwerkweite Freigabe").', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ul>',
+                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Veröffentlichungs- und Sichtbarkeitsstatus werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                   
+                    '<p class="status-draft">' . __('<strong>Entwurf</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="status-pending">'. __('<strong>Zur Revision vorliegend / Ausstehender Review</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="status-publish">' . __('<strong>Veröffentlicht</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="status-future">' . __('<strong>Geplant</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="status-private">' . __('<strong>Privat</strong> - Private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht.Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="post-password-required">' . __('<strong>Passwortgeschützt</strong> - Passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurf.Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="status-trash">'. __('<strong>Papierkorb</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
                 );
 

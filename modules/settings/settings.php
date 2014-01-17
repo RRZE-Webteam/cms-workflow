@@ -9,6 +9,20 @@ class Workflow_Settings extends Workflow_Module {
         
         $this->module_url = $this->get_module_url( __FILE__ );
         
+                $content_help_tab = array(
+                    '<p>' . __('Das Workflow-Plugin bietet Ihnen die Möglichkeit, eine bessere redaktionelle Kontrolle bei der Erstellung von Webseiten mit WordPress zu erhalten.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Ihnen stehen hierzu verschiedene Module zur Verfügung:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Autoren</strong> - Detaillierte Vergabe der Rechte für Autoren.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Dashboard</strong> - Anstehende Aufgaben und Dokumentenbearbeitungen werden im Dashboard angezeigt.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Redaktionelle Diskussion</strong> - Bessere Kommunikation bei der Dokumentenbearbeitung durch redaktionelle Kommentare.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Redakteure</strong> - Detaillierte Vergabe der Rechte für Redakteure.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Benachrichtigungen</strong> - Änderungen werden per E-Mail an die zuständigen Benutzer verschickt.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Versionierung</strong> - Einfachere Aktualisierung von Inhalten durch die Verwaltung verschiedener Dokumentenversionen, zur Unterstützung mehrsprachiger Webauftritte auch netzwerkweit möglich.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aufgabenliste</strong> - Erstellen von Aufgaben, .', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Übersetzung</strong> - Unterstützung von mehrsprachigen Webauftritten.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Benutzergruppen</strong> - Vereinfachte Verwaltung durch Gruppierung der Benutzer nach Abteilung oder Funktion.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
+                );
+        
 		$args = array(
 			'title' => __( 'Einstellungen', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'Auf dieser Seite können Sie grundlegende Einstellungen vornehmen.', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -20,7 +34,7 @@ class Workflow_Settings extends Workflow_Module {
 			'settings_help_tab' => array(
 				'id' => 'workflow-settings-overview',
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-				'content' => __('<p></p>', CMS_WORKFLOW_TEXTDOMAIN),
+				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
 		);

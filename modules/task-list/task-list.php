@@ -14,7 +14,7 @@ class Workflow_Task_List extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
         
                 $content_help_tab = array(
-                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen. Sie können auf dieser Seite auswählen, für welche Bereiche die Aufgabenliste freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen. Sie können auf dieser Seite auswählen, in welchen Bereichen die Erstellung von Aufgabenlisten freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So fügen Sie eine neue Aufgabe hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich. ', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
