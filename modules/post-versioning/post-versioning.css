@@ -1,27 +1,27 @@
-.status-draft {
+.status-draft .check-column {
     background: #ffffe0 !important;
 }
 
-.status-future {
+.status-future .check-column {
     background-color: #E9F2D3 !important;
 }
 
-.status-publish {
+.status-publish .check-column {
 }
 
-.status-pending {
+.status-pending .check-column {
     background-color: #D3E4ED !important;
 }
 
-.status-private {
+.status-private .check-column {
     background-color: #FFECE6 !important;
 }
 
-.post-password-required {
+.post-password-required .check-column {
     background-color: #ff9894 !important;
 }
 
-.status-trash {
+.status-trash .check-column {
     background-color: #FFEBE8 !important;
 }
 
