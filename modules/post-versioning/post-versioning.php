@@ -884,6 +884,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     public function custom_columns( $columns ) {
         $position = array_search('comments', array_keys($columns));
+        if( $position === false )
+            $position = array_search( 'date', array_keys( $columns ) );
+        
         if($position !== false)
             $columns = array_slice( $columns, 0, $position, true) + array( 'version' => '') + array_slice($columns, $position, count($columns) - $position, true);
         
