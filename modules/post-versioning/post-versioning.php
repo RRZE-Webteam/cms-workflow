@@ -639,6 +639,17 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if( empty( $connections ) || !in_array( $post->post_status, array('publish', 'future', 'private') ) )
             return;      
         
+        $meta_key = $this->module->workflow_options_name . '_network_connections';
+        $meta_data = get_post_custom( $post->ID );
+        
+        if ( !isset( $meta_data[$meta_key] ) ) {
+            $meta_data = array();
+            foreach( $connections as $connection ) {
+                $meta_data[] = $connection;
+            }
+            update_post_meta ($post->ID, $meta_key, $meta_data);
+        }
+        
         add_action( 'post_submitbox_start', array( $this, 'network_connections_version_input') );
 		add_meta_box('network-connections', __( 'Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
     }
