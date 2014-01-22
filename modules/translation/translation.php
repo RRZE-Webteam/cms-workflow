@@ -72,7 +72,7 @@ class Workflow_Translation extends Workflow_Module {
 
             add_action('post_edit_form_tag', array( $this, 'update_edit_form'));
 
-            add_action('add_meta_boxes', array( $this, 'translate_meta_box'));
+            add_action('add_meta_boxes', array( $this, 'translate_meta_box'), 10, 2);
 
             add_action('save_post', array( $this, 'save_translate_meta_data'));          
         }                               
@@ -139,8 +139,9 @@ class Workflow_Translation extends Workflow_Module {
         return $mime_types;
     }
 
-    public function translate_meta_box() {
-        global $post;
+    public function translate_meta_box( $post_type, $post ) {
+		if ( !$this->is_post_type_enabled($post_type))
+			return;
 
         if($this->module_activated( 'post_versioning' ) && in_array( $post->post_status, array('publish', 'future', 'private') ))
             return;
@@ -148,16 +149,14 @@ class Workflow_Translation extends Workflow_Module {
         add_meta_box(
             'translate',
             __('Übersetzung', CMS_WORKFLOW_TEXTDOMAIN),
-            array( $this, 'translate_meta_box_fields'),
-            'page',
+            array( $this, 'translate_inner_box'),
+            $post_type,
             'normal'
         );
         
     }
 
-    public function translate_meta_box_fields() {
-        global $post;
-        
+    public function translate_inner_box( $post ) {
         $post_id = $post->ID;
         
         $site_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
