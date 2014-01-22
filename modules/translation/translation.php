@@ -251,6 +251,8 @@ class Workflow_Translation extends Workflow_Module {
             return;
         }
         
+        $post = get_post($post_id);
+        
         $cap = $this->get_available_post_types($post->post_type)->cap;
         
         if(!current_user_can($cap->edit_posts)) {
