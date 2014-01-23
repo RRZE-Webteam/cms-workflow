@@ -234,11 +234,6 @@ class CMS_Workflow {
         
 		if ( !empty( $args['settings_help_tab'] ) )
 			add_action( sprintf( 'load-workflow_page_%s', $args['settings_slug'] ), array( &$this->$name, 'action_settings_help_menu' ) );
-		
-		if ( !empty( $args['context_page'] ) ) {
-            if( !is_array($args['context_page']) )
-                $args['context_page'] = array($args['context_page']);
-        }
         
 		$this->modules->$name = (object) $args;
         
