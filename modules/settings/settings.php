@@ -99,7 +99,7 @@ class Workflow_Settings extends Workflow_Module {
 			return $contextual_help;
         
         $contextual_help_menu = $this->contextual_help_menu();
-   
+
         foreach ( $contextual_help_menu as $context_help ) {
             foreach( $context_help as $context_page => $context_help_tab) {
                 if( $screen_id == $context_page ) {
@@ -122,13 +122,15 @@ class Workflow_Settings extends Workflow_Module {
         
 		foreach ( $cms_workflow->modules as $mod_name => $mod_data ) {
             
-			if ( !empty( $mod_data->context_page ) && !empty( $mod_data->context_help_tab ) ) {
+			if ( !empty( $mod_data->contextual_help ) ) {
                 
-                foreach( $mod_data->context_page as $screen_id ) {
-
-                    if ( isset( $mod_data->context_help_tab['id'], $mod_data->context_help_tab['title'], $mod_data->context_help_tab['content'] ) )
-                        $contextual_help[] = array($screen_id => $mod_data->context_help_tab);
-                
+                foreach( $mod_data->contextual_help as $data ) {
+                    $data = (object) $data;
+                    if ( !empty($data->screen_id) && is_array($data->screen_id) && isset( $data->help_tab['id'], $data->help_tab['title'], $data->help_tab['content'] ) ) {
+                        foreach( $data->screen_id as $screen_id ) {
+                            $contextual_help[] = array($screen_id => $data->help_tab);
+                        }
+                    }
                 }
             }
   		}
