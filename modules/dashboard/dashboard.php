@@ -24,7 +24,11 @@ class Workflow_Dashboard extends Workflow_Module {
                  * 
                  */
                  $context_help_tab = array(
-                    '<p>Dashboard</p>'
+                    '<p>'. __('Je nach Freigabe durch den Administrator haben Sie die Möglichkeit, unterschiedliche Inhalte zu verfolgen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                     
+                    '<p>' . __('<strong>Aktuelle Entwürfe</strong> - ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aufgabenliste</strong> -', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                      
                 );
         

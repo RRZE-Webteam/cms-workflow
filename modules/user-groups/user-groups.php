@@ -14,7 +14,7 @@ class Workflow_User_Groups extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
 		
                 $content_help_tab = array(
-                    '<p>' . __('Um komfortabler mehrere Personen einer Abteilung oder mit der gleichen Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche die Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('Um die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
@@ -35,7 +35,7 @@ class Workflow_User_Groups extends Workflow_Module {
                  *
                  */
                  $context_help_tab = array(
-                    '<p>' . __('Um komfortabler mehrere Personen einer Abteilung oder mit der gleichen Funktion als Autoren zu einem Dokument hinzuzufügen, sind diese in Benutzergruppen zusammengefasst.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, sind diese in Benutzergruppen zusammengefasst.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
