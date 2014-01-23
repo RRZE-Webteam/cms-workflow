@@ -98,31 +98,34 @@ class Workflow_Settings extends Workflow_Module {
 		if ( !method_exists( $screen, 'add_help_tab' ) ) 
 			return $contextual_help;
         
-        $contextual_help_menu = $this->contextual_help_menu();
+            $post_type = $screen->post_type;
+            $contextual_help_menu = $this->contextual_help_menu( $post_type );
 
-        foreach ( $contextual_help_menu as $context_help ) {
-            foreach( $context_help as $context_page => $context_help_tab) {
-                if( $screen_id == $context_page ) {
-                    $screen->add_help_tab( array(
-                        'id'      => $context_help_tab['id'],
-                        'title'   => $context_help_tab['title'],
-                        'content' => $context_help_tab['content'],
-                    ));              
+            foreach ( $contextual_help_menu as $context_help ) {
+                foreach( $context_help as $context_page => $context_help_tab) {
+                    if( $screen_id == $context_page ) {
+                        $screen->add_help_tab( array(
+                            'id'      => $context_help_tab['id'],
+                            'title'   => $context_help_tab['title'],
+                            'content' => $context_help_tab['content'],
+                        ));              
+                    }
                 }
             }
-        }
                 
         return $contextual_help;
 	}
     
-    private function contextual_help_menu() {
+    private function contextual_help_menu( $post_type ) {
         global $cms_workflow;
         
         $contextual_help = array();
         
 		foreach ( $cms_workflow->modules as $mod_name => $mod_data ) {
+
+            $allowed_post_types = $this->get_post_types( $mod_data );
             
-			if ( !empty( $mod_data->contextual_help ) ) {
+			if ( $mod_data->options->activated && in_array($post_type, $allowed_post_types) && !empty( $mod_data->contextual_help ) ) {
                 
                 foreach( $mod_data->contextual_help as $data ) {
                     $data = (object) $data;
