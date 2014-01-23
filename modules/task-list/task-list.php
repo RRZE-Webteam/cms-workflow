@@ -14,15 +14,15 @@ class Workflow_Task_List extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
         
                 $content_help_tab = array(
-                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen. Sie können auf dieser Seite auswählen, in welchen Bereichen die Erstellung von Aufgabenlisten freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('Sie können auf dieser Seite auswählen, in welchen Bereichen die Erstellung von Aufgabenlisten freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So fügen Sie eine neue Aufgabe hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich. ', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Wählen Sie "+ Neue Aufgabe hinzufügen" im Kästchen "Aufgabenliste" aus (wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie "+ Neue Aufgabe hinzufügen" im Kästchen "Aufgabenliste" aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('Sie können jetzt folgende Informationen angeben oder auswählen:', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Titel</strong> und <strong>Beschreibung</strong> der Aufgabe', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Aufgabe zuweisen an</strong> - um den Autor auszuwählen, der diese Aufgabe erledigen soll. Erscheint nur bei aktivierter Autorenverwaltung und wenn mehrere Autoren dem Dokument zugeordnet sind. Aufgaben können keinen Benutzergruppen zugewiesen werden.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Priorität</strong> - auswählbar sind: hoch, normal oder niedrig. Je nach Priorität wird die Reihenfolge und Farbe der Aufgaben im Dashboard angezeigt.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('Speichern Sie mit "Neue Aufgabe hinzufügen".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>',
-                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Priorität werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Priorität werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                    
                     '<p class="priority-3">' . __('<strong>Priorität hoch</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p class="priority-2">'. __('<strong>Priorität normal</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
@@ -36,11 +36,32 @@ class Workflow_Task_List extends Workflow_Module {
                  * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
                  *   
                 */
-                $context_help_tab = array(
-                    '<p>Task-List</p>'
+                $context_help_tab1 = array(
+                    '<p>' . __('In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen.', CMS_WORKFLOW_TEXTDOMAIN),
+                    '<p>' . __('Mit Klick auf den Aufgabentitel sehen Sie die Beschreibung der Aufgabe und haben die Möglichkeit, diese anzunehmen, zu löschen oder als erledigt zu markieren.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('So fügen Sie eine neue Aufgabe hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Wählen Sie "+ Neue Aufgabe hinzufügen" im Kästchen "Aufgabenliste" aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Sie können jetzt folgende Informationen angeben oder auswählen:', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Titel</strong> und <strong>Beschreibung</strong> der Aufgabe', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Aufgabe zuweisen an</strong> - um den Autor auszuwählen, der diese Aufgabe erledigen soll. Erscheint nur bei aktivierter Autorenverwaltung und wenn mehrere Autoren dem Dokument zugeordnet sind. Aufgaben können keinen Benutzergruppen zugewiesen werden.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('<strong>Priorität</strong> - auswählbar sind: hoch, normal oder niedrig. Je nach Priorität wird die Reihenfolge und Farbe der Aufgaben im Dashboard angezeigt.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Speichern Sie mit "Neue Aufgabe hinzufügen".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>',
+                     '<p>' . __('Sofern freigegeben sehen Sie auch im Dashboard die Liste aller anstehenden Aufgaben.', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('Je nach Priorität werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                   
+                    '<p class="priority-3">' . __('<strong>Priorität hoch</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-2">'. __('<strong>Priorität normal</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-1">'. __('<strong>Priorität niedrig</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
+                   
                 );
         
-                        
+                $context_help_tab2 = array(
+                    
+                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Priorität werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                   
+                    '<p class="priority-3">' . __('<strong>Priorität hoch</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-2">'. __('<strong>Priorität normal</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="priority-1">'. __('<strong>Priorität niedrig</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
+                );           
+                                 
 		$args = array(
 			'title' => __( 'Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN ),
 			'description' => __( 'In einer Aufgabenliste wird festgehalten, welche Aufgaben anstehen, wer dafür verantwortlich ist und bis wann sie erledigt sein müssen.', CMS_WORKFLOW_TEXTDOMAIN ),
@@ -60,11 +81,24 @@ class Workflow_Task_List extends Workflow_Module {
 				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
-                        'context_page' => array('post', 'page'),
-                        'context_help_tab' => array(
-                            'id' => 'workflow-task-list-context',
-                            'title' => __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN),
-                            'content' => implode(PHP_EOL, $context_help_tab),
+                        'contextual_help' => array(
+                            '1' => array(
+                                'screen_id' => array('post', 'page'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-task-list-context',
+                                    'title' => __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab1),
+                                )
+                            ),
+                            '2' => array(
+                                'screen_id' => array('post', 'page'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-task-list-context',
+                                    'title' => __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab2),
+                                )
+                            )
+                        
                         ),     
 		);
         

@@ -18,22 +18,22 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
 
                 $content_help_tab = array(
-                    '<p>'. __('Wenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Über die Versionierung haben Sie die MöglichkeitWenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
 
                     '<p>' . __('für welche Bereiche die Unterstützung mehrerer Versionnen freigegeben werden soll', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ul>',
                     '<li>' . __('innerhalb des gleichen Webauftritts ("Lokale Freigabe") oder', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('im Austausch mit einem anderen, normalerweise anderssprachigen Webauftritt ("Netzwerkweite Freigabe").', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ul>',
-                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Veröffentlichungs- und Sichtbarkeitsstatus werden diese angeordnet und in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Veröffentlichungs- und Sichtbarkeitsstatus werden diese am Anfang der Zeile in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                    
-                    '<p class="status-draft">' . __('<strong>Entwurf</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="status-pending">'. __('<strong>Zur Revision vorliegend / Ausstehender Review</strong> - Aufgabe steht in der Mitte der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="status-publish">' . __('<strong>Veröffentlicht</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="status-future">' . __('<strong>Geplant</strong> - Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="status-private">' . __('<strong>Privat</strong> - Private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht.Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="post-password-required">' . __('<strong>Passwortgeschützt</strong> - Passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurf.Aufgabe steht ganz oben in der Liste', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="status-trash">'. __('<strong>Papierkorb</strong> - Aufgabe steht am Ende der Liste und wird nicht farblich hervorgehoben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-draft">' . __('<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-pending">'. __('<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig bearbeitet und liegt zur Revision beim Redakteur vor.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-publish">' . __('<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur veröffentlicht, wird nicht farblich hervorgehoben.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-future">' . __('<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem Datum veröffentlicht', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-private">' . __('<strong>Privat</strong> - Private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-post-password-required">' . __('<strong>Passwortgeschützt</strong> - Passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurfsstatus.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-trash">'. __('<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im Papierkorb.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
                 );
 
@@ -45,11 +45,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                  * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
                  *  
                  */
-                 $context_help_tab = array(
-                    '<p>Dies ist die Kontext-Hilfe für die Versionierung.</p>'
-                );
-                  $context_help_tab2 = array(
+                 $context_help_tab1 = array(
                     '<p>Dies ist die Kontext-Hilfe für die netzwerkweite Versionierung.</p>'
+                );
+                 $context_help_tab2 = array(
+                    '<p>Dies ist die Kontext-Hilfe für die Versionierung.</p>'
                 );
         
 		$args = array(
@@ -71,18 +71,24 @@ class Workflow_Post_Versioning extends Workflow_Module {
 				'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
 				'content' => implode(PHP_EOL, $content_help_tab),
 				),
-			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
-                        'context_page' => array('post', 'page'),
-                        'context_help_tab' => array(
-                            'id' => 'workflow-post-versioning-context',
-                            'title' => __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
-                            'content' => implode(PHP_EOL, $context_help_tab),
-                        ),
-                        'context_page' => array('edit-post', 'post', 'edit-page', 'page'),
-                        'context_help_tab' => array(
-                            'id' => 'workflow-post-versioning-network-context',
-                            'title' => __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
-                            'content' => implode(PHP_EOL, $context_help_tab2),
+			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),                        
+                        'contextual_help' => array(
+                            '1' => array(
+                                'screen_id' => array('post', 'page'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-post-versioning-context',
+                                    'title' => __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab1),
+                                )                                 
+                            ),                        
+                            '2' => array(
+                                'screen_id' => array('edit-post', 'edit-page'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-post-versioning-network-context',
+                                    'title' => __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab2),
+                                )
+                            )        
                         ),
 		);
         

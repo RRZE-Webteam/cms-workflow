@@ -21,8 +21,9 @@ class Workflow_User_Groups extends Workflow_Module {
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen (wenn die Box "Autor" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                     '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                     '<li>' . __('Einzelne Autoren können jetzt auch wieder abgewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>'
                 );
                 
@@ -34,7 +35,13 @@ class Workflow_User_Groups extends Workflow_Module {
                  *
                  */
                  $context_help_tab = array(
-                    '<p>Dies ist die Kontext-Hilfe für die Benutzergruppen.</p>'
+                    '<p>' . __('Um komfortabler mehrere Personen einer Abteilung oder mit der gleichen Funktion als Autoren zu einem Dokument hinzuzufügen, sind diese in Benutzergruppen zusammengefasst.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                     '<li>' . __('Einzelne Autoren können jetzt auch wieder abgewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>'
                 );
         
                 
@@ -63,12 +70,16 @@ class Workflow_User_Groups extends Workflow_Module {
 				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
-                        'context_page' => array('post', 'page'),
-                        'context_help_tab' => array(
-                            'id' => 'workflow-user-groups-context',
-                            'title' => __('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN),
-                            'content' => implode(PHP_EOL, $context_help_tab),
-                        ),     
+                        'contextual_help' => array(
+                            '1' => array(
+                                'screen_id' => array('post', 'page'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-user-groups-context',
+                                    'title' => __('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab),
+                            )
+                        )
+                    ),     
 		);
         
 		$this->module = $cms_workflow->register_module( 'user_groups', $args );
