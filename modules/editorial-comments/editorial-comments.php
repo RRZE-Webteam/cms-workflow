@@ -82,7 +82,8 @@ class Workflow_Editorial_Comments extends Workflow_Module {
                                     'content' => implode(PHP_EOL, $context_help_tab2),
                                 )   
                         
-                            ),     
+                            ) 
+                      )      
 		);
         
 		$this->module = $cms_workflow->register_module( 'editorial_comments', $args );
