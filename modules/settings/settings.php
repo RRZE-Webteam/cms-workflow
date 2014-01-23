@@ -125,7 +125,7 @@ class Workflow_Settings extends Workflow_Module {
 
             $allowed_post_types = $this->get_post_types( $mod_data );
             
-			if ( $mod_data->options->activated && in_array($post_type, $allowed_post_types) && !empty( $mod_data->contextual_help ) ) {
+			if ( $mod_data->options->activated && (empty($post_type) || in_array($post_type, $allowed_post_types)) && !empty( $mod_data->contextual_help ) ) {
                 
                 foreach( $mod_data->contextual_help as $data ) {
                     $data = (object) $data;
