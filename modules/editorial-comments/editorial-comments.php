@@ -30,7 +30,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
         * 
         */
         $context_help_tab = array(
-            '<p></p>'
+            '<p>Editorial Comments</p>'
         );
         
 
@@ -53,6 +53,12 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
+                        'context_page' => array('edit-comments'),
+                        'context_help_tab' => array(
+                            'id' => 'workflow-editorial-comments-context',
+                            'title' => __('Redaktionelle Kommentare', CMS_WORKFLOW_TEXTDOMAIN),
+                            'content' => implode(PHP_EOL, $context_help_tab),
+                        ),     
 		);
         
 		$this->module = $cms_workflow->register_module( 'editorial_comments', $args );

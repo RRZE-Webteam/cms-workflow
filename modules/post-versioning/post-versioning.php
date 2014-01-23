@@ -46,7 +46,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
                  *  
                  */
                  $context_help_tab = array(
-                    '<p></p>'
+                    '<p>Dies ist die Kontext-Hilfe für die Versionierung.</p>'
+                );
+                  $context_help_tab2 = array(
+                    '<p>Dies ist die Kontext-Hilfe für die netzwerkweite Versionierung.</p>'
                 );
         
 		$args = array(
@@ -69,6 +72,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
 				'content' => implode(PHP_EOL, $content_help_tab),
 				),
 			'settings_help_sidebar' => __( '<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN ),
+                        'context_page' => array('post', 'page'),
+                        'context_help_tab' => array(
+                            'id' => 'workflow-post-versioning-context',
+                            'title' => __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
+                            'content' => implode(PHP_EOL, $context_help_tab),
+                        ),
+                        'context_page' => array('edit-post', 'post', 'edit-page', 'page'),
+                        'context_help_tab' => array(
+                            'id' => 'workflow-post-versioning-network-context',
+                            'title' => __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
+                            'content' => implode(PHP_EOL, $context_help_tab2),
+                        ),
 		);
         
 		$this->module = $cms_workflow->register_module( 'post_versioning', $args );
