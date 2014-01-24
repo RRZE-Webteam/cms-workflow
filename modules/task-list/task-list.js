@@ -40,10 +40,8 @@ jQuery(document).ready(function($) {
         
         if($(this).closest(".task-item").children(".task-item-content").is(":visible")) {
             $(this).closest(".task-item").children(".task-item-content").slideUp();
-            $(this).closest(".task-item").css("background-color", "transparent");
         } else {
             $(this).closest(".task-item").children(".task-item-content").slideDown();
-            $(this).closest(".task-item").css("background-color", "#FFFBCC");
         }
         
     });
@@ -73,6 +71,7 @@ jQuery(document).ready(function($) {
                 if(clicked_task.attr("checked") == "checked") {
                     clicked_task.closest(".task-item-content").children(".task-content-body").append('<p class="marked-as-done">' + sprintf(task_list_vars.message_2, task_list_vars.current_user_display_name, task_list_vars.current_date) + '</p>');
                     clicked_task.closest(".task-item").find(".task-item-link").css("text-decoration", "line-through");
+                    clicked_task.closest(".task-item").children(".task-item-content").slideUp();
                 } else {
                     clicked_task.closest(".task-item-content").find(".marked-as-done").remove();
                     clicked_task.closest(".task-item").find(".task-item-link").css("text-decoration", "none");
