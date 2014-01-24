@@ -272,6 +272,20 @@ class Workflow_Task_List extends Workflow_Module {
             $data = json_decode(json_encode($data), false);
             $data = $this->task_list_order_page_result( $data );
             
+            foreach( $data as $value ) {
+                $priority[] = $value->task_priority;
+                $timestamp[] = $value->task_timestamp; 
+                $task_id[] = $value->task_id;
+                $task[$value->task_id] = $value;                
+            }
+            
+            array_multisort($priority, SORT_DESC, $timestamp, SORT_ASC, $task_id, SORT_ASC);
+            
+            $data = array();
+            foreach($task_id as $value) {
+                $data[$value] = $task[$value];
+            }
+            
             foreach( $data as $task ) {
                 $this->task_list_print_task( $task );
             }
