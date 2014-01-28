@@ -12,26 +12,20 @@ class Workflow_Dashboard extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
                 
                 $content_help_tab = array(
-                    '<p>'. __('Je nachdem, was Sie auf dieser Seite aktivieren, können Sie im Dashboard unterschiedliche Inhalte verfolgen: aktuelle Entwürfe, aktuell ausstehende Reviews oder die Aufgabenliste.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>'. __('Auf der Dashboard-Seite hat dann jeder Nutzer die Möglichkeit, über die Registerkarte "Optionen einblenden" in der rechten oberen Ecke die gewünschten Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Je nachdem, was Sie auf dieser Seite aktivieren, können Sie im Dashboard unterschiedliche Inhalte verfolgen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aktuelle Entwürfe</strong> - Übersicht über alle Dokumente mit Status <i>Entwurf</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - Übersicht über alle Dokumente mit Status <i>Ausstehender Review</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aufgabenliste</strong> - Liste aller anstehenden Aufgaben zu Dokumenten, bei denen Sie als Autor eingetragen sind (sofern das Modul <i>Aufgabenliste</i> aktiviert ist).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Auf der Dashboard-Seite hat dann jeder Nutzer die Möglichkeit, über die Registerkarte <i>Optionen einblenden</i> in der rechten oberen Ecke die gewünschten Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                 );
                 
-                /*Kontexthilfe, einzubinden in der Dashboard-Hilfe über 
-                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
-                 *  
-                 * add_action( 'admin_head-index.php', array( __CLASS__, 'add_dashboard_help_tab'));    
-                 * 
-                 * 
-                 */
                  $context_help_tab = array(
-                    '<p>'. __('Um anstehende Arbeiten schneller überblicken zu können, haben Sie die Möglichkeit, im Dashboard unterschiedliche Inhalte zu verfolgen - sofern dies der Administrator freigegeben hat:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>'. __('Um anstehende Arbeiten schneller überblicken zu können, haben Sie die Möglichkeit, im Dashboard unterschiedliche Inhalte zu verfolgen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                      
-                    '<p>' . __('<strong>Aktuelle Entwürfe</strong> - alle ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>' . __('<strong>Aufgabenliste</strong> - ', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                     
-                );
-        
+                    '<p>' . __('<strong>Aktuelle Entwürfe</strong> - Übersicht über alle Dokumente mit Status <i>Entwurf</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - Übersicht über alle Dokumente mit Status <i>Ausstehender Review</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Sollten bei Ihnen die Boxen <i>Aktuelle Entwürfe</i> und <i>Aktuell ausstehende Reviews</i> nicht erscheinen, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen (sofern der Administrator diese freigegeben hat).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                );        
         
 		$args = array(
 			'title' => __( 'Dashboard', CMS_WORKFLOW_TEXTDOMAIN ),

@@ -16,33 +16,26 @@ class Workflow_Editorial_Comments extends Workflow_Module {
             '<p>'. __('So fügen Sie einen redaktionellen Kommentar hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('Bevor Sie einen redaktionellen Kommentar hinzufügen können, muss das Dokument bereits einmal gespeichert worden sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie "Kommentar hinzufügen" im Kästchen "Redaktionelle Kommentare" aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit "Senden".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
+            '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit <i>Senden</i>.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
             '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
         );    
         
-        /*Kontexthilfe, einzubinden in der Kommentare-Hilfe über 
-         * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
-         *  
-         * add_action( 'admin_head-edit-comments.php', array( __CLASS__, 'add_comment_help_tab'));     
-        * 
-        * 
-        */
         $context_help_tab1 = array(
             '<p>'. __('Über die redaktionelle Diskussion können sich die Autoren eines Dokumentes über die weitere Bearbeitung austauschen. Redaktionelle Kommentare sind auf der Beitragsseite nicht zu sehen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>'. __('So fügen Sie einen redaktionellen Kommentar hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('Bevor Sie einen redaktionellen Kommentar hinzufügen können, muss das Dokument bereits einmal gespeichert worden sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie "Kommentar hinzufügen" im Kästchen "Redaktionelle Kommentare" aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit "Senden".', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit <i>Senden</i>.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
             '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
         );
         
         $context_help_tab2 = array(
             '<p>'. __('Über die redaktionelle Diskussion können sich die Autoren eines Dokumentes über die weitere Bearbeitung austauschen. Redaktionelle Kommentare sind auf der Beitragsseite nicht zu sehen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>'. __('Auf dieser Übersichtsseite sehen Sie alle Kommentare. An der Art eines Kommentars können Sie unterscheiden, ob es sich um einen Standard-Kommentar handelt oder um einen Kommentar im Rahmen einer redaktionellen Diskussion. Redaktionelle Kommentare können hier nur in den Papierkorb verschoben, aber nicht beantwortet oder bearbeitet werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>'. __('In der Spalte <i>Art</i> können Sie sehen, ob es sich um einen Standard-Kommentar handelt oder um einen Kommentar im Rahmen einer redaktionellen Diskussion. Redaktionelle Kommentare können auf dieser Übersichtsseite nur in den Papierkorb verschoben, aber nicht beantwortet oder bearbeitet werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
         
         );
 

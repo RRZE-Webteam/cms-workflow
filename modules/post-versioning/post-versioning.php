@@ -20,23 +20,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
 		$this->module_url = $this->get_module_url( __FILE__ );
 
                 $content_help_tab = array(
-                    '<p>'. __('Über die Versionierung haben Sie die MöglichkeitWenn Sie in den Workflow-Einstellungen die Autorenverwaltung aktiviert haben, können Sie hier angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-
-                    '<p>' . __('für welche Bereiche die Unterstützung mehrerer Versionnen freigegeben werden soll', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<ul>',
-                    '<li>' . __('innerhalb des gleichen Webauftritts ("Lokale Freigabe") oder', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('im Austausch mit einem anderen, normalerweise anderssprachigen Webauftritt ("Netzwerkweite Freigabe").', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '</ul>',
-                    '<p>' . __('Wenn Sie in den Workflow-Einstellungen das Dashboard-Modul und hierin die Aufgabenliste aktiviert haben, sehen Sie im Dashboard die Liste aller anstehenden Aufgaben (wenn die Box "Aufgabenliste" dort nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen). <br />Je nach Veröffentlichungs- und Sichtbarkeitsstatus werden diese am Anfang der Zeile in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                   
-                    '<p class="cms-status-draft">' . __('<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-status-pending">'. __('<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig bearbeitet und liegt zur Revision beim Redakteur vor.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-status-publish">' . __('<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur veröffentlicht, wird nicht farblich hervorgehoben.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-status-future">' . __('<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem Datum veröffentlicht', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-status-private">' . __('<strong>Privat</strong> - Private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-post-password-required">' . __('<strong>Passwortgeschützt</strong> - Passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurfsstatus.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p class="cms-status-trash">'. __('<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im Papierkorb.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>'. __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehe, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
+                    '<p>' . __('Über die Versionierung können Sie einfach neue Versionen oder Kopien Ihrer Dokumente erstellen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Eine <strong>Kopie</strong> hat keinen Bezug mehr zum ursprünglichen Dokument:', CMS_WORKFLOW_TEXTDOMAIN) . '<br /> '. __('es wird ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom ursprünglichen Dokument bearbeitet werden kann und unter einer neuen Adresse veröffentlicht wird.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />',
+                    '<p>' . __('Eine <strong>neue Version</strong> hingegen steht mit dem Ursprungsdokument in Zusammenhang:', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('es wird wie bei der Kopie ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom ursprünglichen Dokument bearbeitet und als Entwurf gespeichert werden kann. Mit dem Veröffentlichen wird jedoch das ursprüngliche Dokument überschrieben, die neue Version ist damit unter der Adresse des alten Dokumentes erreichbar.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('Neue Versionen können nur von veröffentlichten Dokumenten erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('Eine neue Version sollte erstellt werden, wenn ein bereits veröffentlichtes Dokument länger überarbeitet werden muss. Dadurch werden Änderungen an dem Dokument erst öffentlich sichtbar, wenn sie vollständig erledigt sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' ,
+                    '<p>' . __('Sie können auf dieser Seite angeben, für welche Bereiche die Erstellung von Kopien oder neuer Versionen freigegeben werden soll:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Lokale Freigabe</strong> - Kopien und neue Versionen innerhalb des gleichen Webauftritts erstellen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Netzwerkweite Freigabe</strong> - Kopien in einem anderen, anderssprachigen Webauftritt erstellen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Vorhandene Webseiten</strong> - hier erscheinen alle Webauftritte, die netzwerkweite Freigaben enthalten. In diese können lokale Dokumente kopiert werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
+                    
                 );
 
                  /*Kontexthilfe, einzubinden in den Übersichtsseiten, Bearbeitungsseiten und neuen Seiten zu posts und pages über 
@@ -48,10 +39,74 @@ class Workflow_Post_Versioning extends Workflow_Module {
                  *  
                  */
                  $context_help_tab1 = array(
-                    '<p>Dies ist die Kontext-Hilfe für die netzwerkweite Versionierung.</p>'
+                    '<p>Dies ist die Kontext-Hilfe für die Beitragsseite.</p>'
                 );
                  $context_help_tab2 = array(
-                    '<p>Dies ist die Kontext-Hilfe für die Versionierung.</p>'
+                    '<p>' . __('Über die Versionierung können Sie einfach neue Versionen oder Kopien Ihrer Dokumente erstellen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Eine <strong>Kopie</strong> hat keinen Bezug mehr zum ursprünglichen Dokument:', CMS_WORKFLOW_TEXTDOMAIN) . '<br /> '. __('es wird ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom ursprünglichen Dokument bearbeitet werden kann und unter einer neuen Adresse veröffentlicht wird.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />',
+                    '<p>' . __('Eine <strong>neue Version</strong> hingegen steht mit dem Ursprungsdokument in Zusammenhang:', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('es wird wie bei der Kopie ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom ursprünglichen Dokument bearbeitet und als Entwurf gespeichert werden kann. Mit dem Veröffentlichen wird jedoch das ursprüngliche Dokument überschrieben, die neue Version ist damit unter der Adresse des alten Dokumentes erreichbar.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('Neue Versionen können nur von veröffentlichten Dokumenten erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '<br />' . __('Eine neue Version sollte erstellt werden, wenn ein bereits veröffentlichtes Dokument länger überarbeitet werden muss. Dadurch werden Änderungen an dem Dokument erst öffentlich sichtbar, wenn sie vollständig erledigt sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' ,
+                     '<p>' . __('Mit der Freigabe der Versionierung sehen Sie auf den entsprechenden Übersichtsseiten aller Dokumente die zusätzliche Spalte <i>Version</i> mit folgenden Informationen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Lokale Kopie</strong> (innerhalb des eigenen Webauftrittes) - kein Eintrag.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Netzwerkweite Kopie</strong> (zu einem anderen Webauftritt) - Pfeil (nach rechts im Quell-Webauftritt oder nach links im Ziel-Webauftritt), verlinkter Name des Zieldokumentes, Sprache des Ziel-Webauftritts.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Neue Version</strong> (innerhalb des eigenen Webauftrittes) - verlinkter Name des Quelldokumentes, Sprache des Webauftritts.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('Außerdem werden die Dokumente am Anfang der Zeile je nach Veröffentlichungs- und Sichtbarkeitsstatus in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-draft">' . __('<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-pending">'. __('<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig bearbeitet und liegt zur Revision beim Redakteur vor.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-publish">' . __('<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur veröffentlicht, wird nicht farblich hervorgehoben.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-future">' . __('<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem Datum veröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-private">' . __('<strong>Privat</strong> - private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht, sind aber nicht öffentlich sichtbar.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-post-password-required">' . __('<strong>Passwortgeschützt</strong> - passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurfsstatus.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-trash">'. __('<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im Papierkorb.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+
+                    '<p>' . __('So erstellen Sie eine Kopie eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Gehen in einem freigegebenen Bereich Sie auf die Übersichtsseite über alle Dokumente.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Fahren Sie mit der Maus in der Liste über das Dokument, das Sie kopieren wollen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie <i>Kopieren</i>. Eine Kopie des Dokumentes wird als Entwurf geöffnet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Ändern Sie das Dokument und speichern oder veröffentlichen Sie dieses.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>',
+                    '<p>' . __('So erstellen Sie eine neue Version eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Gehen Sie in einem freigegebenen Bereich auf die Übersichtsseite über alle Dokumente.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Fahren Sie in der Liste mit der Maus über das Dokument, von dem Sie eine neue Version erstellen wollen. Das Dokument muss bereits veröffentlicht sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie <i>Neue Version</i>. Eine neue Version des Dokumentes wird als Entwurf geöffnet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Ändern Sie das Dokument und speichern Sie dieses.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Beim Veröffentlichen wird das ursprüngliche Dokument durch die neue Version ersetzt.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>'
+                    
+                );
+                 $context_help_tab3 = array(
+                    '<p>' . __('Mit der Freigabe der Versionierung sehen Sie auf den entsprechenden Übersichtsseiten aller Dokumente die zusätzliche Spalte <i>Version</i> mit folgenden Informationen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Lokale Kopie</strong> (innerhalb des eigenen Webauftrittes) - kein Eintrag.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Netzwerkweite Kopie</strong> (zu einem anderen Webauftritt) - Pfeil (nach rechts im Quell-Webauftritt oder nach links im Ziel-Webauftritt), verlinkter Name des Zieldokumentes, Sprache des Ziel-Webauftritts.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('<strong>Neue Version</strong> (innerhalb des eigenen Webauftrittes) - verlinkter Name des Quelldokumentes, Sprache des Webauftritts.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>', 
+                    '<p>' . __('Außerdem werden die Dokumente am Anfang der Zeile je nach Veröffentlichungs- und Sichtbarkeitsstatus in unterschiedlichen Farben angezeigt:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-draft">' . __('<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-pending">'. __('<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig bearbeitet und liegt zur Revision beim Redakteur vor.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-publish">' . __('<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur veröffentlicht, wird nicht farblich hervorgehoben.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-future">' . __('<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem Datum veröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-private">' . __('<strong>Privat</strong> - private Dokumente können nicht im Entwurf vorliegen, sondern werden gleich veröffentlicht, sind aber nicht öffentlich sichtbar.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-post-password-required">' . __('<strong>Passwortgeschützt</strong> - passwortgeschützte Dokumente können auch Entwürfe sein, farblich überschreibt der Passwortschutz den Entwurfsstatus.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p class="cms-status-trash">'. __('<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im Papierkorb.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+
+                    '<p>' . __('So erstellen Sie eine Kopie eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Gehen in einem freigegebenen Bereich Sie auf die Übersichtsseite über alle Dokumente.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Fahren Sie mit der Maus in der Liste über das Dokument, das Sie kopieren wollen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie <i>Kopieren</i>. Eine Kopie des Dokumentes wird als Entwurf geöffnet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Ändern Sie das Dokument und speichern oder veröffentlichen Sie dieses.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>',
+                    '<p>' . __('So erstellen Sie eine neue Version eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<ol>',
+                    '<li>' . __('Gehen Sie in einem freigegebenen Bereich auf die Übersichtsseite über alle Dokumente.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Fahren Sie in der Liste mit der Maus über das Dokument, von dem Sie eine neue Version erstellen wollen. Das Dokument muss bereits veröffentlicht sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie <i>Neue Version</i>. Eine neue Version des Dokumentes wird als Entwurf geöffnet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Ändern Sie das Dokument und speichern Sie dieses.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Beim Veröffentlichen wird das ursprüngliche Dokument durch die neue Version ersetzt.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '</ol>'
+                    
+                    
+                    
                 );
         
 		$args = array(
@@ -87,10 +142,19 @@ class Workflow_Post_Versioning extends Workflow_Module {
                                 'screen_id' => array('edit-post', 'edit-page'),
                                 'help_tab' => array(
                                     'id' => 'workflow-post-versioning-network-context',
-                                    'title' => __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'title' => __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
                                     'content' => implode(PHP_EOL, $context_help_tab2),
                                 )
-                            )        
+                            ),
+                            '3' => array(
+                                'screen_id' => array('workflow_page_workflow-post-versioning-settings'),
+                                'help_tab' => array(
+                                    'id' => 'workflow-post-versioning-manage-context',
+                                    'title' => __('Versionen verwalten', CMS_WORKFLOW_TEXTDOMAIN),
+                                    'content' => implode(PHP_EOL, $context_help_tab3),
+                                )
+                                
+                            )
                         ),
 		);
         
@@ -1057,7 +1121,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
                     $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                    $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
+                    $documents[] = sprintf('<a class="export" href="%1$s</i> target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
                 }                
                 restore_current_blog();
             }

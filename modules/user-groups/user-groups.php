@@ -21,26 +21,19 @@ class Workflow_User_Groups extends Workflow_Module {
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                     '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                     '<li>' . __('Einzelne Autoren können jetzt auch wieder abgewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie im Kästchen <i>Autor</i> die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
+                     '<li>' . __('Mit dem Speichern bzw. Veröffentlichen des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                     '<li>' . __('Die Markierung der Benutzergruppe bleibt bestehen, beim Speichern des Dokumentes werden daher alle Mitglieder der Benutzergruppe automatisch wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere Autoren können zusätzlich gewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>'
                 );
                 
-                 /*Kontexthilfe, einzubinden in den Bearbeitungsseiten und neuen Seiten zu posts und pages über 
-                 * (nicht über load-, sondern über admin_head-, sonst erscheint der neue Hilfe-Tab als erstes!)    
-                 *  
-                 * add_action( 'admin_head-post-new.php', array( __CLASS__, 'add_post_new_help_tab'));     
-                 * add_action( 'admin_head-post.php', array( __CLASS__, 'add_post_new_help_tab'));    
-                 *
-                 */
                  $context_help_tab = array(
-                    '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, sind diese in Benutzergruppen zusammengefasst.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
-                    '<li>' . __('Wählen Sie im Kästchen "Autor" die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche "Optionen einblenden" in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Mit dem Aktualisieren des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert und die Markierung der Benutzergruppe verschwindet.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                     '<li>' . __('Einzelne Autoren können jetzt auch wieder abgewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie im Kästchen <i>Autor</i> die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Mit dem Speichern bzw. Veröffentlichen des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                     '<li>' . __('Die Markierung der Benutzergruppe bleibt bestehen, beim Speichern des Dokumentes werden daher alle Mitglieder der Benutzergruppe automatisch wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere Autoren können zusätzlich gewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>'
                 );
         
