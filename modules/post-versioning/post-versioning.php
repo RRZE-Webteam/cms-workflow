@@ -927,7 +927,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 } else {
 
                     if($remote_post['post_status'] == 'publish' ) {
-                        $draft_id = self::version_as_new_post($remote_parent_post_meta['post_id'], $remote_post);
+                        $draft_id = $this->version_as_new_post($remote_parent_post_meta['post_id'], $postdata);
                         
                         $permalink = get_permalink($draft_id);
                         if($permalink) {
