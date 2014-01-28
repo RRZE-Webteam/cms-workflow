@@ -8,6 +8,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     const version_remote_post_meta = '_version_remote_post_meta';
     
+    const site_connections = 'cms_workflow_site_connections';
+    
     public $module;
     
     public $source_blog = null;
@@ -124,6 +126,22 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }                       
 	}
 
+    public function deactivation() {
+        global $cms_workflow;
+        
+        $connections = get_site_option( self::site_connections, array() );
+        
+        $current_blog_id = get_current_blog_id();
+        
+        if(isset($connections[$current_blog_id]))
+            unset($connections[$current_blog_id]);                    
+        
+        update_site_option( self::site_connections, $connections );
+
+        $cms_workflow->update_module_option( $this->module->name, 'network_posts_types', array() );
+        $cms_workflow->update_module_option( $this->module->name, 'network_connections', array() );
+    }
+    
 	public function admin_enqueue_scripts( ) {
 		wp_enqueue_style( 'workflow-post-versioning', $this->module_url . 'post-versioning.css', false, CMS_WORKFLOW_VERSION, 'all' );
 	}
@@ -136,7 +154,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             
             add_settings_field( 'network_posts_types', __( 'Netzwerkweite Freigabe', CMS_WORKFLOW_TEXTDOMAIN ), array( $this, 'settings_network_posts_types_option' ), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general' );
 
-            $connections = get_site_option( 'cms_workflow_site_connections', array() );
+            $connections = get_site_option( self::site_connections, array() );
 
             $current_blog_id = get_current_blog_id();
 
@@ -164,7 +182,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 	}
     
 	public function settings_network_connections_option() {	
-        $connections = get_site_option( 'cms_workflow_site_connections', array() );
+        $connections = get_site_option( self::site_connections, array() );
         
         $current_blog_id = get_current_blog_id();
         
@@ -215,10 +233,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             $new_options['network_posts_types'] = $this->clean_post_type_options( $new_options['network_posts_types'], $this->module->post_type_support );
         
-            $all_blogs = get_site_option( 'cms_workflow_site_connections' );
+            $connections = get_site_option( self::site_connections );
 
-            if ( ! $all_blogs )
-                $all_blogs = array( );
+            if ( ! $connections )
+                $connections = array( );
 
             $current_connections = $this->module->options->network_connections;
 
@@ -227,7 +245,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             $new_connections = isset($new_options[ 'network_connections' ]) ? $new_options[ 'network_connections' ] : array();
 
-            foreach ( $all_blogs as $blog_id => $blog_data ) {
+            foreach ( $connections as $blog_id => $blog_data ) {
 
                 if ( $current_blog_id == $blog_id )
                     continue;
@@ -253,16 +271,16 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             $new_options[ 'network_connections' ] = $current_connections;
 
-            if(isset($all_blogs[$current_blog_id]))
-                unset($all_blogs[$current_blog_id]);                    
+            if(isset($connections[$current_blog_id]))
+                unset($connections[$current_blog_id]);                    
 
             if(array_search( true, $new_options['network_posts_types'] ) !== false) {
                 foreach($new_options['network_posts_types'] as $key => $value ) {
-                    $all_blogs[$current_blog_id][ $key ] = $value;
+                    $connections[$current_blog_id][ $key ] = $value;
                 }
             }
 
-            update_site_option( 'cms_workflow_site_connections', $all_blogs );
+            update_site_option( self::site_connections, $connections );
 
             $this->update_site_connections();
             
@@ -272,14 +290,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
 	}	
 
     private function update_site_connections() {
-        $all_blogs = get_site_option( 'cms_workflow_site_connections' );
+        $connections = get_site_option( self::site_connections );
 
-        if ( ! $all_blogs )
-            $all_blogs = array();
+        if ( ! $connections )
+            $connections = array();
 
         $cleanup_blogs = array();
 
-        foreach ( $all_blogs as $blog_id => $blog_data ) {
+        foreach ( $connections as $blog_id => $blog_data ) {
             
             $blog_details = get_blog_details( $blog_id );
             if ( empty( $blog_details ) )
@@ -288,7 +306,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         if ( count( $cleanup_blogs ) > 0 ) {
 
-            foreach ( $all_blogs as $blog_id => $blog_data ) {
+            foreach ( $connections as $blog_id => $blog_data ) {
 
                 foreach ( $cleanup_blogs as $blog_to_clean ) {
 
@@ -309,12 +327,12 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             foreach ( $cleanup_blogs as $blog_to_clean ) {
 
-                if ( array_key_exists( $blog_to_clean, $all_blogs ) )
-                    unset( $all_blogs[ $blog_to_clean ] );
+                if ( array_key_exists( $blog_to_clean, $connections ) )
+                    unset( $connections[ $blog_to_clean ] );
 
             }
             
-            update_site_option( 'cms_workflow_site_connections', $all_blogs );
+            update_site_option( self::site_connections, $connections );
         }
 
     }
@@ -652,12 +670,33 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
         
     public function network_connections_meta_box( $post_type, $post ) {
-		if ( !$this->is_post_type_enabled($post_type))
+        global $cms_workflow;
+                
+		if ( !$this->is_post_type_enabled($post_type)  || !in_array( $post->post_status, array('publish', 'future', 'private') ) )
 			return;
         
-        $connections = $this->module->options->network_connections;
+        $connections = get_site_option( self::site_connections, array() );
         
-        if( empty( $connections ) || !in_array( $post->post_status, array('publish', 'future', 'private') ) )
+        $network_connections = $this->module->options->network_connections;
+        
+        foreach ( $network_connections as $key => $blog_id ) {
+            if ( !isset($connections[$blog_id]) ) {
+                unset($network_connections[$key]);
+                $cms_workflow->update_module_option( $this->module->name, 'network_connections', array() );           
+            } else {
+                if(!switch_to_blog( $blog_id ))
+                    continue;
+                
+                $options = get_option( $cms_workflow->workflow_options . $this->module->name . '_options', new stdClass );
+                $network_posts_types = $options->network_posts_types;
+                restore_current_blog();
+                
+                if( !isset( $network_posts_types[$post_type] ) || !$network_posts_types[$post_type] )
+                    return;
+            }
+        }
+        
+        if( empty( $network_connections ) )
             return;      
         
         $meta_key = $this->module->workflow_options_name . '_network_connections';
@@ -665,7 +704,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         
         if ( !isset( $meta_data[$meta_key] ) ) {
             $meta_data = array();
-            foreach( $connections as $connection ) {
+            foreach( $network_connections as $connection ) {
                 $meta_data[] = $connection;
             }
             update_post_meta ($post->ID, $meta_key, $meta_data);
@@ -676,28 +715,28 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function network_connections_inner_box( $post ) {
-
+        
         wp_nonce_field( plugin_basename( __FILE__ ), 'network_connections_noncename' );
         
         $network_connections = $this->module->options->network_connections;
-        
-        $connections = get_post_meta( $post->ID, $this->module->workflow_options_name . '_network_connections' );
-        if( !empty($connections)) {
-            $connections = array_values($connections);
-            $connections = (array) array_shift($connections);
-        }
-        
-        $current_blog_id = get_current_blog_id();
-        
+                
         if( empty( $network_connections ) )
             return;      
+        
+        $meta_connections = get_post_meta( $post->ID, $this->module->workflow_options_name . '_network_connections' );
+        if( !empty($meta_connections)) {
+            $meta_connections = array_values($meta_connections);
+            $meta_connections = (array) array_shift($meta_connections);
+        }
+        
+        $current_blog_id = get_current_blog_id();        
         ?>
         <ul id="page_connections_checklist" class="form-no-clear">
         <?php
-        foreach ( $network_connections as $key => $blog_id ) :
+        foreach ( $network_connections as $blog_id ) :
             if ( $current_blog_id == $blog_id )
                 continue;
-
+                        
             if(!switch_to_blog( $blog_id ))
                 continue;
 
@@ -707,7 +746,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             restore_current_blog();
 
-            $connected = in_array( $blog_id, $connections ) ? true : false;
+            $connected = in_array( $blog_id, $meta_connections ) ? true : false;
              ?>
             <li id="network_connections_<?php echo $blog_id; ?>">
                 <label class="selectit">
