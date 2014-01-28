@@ -29,7 +29,7 @@ class Workflow_Translation extends Workflow_Module {
                     '<p>'. __('So erstellen Sie eine anderssprachige Version eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Das Dokument muss gespeichert, darf aber nicht veröffentlicht sein (Status <i>Entwurf</i> oder <i>Ausstehender Review</i>).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-                    '<li>' . __('Wählen Sie im Kästchen <i>Übersetzung</i> aus, von welcher Sprache Sie in welche Sprache übersetzen wollen (wenn diese Box nicht erscheint, überprüfen Sie den Status des Dokumentes oder lassen Sie sie über die Lasche </i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+                    '<li>' . __('Wählen Sie im Kästchen <i>Übersetzung</i> aus, von welcher Sprache Sie in welche Sprache übersetzen wollen (wenn diese Box nicht erscheint, überprüfen Sie den Status des Dokumentes oder lassen Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('Über <i>XLIFF-Datei herunterladen</i> können Sie die XLIFF-Datei des Dokumentes auf Ihrem Rechner speichern und mit einem externen Übersetzungsprogramm übersetzen lassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '<li>' . __('Die übersetzte XLIFF-Datei können Sie über die Schaltfläche <i>Durchsuchen...</i> hochladen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
                     '</ol>'

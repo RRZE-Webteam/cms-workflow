@@ -27,7 +27,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
             '<p>'. __('So fügen Sie einen redaktionellen Kommentar hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('Bevor Sie einen redaktionellen Kommentar hinzufügen können, muss das Dokument bereits einmal gespeichert worden sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
+            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
             '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit <i>Senden</i>.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
             '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
