@@ -27,7 +27,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
             '<p>'. __('So fügen Sie einen redaktionellen Kommentar hinzu:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('Bevor Sie einen redaktionellen Kommentar hinzufügen können, muss das Dokument bereits einmal gespeichert worden sein.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
+            '<li>' . __('Wählen Sie <i>Kommentar hinzufügen</i> im Kästchen <i>Redaktionelle Kommentare</i> aus', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('(wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '<li>' . __('Geben Sie Ihren Kommentar ein und speichern diesen mit <i>Senden</i>.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
             '</ol>',
             '<p>'. __('Abhängig von den eingestellten Rechten können die Autoren eines Beitrags auf einen Kommentar antworten oder einen neuen Kommentar hinzufügen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>' 
@@ -99,7 +99,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 	public function admin_enqueue_scripts() {
         global $pagenow;
 
-		if ( !in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'page-new.php', 'edit-comments.php' ) ) )
+		if ( !in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'page-new.php' ) ) )
 			return;
 		                
 		$post_type = $this->get_current_post_type();
@@ -206,12 +206,13 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 			<?php
 			if( ! in_array( $post->post_status, array( 'new', 'auto-draft' ) ) ) :
 				
-				$editorial_comments = self::workflow_get_comments_plus (
+				$editorial_comments = $this->get_editorial_comments(
                     array(
                         'post_id' => $post->ID,
                         'comment_type' => self::comment_type,
                         'orderby' => 'comment_date',
-                        'order' => 'ASC'
+                        'order' => 'ASC',
+                        'status' => -1,
                     )
                 );
 				?>
@@ -357,7 +358,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 			    'comment_agent' => esc_sql($_SERVER['HTTP_USER_AGENT']),
 			    'comment_date' => $time,
 			    'comment_date_gmt' => $time,
-			    'comment_approved' => 1,
+			    'comment_approved' => -1,
 			);
 			
 			$comment_id = wp_insert_comment($data);
@@ -424,7 +425,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
 		<?php
 	}
 
-    public static function workflow_get_comments_plus( $args = '' ) {
+    public function get_editorial_comments( $args = '' ) {
         global $wpdb;
 
         $defaults = array( 
