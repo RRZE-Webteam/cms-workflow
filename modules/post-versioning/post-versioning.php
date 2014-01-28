@@ -1047,7 +1047,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
-            $post_title = get_the_title($post_id);
+            $post_title = get_the_title(get_post_meta($post_id, self::version_post_id, true));
             $documents[] = sprintf( '<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );         
         }   
         
