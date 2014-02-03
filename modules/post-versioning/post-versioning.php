@@ -1051,16 +1051,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
     private function get_versions( $post_id ) {
         $documents = array();
         
-        if( get_post_meta($post_id, self::version_post_id, true) ) {
-            $permalink = get_permalink($post_id);
-            $translate_to_lang = get_post_meta($post_id, '_translate_to_lang_post_meta', true);
+        $version_post_id = get_post_meta($post_id, self::version_post_id, true);
+        
+        if( $version_post_id ) {
+            $permalink = get_permalink($version_post_id);
+            $translate_to_lang = get_post_meta($version_post_id, '_translate_to_lang_post_meta', true);
             if(empty($translate_to_lang)) {
                 $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
             }
 
             $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
-            $post_title = get_the_title(get_post_meta($post_id, self::version_post_id, true));
+            $post_title = get_the_title($version_post_id);
             $documents[] = sprintf( '<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );         
         }   
         
@@ -1134,7 +1136,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
 
                     $post_title = get_the_title($remote_parent_post_meta['post_id']);
-                    $documents[] = sprintf('<a class="export" href="%1$s</i> target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
+                    $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang );
                 }                
                 restore_current_blog();
             }
