@@ -16,7 +16,7 @@ class Workflow_User_Groups extends Workflow_Module {
                 $content_help_tab = array(
                     '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche die Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen. Die Freigaben gelten für alle Benutzergruppen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('Um die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
@@ -407,7 +407,8 @@ class Workflow_User_Groups extends Workflow_Module {
 					<a href="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" class="nav-tab<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ) echo ' nav-tab-active'; ?>"><?php _e( 'Einstellungen', CMS_WORKFLOW_TEXTDOMAIN ); ?></a>
 				</h2>
 				<?php if ( isset( $_GET['action'] ) && $_GET['action'] == 'change-options' ): ?>
-				<form class="basic-settings" action="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" method="post">
+                                    <p class="description">Die Freigabeeinstellungen gelten für alle Benutzergruppen.</p>
+				<form class="basic-settings form-user-groups" action="<?php echo esc_url( $this->get_link( array( 'action' => 'change-options' ) ) ); ?>" method="post">
 					<?php settings_fields( $this->module->workflow_options_name ); ?>
 					<?php do_settings_sections( $this->module->workflow_options_name ); ?>	
 					<?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr( $this->module->name ) . '" />'; ?>

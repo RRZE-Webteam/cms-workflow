@@ -90,3 +90,7 @@
 .inline-edit-row fieldset label span.input-text-wrap {
     margin-left: 7em !important;
 }
+
+.form-user-groups .form-table td, .form-table th {
+    line-height: 0.3;
+}
