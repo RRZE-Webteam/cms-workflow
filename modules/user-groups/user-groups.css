@@ -91,6 +91,7 @@
     margin-left: 7em !important;
 }
 
-.form-user-groups .form-table td, .form-table th {
+.form-user-groups .form-table td, 
+.form-user-groups .form-table th {
     line-height: 0.3;
 }
