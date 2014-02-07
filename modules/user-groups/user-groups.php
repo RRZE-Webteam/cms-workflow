@@ -15,9 +15,9 @@ class Workflow_User_Groups extends Workflow_Module {
 		
                 $content_help_tab = array(
                     '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe. Nach Erstellen der Gruppe durch <i>Neue Benutzergruppe hinzufügen</i> können Sie die zugehörigen Benutzer auswählen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen. Die Freigaben gelten für alle Benutzergruppen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-                    '<p>' . __('Um die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+                    '<p>' . __('Um nachträglich die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
                     '<ol>',
                     '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
