@@ -60,7 +60,7 @@ class Workflow_Settings extends Workflow_Module {
 	public function action_admin_menu() {
 		global $cms_workflow, $settings_page;
         
-		$settings_page = add_menu_page( 'Workflow', 'Workflow', 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ) ) ;
+		$settings_page = add_menu_page( __( 'Workflow', CMS_WORKFLOW_TEXTDOMAIN ), __( 'Workflow', CMS_WORKFLOW_TEXTDOMAIN ), 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ), 'dashicons-share-alt' ) ;
 		
         add_submenu_page( $this->module->settings_slug, $this->module->title, $this->module->title, 'manage_options', $this->module->settings_slug, array( $this, 'settings_page_controller' ) ) ;
         
