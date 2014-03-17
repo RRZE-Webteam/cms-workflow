@@ -315,6 +315,7 @@ class Workflow_Authors extends Workflow_Module {
                 wp_set_object_terms( $post_id, $name, self::taxonomy_key, true );
         }
         
+        return $user_id;
     }
 	
 	public function save_post_authors( $post, $users = null ) {
