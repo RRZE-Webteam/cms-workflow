@@ -49,10 +49,11 @@ class CMS_Workflow {
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new CMS_Workflow;
-			self::$instance->init();
 
 			global $cms_workflow;
 			$cms_workflow = self::$instance;
+            
+            self::$instance->init();
 		}
         
 		return self::$instance;
@@ -119,10 +120,12 @@ class CMS_Workflow {
         
         $this->modules = new stdClass();
         
-        add_action( 'init', array( $this, 'set_plugin' ) );
-		add_action( 'init', array( $this, 'set_modules' ) );
-		add_action( 'init', array( $this, 'set_post_types' ) );
-
+        $this->set_plugin();
+        
+        $this->set_modules();
+        
+        $this->set_post_types();
+        
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
 	}
