@@ -106,28 +106,30 @@ class Workflow_Translation_Helper {
         else
             $related_sites = $this->array_orderby($related_sites, 'blogname', SORT_ASC);
 
-        $output .= '<div class="workflow-language"><ul>';
+        $output .= '<div class="workflow-language mlp_language_box"><ul>';
 
         foreach ($related_sites as $site) {
 
+            $sitelang = explode('_', $site['sitelang']);
+            $sitelang = end($sitelang);
+            
             if ('text' == $linktext) {
                 $display = $cms_workflow->translation->get_lang_name($site['sitelang']);
             } else {
-                $sitelang = explode('_', $site['sitelang']);
-                $display = end($sitelang);
+                $display = $sitelang;
             }
             
             $a_id = ( get_current_blog_id() == $site['blog_id'] ) ? 'id="lang-current-locale"' : '';
-            $li_class = ( get_current_blog_id() == $site['blog_id'] ) ? 'class="lang-current"' : '';
+            $li_class = ( get_current_blog_id() == $site['blog_id'] ) ? 'class="lang-current current"' : '';
 
             if (isset($remote_permalink[$site['blog_id']]))
                 $link = $remote_permalink[$site['blog_id']];
-            elseif (get_current_blog_id() == $site['blog_id'])
+            elseif (is_singular() && get_current_blog_id() == $site['blog_id'])
                 $link = get_permalink($current_post_id);
             else
                 $link = get_site_url($site['blog_id']);
 
-            $output .= '<li ' . $li_class . '><a rel="alternate" hreflang="' . $site['sitelang'] . '" ' . $a_id . ' href="' . $link . '">' . $display . '</a></li>';
+            $output .= '<li ' . $li_class . '><a rel="alternate" hreflang="' . strtolower($sitelang) . '" ' . $a_id . ' href="' . $link . '">' . $display . '</a></li>';
         }
         $output .= '</ul></div>';
         return $output;
