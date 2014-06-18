@@ -75,9 +75,9 @@ class Workflow_Authors extends Workflow_Module {
 	
 	public function init() {
         
-        $this->set_role_caps();
+        add_action( 'admin_init', array( $this, 'set_role_caps' ) );
         
-        $this->register_taxonomies();
+        add_action( 'init', array( $this, 'register_taxonomies' ) );
         
 		add_action( 'add_meta_boxes', array( $this, 'add_post_meta_box' ) );
 	
@@ -172,7 +172,7 @@ class Workflow_Authors extends Workflow_Module {
         }
 
         $all_post_types = $this->get_available_post_types();
-        
+
         $allowed_post_types = $this->get_post_types( $this->module );
         
         foreach( $all_post_types as $post_type => $args ) {
@@ -767,7 +767,7 @@ class Workflow_Authors extends Workflow_Module {
         if($current_user_id == $user->ID)
             $mine = sprintf( _nx( 'Mein %1$s <span class="count">(%2$s)</span>', 'Meine %1$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), ($post_count == 1 ? $labels->singular_name : $labels->name), number_format_i18n( $post_count ) );
         else
-            $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $post_count ), $user->display_name );
+            $mine = sprintf( __( '%1$s von %3$s <span class="count">(%2$s)</span>', CMS_WORKFLOW_TEXTDOMAIN ), $labels->name, number_format_i18n( $post_count ), $user->display_name );
         
 		$mine_view['mine'] = '<a' . $class . ' href="' . add_query_arg( $mine_args, admin_url( 'edit.php' ) ) . '">' . $mine . '</a>';
         

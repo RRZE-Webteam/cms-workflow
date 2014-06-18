@@ -81,7 +81,7 @@ class Workflow_User_Groups extends Workflow_Module {
 	
 	public function init() {
 		
-        $this->register_taxonomies();
+        add_action( 'init', array( $this, 'register_taxonomies' ) );
         
 		add_action( 'admin_init', array( $this, 'register_settings' ) );		
 		

@@ -100,7 +100,7 @@ class Workflow_Editors extends Workflow_Module {
 	
 	public function init() {
         
-        $this->set_role_caps();
+        add_action( 'admin_init', array( $this, 'set_role_caps' ) );
         
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
         
