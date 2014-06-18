@@ -452,14 +452,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $post_id = (int) isset($_GET['post']) ? $_GET['post'] : $_POST['post'];
         $post = get_post( $post_id, ARRAY_A );
 
+        if (is_null($post))
+            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
+        
         $cap = $this->get_available_post_types($post['post_type'])->cap;
         
         if ( !current_user_can($cap->edit_posts) || $post['post_status'] != 'publish' ) 
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         
-        if (is_null($post))
-            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
-
         if ( !$this->is_post_type_enabled($post['post_type']))
             wp_die(__('Diese Aktion ist nicht erlaubt.', CMS_WORKFLOW_TEXTDOMAIN));
                     
@@ -479,6 +479,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             $remote = true;
         
         unset( $post['ID'] );
+        $post['post_author'] = get_current_user_id();
         $post['post_status'] = 'draft';
         
         $draft_id = wp_insert_post( $post );
@@ -720,19 +721,20 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if (in_array($post->post_type, array('revision', 'attachment')))
             wp_die(__('Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte kehren Sie zurück und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN));
         
-        $new_post_author = wp_get_current_user();
+        $post_author = get_current_user_id();
+        $post_status = 'draft';
 
         $new_post = array(
             'menu_order' => $post->menu_order,
             'comment_status' => $post->comment_status,
             'ping_status' => $post->ping_status,
-            'post_author' => $new_post_author->ID,
+            'post_author' => $post_author,
             'post_content' => $post->post_content,
             'post_excerpt' => $post->post_excerpt,
             'post_mime_type' => $post->post_mime_type,
             'post_parent' => $post->post_parent,
             'post_password' => $post->post_password,
-            'post_status' => 'draft',
+            'post_status' => $post_status,
             'post_title' => $post->post_title,
             'post_type' => $post->post_type,
         );
