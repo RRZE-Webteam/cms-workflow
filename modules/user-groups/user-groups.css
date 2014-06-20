@@ -1,4 +1,6 @@
 .workflow-groups-list {
+    height: 300px;
+    overflow: auto;    
 }
 
 .workflow-groups-list li {
@@ -64,34 +66,11 @@
     float: right;
 }
 
-#workflow-groups-users-box .workflow-groups-list,
-#workflow-groups-usergroups-box .workflow-groups-list {
-    height: 300px;
-    overflow: auto;
-}
-
 #workflow-groups-users-box .list-filterizer-tools,
 #workflow-groups-usergroups-box .list-filterizer-tools {
     margin-top: 5px;
 }
 
-#profile-page #groups-usergroups {
-    width: 300px;
-}
-
-#workflow-usergroup-users h4 {
-    margin-top: 0;
-}
-
-.inline-edit-row fieldset label span.title {
-    width: 7em !important;
-}
-
-.inline-edit-row fieldset label span.input-text-wrap {
-    margin-left: 7em !important;
-}
-
-.form-user-groups .form-table td, 
-.form-user-groups .form-table th {
-    line-height: 0.3;
+table#workflow-user-usergroups td {
+    padding: 80px 10px 25px;
 }
