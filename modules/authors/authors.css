@@ -1,4 +1,6 @@
 .workflow-post-authors-list {
+    height: 300px;
+    overflow: auto;    
 }
 
 .workflow-post-authors-list li {
@@ -64,17 +66,7 @@
     float: right;
 }
 
-#workflow-post-authors-inside .workflow-post-authors-list,
-#workflow-post-authors-usergroups-box .workflow-post-authors-list {
-    height: 300px;
-    overflow: auto;
-}
-
 #workflow-post-authors-inside .list-filterizer-tools,
-		#workflow-post-authors-usergroups-box .list-filterizer-tools {
+#workflow-post-authors-usergroups-box .list-filterizer-tools {
     margin-top: 5px;
-}
-
-#profile-page #post-authors-usergroups {
-    width: 300px;
 }
