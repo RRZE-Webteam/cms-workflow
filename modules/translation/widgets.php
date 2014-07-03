@@ -17,8 +17,9 @@ class Workflow_Translation_Widget extends WP_Widget {
 
         extract($args, EXTR_SKIP);
 
-        if (!isset($instance['widget_sort_order']))
+        if (!isset($instance['widget_sort_order'])) {
             $instance['widget_sort_order'] = 'blogid';
+        }
 
         $output = workflow_get_translated_sites(
                 array(
@@ -29,13 +30,15 @@ class Workflow_Translation_Widget extends WP_Widget {
                 )
         );
 
-        if ('' == $output)
+        if ('' == $output) {
             return;
+        }
 
         echo $before_widget;
 
-        if ($instance['widget_title'])
+        if ($instance['widget_title']) {
             echo $before_title . apply_filters('widget_title', $instance['widget_title']) . $after_title;
+        }
 
         echo $output . $after_widget;
     }
@@ -58,18 +61,18 @@ class Workflow_Translation_Widget extends WP_Widget {
         $show_current_blog = ( isset($instance['widget_show_current_blog']) ) ? strip_tags($instance['widget_show_current_blog']) : '';
         ?>
         <p>
-            <label for='<?php echo $this->get_field_id('workflow_translation_widget_title'); ?>'><?php _e('Titel:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br />
+            <label for='<?php echo $this->get_field_id('workflow_translation_widget_title'); ?>'><?php _e('Titel:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
             <input class="widefat" type ='text' id='<?php echo $this->get_field_id("workflow_translation_widget_title"); ?>' name='<?php echo $this->get_field_name('workflow_translation_widget_title'); ?>' value='<?php echo $title; ?>'>
         </p>
         <p>
-            <label for='<?php echo $this->get_field_id('workflow_translation_widget_sort_order'); ?>'><?php _e('Sortierung:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br />
+            <label for='<?php echo $this->get_field_id('workflow_translation_widget_sort_order'); ?>'><?php _e('Sortierung:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
             <select class="widefat" id='<?php echo $this->get_field_id('workflow_translation_widget_sort_order'); ?>' name='<?php echo $this->get_field_name('workflow_translation_widget_sort_order'); ?>' >
                 <option <?php selected($sort_order, 'name'); ?> value="name"><?php _e('nach Webseitennamen', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
                 <option <?php selected($sort_order, 'blogid'); ?> value="blogid"><?php _e('nach Webseiten-ID', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
             </select>
         </p>
         <p>
-            <label for='<?php echo $this->get_field_id('workflow_translation_widget_link_type'); ?>'><?php _e('Linktyp:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br />
+            <label for='<?php echo $this->get_field_id('workflow_translation_widget_link_type'); ?>'><?php _e('Linktyp:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
             <select class="widefat" id='<?php echo $this->get_field_id('workflow_translation_widget_link_type'); ?>' name='<?php echo $this->get_field_name('workflow_translation_widget_link_type'); ?>' >
                 <option <?php selected($link_type, 'text'); ?> value="text"><?php _e('Text', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
                 <option <?php selected($link_type, 'lang_code'); ?> value="lang_code"><?php _e('Sprachcode', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
