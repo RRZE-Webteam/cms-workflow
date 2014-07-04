@@ -249,6 +249,10 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($posts && is_array($posts)) {
             $list = array();
             foreach ($posts as $post) {
+                if (!current_user_can('edit_post', $post->ID)) {
+                    continue;
+                }
+
                 $post_type = $this->allowed_post_types[$post->post_type];
 
                 $authors = array();
@@ -260,7 +264,7 @@ class Workflow_Dashboard extends Workflow_Module {
                 $authors[$post->post_author] = $post->post_author;
                 $authors = array_unique($authors);
 
-                if (!current_user_can('manage_categories') && !in_array($current_user->ID, $authors)) {
+                if (!in_array($current_user->ID, $authors)) {
                     continue;
                 }
 
@@ -313,6 +317,10 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($posts && is_array($posts)) {
             $list = array();
             foreach ($posts as $post) {
+                if (!current_user_can('edit_post', $post->ID)) {
+                    continue;
+                }
+                
                 $post_type = $this->allowed_post_types[$post->post_type];
 
                 $authors = array();
@@ -324,7 +332,7 @@ class Workflow_Dashboard extends Workflow_Module {
                 $authors[$post->post_author] = $post->post_author;
                 $authors = array_unique($authors);
 
-                if (!current_user_can('manage_categories') && !in_array($current_user->ID, $authors)) {
+                if (!in_array($current_user->ID, $authors)) {
                     continue;
                 }
 
@@ -364,7 +372,6 @@ class Workflow_Dashboard extends Workflow_Module {
                 array(
                     'post_type' => array_keys($this->allowed_post_types),
                     'meta_key' => Workflow_Task_List::postmeta_key,
-                    'post_status' => array('pending', 'draft'),
                     'posts_per_page' => 50
                 )
             );
@@ -384,6 +391,10 @@ class Workflow_Dashboard extends Workflow_Module {
                 $task = (object) $value['task'];
 
                 foreach ($posts as $post) {
+                    if (!current_user_can('edit_post', $post->ID)) {
+                        continue;
+                    }
+                    
                     if ($post->ID != $value['post_id']) {
                         continue;
                     }
@@ -399,7 +410,7 @@ class Workflow_Dashboard extends Workflow_Module {
                     $authors[$post->post_author] = $post->post_author;
                     $authors = array_unique($authors);
 
-                    if (!current_user_can('manage_categories') && !in_array($current_user->ID, $authors)) {
+                    if (!in_array($current_user->ID, $authors)) {
                         continue;
                     }
 
