@@ -364,6 +364,7 @@ class Workflow_Dashboard extends Workflow_Module {
                 array(
                     'post_type' => array_keys($this->allowed_post_types),
                     'meta_key' => Workflow_Task_List::postmeta_key,
+                    'post_status' => array('pending', 'draft'),
                     'posts_per_page' => 50
                 )
             );
