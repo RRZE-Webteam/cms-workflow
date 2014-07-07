@@ -252,15 +252,26 @@ class Workflow_Editors extends Workflow_Module {
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
 
         $all_post_types = $this->get_available_post_types();
-
+        
         foreach ($all_post_types as $post_type => $args) {
             if ($post_type == $args->capability_type && empty($new_options['post_types'][$post_type])) {
+                unset($new_options['role_caps'][$args->cap->edit_post]);
+                unset($new_options['role_caps'][$args->cap->delete_post]);                
                 unset($new_options['role_caps'][$args->cap->edit_posts]);
+                unset($new_options['role_caps'][$args->cap->delete_posts]);                
                 unset($new_options['role_caps'][$args->cap->publish_posts]);
-                unset($new_options['role_caps'][$args->cap->delete_posts]);
                 unset($new_options['role_caps'][$args->cap->edit_published_posts]);
                 unset($new_options['role_caps'][$args->cap->delete_published_posts]);
             }
+            
+            if(!empty($new_options['role_caps'][$args->cap->edit_posts])) {
+                $new_options['role_caps']["edit_{$args->capability_type}"] = 1;
+            }
+            
+            elseif(!empty($new_options['role_caps'][$args->cap->delete_posts])) {
+                $new_options['role_caps']["delete_{$args->capability_type}"] = 1;
+            }
+            
         }
 
         $role = get_role(self::role);
