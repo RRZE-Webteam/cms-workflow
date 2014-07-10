@@ -6,6 +6,8 @@ class Workflow_Authors extends Workflow_Module {
     const taxonomy_pattern = '#^workflow\-#';
     const role = 'author';
 
+    private $wp_post_caps = array();
+    private $wp_manage_caps = array();    
     private $wp_role_caps = array();
     private $more_role_caps = array();
     public $role_caps = array();
@@ -17,8 +19,7 @@ class Workflow_Authors extends Workflow_Module {
 
         $this->module_url = $this->get_module_url(__FILE__);
 
-        $this->wp_role_caps = array(
-            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),
+        $this->wp_post_caps = array(
             'publish_posts' => __('Beitrag veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
@@ -26,8 +27,14 @@ class Workflow_Authors extends Workflow_Module {
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
+        $this->wp_manage_caps = array(
+            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN)
+        );
+        
         $this->more_role_caps = array();
 
+        $this->wp_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps));
+        
         $content_help_tab = array(
             '<p>' . __('Verwenden Sie die Autorenverwaltung, um die Rechte für Autoren detaillierter vergeben zu können. Sie können angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<ol>',
@@ -167,14 +174,14 @@ class Workflow_Authors extends Workflow_Module {
                 $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
             
-            if (isset($args->cap->publish_posts)) {
-                $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
-            
             if (isset($args->cap->delete_posts)) {
                 $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
             
+            if (isset($args->cap->publish_posts)) {
+                $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+            }
+                        
             if (isset($args->cap->edit_published_posts)) {
                 $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
@@ -184,7 +191,7 @@ class Workflow_Authors extends Workflow_Module {
             }
         }
 
-        $this->role_caps['upload_files'] = __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN);
+        $this->role_caps = array_merge($this->role_caps, $this->wp_manage_caps, $this->more_role_caps);
     }
 
     public function register_taxonomies() {
@@ -587,16 +594,6 @@ class Workflow_Authors extends Workflow_Module {
 
         if (!$this->is_post_author($current_user->user_login, $post_id)) {
             return $allcaps;
-        }
-
-        if (isset($post_type_obj->cap->edit_published_posts)) {
-            if ('publish' == get_post_status($post_id) && !empty($current_user->allcaps[$post_type_obj->cap->edit_published_posts])) {
-                $allcaps[$post_type_obj->cap->edit_published_posts] = true;
-            }
-
-            elseif ('private' == get_post_status($post_id) && !empty($current_user->allcaps[$post_type_obj->cap->edit_private_posts])) {
-                $allcaps[$post_type_obj->cap->edit_private_posts] = true;
-            }
         }
 
         if (isset($post_type_obj->cap->edit_others_posts) && !empty($current_user->allcaps[$post_type_obj->cap->edit_posts])) {
@@ -1050,7 +1047,6 @@ class Workflow_Authors extends Workflow_Module {
     }
 
     public function settings_role_caps_option() {
-        natsort($this->role_caps);
         foreach ($this->role_caps as $key => $value) {
             echo '<label for="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '">';
             echo '<input id="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '" name="'
@@ -1077,37 +1073,56 @@ class Workflow_Authors extends Workflow_Module {
 
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
 
-        $all_post_types = $this->get_available_post_types();
+        $new_role_caps = array();
         
+        $all_post_types = $this->get_available_post_types();
+
         foreach ($all_post_types as $post_type => $args) {
-            if ($post_type == $args->capability_type && empty($new_options['post_types'][$post_type])) {
-                unset($new_options['role_caps'][$args->cap->edit_post]);
-                unset($new_options['role_caps'][$args->cap->delete_post]);                
-                unset($new_options['role_caps'][$args->cap->edit_posts]);
-                unset($new_options['role_caps'][$args->cap->delete_posts]);                
-                unset($new_options['role_caps'][$args->cap->publish_posts]);
-                unset($new_options['role_caps'][$args->cap->edit_published_posts]);
-                unset($new_options['role_caps'][$args->cap->delete_published_posts]);
-            }
-            
-            if(!empty($new_options['role_caps'][$args->cap->edit_posts])) {
-                $new_options['role_caps']["edit_{$args->capability_type}"] = 1;
-            }
-            
-            elseif(!empty($new_options['role_caps'][$args->cap->delete_posts])) {
-                $new_options['role_caps']["delete_{$args->capability_type}"] = 1;
+            if (!empty($new_options['post_types'][$post_type]) && $post_type == $args->capability_type) {
+                
+                if(isset($args->cap->edit_posts) && !empty($new_options['role_caps'][$args->cap->edit_posts])) {
+                    $new_role_caps["edit_{$args->capability_type}"] = 1;
+                    $new_role_caps["edit_{$args->capability_type}s"] = 1;            
+                }
+
+                if(isset($args->cap->delete_posts) && !empty($new_options['role_caps'][$args->cap->delete_posts])) {
+                    $new_role_caps["delete_{$args->capability_type}"] = 1;
+                    $new_role_caps["delete_{$args->capability_type}s"] = 1;               
+                }
+
+                if(isset($args->cap->publish_posts) && !empty($new_options['role_caps'][$args->cap->publish_posts])) {
+                    $new_role_caps["publish_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->edit_published_posts) && !empty($new_options['role_caps'][$args->cap->edit_published_posts])) {
+                    $new_role_caps["edit_published_{$args->capability_type}s"] = 1;
+                }
+
+                if(isset($args->cap->delete_published_posts) && !empty($new_options['role_caps'][$args->cap->delete_published_posts])) {
+                    $new_role_caps["delete_published_{$args->capability_type}s"] = 1;
+                }
+                
             }
             
         }
-
+                
+        $more_role_caps = array_keys(array_merge($this->wp_manage_caps, $this->more_role_caps));
+        
+        foreach ($more_role_caps as $cap) {
+            if(!empty($new_options['role_caps'][$cap])) {
+                $new_role_caps[$cap] = 1;
+            }
+        }
+        
+        $new_options['role_caps'] = $new_role_caps;
+        $new_role_caps = array_keys($new_options['role_caps']);
+        
         $role = get_role(self::role);
         $role_caps = array_keys($this->module->options->role_caps);
 
         foreach ($role_caps as $cap) {
             $role->remove_cap($cap);
         }
-
-        $new_role_caps = array_keys($new_options['role_caps']);
 
         foreach ($new_role_caps as $cap) {
             $role->add_cap($cap);

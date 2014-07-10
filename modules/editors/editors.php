@@ -4,6 +4,8 @@ class Workflow_Editors extends Workflow_Module {
 
     const role = 'editor';
 
+    private $wp_post_caps = array();
+    private $wp_manage_caps = array();
     private $wp_role_caps = array();
     private $more_role_caps = array();
     public $role_caps = array();
@@ -14,10 +16,7 @@ class Workflow_Editors extends Workflow_Module {
 
         $this->module_url = $this->get_module_url(__FILE__);
 
-        $this->wp_role_caps = array(
-            'moderate_comments' => __('Kommentare moderieren', CMS_WORKFLOW_TEXTDOMAIN),
-            'manage_categories' => __('Taxonomien verwalten', CMS_WORKFLOW_TEXTDOMAIN),
-            'manage_links' => __('Links verwalten', CMS_WORKFLOW_TEXTDOMAIN),
+        $this->wp_post_caps = array(
             'edit_others_posts' => __('Andere Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_pages' => __('Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_others_pages' => __('Andere Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
@@ -34,17 +33,25 @@ class Workflow_Editors extends Workflow_Module {
             'edit_private_pages' => __('Private Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'read_private_pages' => __('Private Seiten lesen', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),
             'publish_posts' => __('Beiträge veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
             'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
             'edit_posts' => __('Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
+        $this->wp_manage_caps = array(
+            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),            
+            'moderate_comments' => __('Kommentare moderieren', CMS_WORKFLOW_TEXTDOMAIN),
+            'manage_categories' => __('Taxonomien verwalten', CMS_WORKFLOW_TEXTDOMAIN),
+            'manage_links' => __('Links verwalten', CMS_WORKFLOW_TEXTDOMAIN),
+        );
+        
         $this->more_role_caps = array(
             'edit_theme_options' => __('Design bearbeiten', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
+        $this->wp_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps));
+        
         $content_help_tab = array(
             '<p>' . __('Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure detaillierter vergeben zu könnnen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>' . __('Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die standardmäßig von WordPress vorgegebenen Rechte.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
@@ -152,7 +159,7 @@ class Workflow_Editors extends Workflow_Module {
         $all_post_types = $this->get_available_post_types();
 
         $allowed_post_types = $this->get_post_types($this->module);
-
+        
         foreach ($all_post_types as $post_type => $args) {
             
             if (!in_array($post_type, $allowed_post_types)) {
@@ -185,14 +192,6 @@ class Workflow_Editors extends Workflow_Module {
                 $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
 
-            if (isset($args->cap->edit_others_posts)) {
-                $this->role_caps[$args->cap->edit_others_posts] = sprintf(__('Andere %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
-
-            if (isset($args->cap->delete_others_posts)) {
-                $this->role_caps[$args->cap->delete_others_posts] = sprintf(__('Andere %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
-
             if (isset($args->cap->edit_private_posts)) {
                 $this->role_caps[$args->cap->edit_private_posts] = sprintf(__('Private %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
@@ -200,16 +199,13 @@ class Workflow_Editors extends Workflow_Module {
             if (isset($args->cap->delete_private_posts)) {
                 $this->role_caps[$args->cap->delete_private_posts] = sprintf(__('Private %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
-
+                
             if (isset($args->cap->read_private_posts)) {
                 $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }
+            }               
         }
         
-        $this->role_caps['upload_files'] = __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN);
-        $this->role_caps['moderate_comments'] = __('Kommentare moderieren', CMS_WORKFLOW_TEXTDOMAIN);
-        $this->role_caps['manage_categories'] = __('Taxonomien verwalten', CMS_WORKFLOW_TEXTDOMAIN);
-        $this->role_caps['manage_links'] = __('Links verwalten', CMS_WORKFLOW_TEXTDOMAIN);        
+        $this->role_caps = array_merge($this->role_caps, $this->wp_manage_caps, $this->more_role_caps);
     }
 
     public function register_settings() {
@@ -224,7 +220,6 @@ class Workflow_Editors extends Workflow_Module {
     }
     
     public function settings_role_caps_option() {
-        natsort($this->role_caps);
         foreach ($this->role_caps as $key => $value) {
             echo '<label for="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '">';
             echo '<input id="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '" name="'
@@ -251,37 +246,68 @@ class Workflow_Editors extends Workflow_Module {
 
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
 
+        $new_role_caps = array();
+        
         $all_post_types = $this->get_available_post_types();
         
         foreach ($all_post_types as $post_type => $args) {
-            if ($post_type == $args->capability_type && empty($new_options['post_types'][$post_type])) {
-                unset($new_options['role_caps'][$args->cap->edit_post]);
-                unset($new_options['role_caps'][$args->cap->delete_post]);                
-                unset($new_options['role_caps'][$args->cap->edit_posts]);
-                unset($new_options['role_caps'][$args->cap->delete_posts]);                
-                unset($new_options['role_caps'][$args->cap->publish_posts]);
-                unset($new_options['role_caps'][$args->cap->edit_published_posts]);
-                unset($new_options['role_caps'][$args->cap->delete_published_posts]);
-            }
-            
-            if(!empty($new_options['role_caps'][$args->cap->edit_posts])) {
-                $new_options['role_caps']["edit_{$args->capability_type}"] = 1;
-            }
-            
-            elseif(!empty($new_options['role_caps'][$args->cap->delete_posts])) {
-                $new_options['role_caps']["delete_{$args->capability_type}"] = 1;
+            if (!empty($new_options['post_types'][$post_type]) && $post_type == $args->capability_type) {
+                
+                if(isset($args->cap->edit_posts) && !empty($new_options['role_caps'][$args->cap->edit_posts])) {
+                    $new_role_caps["edit_{$args->capability_type}"] = 1;
+                    $new_role_caps["edit_{$args->capability_type}s"] = 1;
+                    $new_role_caps["edit_others_{$args->capability_type}s"] = 1;
+                }
+
+                if(isset($args->cap->delete_posts) && !empty($new_options['role_caps'][$args->cap->delete_posts])) {
+                    $new_role_caps["delete_{$args->capability_type}"] = 1;
+                    $new_role_caps["delete_{$args->capability_type}s"] = 1;
+                    $new_role_caps["delete_others_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->publish_posts) && !empty($new_options['role_caps'][$args->cap->publish_posts])) {
+                    $new_role_caps["publish_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->edit_published_posts) && !empty($new_options['role_caps'][$args->cap->edit_published_posts])) {
+                    $new_role_caps["edit_published_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->delete_published_posts) && !empty($new_options['role_caps'][$args->cap->delete_published_posts])) {
+                    $new_role_caps["delete_published_{$args->capability_type}s"] = 1;
+                }                
+
+                if(isset($args->cap->edit_private_posts) && !empty($new_options['role_caps'][$args->cap->edit_private_posts])) {
+                    $new_role_caps["read_private_{$args->capability_type}s"] = 1;
+                    $new_role_caps["edit_private_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->delete_private_posts) && !empty($new_options['role_caps'][$args->cap->delete_private_posts])) {
+                    $new_role_caps["read_private_{$args->capability_type}s"] = 1;
+                    $new_role_caps["delete_private_{$args->capability_type}s"] = 1;
+                }
+                
             }
             
         }
-
+        
+        $more_role_caps = array_keys(array_merge($this->wp_manage_caps, $this->more_role_caps));
+        
+        foreach ($more_role_caps as $cap) {
+            if(!empty($new_options['role_caps'][$cap])) {
+                $new_role_caps[$cap] = 1;
+            }
+        }
+        
+        $new_options['role_caps'] = $new_role_caps;
+        $new_role_caps = array_keys($new_options['role_caps']);
+        
         $role = get_role(self::role);
         $role_caps = array_keys($this->module->options->role_caps);
 
         foreach ($role_caps as $cap) {
             $role->remove_cap($cap);
         }
-
-        $new_role_caps = array_keys($new_options['role_caps']);
 
         foreach ($new_role_caps as $cap) {
             $role->add_cap($cap);
