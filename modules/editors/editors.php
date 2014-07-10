@@ -192,6 +192,10 @@ class Workflow_Editors extends Workflow_Module {
                 $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
 
+            if (isset($args->cap->read_private_posts)) {
+                $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+            }               
+            
             if (isset($args->cap->edit_private_posts)) {
                 $this->role_caps[$args->cap->edit_private_posts] = sprintf(__('Private %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
@@ -200,9 +204,6 @@ class Workflow_Editors extends Workflow_Module {
                 $this->role_caps[$args->cap->delete_private_posts] = sprintf(__('Private %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
             }
                 
-            if (isset($args->cap->read_private_posts)) {
-                $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', CMS_WORKFLOW_TEXTDOMAIN), $label);
-            }               
         }
         
         $this->role_caps = array_merge($this->role_caps, $this->wp_manage_caps, $this->more_role_caps);
@@ -277,13 +278,15 @@ class Workflow_Editors extends Workflow_Module {
                     $new_role_caps["delete_published_{$args->capability_type}s"] = 1;
                 }                
 
-                if(isset($args->cap->edit_private_posts) && !empty($new_options['role_caps'][$args->cap->edit_private_posts])) {
+                if(isset($args->cap->read_private_posts) && !empty($new_options['role_caps'][$args->cap->read_private_posts])) {
                     $new_role_caps["read_private_{$args->capability_type}s"] = 1;
+                }
+                
+                if(isset($args->cap->edit_private_posts) && !empty($new_options['role_caps'][$args->cap->edit_private_posts])) {
                     $new_role_caps["edit_private_{$args->capability_type}s"] = 1;
                 }
                 
                 if(isset($args->cap->delete_private_posts) && !empty($new_options['role_caps'][$args->cap->delete_private_posts])) {
-                    $new_role_caps["read_private_{$args->capability_type}s"] = 1;
                     $new_role_caps["delete_private_{$args->capability_type}s"] = 1;
                 }
                 
