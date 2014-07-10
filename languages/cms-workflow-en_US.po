@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 16:27+0100\n"
+"POT-Creation-Date: 2014-07-10 16:12+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -102,64 +102,63 @@ msgstr "English"
 msgid "Spanisch"
 msgstr "Spanish"
 
-#: ../modules/authors/authors.php:21 ../modules/authors/authors.php:187
-#: ../modules/editors/editors.php:37 ../modules/editors/editors.php:209
-msgid "Dateien hochladen"
-msgstr "Upload Files"
-
-#: ../modules/authors/authors.php:22
+#: ../modules/authors/authors.php:23
 msgid "Beitrag veröffentlichen"
 msgstr "Publish Posts"
 
-#: ../modules/authors/authors.php:23 ../modules/editors/editors.php:36
+#: ../modules/authors/authors.php:24 ../modules/editors/editors.php:35
 msgid "Veröffentlichte Beiträge bearbeiten"
 msgstr "Edit Published Posts"
 
-#: ../modules/authors/authors.php:24 ../modules/editors/editors.php:39
+#: ../modules/authors/authors.php:25 ../modules/editors/editors.php:37
 msgid "Veröffentlichte Beiträge löschen"
 msgstr "Delete Published Posts"
 
-#: ../modules/authors/authors.php:25 ../modules/editors/editors.php:40
+#: ../modules/authors/authors.php:26 ../modules/editors/editors.php:38
 msgid "Beiträge bearbeiten"
 msgstr "Edit Posts"
 
-#: ../modules/authors/authors.php:26 ../modules/editors/editors.php:41
+#: ../modules/authors/authors.php:27 ../modules/editors/editors.php:39
 msgid "Beiträge löschen"
 msgstr "Delete Posts"
 
-#: ../modules/authors/authors.php:32
+#: ../modules/authors/authors.php:31 ../modules/editors/editors.php:43
+msgid "Dateien hochladen"
+msgstr "Upload Files"
+
+#: ../modules/authors/authors.php:39
 msgid ""
 "Verwenden Sie die Autorenverwaltung, um die Rechte für Autoren detaillierter "
 "vergeben zu können. Sie können angeben"
 msgstr ""
 
-#: ../modules/authors/authors.php:34
+#: ../modules/authors/authors.php:41
 msgid "für welche Bereiche die Autorenverwaltung freigegeben werden soll und"
 msgstr ""
 
-#: ../modules/authors/authors.php:35
+#: ../modules/authors/authors.php:42
 msgid "welche Rechte ein Autor erhalten darf."
 msgstr ""
 
-#: ../modules/authors/authors.php:37
+#: ../modules/authors/authors.php:44
 msgid ""
 "Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die "
 "standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten "
 "ansehen, erstellen, bearbeiten und löschen, Dateien hochladen)."
 msgstr ""
 
-#: ../modules/authors/authors.php:41 ../modules/authors/authors.php:230
-#: ../modules/authors/authors.php:646
+#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:237
+#: ../modules/authors/authors.php:643
 msgid "Autoren"
 msgstr "Authors"
 
-#: ../modules/authors/authors.php:42
+#: ../modules/authors/authors.php:49
 msgid "Verwaltung der Autoren."
 msgstr "Authors administration."
 
-#: ../modules/authors/authors.php:62 ../modules/dashboard/dashboard.php:42
+#: ../modules/authors/authors.php:69 ../modules/dashboard/dashboard.php:42
 #: ../modules/editorial-comments/editorial-comments.php:56
-#: ../modules/editors/editors.php:93
+#: ../modules/editors/editors.php:100
 #: ../modules/notifications/notifications.php:38
 #: ../modules/post-versioning/post-versioning.php:128
 #: ../modules/settings/settings.php:36 ../modules/task-list/task-list.php:68
@@ -168,9 +167,9 @@ msgstr "Authors administration."
 msgid "Übersicht"
 msgstr "Overall view"
 
-#: ../modules/authors/authors.php:65 ../modules/dashboard/dashboard.php:45
+#: ../modules/authors/authors.php:72 ../modules/dashboard/dashboard.php:45
 #: ../modules/editorial-comments/editorial-comments.php:59
-#: ../modules/editors/editors.php:96
+#: ../modules/editors/editors.php:103
 #: ../modules/notifications/notifications.php:41
 #: ../modules/post-versioning/post-versioning.php:131
 #: ../modules/settings/settings.php:39 ../modules/task-list/task-list.php:71
@@ -187,64 +186,64 @@ msgstr ""
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
 
-#: ../modules/authors/authors.php:167 ../modules/editors/editors.php:169
+#: ../modules/authors/authors.php:174 ../modules/editors/editors.php:176
 #, php-format
 msgid "%s bearbeiten"
 msgstr "Edit %s"
 
-#: ../modules/authors/authors.php:171 ../modules/editors/editors.php:173
-#, php-format
-msgid "%s veröffentlichen"
-msgstr "Publish %s"
-
-#: ../modules/authors/authors.php:175 ../modules/editors/editors.php:177
+#: ../modules/authors/authors.php:178 ../modules/editors/editors.php:184
 #, php-format
 msgid "%s löschen"
 msgstr "Delete %s"
 
-#: ../modules/authors/authors.php:179 ../modules/editors/editors.php:181
+#: ../modules/authors/authors.php:182 ../modules/editors/editors.php:180
+#, php-format
+msgid "%s veröffentlichen"
+msgstr "Publish %s"
+
+#: ../modules/authors/authors.php:186 ../modules/editors/editors.php:188
 #, php-format
 msgid "Veröffentlichte %s bearbeiten"
 msgstr "Edit Published %s"
 
-#: ../modules/authors/authors.php:183 ../modules/editors/editors.php:185
+#: ../modules/authors/authors.php:190 ../modules/editors/editors.php:192
 #, php-format
 msgid "Veröffentlichte %s löschen"
 msgstr "Delete Published %s"
 
-#: ../modules/authors/authors.php:212
+#: ../modules/authors/authors.php:219
 #: ../modules/user-groups/user-groups.php:120
 msgid "Alle"
 msgstr "All"
 
-#: ../modules/authors/authors.php:213
+#: ../modules/authors/authors.php:220
 #: ../modules/user-groups/user-groups.php:121
 msgid "Ausgewählt"
 msgstr "Selected"
 
-#: ../modules/authors/authors.php:214
+#: ../modules/authors/authors.php:221
 #: ../modules/user-groups/user-groups.php:122
 msgid "Suchen..."
 msgstr "Search..."
 
-#: ../modules/authors/authors.php:237
+#: ../modules/authors/authors.php:244
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr "Select the authors for this document"
 
-#: ../modules/authors/authors.php:239
+#: ../modules/authors/authors.php:246
 #: ../modules/user-groups/user-groups.php:380
 #: ../modules/user-groups/user-groups.php:809
 msgid "Benutzer"
 msgstr "User"
 
-#: ../modules/authors/authors.php:256
+#: ../modules/authors/authors.php:263
 #: ../modules/user-groups/user-groups.php:41
 #: ../modules/user-groups/user-groups.php:70
 #: ../modules/user-groups/user-groups.php:473
 msgid "Benutzergruppen"
 msgstr "User Groups"
 
-#: ../modules/authors/authors.php:772
+#: ../modules/authors/authors.php:769
 #, php-format
 msgctxt "authors"
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
@@ -252,14 +251,14 @@ msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] "My %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[1] "My %1$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:776
+#: ../modules/authors/authors.php:773
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:1043
+#: ../modules/authors/authors.php:1040
 #: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:217
+#: ../modules/editors/editors.php:213
 #: ../modules/notifications/notifications.php:409
 #: ../modules/post-versioning/post-versioning.php:238
 #: ../modules/task-list/task-list.php:557
@@ -268,7 +267,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 msgid "Freigabe"
 msgstr "Allowed Post Types"
 
-#: ../modules/authors/authors.php:1044
+#: ../modules/authors/authors.php:1041
 msgid "Autorenrechte"
 msgstr "Authors Capabilities"
 
@@ -336,17 +335,17 @@ msgid "Auf einen Blick"
 msgstr "Right Now"
 
 #: ../modules/dashboard/dashboard.php:99
-#: ../modules/dashboard/dashboard.php:465
+#: ../modules/dashboard/dashboard.php:477
 msgid "Aktuelle Entwürfe"
 msgstr "Recent Drafts"
 
 #: ../modules/dashboard/dashboard.php:103
-#: ../modules/dashboard/dashboard.php:466
+#: ../modules/dashboard/dashboard.php:478
 msgid "Aktuelle ausstehende Reviews"
 msgstr "Recent Pending Reviews"
 
 #: ../modules/dashboard/dashboard.php:107
-#: ../modules/dashboard/dashboard.php:469
+#: ../modules/dashboard/dashboard.php:481
 #: ../modules/task-list/task-list.php:54 ../modules/task-list/task-list.php:77
 #: ../modules/task-list/task-list.php:85
 #: ../modules/task-list/task-list.php:164
@@ -401,38 +400,38 @@ msgstr "Space Allowed"
 msgid "Speicherplatz verbraucht"
 msgstr "Space Used"
 
-#: ../modules/dashboard/dashboard.php:276
-#: ../modules/dashboard/dashboard.php:341
+#: ../modules/dashboard/dashboard.php:280
+#: ../modules/dashboard/dashboard.php:349
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Last modified by <i>%1$s</i> on %2$s at %3$s"
 
-#: ../modules/dashboard/dashboard.php:292
+#: ../modules/dashboard/dashboard.php:296
 msgid "Zurzeit gibt es keine Entwürfe."
 msgstr "There are no drafts at the moment."
 
-#: ../modules/dashboard/dashboard.php:357
+#: ../modules/dashboard/dashboard.php:365
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr "There are no pending reviews at the moment."
 
-#: ../modules/dashboard/dashboard.php:412
+#: ../modules/dashboard/dashboard.php:424
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Task added by <i>%1$s</i> on %2$s at %3$s"
 
-#: ../modules/dashboard/dashboard.php:425
+#: ../modules/dashboard/dashboard.php:437
 msgid "Zurzeit gibt es keine Aufgaben."
 msgstr "There are no tasks at the moment."
 
-#: ../modules/dashboard/dashboard.php:475
-#: ../modules/dashboard/dashboard.php:489
-#: ../modules/dashboard/dashboard.php:503 ../modules/settings/settings.php:263
+#: ../modules/dashboard/dashboard.php:487
+#: ../modules/dashboard/dashboard.php:501
+#: ../modules/dashboard/dashboard.php:515 ../modules/settings/settings.php:263
 msgid "Deaktiviert"
 msgstr "Disabled"
 
-#: ../modules/dashboard/dashboard.php:476
-#: ../modules/dashboard/dashboard.php:490
-#: ../modules/dashboard/dashboard.php:504 ../modules/settings/settings.php:264
+#: ../modules/dashboard/dashboard.php:488
+#: ../modules/dashboard/dashboard.php:502
+#: ../modules/dashboard/dashboard.php:516 ../modules/settings/settings.php:264
 msgid "Aktiviert"
 msgstr "Enabled"
 
@@ -590,132 +589,122 @@ msgstr "Please enter a comment."
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgstr "An unexpected error has occurred. Please try again."
 
-#: ../modules/editors/editors.php:18 ../modules/editors/editors.php:210
-msgid "Kommentare moderieren"
-msgstr "Moderate Comments"
-
-#: ../modules/editors/editors.php:19 ../modules/editors/editors.php:211
-msgid "Taxonomien verwalten"
-msgstr "Manage Taxonomies"
-
-#: ../modules/editors/editors.php:20 ../modules/editors/editors.php:212
-msgid "Links verwalten"
-msgstr "Manage Links"
-
-#: ../modules/editors/editors.php:21
+#: ../modules/editors/editors.php:20
 msgid "Andere Beiträge bearbeiten"
 msgstr "Edit Others Posts"
 
-#: ../modules/editors/editors.php:22
+#: ../modules/editors/editors.php:21
 msgid "Seiten bearbeiten"
 msgstr "Edit Pages"
 
-#: ../modules/editors/editors.php:23
+#: ../modules/editors/editors.php:22
 msgid "Andere Seiten bearbeiten"
 msgstr "Edit Others Pages"
 
-#: ../modules/editors/editors.php:24
+#: ../modules/editors/editors.php:23
 msgid "Veröffentlichte Seiten bearbeiten"
 msgstr "Edit Published Pages"
 
-#: ../modules/editors/editors.php:25
+#: ../modules/editors/editors.php:24
 msgid "Seiten veröffentlichen"
 msgstr "Publish Pages"
 
-#: ../modules/editors/editors.php:26
+#: ../modules/editors/editors.php:25
 msgid "Seiten löschen"
 msgstr "Delete Pages"
 
-#: ../modules/editors/editors.php:27
+#: ../modules/editors/editors.php:26
 msgid "Andere Seiten löschen"
 msgstr "Delete Others Pages"
 
-#: ../modules/editors/editors.php:28
+#: ../modules/editors/editors.php:27
 msgid "Veröffentlichte Seiten löschen"
 msgstr "Delete Published Pages"
 
-#: ../modules/editors/editors.php:29
+#: ../modules/editors/editors.php:28
 msgid "Andere Beiträge löschen"
 msgstr "Delete Others Posts"
 
-#: ../modules/editors/editors.php:30
+#: ../modules/editors/editors.php:29
 msgid "Private Beiträge löschen"
 msgstr "Delete Private Posts"
 
-#: ../modules/editors/editors.php:31
+#: ../modules/editors/editors.php:30
 msgid "Private Beiträge bearbeiten"
 msgstr "Edit Private Posts"
 
-#: ../modules/editors/editors.php:32
+#: ../modules/editors/editors.php:31
 msgid "Private Beiträge lesen"
 msgstr "Read Private Posts"
 
-#: ../modules/editors/editors.php:33
+#: ../modules/editors/editors.php:32
 msgid "Private Seiten löschen"
 msgstr "Delete Private Pages"
 
-#: ../modules/editors/editors.php:34
+#: ../modules/editors/editors.php:33
 msgid "Private Seiten bearbeiten"
 msgstr "Edit Private Pages"
 
-#: ../modules/editors/editors.php:35
+#: ../modules/editors/editors.php:34
 msgid "Private Seiten lesen"
 msgstr "Read Private Pages"
 
-#: ../modules/editors/editors.php:38
+#: ../modules/editors/editors.php:36
 msgid "Beiträge veröffentlichen"
 msgstr "Publish Posts"
 
+#: ../modules/editors/editors.php:44
+msgid "Kommentare moderieren"
+msgstr "Moderate Comments"
+
 #: ../modules/editors/editors.php:45
+msgid "Taxonomien verwalten"
+msgstr "Manage Taxonomies"
+
+#: ../modules/editors/editors.php:46
+msgid "Links verwalten"
+msgstr "Manage Links"
+
+#: ../modules/editors/editors.php:50
 msgid "Design bearbeiten"
 msgstr "Edit Appearance"
 
-#: ../modules/editors/editors.php:49
+#: ../modules/editors/editors.php:56
 msgid ""
 "Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure "
 "detaillierter vergeben zu könnnen."
 msgstr ""
 
-#: ../modules/editors/editors.php:50
+#: ../modules/editors/editors.php:57
 msgid ""
 "Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die "
 "standardmäßig von WordPress vorgegebenen Rechte."
 msgstr ""
 
-#: ../modules/editors/editors.php:54
+#: ../modules/editors/editors.php:61
 msgid "Redakteure"
 msgstr "Editors"
 
-#: ../modules/editors/editors.php:55
+#: ../modules/editors/editors.php:62
 msgid "Verwaltung der Redakteure."
 msgstr "Editors administration."
 
-#: ../modules/editors/editors.php:189
-#, php-format
-msgid "Andere %s bearbeiten"
-msgstr "Edit Others %s"
-
-#: ../modules/editors/editors.php:193
-#, php-format
-msgid "Andere %s löschen"
-msgstr "Delete Others %s"
-
-#: ../modules/editors/editors.php:197
+#: ../modules/editors/editors.php:196
 #, php-format
 msgid "Private %s bearbeiten"
 msgstr "Edit Private %s"
 
-#: ../modules/editors/editors.php:201
+#: ../modules/editors/editors.php:200
 #, php-format
 msgid "Private %s löschen"
 msgstr "Delete Private %s"
 
-#: ../modules/editors/editors.php:205
+#: ../modules/editors/editors.php:204
 #, php-format
 msgid "Private %s lesen"
 msgstr "Read Private %s"
 
-#: ../modules/editors/editors.php:218
+#: ../modules/editors/editors.php:214
 msgid "Redakteurerechte"
 msgstr "Editors Capabilities"
 
@@ -1943,8 +1932,9 @@ msgid "Sortierung:"
 msgstr ""
 
 #: ../modules/translation/widgets.php:70
+#, fuzzy
 msgid "nach Webseitennamen"
-msgstr ""
+msgstr "by Sites-ID"
 
 #: ../modules/translation/widgets.php:71
 msgid "nach Webseiten-ID"
@@ -2180,6 +2170,12 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:874
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#~ msgid "Andere %s bearbeiten"
+#~ msgstr "Edit Others %s"
+
+#~ msgid "Andere %s löschen"
+#~ msgstr "Delete Others %s"
 
 #~ msgid "<p></p>"
 #~ msgstr "<p></p>"
