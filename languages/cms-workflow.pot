@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-10 16:12+0100\n"
+"POT-Creation-Date: 2014-08-11 14:58+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -250,7 +250,7 @@ msgstr ""
 
 #: ../modules/authors/authors.php:1040
 #: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:213
+#: ../modules/editors/editors.php:214
 #: ../modules/notifications/notifications.php:409
 #: ../modules/post-versioning/post-versioning.php:238
 #: ../modules/task-list/task-list.php:557
@@ -680,20 +680,20 @@ msgstr ""
 
 #: ../modules/editors/editors.php:196
 #, php-format
-msgid "Private %s bearbeiten"
+msgid "Private %s lesen"
 msgstr ""
 
 #: ../modules/editors/editors.php:200
 #, php-format
-msgid "Private %s löschen"
+msgid "Private %s bearbeiten"
 msgstr ""
 
 #: ../modules/editors/editors.php:204
 #, php-format
-msgid "Private %s lesen"
+msgid "Private %s löschen"
 msgstr ""
 
-#: ../modules/editors/editors.php:214
+#: ../modules/editors/editors.php:215
 msgid "Redakteurerechte"
 msgstr ""
 
@@ -1889,36 +1889,50 @@ msgstr ""
 msgid "Multisite-Sprachwechsler"
 msgstr ""
 
-#: ../modules/translation/widgets.php:64
+#: ../modules/translation/widgets.php:67
 msgid "Titel:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:68
+#: ../modules/translation/widgets.php:71
 msgid "Sortierung:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:70
+#: ../modules/translation/widgets.php:73
 msgid "nach Webseitennamen"
 msgstr ""
 
-#: ../modules/translation/widgets.php:71
+#: ../modules/translation/widgets.php:74
 msgid "nach Webseiten-ID"
 msgstr ""
 
-#: ../modules/translation/widgets.php:75
+#: ../modules/translation/widgets.php:78
 msgid "Linktyp:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:77
+#: ../modules/translation/widgets.php:80
 msgid "Text"
 msgstr ""
 
-#: ../modules/translation/widgets.php:78
+#: ../modules/translation/widgets.php:81
 msgid "Sprachcode"
 msgstr ""
 
-#: ../modules/translation/widgets.php:82
+#: ../modules/translation/widgets.php:85
 msgid "Aktuelle Webseite zeigen:"
+msgstr ""
+
+#: ../modules/translation/widgets.php:89
+msgid "Weiterleitungsseite (statische Seite):"
+msgstr ""
+
+#: ../modules/translation/widgets.php:95
+msgid "— Startseite der übersetzten Webseite —"
+msgstr ""
+
+#: ../modules/translation/widgets.php:101
+msgid ""
+"Lokale Standardseite, die im Falle einer nicht übersetztes Dokument "
+"angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite)."
 msgstr ""
 
 #: ../modules/user-groups/user-groups.php:16

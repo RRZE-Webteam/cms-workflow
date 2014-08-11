@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-10 16:12+0100\n"
+"POT-Creation-Date: 2014-08-11 14:59+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -258,7 +258,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
 #: ../modules/authors/authors.php:1040
 #: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:213
+#: ../modules/editors/editors.php:214
 #: ../modules/notifications/notifications.php:409
 #: ../modules/post-versioning/post-versioning.php:238
 #: ../modules/task-list/task-list.php:557
@@ -691,20 +691,20 @@ msgstr "Editors administration."
 
 #: ../modules/editors/editors.php:196
 #, php-format
+msgid "Private %s lesen"
+msgstr "Read Private %s"
+
+#: ../modules/editors/editors.php:200
+#, php-format
 msgid "Private %s bearbeiten"
 msgstr "Edit Private %s"
 
-#: ../modules/editors/editors.php:200
+#: ../modules/editors/editors.php:204
 #, php-format
 msgid "Private %s löschen"
 msgstr "Delete Private %s"
 
-#: ../modules/editors/editors.php:204
-#, php-format
-msgid "Private %s lesen"
-msgstr "Read Private %s"
-
-#: ../modules/editors/editors.php:214
+#: ../modules/editors/editors.php:215
 msgid "Redakteurerechte"
 msgstr "Editors Capabilities"
 
@@ -1854,7 +1854,7 @@ msgstr "Add related websites"
 #: ../modules/translation/translation.php:146
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
-msgstr ""
+msgstr "%2$s (%3$s) (%4$s)"
 
 #: ../modules/translation/translation.php:275
 #, php-format
@@ -1913,48 +1913,63 @@ msgstr "An unexpected error has occurred. The document could not be saved."
 #: ../modules/translation/translation.php:466
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
-msgstr ""
+msgstr "%1$s. %2$s (%3$s) (%4$s)"
 
 #: ../modules/translation/widgets.php:9
 msgid "Sprachwechsler"
-msgstr ""
+msgstr "Language changer"
 
 #: ../modules/translation/widgets.php:11
 msgid "Multisite-Sprachwechsler"
-msgstr ""
+msgstr "Multisite Language Changer"
 
-#: ../modules/translation/widgets.php:64
+#: ../modules/translation/widgets.php:67
 msgid "Titel:"
 msgstr "Title:"
 
-#: ../modules/translation/widgets.php:68
-msgid "Sortierung:"
-msgstr ""
-
-#: ../modules/translation/widgets.php:70
-#, fuzzy
-msgid "nach Webseitennamen"
-msgstr "by Sites-ID"
-
 #: ../modules/translation/widgets.php:71
+msgid "Sortierung:"
+msgstr "Sort by:"
+
+#: ../modules/translation/widgets.php:73
+msgid "nach Webseitennamen"
+msgstr "by page title"
+
+#: ../modules/translation/widgets.php:74
 msgid "nach Webseiten-ID"
-msgstr "by Sites-ID"
+msgstr "by site-ID"
 
-#: ../modules/translation/widgets.php:75
+#: ../modules/translation/widgets.php:78
 msgid "Linktyp:"
-msgstr ""
+msgstr "Link Type:"
 
-#: ../modules/translation/widgets.php:77
+#: ../modules/translation/widgets.php:80
 msgid "Text"
 msgstr "Text"
 
-#: ../modules/translation/widgets.php:78
+#: ../modules/translation/widgets.php:81
 msgid "Sprachcode"
-msgstr ""
+msgstr "Language Code"
 
-#: ../modules/translation/widgets.php:82
+#: ../modules/translation/widgets.php:85
 msgid "Aktuelle Webseite zeigen:"
 msgstr "Show current website:"
+
+#: ../modules/translation/widgets.php:89
+msgid "Weiterleitungsseite (statische Seite):"
+msgstr "Redirect page (static page)"
+
+#: ../modules/translation/widgets.php:95
+msgid "— Startseite der übersetzten Webseite —"
+msgstr "— Home page of the translated website —"
+
+#: ../modules/translation/widgets.php:101
+msgid ""
+"Lokale Standardseite, die im Falle einer nicht übersetztes Dokument "
+"angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite)."
+msgstr ""
+"Local default page that is displayed in case of not translated document "
+"(default is the home page of the translated website)."
 
 #: ../modules/user-groups/user-groups.php:16
 #: ../modules/user-groups/user-groups.php:30
@@ -2170,6 +2185,9 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:874
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#~ msgid "— Startseite des Zielwebauftritts —"
+#~ msgstr "— Home of the target website —"
 
 #~ msgid "Andere %s bearbeiten"
 #~ msgstr "Edit Others %s"
