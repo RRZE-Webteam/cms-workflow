@@ -94,7 +94,7 @@ class Workflow_Translation_Widget extends WP_Widget {
                 'selected' => $redirect_page_id,
                 'show_option_none' => __('— Startseite der übersetzten Webseite —', CMS_WORKFLOW_TEXTDOMAIN),
                 'option_none_value' => 0,
-                'depth' => 1
+                'depth' => 2
             ));
             ?>
             <br>
