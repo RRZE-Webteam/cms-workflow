@@ -88,7 +88,7 @@ class Workflow_Translation_Widget extends WP_Widget {
         <p>
             <label for="<?php echo $this->get_field_id('workflow_translation_widget_redirect_page_id'); ?>"><?php _e('Weiterleitungsseite (statische Seite):', CMS_WORKFLOW_TEXTDOMAIN) ?></label>
             <?php
-            wp_dropdown_pages(array(
+            workflow_dropdown_pages(array(
                 'id' => $this->get_field_id('workflow_translation_widget_redirect_page_id'),
                 'name' => $this->get_field_name('workflow_translation_widget_redirect_page_id'),
                 'selected' => $redirect_page_id,

@@ -1,4 +1,53 @@
 <?php
+function workflow_dropdown_pages($args = '') {
+	$defaults = array(
+		'depth' => 0,
+        'child_of' => 0,
+		'selected' => 0,
+        'echo' => 1,
+		'name' => 'page_id',
+        'id' => '',
+		'show_option_none' => '',
+        'show_option_no_change' => '',
+		'option_none_value' => '',
+        'class' => 'widefat'
+	);
+
+	$r = wp_parse_args( $args, $defaults );
+	extract( $r, EXTR_SKIP );
+
+	$pages = get_pages($r);
+	$output = '';
+	if ( empty($id) ) {
+		$id = $name;
+    }
+
+	if ( ! empty($pages) ) {
+		$output = "<select name='" . esc_attr($name) . "' id='" . esc_attr($id) . "' class='" . esc_attr($class) . "'>\n";
+		if ( $show_option_no_change ) {
+			$output .= "\t<option value=\"-1\">$show_option_no_change</option>";
+        }
+		if ( $show_option_none ) {
+			$output .= "\t<option value=\"" . esc_attr($option_none_value) . "\">$show_option_none</option>\n";
+        }
+		$output .= walk_page_dropdown_tree($pages, $depth, $r);
+		$output .= "</select>\n";
+	}
+
+	/**
+	 * Filter the HTML output of a list of pages as a drop down.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param string $output HTML output for drop down list of pages.
+	 */
+	$output = apply_filters( 'wp_dropdown_pages', $output );
+
+	if ( $echo )
+		echo $output;
+
+	return $output;
+}
 
 function workflow_get_translated_sites($args = array()) {
     global $cms_workflow;
