@@ -7,7 +7,8 @@ function workflow_get_translated_sites($args = array()) {
         'linktext' => 'text',
         'order' => 'blogid',
         'show_current_blog' => false,
-        'echo' => false
+        'echo' => false,
+        'redirect_page_id' => 0
     );
 
     $args = wp_parse_args($args, $defaults);
@@ -145,6 +146,10 @@ class Workflow_Translation_Helper {
             
             elseif (is_singular() && get_current_blog_id() == $site['blog_id']) {
                 $link = get_permalink($current_post_id);
+            }
+            
+            elseif ($redirect_page_id > 0) {
+                $link = get_permalink($redirect_page_id);
             }
             
             else {
