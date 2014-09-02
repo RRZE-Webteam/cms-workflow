@@ -2,7 +2,7 @@
 
 class Workflow_Task_List extends Workflow_Module {
 
-    const postmeta_key = 'workflow_task_list';
+    const postmeta_key = '_task_list';
 
     public $module;
     public static $priorities;
@@ -111,8 +111,6 @@ class Workflow_Task_List extends Workflow_Module {
         add_action('wp_ajax_task_list_ajax_delete_task', array($this, 'task_list_ajax_delete_task'));
         add_action('wp_ajax_task_list_ajax_self_assignment', array($this, 'task_list_ajax_self_assignment'));
         add_action('wp_ajax_task_list_ajax_self_unassignment', array($this, 'task_list_ajax_self_unassignment'));
-
-        add_filter('workflow_post_versioning_skip_add_post_meta', array($this, 'post_versioning_skip_post_meta'));
     }
 
     public function admin_enqueue_scripts() {
@@ -162,12 +160,6 @@ class Workflow_Task_List extends Workflow_Module {
         }
 
         add_meta_box('workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'metabox_post'), $post_type, 'side', 'high');
-    }
-
-    public function post_versioning_skip_post_meta($key) {
-        if ($key === self::postmeta_key) {
-            return true;
-        }
     }
 
     public function metabox_post() {
