@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-11 14:59+0100\n"
+"POT-Creation-Date: 2014-09-02 15:52+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -10,7 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_nx:4c,1,2;_x:1,2c\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;esc_attr__;esc_attr_e;_n:1,2;"
+"_nx:4c,1,2;_x:1,2c\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -160,7 +161,7 @@ msgstr "Authors administration."
 #: ../modules/editorial-comments/editorial-comments.php:56
 #: ../modules/editors/editors.php:100
 #: ../modules/notifications/notifications.php:38
-#: ../modules/post-versioning/post-versioning.php:128
+#: ../modules/post-versioning/post-versioning.php:129
 #: ../modules/settings/settings.php:36 ../modules/task-list/task-list.php:68
 #: ../modules/translation/translation.php:54
 #: ../modules/user-groups/user-groups.php:61
@@ -171,7 +172,7 @@ msgstr "Overall view"
 #: ../modules/editorial-comments/editorial-comments.php:59
 #: ../modules/editors/editors.php:103
 #: ../modules/notifications/notifications.php:41
-#: ../modules/post-versioning/post-versioning.php:131
+#: ../modules/post-versioning/post-versioning.php:132
 #: ../modules/settings/settings.php:39 ../modules/task-list/task-list.php:71
 #: ../modules/translation/translation.php:57
 #: ../modules/user-groups/user-groups.php:64
@@ -260,8 +261,8 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 #: ../modules/editorial-comments/editorial-comments.php:381
 #: ../modules/editors/editors.php:214
 #: ../modules/notifications/notifications.php:409
-#: ../modules/post-versioning/post-versioning.php:238
-#: ../modules/task-list/task-list.php:557
+#: ../modules/post-versioning/post-versioning.php:239
+#: ../modules/task-list/task-list.php:549
 #: ../modules/translation/translation.php:128
 #: ../modules/user-groups/user-groups.php:343
 msgid "Freigabe"
@@ -348,7 +349,7 @@ msgstr "Recent Pending Reviews"
 #: ../modules/dashboard/dashboard.php:481
 #: ../modules/task-list/task-list.php:54 ../modules/task-list/task-list.php:77
 #: ../modules/task-list/task-list.php:85
-#: ../modules/task-list/task-list.php:164
+#: ../modules/task-list/task-list.php:162
 msgid "Aufgabenliste"
 msgstr "Task List"
 
@@ -475,7 +476,7 @@ msgid ""
 msgstr ""
 
 #: ../modules/editorial-comments/editorial-comments.php:19
-#: ../modules/post-versioning/post-versioning.php:106
+#: ../modules/post-versioning/post-versioning.php:107
 #: ../modules/task-list/task-list.php:20 ../modules/task-list/task-list.php:34
 #: ../modules/user-groups/user-groups.php:23
 #: ../modules/user-groups/user-groups.php:33
@@ -584,8 +585,8 @@ msgid "Bitte geben Sie einen Kommentar ein."
 msgstr "Please enter a comment."
 
 #: ../modules/editorial-comments/editorial-comments.php:375
-#: ../modules/task-list/task-list.php:386
-#: ../modules/task-list/task-list.php:537
+#: ../modules/task-list/task-list.php:378
+#: ../modules/task-list/task-list.php:529
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgstr "An unexpected error has occurred. Please try again."
 
@@ -964,38 +965,38 @@ msgstr "No"
 msgid "Ja"
 msgstr "Yes"
 
-#: ../modules/post-versioning/post-versioning.php:19
-#: ../modules/post-versioning/post-versioning.php:30
-#: ../modules/post-versioning/post-versioning.php:42
+#: ../modules/post-versioning/post-versioning.php:20
+#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:43
 msgid ""
 "Über die Versionierung können Sie einfach neue Versionen oder Kopien Ihrer "
 "Dokumente erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:21
+#: ../modules/post-versioning/post-versioning.php:44
 msgid ""
 "Eine <strong>Kopie</strong> hat keinen Bezug mehr zum ursprünglichen "
 "Dokument:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:21
+#: ../modules/post-versioning/post-versioning.php:44
 msgid ""
 "es wird ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom "
 "ursprünglichen Dokument bearbeitet werden kann und unter einer neuen Adresse "
 "veröffentlicht wird."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Eine <strong>neue Version</strong> hingegen steht mit dem Ursprungsdokument "
 "in Zusammenhang:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "es wird wie bei der Kopie ein neues Dokument mit gleichem Inhalt erstellt, "
 "das unabhängig vom ursprünglichen Dokument bearbeitet und als Entwurf "
@@ -1004,29 +1005,29 @@ msgid ""
 "Adresse des alten Dokumentes erreichbar."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Neue Versionen können nur von veröffentlichten Dokumenten erstellt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Eine neue Version sollte erstellt werden, wenn ein bereits veröffentlichtes "
 "Dokument überarbeitet werden muss. Dadurch werden Änderungen an dem Dokument "
 "erst öffentlich sichtbar, wenn sie vollständig erledigt sind."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:22
-#: ../modules/post-versioning/post-versioning.php:45
+#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "Zudem kann für jedes veröffentlichte Dokument eine <strong>netzwerkweite "
 "Version</strong> erstellt werden:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:22
-#: ../modules/post-versioning/post-versioning.php:45
+#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "es wird wie bei der Kopie oder der neuen Version ein neues Dokument mit "
 "gleichem Inhalt erstellt, allerdings nicht innerhalb des eigenen "
@@ -1037,53 +1038,53 @@ msgid ""
 "Spalte <i>Version</i> miteinander verbunden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:22
-#: ../modules/post-versioning/post-versioning.php:32
+#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "Wird ein bereits netzwerkweit versioniertes Dokument nochmals netzwerkweit "
 "gespeichert, wird im anderen Webauftritt eine neue Version als Entwurf "
 "erstellt, die dann übersetzt werden kann."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:24
 msgid ""
 "Sie können auf dieser Seite angeben, für welche Bereiche die Erstellung von "
 "Kopien oder neuer Versionen freigegeben werden soll:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:24
+#: ../modules/post-versioning/post-versioning.php:25
 msgid ""
 "<strong>Lokale Freigabe</strong> - Kopien und neue Versionen innerhalb des "
 "gleichen Webauftritts erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:25
+#: ../modules/post-versioning/post-versioning.php:26
 msgid ""
 "<strong>Netzwerkweite Freigabe</strong> - Neue Versionen in einem anderen, "
 "anderssprachigen Webauftritt erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:26
+#: ../modules/post-versioning/post-versioning.php:27
 msgid ""
 "<strong>Vorhandene Webseiten</strong> - hier erscheinen alle Webauftritte, "
 "die netzwerkweite Freigaben enthalten. In diese können lokale Dokumente "
 "kopiert werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:32
 msgid ""
 "Wenn Sie eine neue lokale Version eines Dokumentes bearbeiten, erhalten Sie "
 "den Hinweis, dass beim Veröffentlichen die Ursprungsversion überschrieben "
 "wird."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:32
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "Für jedes veröffentlichte Dokument kann auch eine <strong>netzwerkweite "
 "Version</strong> erstellt werden:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:32
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "es wird wie ein neues Dokument mit gleichem Inhalt erstellt, allerdings "
 "nicht innerhalb des eigenen Webauftritts, sondern als Entwurf in einem "
@@ -1091,66 +1092,66 @@ msgid ""
 "vorgenommen und das Dokument veröffentlicht werden. "
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:33
-#: ../modules/post-versioning/post-versioning.php:103
+#: ../modules/post-versioning/post-versioning.php:34
+#: ../modules/post-versioning/post-versioning.php:104
 msgid "So erstellen Sie eine netzwerkweite Version eines Dokumentes:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:35
-#: ../modules/post-versioning/post-versioning.php:106
+#: ../modules/post-versioning/post-versioning.php:36
+#: ../modules/post-versioning/post-versioning.php:107
 msgid ""
 "Überprüfen Sie, ob im Kästchen <i>Netzwerkweite Versionierung</i> der "
 "Webauftritt ausgewählt ist, in dem eine neue Version erstellt werden soll"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:35
+#: ../modules/post-versioning/post-versioning.php:36
 msgid ""
 "wenn diese Box nicht erscheint, stellen Sie sicher, dass das Dokument "
 "bereits veröffentlicht ist bzw. lassen Sie sich diese über die Lasche "
 "<i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:36
-#: ../modules/post-versioning/post-versioning.php:107
+#: ../modules/post-versioning/post-versioning.php:37
+#: ../modules/post-versioning/post-versioning.php:108
 msgid ""
 "Aktivieren Sie im Kästchen <i>Veröffentlichen</i> die Schaltfläche "
 "<i>Netzwerkweite Versionierung</i>."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:37
-#: ../modules/post-versioning/post-versioning.php:108
+#: ../modules/post-versioning/post-versioning.php:38
+#: ../modules/post-versioning/post-versioning.php:109
 msgid ""
 "Speichern Sie das Dokument durch <i>Aktualisieren</i>. Eine neue Version "
 "dieses Dokumentes wird im ausgewählten Webauftritt als Entwurf erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:45
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "Wird ein bereits netzwerkweit versioniertes Dokument nochmals netzwerkweit "
 "gespeichert, wird auch im anderen Webauftritt eine neue Version als Entwurf "
 "erstellt, die dann übersetzt werden kann."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:47
-msgid "In der Spalte <i>Version</i> sehen Sie folgende Informationen:"
-msgstr ""
-
 #: ../modules/post-versioning/post-versioning.php:48
-#: ../modules/post-versioning/post-versioning.php:77
-msgid ""
-"<strong>Lokale Kopie</strong> (innerhalb des eigenen Webauftrittes) - kein "
-"Eintrag."
+msgid "In der Spalte <i>Version</i> sehen Sie folgende Informationen:"
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:49
 #: ../modules/post-versioning/post-versioning.php:78
 msgid ""
-"<strong>Neue Version</strong> (innerhalb des eigenen Webauftrittes) - "
-"verlinkter Name des Quelldokumentes, Sprache des Webauftritts."
+"<strong>Lokale Kopie</strong> (innerhalb des eigenen Webauftrittes) - kein "
+"Eintrag."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:50
 #: ../modules/post-versioning/post-versioning.php:79
+msgid ""
+"<strong>Neue Version</strong> (innerhalb des eigenen Webauftrittes) - "
+"verlinkter Name des Quelldokumentes, Sprache des Webauftritts."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:51
+#: ../modules/post-versioning/post-versioning.php:80
 msgid ""
 "<strong>Netzwerkweite Versionierung</strong> (zu einem anderen Webauftritt) "
 "- Pfeil (nach rechts im Quell-Webauftritt oder nach links im Ziel-"
@@ -1158,165 +1159,165 @@ msgid ""
 "Webauftritts."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:51
-#: ../modules/post-versioning/post-versioning.php:80
+#: ../modules/post-versioning/post-versioning.php:52
+#: ../modules/post-versioning/post-versioning.php:81
 msgid ""
 "Außerdem werden die Dokumente am Anfang der Zeile je nach Veröffentlichungs- "
 "und Sichtbarkeitsstatus in unterschiedlichen Farben angezeigt:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:52
-#: ../modules/post-versioning/post-versioning.php:81
-msgid ""
-"<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet."
-msgstr ""
-
 #: ../modules/post-versioning/post-versioning.php:53
 #: ../modules/post-versioning/post-versioning.php:82
 msgid ""
-"<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig "
-"bearbeitet und liegt zur Revision beim Redakteur vor."
+"<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:54
 #: ../modules/post-versioning/post-versioning.php:83
 msgid ""
-"<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur "
-"veröffentlicht, wird nicht farblich hervorgehoben."
+"<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig "
+"bearbeitet und liegt zur Revision beim Redakteur vor."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:55
 #: ../modules/post-versioning/post-versioning.php:84
 msgid ""
-"<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem "
-"Datum veröffentlicht."
+"<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur "
+"veröffentlicht, wird nicht farblich hervorgehoben."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:56
 #: ../modules/post-versioning/post-versioning.php:85
+msgid ""
+"<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem "
+"Datum veröffentlicht."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:57
+#: ../modules/post-versioning/post-versioning.php:86
 msgid ""
 "<strong>Privat</strong> - private Dokumente können nicht im Entwurf "
 "vorliegen, sondern werden gleich veröffentlicht, sind aber nicht öffentlich "
 "sichtbar."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:57
-#: ../modules/post-versioning/post-versioning.php:86
+#: ../modules/post-versioning/post-versioning.php:58
+#: ../modules/post-versioning/post-versioning.php:87
 msgid ""
 "<strong>Passwortgeschützt</strong> - passwortgeschützte Dokumente können "
 "auch Entwürfe sein, farblich überschreibt der Passwortschutz den "
 "Entwurfsstatus."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:58
-#: ../modules/post-versioning/post-versioning.php:87
+#: ../modules/post-versioning/post-versioning.php:59
+#: ../modules/post-versioning/post-versioning.php:88
 msgid ""
 "<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im "
 "Papierkorb."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:60
-#: ../modules/post-versioning/post-versioning.php:88
+#: ../modules/post-versioning/post-versioning.php:61
+#: ../modules/post-versioning/post-versioning.php:89
 msgid "So erstellen Sie eine Kopie eines Dokumentes:"
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:62
-#: ../modules/post-versioning/post-versioning.php:91
-msgid ""
-"Fahren Sie mit der Maus in der Liste über das Dokument, das Sie kopieren "
-"wollen."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:63
 #: ../modules/post-versioning/post-versioning.php:92
 msgid ""
-"Wählen Sie <i>Kopieren</i>. Eine Kopie des Dokumentes wird als Entwurf "
-"geöffnet."
+"Fahren Sie mit der Maus in der Liste über das Dokument, das Sie kopieren "
+"wollen."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:64
 #: ../modules/post-versioning/post-versioning.php:93
+msgid ""
+"Wählen Sie <i>Kopieren</i>. Eine Kopie des Dokumentes wird als Entwurf "
+"geöffnet."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:65
+#: ../modules/post-versioning/post-versioning.php:94
 msgid "Ändern Sie das Dokument und speichern oder veröffentlichen Sie dieses."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:66
-#: ../modules/post-versioning/post-versioning.php:95
+#: ../modules/post-versioning/post-versioning.php:67
+#: ../modules/post-versioning/post-versioning.php:96
 msgid "So erstellen Sie eine neue Version eines Dokumentes:"
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:68
-#: ../modules/post-versioning/post-versioning.php:98
-msgid ""
-"Fahren Sie in der Liste mit der Maus über das Dokument, von dem Sie eine "
-"neue Version erstellen wollen. Das Dokument muss bereits veröffentlicht sein."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:69
 #: ../modules/post-versioning/post-versioning.php:99
 msgid ""
-"Wählen Sie <i>Neue Version</i>. Eine neue Version des Dokumentes wird als "
-"Entwurf geöffnet."
+"Fahren Sie in der Liste mit der Maus über das Dokument, von dem Sie eine "
+"neue Version erstellen wollen. Das Dokument muss bereits veröffentlicht sein."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:70
 #: ../modules/post-versioning/post-versioning.php:100
-msgid "Ändern Sie das Dokument und speichern Sie dieses."
+msgid ""
+"Wählen Sie <i>Neue Version</i>. Eine neue Version des Dokumentes wird als "
+"Entwurf geöffnet."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:71
 #: ../modules/post-versioning/post-versioning.php:101
+msgid "Ändern Sie das Dokument und speichern Sie dieses."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:72
+#: ../modules/post-versioning/post-versioning.php:102
 msgid ""
 "Beim Veröffentlichen wird das ursprüngliche Dokument durch die neue Version "
 "ersetzt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:76
+#: ../modules/post-versioning/post-versioning.php:77
 msgid ""
 "Mit der Freigabe der Versionierung sehen Sie auf den entsprechenden "
 "Übersichtsseiten aller Dokumente die zusätzliche Spalte <i>Version</i> mit "
 "folgenden Informationen:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:90
-#: ../modules/post-versioning/post-versioning.php:97
+#: ../modules/post-versioning/post-versioning.php:91
+#: ../modules/post-versioning/post-versioning.php:98
 msgid ""
 "Gehen Sie in einem freigegebenen Bereich auf die Übersichtsseite über alle "
 "Dokumente."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:105
+#: ../modules/post-versioning/post-versioning.php:106
 msgid ""
 "Gehen Sie auf ein bereits veröffentlichtes Dokument in einem freigegebenen "
 "Bereich."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:113
-#: ../modules/post-versioning/post-versioning.php:137
-#: ../modules/post-versioning/post-versioning.php:145
+#: ../modules/post-versioning/post-versioning.php:114
+#: ../modules/post-versioning/post-versioning.php:138
+#: ../modules/post-versioning/post-versioning.php:146
 msgid "Versionierung"
 msgstr "Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:114
+#: ../modules/post-versioning/post-versioning.php:115
 msgid "Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen."
 msgstr "Create a new version or a copy of an existing document."
 
-#: ../modules/post-versioning/post-versioning.php:153
+#: ../modules/post-versioning/post-versioning.php:154
 msgid "Versionen verwalten"
 msgstr "Manage Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:220
+#: ../modules/post-versioning/post-versioning.php:221
 msgid "Lokale Freigabe"
 msgstr "Local allowance"
 
-#: ../modules/post-versioning/post-versioning.php:222
+#: ../modules/post-versioning/post-versioning.php:223
 msgid "Netzwerkweite Freigabe"
 msgstr "Network-Wide allowance"
 
-#: ../modules/post-versioning/post-versioning.php:233
+#: ../modules/post-versioning/post-versioning.php:234
 msgid "Vorhandene Webseiten"
 msgstr "Existing Web sites"
 
-#: ../modules/post-versioning/post-versioning.php:285
+#: ../modules/post-versioning/post-versioning.php:286
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "dupliziert werden."
@@ -1324,47 +1325,47 @@ msgstr ""
 "Local documents can be as a new version (draft) duplicated in these web "
 "sites."
 
-#: ../modules/post-versioning/post-versioning.php:440
+#: ../modules/post-versioning/post-versioning.php:441
 msgid "Dieses Element als neuen Entwurf kopieren"
 msgstr "Copy this item as a new draft"
 
-#: ../modules/post-versioning/post-versioning.php:441
+#: ../modules/post-versioning/post-versioning.php:442
 msgid "Kopieren"
 msgstr "Copy"
 
-#: ../modules/post-versioning/post-versioning.php:446
+#: ../modules/post-versioning/post-versioning.php:447
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
-#: ../modules/post-versioning/post-versioning.php:447
+#: ../modules/post-versioning/post-versioning.php:448
 msgid "Neue Version"
 msgstr "New version"
 
-#: ../modules/post-versioning/post-versioning.php:455
-#: ../modules/post-versioning/post-versioning.php:724
+#: ../modules/post-versioning/post-versioning.php:456
+#: ../modules/post-versioning/post-versioning.php:653
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
-#: ../modules/post-versioning/post-versioning.php:462
-#: ../modules/post-versioning/post-versioning.php:731
+#: ../modules/post-versioning/post-versioning.php:463
+#: ../modules/post-versioning/post-versioning.php:660
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
-#: ../modules/post-versioning/post-versioning.php:468
-#: ../modules/post-versioning/post-versioning.php:575
+#: ../modules/post-versioning/post-versioning.php:469
+#: ../modules/post-versioning/post-versioning.php:526
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr "You do not have the necessary rights to create a new version."
 
-#: ../modules/post-versioning/post-versioning.php:472
+#: ../modules/post-versioning/post-versioning.php:473
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr "This action is not allowed."
 
-#: ../modules/post-versioning/post-versioning.php:476
+#: ../modules/post-versioning/post-versioning.php:477
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:684
+#: ../modules/post-versioning/post-versioning.php:618
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1374,7 +1375,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:688
+#: ../modules/post-versioning/post-versioning.php:622
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1383,7 +1384,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:705
+#: ../modules/post-versioning/post-versioning.php:639
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1392,12 +1393,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:737
+#: ../modules/post-versioning/post-versioning.php:666
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:741
+#: ../modules/post-versioning/post-versioning.php:670
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1405,19 +1406,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:818
-#: ../modules/post-versioning/post-versioning.php:912
+#: ../modules/post-versioning/post-versioning.php:758
+#: ../modules/post-versioning/post-versioning.php:852
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:868
+#: ../modules/post-versioning/post-versioning.php:808
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:987
+#: ../modules/post-versioning/post-versioning.php:943
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1426,13 +1427,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:993
+#: ../modules/post-versioning/post-versioning.php:950
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:1032
+#: ../modules/post-versioning/post-versioning.php:983
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1441,11 +1442,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1079
+#: ../modules/post-versioning/post-versioning.php:1153
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1090
+#: ../modules/post-versioning/post-versioning.php:1164
 msgid "Version"
 msgstr "Version"
 
@@ -1687,7 +1688,7 @@ msgstr "Normal"
 msgid "Hoch"
 msgstr "High"
 
-#: ../modules/task-list/task-list.php:145
+#: ../modules/task-list/task-list.php:143
 msgid ""
 "Sie sind dabei, die ausgewählte Aufgabe dauerhaft zu löschen. Sind Sie "
 "sicher, dass Sie fortfahren möchten?"
@@ -1695,21 +1696,21 @@ msgstr ""
 "You are about to permanently delete the selected task. Are you sure you want "
 "to continue?"
 
-#: ../modules/task-list/task-list.php:146
-#: ../modules/task-list/task-list.php:344
+#: ../modules/task-list/task-list.php:144
+#: ../modules/task-list/task-list.php:336
 #, php-format
 msgid "Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert."
 msgstr "This Task was marked as done by %1$s on %2$s."
 
-#: ../modules/task-list/task-list.php:184
+#: ../modules/task-list/task-list.php:176
 msgid " + Neue Aufgabe hinzufügen"
 msgstr " + Add New Task"
 
-#: ../modules/task-list/task-list.php:188
+#: ../modules/task-list/task-list.php:180
 msgid "Titel"
 msgstr "Title"
 
-#: ../modules/task-list/task-list.php:192
+#: ../modules/task-list/task-list.php:184
 #: ../modules/user-groups/user-groups.php:405
 #: ../modules/user-groups/user-groups.php:445
 #: ../modules/user-groups/user-groups.php:808
@@ -1717,54 +1718,54 @@ msgstr "Title"
 msgid "Beschreibung"
 msgstr "Description"
 
-#: ../modules/task-list/task-list.php:207
+#: ../modules/task-list/task-list.php:199
 msgid "Aufgabe zuweisen an"
 msgstr "Assign to"
 
-#: ../modules/task-list/task-list.php:210
-#: ../modules/task-list/task-list.php:322
+#: ../modules/task-list/task-list.php:202
+#: ../modules/task-list/task-list.php:314
 msgid "Alle Autoren"
 msgstr "All authors"
 
-#: ../modules/task-list/task-list.php:219
-#: ../modules/task-list/task-list.php:341
+#: ../modules/task-list/task-list.php:211
+#: ../modules/task-list/task-list.php:333
 msgid "Priorität"
 msgstr "Priority"
 
-#: ../modules/task-list/task-list.php:241
+#: ../modules/task-list/task-list.php:233
 msgid "Laden..."
 msgstr "Loading..."
 
-#: ../modules/task-list/task-list.php:245
+#: ../modules/task-list/task-list.php:237
 msgid "Neue Aufgabe hinzufügen"
 msgstr "Add New Task"
 
-#: ../modules/task-list/task-list.php:283
+#: ../modules/task-list/task-list.php:275
 msgid "Keine Aufgaben gefunden."
 msgstr "No tasks found."
 
-#: ../modules/task-list/task-list.php:340
+#: ../modules/task-list/task-list.php:332
 msgid "Besitzer"
 msgstr "Owner"
 
-#: ../modules/task-list/task-list.php:351
+#: ../modules/task-list/task-list.php:343
 msgid "Aufgabe annehmen"
 msgstr "Assign to me"
 
-#: ../modules/task-list/task-list.php:355
+#: ../modules/task-list/task-list.php:347
 msgid "Aufgabe ablehnen"
 msgstr "Unassign from me"
 
-#: ../modules/task-list/task-list.php:360
+#: ../modules/task-list/task-list.php:352
 msgid "Aufgabe löschen"
 msgstr "Delete Task"
 
-#: ../modules/task-list/task-list.php:366
+#: ../modules/task-list/task-list.php:358
 msgid "Aufgabe erledigt"
 msgstr "Mark as done"
 
-#: ../modules/task-list/task-list.php:394
-#: ../modules/task-list/task-list.php:508
+#: ../modules/task-list/task-list.php:386
+#: ../modules/task-list/task-list.php:500
 msgid "Der Titel wird benötigt."
 msgstr "The title is required."
 
@@ -1886,31 +1887,31 @@ msgstr "Download XLIFF file"
 msgid "XLIFF-Datei hochladen:"
 msgstr "Upload XLIFF file:"
 
-#: ../modules/translation/translation.php:364
+#: ../modules/translation/translation.php:370
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr "The type of file you have uploaded is not a XLIFF."
 
-#: ../modules/translation/translation.php:388
+#: ../modules/translation/translation.php:387
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr "The \"Simple XML\" library is missing."
 
-#: ../modules/translation/translation.php:394
-#: ../modules/translation/translation.php:399
+#: ../modules/translation/translation.php:393
+#: ../modules/translation/translation.php:398
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr "The XLIFF file (%s) could not be read."
 
-#: ../modules/translation/translation.php:405
+#: ../modules/translation/translation.php:404
 msgid "Die hochgeladene XLIFF-Datei ist nicht für dieses Dokument geeignet."
 msgstr "The uploaded XLIFF file is not suitable for this document."
 
-#: ../modules/translation/translation.php:428
+#: ../modules/translation/translation.php:436
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
 msgstr "An unexpected error has occurred. The document could not be saved."
 
-#: ../modules/translation/translation.php:466
+#: ../modules/translation/translation.php:478
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr "%1$s. %2$s (%3$s) (%4$s)"
