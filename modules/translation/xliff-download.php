@@ -86,27 +86,50 @@ function get_xliff_file($post_id) {
     $language_code = explode('_', $language_code);
     $language_code = $language_code[0];
 
+    $elements = array(
+        (object) array(
+            'field_type' => 'title',
+            'field_data' => $post->post_title,
+            'field_data_translated' => $post->post_title,
+        ),
+        (object) array(
+            'field_type' => 'body',
+            'field_data' => $post->post_content,
+            'field_data_translated' => $post->post_content,
+        ),
+        (object) array(
+            'field_type' => 'excerpt',
+            'field_data' => $post->post_excerpt,
+            'field_data_translated' => $post->post_excerpt,
+    ));
+
+    $post_meta = get_post_meta($post_id);
+
+    foreach ($post_meta as $post_meta_key => $post_meta_value) {
+        if (strpos($post_meta_key, '_') === 0) {
+            continue;
+        }
+        
+        if (empty($post_meta_value) || count($post_meta_value) == 1) {
+            $post_meta_value = get_post_meta($post_id, $post_meta_key, true);
+        } 
+        
+        else {
+            $post_meta_value = maybe_serialize($post_meta_value);
+        }
+
+        $elements[] = (object) array(
+            'field_type' => '_meta_' . $post_meta_key,
+            'field_data' => $post_meta_value,
+            'field_data_translated' => $post_meta_value,            
+        );
+    }
+    exit;
     $translation = (object) array(
         'original' => md5(sprintf('%d - %d', $blog_id, $post_id)),
         'source_language_code' => $source_language_code,
         'language_code' => $language_code,
-        'elements' => array(
-            (object) array(
-                'field_type' => 'title',
-                'field_data' => $post->post_title,
-                'field_data_translated' => $post->post_title,
-            ),
-            (object) array(
-                'field_type' => 'body',
-                'field_data' => $post->post_content,
-                'field_data_translated' => $post->post_content,
-            ),
-            (object) array(
-                'field_type' => 'excerpt',
-                'field_data' => $post->post_excerpt,
-                'field_data_translated' => $post->post_excerpt,
-            ),
-        ),
+        'elements' => $elements
     );
 
     $xliff_file = '<?xml version="1.0" encoding="utf-8" standalone="no"?>' . PHP_EOL;

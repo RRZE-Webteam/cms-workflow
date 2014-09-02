@@ -357,9 +357,15 @@ class Workflow_Translation extends Workflow_Module {
 
                 if (in_array($arr_file_type['type'], $supported_types)) {
 
-                    $error = $this->import_xliff($post_id, $_FILES['translate_xliff_attachment']);
-                    if (is_wp_error($error))
-                        $this->flash_admin_notice($error->get_error_message(), 'error');
+                    if (!wp_is_post_revision($post_id)) {
+                        remove_action('save_post', array($this, 'save_translate_meta_data'));
+                        $error = $this->import_xliff($post_id, $_FILES['translate_xliff_attachment']);
+                        if (is_wp_error($error)) {
+                            $this->flash_admin_notice($error->get_error_message(), 'error');
+                        }
+                        add_action('save_post', array($this, 'save_translate_meta_data'));
+                    }
+                    
                 } else {
                     $this->flash_admin_notice(__('Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
                 }
@@ -368,13 +374,6 @@ class Workflow_Translation extends Workflow_Module {
     }
 
     public function import_xliff($post_id, $file) {
-
-        if (wp_is_post_revision($post_id)) {
-            return;
-        }
-
-        remove_action('save_post', array($this, 'save_translate_meta_data'));
-
         $blog_id = get_current_blog_id();
 
         $fh = fopen($file['tmp_name'], 'r');
@@ -406,6 +405,7 @@ class Workflow_Translation extends Workflow_Module {
         }
 
         $post_array = array('ID' => $post_id);
+        $post_meta_array = array();
 
         foreach ($xml->file->body->children() as $node) {
             $attr = $node->attributes();
@@ -422,10 +422,22 @@ class Workflow_Translation extends Workflow_Module {
             elseif ($type == 'excerpt') {
                 $post_array['post_excerpt'] = (string) $node->target;
             }
+            
+            elseif (strpos($type, '_meta_') === 0) {
+                $meta_key = substr($type, strlen('_meta_'));
+                if(strlen($meta_key) > 0) {
+                    $meta_value = (string) $node->target;
+                    $post_meta_array[$meta_key] = maybe_unserialize($meta_value);
+                }
+            }
         }
 
         if (!wp_update_post($post_array)) {
             return new WP_Error('post_update_error', __('Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht gespeichert werden.', CMS_WORKFLOW_TEXTDOMAIN));
+        }
+        
+        foreach ($post_meta_array as $meta_key => $meta_value) {
+            update_post_meta($post_id, $meta_key, $meta_value);
         }
     }
 
