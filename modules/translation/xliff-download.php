@@ -124,7 +124,7 @@ function get_xliff_file($post_id) {
             'field_data_translated' => $post_meta_value,            
         );
     }
-    exit;
+
     $translation = (object) array(
         'original' => md5(sprintf('%d - %d', $blog_id, $post_id)),
         'source_language_code' => $source_language_code,
