@@ -680,8 +680,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
             
             $this->add_post_meta($draft_id, $post_meta);
             
-            $post_attached_data = $this->get_post_attached_file($post_id);
-            
             $this->add_post_attached_file($draft_id, $post_attached_data);
             
             wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
@@ -985,8 +983,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 switch_to_blog($blog_id);
                 
                 add_post_meta($remote_post_id, self::version_remote_post_meta, array('blog_id' => $this->source_blog, 'post_id' => $post_id));
-
-                $this->add_post_attached_file($remote_post_id, $post_attached_data);
             }
 
             restore_current_blog();
@@ -1040,7 +1036,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
             'post_type' => 'attachment',
             'numberposts' => -1,
             'post_status' => null,
-            'post_parent' => $source_post_id
+            'post_parent' => $source_post_id,
+            'exclude' => get_post_thumbnail_id($source_post_id),
         );
         
         $attachments = get_posts($args);
@@ -1094,11 +1091,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if (current_theme_supports('post-thumbnails')) {
             $thumbnail_id = get_post_thumbnail_id($post_id);
             if ($thumbnail_id > 0) {
+                $attachment = get_post($thumbnail_id);
                 $source_upload_dir = wp_upload_dir();
                 $attached_file = get_post_meta($thumbnail_id, '_wp_attached_file', true);
                 $attached_pathinfo = pathinfo($attached_file);
                 
                 $attachment = array(
+                    'attachment' => $attachment,
                     'source_upload_dir' => $source_upload_dir,
                     'attached_file' => $attached_file,
                     'attached_pathinfo' => $attached_pathinfo
@@ -1129,10 +1128,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     'post_mime_type' => $wp_filetype['type'],
                     'guid' => $target_upload_dir['url'] . '/' . $filename,
                     'post_parent' => $post_id,
-                    'post_title' => '',
-                    'post_excerpt' => '',
+                    'post_title' => $attachment->post_title,
+                    'post_excerpt' => $attachment->post_excerpt,
                     'post_author' => get_current_user_id(),
-                    'post_content' => '',
+                    'post_content' => $attachment->post_content,
                 );
 
                 $attach_id = wp_insert_attachment($attachment, $target_upload_dir['path'] . '/' . $filename);
