@@ -16,14 +16,15 @@ require_once( dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '
 
 wp_not_installed();
 
-require( ABSPATH . WPINC . '/formatting.php' );
-require( ABSPATH . WPINC . '/capabilities.php' );
-require( ABSPATH . WPINC . '/user.php' );
-require( ABSPATH . WPINC . '/meta.php' );
-require( ABSPATH . WPINC . '/post.php' );
-require( ABSPATH . WPINC . '/kses.php' );
-require( ABSPATH . WPINC . '/ms-functions.php' );
-require_once( ABSPATH . WPINC . '/general-template.php' );
+require(ABSPATH . WPINC . '/formatting.php');
+require(ABSPATH . WPINC . '/capabilities.php');
+require(ABSPATH . WPINC . '/user.php');
+require(ABSPATH . WPINC . '/session.php');
+require(ABSPATH . WPINC . '/meta.php');
+require(ABSPATH . WPINC . '/post.php');
+require(ABSPATH . WPINC . '/kses.php');
+require(ABSPATH . WPINC . '/ms-functions.php');
+require_once(ABSPATH . WPINC . '/general-template.php');
 
 wp_plugin_directory_constants();
 
@@ -42,17 +43,15 @@ if (!is_user_logged_in()) {
 xliff_attachment($post_id);
 
 function xliff_attachment($post_id) {
-    $xliff_file = get_xliff_file($post_id);
-    if (!$xliff_file) {
+    $post = get_post($post_id);
+    
+    if (is_null($post)) {
         exit;
     }
-
-    $sitename = sanitize_key(get_bloginfo('name'));
-    if (!empty($sitename)) {
-        $sitename .= '-';
-    }
-
-    $filename = sprintf('%1$s%2$s-%3$s.xliff', $sitename, $post_id, date('Y-m-d'));
+    
+    $xliff_file = get_xliff_file($post_id, $post);
+    
+    $filename = sanitize_file_name(sprintf('%1$s-%2$s.xliff', $post->post_title, $post->ID));
 
     header('Content-Description: File Transfer');
     header('Content-Disposition: attachment; filename=' . $filename);
@@ -62,13 +61,7 @@ function xliff_attachment($post_id) {
     exit;
 }
 
-function get_xliff_file($post_id) {
-    $blog_id = get_current_blog_id();
-    $post = get_post($post_id);
-
-    if (is_null($post)) {
-        return false;
-    }
+function get_xliff_file($post_id, $post) {
 
     $source_language_code = get_post_meta($post_id, '_translate_from_lang_post_meta', true);
     if ($source_language_code == '') {
@@ -126,7 +119,7 @@ function get_xliff_file($post_id) {
     }
 
     $translation = (object) array(
-        'original' => md5(sprintf('%d - %d', $blog_id, $post_id)),
+        'original' => sanitize_file_name(sprintf('%1$s-%2$s', $post->post_title, $post->ID)),
         'source_language_code' => $source_language_code,
         'language_code' => $language_code,
         'elements' => $elements

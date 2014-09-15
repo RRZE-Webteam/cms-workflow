@@ -374,7 +374,7 @@ class Workflow_Translation extends Workflow_Module {
     }
 
     public function import_xliff($post_id, $file) {
-        $blog_id = get_current_blog_id();
+        $post = get_post($post_id);
 
         $fh = fopen($file['tmp_name'], 'r');
 
@@ -400,8 +400,8 @@ class Workflow_Translation extends Workflow_Module {
 
         $original = (string) $file_attributes['original'];
 
-        if ($original != md5(sprintf('%d - %d', $blog_id, $post_id))) {
-            return new WP_Error('xliff_doesnt_match', __('Die hochgeladene XLIFF-Datei ist nicht für dieses Dokument geeignet.', CMS_WORKFLOW_TEXTDOMAIN));
+        if ($original != sanitize_file_name(sprintf('%1$s-%2$s', $post->post_title, $post->ID))) {
+            $this->flash_admin_notice(__('Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
         }
 
         $post_array = array('ID' => $post_id);
