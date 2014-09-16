@@ -424,8 +424,8 @@ class Workflow_Translation extends Workflow_Module {
             }
             
             elseif (strpos($type, '_meta_') === 0) {
-                $meta_key = substr($type, strlen('_meta_'));
-                if(strlen($meta_key) > 0) {
+                $meta_key = (string) substr($type, strlen('_meta_'));
+                if(strlen(get_post_meta($post_id, $meta_key, true)) > 0) {
                     $meta_value = (string) $node->target;
                     $post_meta_array[$meta_key] = maybe_unserialize($meta_value);
                 }
