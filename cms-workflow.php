@@ -4,12 +4,13 @@
  * Plugin Name: CMS-Workflow
  * Description: Redaktioneller Workflow.
  * Version: 1.6
- * Author: Rolf v. d. Forst
+ * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
+ * Text Domain: cms-workflow
  * License: GPLv2 or later
  */
 
-/*
+/**
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -55,12 +56,12 @@ class CMS_Workflow {
         return self::$instance;
     }
 
-    public static function activation_hook($networkwide) {
+    public static function activation_hook($network_wide) {
         self::verify_requirements();
     }
 
-    public static function deactivation_hook($networkwide) {
-        self::register_hook('deactivation', $networkwide);
+    public static function deactivation_hook($network_wide) {
+        self::register_hook('deactivation', $network_wide);
     }
 
     public static function verify_requirements() {
@@ -80,10 +81,10 @@ class CMS_Workflow {
         }
     }
 
-    private static function register_hook($register, $networkwide) {
+    private static function register_hook($register, $network_wide) {
         global $wpdb, $cms_workflow;
 
-        if (is_multisite() && $networkwide) {
+        if (is_multisite() && $network_wide) {
 
             $old_blog = $wpdb->blogid;
             $blogids = $wpdb->get_col("SELECT blog_id FROM {$wpdb->blogs}");
@@ -101,12 +102,12 @@ class CMS_Workflow {
         $cms_workflow->$register(false);
     }
 
-    private function deactivation($networkwide) {
+    private function deactivation($network_wide) {
         foreach ($this->modules as $mod_name => $mod_data) {
             if ($mod_data->options->activated) {
                 foreach ($this->modules as $mod_name => $mod_data) {
                     if (method_exists($this->$mod_name, 'deactivation')) {
-                        $this->$mod_name->deactivation($networkwide);
+                        $this->$mod_name->deactivation($network_wide);
                     }
                 }
             }

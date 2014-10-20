@@ -1182,7 +1182,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
     public function posts_where($where) {
         if (is_admin() && is_search()) {
-            $s = $_GET['s'];
+            $s = isset($_GET['s']) ? $_GET['s'] : '';
             if (!empty($s)) {
                 if (is_numeric($s)) {
                     global $wpdb;
