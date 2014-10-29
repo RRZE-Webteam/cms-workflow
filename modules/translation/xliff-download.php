@@ -98,23 +98,26 @@ function get_xliff_file($post_id, $post) {
 
     $post_meta = get_post_meta($post_id);
 
-    foreach ($post_meta as $post_meta_key => $post_meta_value) {
-        if (strpos($post_meta_key, '_') === 0) {
+    foreach ($post_meta as $meta_key => $meta_value) {
+        if (strpos($meta_key, '_') === 0) {
             continue;
         }
         
-        if (empty($post_meta_value) || count($post_meta_value) == 1) {
-            $post_meta_value = get_post_meta($post_id, $post_meta_key, true);
-        } 
+        if (empty($meta_value)) {
+            continue;
+        }        
         
-        else {
-            $post_meta_value = maybe_serialize($post_meta_value);
+        $meta_value = array_map('maybe_unserialize', $meta_value);
+        $meta_value = $meta_value[0];
+        
+        if (empty($meta_value) || is_array($meta_value) || is_numeric($meta_value)) {
+            continue;
         }
-
+                
         $elements[] = (object) array(
-            'field_type' => '_meta_' . $post_meta_key,
-            'field_data' => $post_meta_value,
-            'field_data_translated' => $post_meta_value,            
+            'field_type' => '_meta_' . $meta_key,
+            'field_data' => $meta_value,
+            'field_data_translated' => $meta_value,            
         );
     }
 

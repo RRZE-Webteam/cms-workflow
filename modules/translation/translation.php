@@ -158,8 +158,9 @@ class Workflow_Translation extends Workflow_Module {
 
     public function settings_validate($new_options) {
 
-        if (!isset($new_options['post_types']))
+        if (!isset($new_options['post_types'])) {
             $new_options['post_types'] = array();
+        }
 
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
 
@@ -425,10 +426,11 @@ class Workflow_Translation extends Workflow_Module {
             
             elseif (strpos($type, '_meta_') === 0) {
                 $meta_key = (string) substr($type, strlen('_meta_'));
-                if(strlen(get_post_meta($post_id, $meta_key, true)) > 0) {
-                    $meta_value = (string) $node->target;
-                    $post_meta_array[$meta_key] = maybe_unserialize($meta_value);
-                }
+                $meta_value = (string) $node->target;
+                if (!empty($meta_value) && !is_numeric($meta_value)) {
+                    $post_meta_array[$meta_key] = $meta_value;
+                } 
+
             }
         }
 
@@ -436,9 +438,29 @@ class Workflow_Translation extends Workflow_Module {
             return new WP_Error('post_update_error', __('Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht gespeichert werden.', CMS_WORKFLOW_TEXTDOMAIN));
         }
         
-        foreach ($post_meta_array as $meta_key => $meta_value) {
-            update_post_meta($post_id, $meta_key, $meta_value);
+        $post_meta = get_post_meta($post_id);
+
+        foreach ($post_meta as $meta_key => $prev_value) {
+            if (strpos($meta_key, '_') === 0) {
+                continue;
+            }
+
+            if (empty($meta_value)) {
+                continue;
+            }        
+
+            $prev_value = array_map('maybe_unserialize', $prev_value);
+            $prev_value = $prev_value[0];
+
+            if (empty($prev_value) || is_array($prev_value) || is_numeric($prev_value)) {
+                continue;
+            }
+            
+            if(isset($post_meta_array[$meta_key])) {
+                update_post_meta($post_id, $meta_key, $post_meta_array[$meta_key], $prev_value);
+            }
         }
+
     }
 
     public function admin_notices() {
