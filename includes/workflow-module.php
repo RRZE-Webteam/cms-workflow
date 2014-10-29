@@ -339,4 +339,86 @@ class Workflow_Module {
         return $lang_codes;
     }
 
+    public function repopulate_role($role = '') {
+        $allowed_roles = array('editor', 'author');
+        
+        if(!in_array($role, $allowed_roles)) {
+            return false;
+        }
+        
+        remove_role($role);
+        
+        $populate_role = sprintf('populate_%s_role', $role);
+        $this->$populate_role();
+    }
+    
+    private function populate_editor_role() {
+        // Dummy gettext calls to get strings in the catalog.
+        /* translators: user role */
+        _x('Editor', 'User role');
+
+        add_role('editor', 'Editor');
+
+        // Add caps for Editor role
+        $role = get_role('editor');
+        $role->add_cap('moderate_comments');
+        $role->add_cap('manage_categories');
+        $role->add_cap('manage_links');
+        $role->add_cap('upload_files');
+        $role->add_cap('unfiltered_html');
+        $role->add_cap('edit_posts');
+        $role->add_cap('edit_others_posts');
+        $role->add_cap('edit_published_posts');
+        $role->add_cap('publish_posts');
+        $role->add_cap('edit_pages');
+        $role->add_cap('read');
+        $role->add_cap('level_7');
+        $role->add_cap('level_6');
+        $role->add_cap('level_5');
+        $role->add_cap('level_4');
+        $role->add_cap('level_3');
+        $role->add_cap('level_2');
+        $role->add_cap('level_1');
+        $role->add_cap('level_0');
+
+        $role->add_cap('edit_others_pages');
+        $role->add_cap('edit_published_pages');
+        $role->add_cap('publish_pages');
+        $role->add_cap('delete_pages');
+        $role->add_cap('delete_others_pages');
+        $role->add_cap('delete_published_pages');
+        $role->add_cap('delete_posts');
+        $role->add_cap('delete_others_posts');
+        $role->add_cap('delete_published_posts');
+        $role->add_cap('delete_private_posts');
+        $role->add_cap('edit_private_posts');
+        $role->add_cap('read_private_posts');
+        $role->add_cap('delete_private_pages');
+        $role->add_cap('edit_private_pages');
+        $role->add_cap('read_private_pages');
+        
+    }
+    
+    private function populate_author_role() {
+        // Dummy gettext calls to get strings in the catalog.
+        /* translators: user role */
+        _x('Author', 'User role');
+        
+        add_role('author', 'Author');
+        
+        // Add caps for Author role
+        $role = get_role('author');
+        $role->add_cap('upload_files');
+        $role->add_cap('edit_posts');
+        $role->add_cap('edit_published_posts');
+        $role->add_cap('publish_posts');
+        $role->add_cap('read');
+        $role->add_cap('level_2');
+        $role->add_cap('level_1');
+        $role->add_cap('level_0');
+        
+        $role->add_cap('delete_posts');
+        $role->add_cap('delete_published_posts');
+        
+    }
 }

@@ -3,7 +3,7 @@
 /**
  * Plugin Name: CMS-Workflow
  * Description: Redaktioneller Workflow.
- * Version: 1.6
+ * Version: 1.7
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * Text Domain: cms-workflow
@@ -34,7 +34,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.6'; // Plugin-Version
+    const version = '1.7'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
@@ -56,7 +56,7 @@ class CMS_Workflow {
         return self::$instance;
     }
 
-    public static function activation_hook($network_wide) {
+    public static function activation_hook() {
         self::verify_requirements();
     }
 

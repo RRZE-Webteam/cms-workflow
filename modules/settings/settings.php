@@ -394,10 +394,10 @@ class Workflow_Settings extends Workflow_Module {
             wp_die(__('Schummeln, was?', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
-        $new_options = isset($_POST[$cms_workflow->$module_name->module->workflow_options_name]) ? $_POST[$cms_workflow->$module_name->module->workflow_options_name] : array();
+        $new_options = (array) isset($_POST[$cms_workflow->$module_name->module->workflow_options_name]) ? $_POST[$cms_workflow->$module_name->module->workflow_options_name] : '';
 
         if (method_exists($cms_workflow->$module_name, 'settings_validate')) {
-            $new_options = $cms_workflow->$module_name->settings_validate($new_options);
+            $new_options = (array) $cms_workflow->$module_name->settings_validate($new_options);
         }
 
         $new_options = (object) array_merge((array) $cms_workflow->$module_name->module->options, $new_options);

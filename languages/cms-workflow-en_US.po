@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-02 15:52+0100\n"
+"POT-Creation-Date: 2014-10-29 17:06+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cms-workflow.php:70
+#: ../cms-workflow.php:71
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
@@ -27,7 +27,7 @@ msgstr ""
 "Your server is running PHP version %s. Please upgrade at least to PHP "
 "version %s."
 
-#: ../cms-workflow.php:74
+#: ../cms-workflow.php:75
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
@@ -36,30 +36,30 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../cms-workflow.php:209
+#: ../cms-workflow.php:210
 msgid "Konfigurieren"
 msgstr "Configure"
 
-#: ../cms-workflow.php:211
+#: ../cms-workflow.php:212
 msgid "Einstellungen gespeichert."
 msgstr "Settings saved."
 
-#: ../cms-workflow.php:212
+#: ../cms-workflow.php:213
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:213 ../modules/settings/settings.php:394
+#: ../cms-workflow.php:214 ../modules/settings/settings.php:394
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
-#: ../cms-workflow.php:214
+#: ../cms-workflow.php:215
 #: ../modules/editorial-comments/editorial-comments.php:320
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr "You do not have the required permissions to perform this action."
 
-#: ../cms-workflow.php:215
+#: ../cms-workflow.php:216
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
@@ -102,6 +102,16 @@ msgstr "English"
 #: ../includes/workflow-module.php:333
 msgid "Spanisch"
 msgstr "Spanish"
+
+#: ../includes/workflow-module.php:358
+msgctxt "User role"
+msgid "Editor"
+msgstr ""
+
+#: ../includes/workflow-module.php:405
+msgctxt "User role"
+msgid "Author"
+msgstr ""
 
 #: ../modules/authors/authors.php:23
 msgid "Beitrag veröffentlichen"
@@ -148,8 +158,8 @@ msgid ""
 "ansehen, erstellen, bearbeiten und löschen, Dateien hochladen)."
 msgstr ""
 
-#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:237
-#: ../modules/authors/authors.php:643
+#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:216
+#: ../modules/authors/authors.php:622
 msgid "Autoren"
 msgstr "Authors"
 
@@ -187,64 +197,64 @@ msgstr ""
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
 
-#: ../modules/authors/authors.php:174 ../modules/editors/editors.php:176
+#: ../modules/authors/authors.php:153 ../modules/editors/editors.php:155
 #, php-format
 msgid "%s bearbeiten"
 msgstr "Edit %s"
 
-#: ../modules/authors/authors.php:178 ../modules/editors/editors.php:184
+#: ../modules/authors/authors.php:157 ../modules/editors/editors.php:163
 #, php-format
 msgid "%s löschen"
 msgstr "Delete %s"
 
-#: ../modules/authors/authors.php:182 ../modules/editors/editors.php:180
+#: ../modules/authors/authors.php:161 ../modules/editors/editors.php:159
 #, php-format
 msgid "%s veröffentlichen"
 msgstr "Publish %s"
 
-#: ../modules/authors/authors.php:186 ../modules/editors/editors.php:188
+#: ../modules/authors/authors.php:165 ../modules/editors/editors.php:167
 #, php-format
 msgid "Veröffentlichte %s bearbeiten"
 msgstr "Edit Published %s"
 
-#: ../modules/authors/authors.php:190 ../modules/editors/editors.php:192
+#: ../modules/authors/authors.php:169 ../modules/editors/editors.php:171
 #, php-format
 msgid "Veröffentlichte %s löschen"
 msgstr "Delete Published %s"
 
-#: ../modules/authors/authors.php:219
+#: ../modules/authors/authors.php:198
 #: ../modules/user-groups/user-groups.php:120
 msgid "Alle"
 msgstr "All"
 
-#: ../modules/authors/authors.php:220
+#: ../modules/authors/authors.php:199
 #: ../modules/user-groups/user-groups.php:121
 msgid "Ausgewählt"
 msgstr "Selected"
 
-#: ../modules/authors/authors.php:221
+#: ../modules/authors/authors.php:200
 #: ../modules/user-groups/user-groups.php:122
 msgid "Suchen..."
 msgstr "Search..."
 
-#: ../modules/authors/authors.php:244
+#: ../modules/authors/authors.php:223
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr "Select the authors for this document"
 
-#: ../modules/authors/authors.php:246
+#: ../modules/authors/authors.php:225
 #: ../modules/user-groups/user-groups.php:380
 #: ../modules/user-groups/user-groups.php:809
 msgid "Benutzer"
 msgstr "User"
 
-#: ../modules/authors/authors.php:263
+#: ../modules/authors/authors.php:242
 #: ../modules/user-groups/user-groups.php:41
 #: ../modules/user-groups/user-groups.php:70
 #: ../modules/user-groups/user-groups.php:473
 msgid "Benutzergruppen"
 msgstr "User Groups"
 
-#: ../modules/authors/authors.php:769
+#: ../modules/authors/authors.php:748
 #, php-format
 msgctxt "authors"
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
@@ -252,14 +262,14 @@ msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] "My %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[1] "My %1$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:773
+#: ../modules/authors/authors.php:752
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:1040
+#: ../modules/authors/authors.php:1019
 #: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:214
+#: ../modules/editors/editors.php:193
 #: ../modules/notifications/notifications.php:409
 #: ../modules/post-versioning/post-versioning.php:239
 #: ../modules/task-list/task-list.php:549
@@ -268,7 +278,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 msgid "Freigabe"
 msgstr "Allowed Post Types"
 
-#: ../modules/authors/authors.php:1041
+#: ../modules/authors/authors.php:1020
 msgid "Autorenrechte"
 msgstr "Authors Capabilities"
 
@@ -690,22 +700,22 @@ msgstr "Editors"
 msgid "Verwaltung der Redakteure."
 msgstr "Editors administration."
 
-#: ../modules/editors/editors.php:196
+#: ../modules/editors/editors.php:175
 #, php-format
 msgid "Private %s lesen"
 msgstr "Read Private %s"
 
-#: ../modules/editors/editors.php:200
+#: ../modules/editors/editors.php:179
 #, php-format
 msgid "Private %s bearbeiten"
 msgstr "Edit Private %s"
 
-#: ../modules/editors/editors.php:204
+#: ../modules/editors/editors.php:183
 #, php-format
 msgid "Private %s löschen"
 msgstr "Delete Private %s"
 
-#: ../modules/editors/editors.php:215
+#: ../modules/editors/editors.php:194
 msgid "Redakteurerechte"
 msgstr "Editors Capabilities"
 
@@ -1406,19 +1416,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:758
-#: ../modules/post-versioning/post-versioning.php:852
+#: ../modules/post-versioning/post-versioning.php:756
+#: ../modules/post-versioning/post-versioning.php:850
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:808
+#: ../modules/post-versioning/post-versioning.php:806
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:943
+#: ../modules/post-versioning/post-versioning.php:941
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1427,13 +1437,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:950
+#: ../modules/post-versioning/post-versioning.php:948
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:983
+#: ../modules/post-versioning/post-versioning.php:981
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1442,11 +1452,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1153
+#: ../modules/post-versioning/post-versioning.php:1152
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1164
+#: ../modules/post-versioning/post-versioning.php:1163
 msgid "Version"
 msgstr "Version"
 
@@ -1836,7 +1846,7 @@ msgstr ""
 
 #: ../modules/translation/translation.php:40
 #: ../modules/translation/translation.php:63
-#: ../modules/translation/translation.php:239
+#: ../modules/translation/translation.php:240
 msgid "Übersetzung"
 msgstr "Translation"
 
@@ -1857,61 +1867,62 @@ msgstr "Add related websites"
 msgid "%2$s (%3$s) (%4$s)"
 msgstr "%2$s (%3$s) (%4$s)"
 
-#: ../modules/translation/translation.php:275
+#: ../modules/translation/translation.php:276
 #, php-format
 msgid "Übersetzung von <i>%1$s</i> nach <i>%2$s</i>."
 msgstr "Translation from <i>%1$s</i> to <i>%2$s</i>."
 
-#: ../modules/translation/translation.php:286
+#: ../modules/translation/translation.php:287
 msgid "Aus der Sprache:"
 msgstr "From the language:"
 
-#: ../modules/translation/translation.php:288
-#: ../modules/translation/translation.php:298
+#: ../modules/translation/translation.php:289
+#: ../modules/translation/translation.php:299
 msgid "Wählen"
 msgstr "Select"
 
-#: ../modules/translation/translation.php:296
+#: ../modules/translation/translation.php:297
 msgid "In die Sprache:"
 msgstr "To the language:"
 
-#: ../modules/translation/translation.php:306
+#: ../modules/translation/translation.php:307
 msgid "Bitte wählen Sie die Übersetzungssprachen aus"
 msgstr "Please select the translation of languages ​​from"
 
-#: ../modules/translation/translation.php:315
+#: ../modules/translation/translation.php:316
 msgid "XLIFF-Datei herunterladen"
 msgstr "Download XLIFF file"
 
-#: ../modules/translation/translation.php:317
+#: ../modules/translation/translation.php:318
 msgid "XLIFF-Datei hochladen:"
 msgstr "Upload XLIFF file:"
 
-#: ../modules/translation/translation.php:370
+#: ../modules/translation/translation.php:371
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr "The type of file you have uploaded is not a XLIFF."
 
-#: ../modules/translation/translation.php:387
+#: ../modules/translation/translation.php:388
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr "The \"Simple XML\" library is missing."
 
-#: ../modules/translation/translation.php:393
-#: ../modules/translation/translation.php:398
+#: ../modules/translation/translation.php:394
+#: ../modules/translation/translation.php:399
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr "The XLIFF file (%s) could not be read."
 
-#: ../modules/translation/translation.php:404
-msgid "Die hochgeladene XLIFF-Datei ist nicht für dieses Dokument geeignet."
+#: ../modules/translation/translation.php:405
+msgid ""
+"Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein."
 msgstr "The uploaded XLIFF file is not suitable for this document."
 
-#: ../modules/translation/translation.php:436
+#: ../modules/translation/translation.php:438
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
 msgstr "An unexpected error has occurred. The document could not be saved."
 
-#: ../modules/translation/translation.php:478
+#: ../modules/translation/translation.php:500
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr "%1$s. %2$s (%3$s) (%4$s)"
