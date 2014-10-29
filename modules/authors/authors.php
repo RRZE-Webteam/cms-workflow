@@ -109,34 +109,13 @@ class Workflow_Authors extends Workflow_Module {
         add_filter('author_edit_pre', array($this, 'author_edit_pre_filter'), 10, 2);
     }
 
-    public function deactivation() {
-        $role = get_role(self::role);
-
-        $role_caps = array_keys($this->module->options->role_caps);
-
-        foreach ($role_caps as $cap) {
-            $role->remove_cap($cap);
-        }
-
-        $wp_role_caps = array_keys($this->wp_role_caps);
-
-        foreach ($wp_role_caps as $cap) {
-            $role->add_cap($cap);
-        }
+    public function deactivation($network_wide = false) {
+        $this->repopulate_role(self::role);
     }
 
     public function activation() {
-        global $cms_workflow;
 
-        if (empty($this->module->options->role_caps)) {
-
-            $this->module->options->role_caps = array_map(function($item) {
-                return true;
-            }, $this->wp_role_caps);
-            $cms_workflow->update_module_option($this->module->name, 'role_caps', $this->module->options->role_caps);
-        } 
-        
-        else {
+        if (!empty($this->module->options->role_caps)) {
             $role = get_role(self::role);
 
             $role_caps = array_keys(array_merge($this->wp_role_caps, $this->more_role_caps));
