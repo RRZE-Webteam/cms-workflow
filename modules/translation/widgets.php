@@ -28,7 +28,7 @@ class Workflow_Translation_Widget extends WP_Widget {
             'redirect_page_id' => $instance['widget_redirect_page_id']
         );
 
-        $output = Workflow_Translation::get_translated_sites($data);
+        $output = Workflow_Translation::get_related_posts($data);
         
         if ('' == $output) {
             return;
