@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-29 17:06+0100\n"
+"POT-Creation-Date: 2014-12-03 16:02+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -169,7 +169,7 @@ msgstr ""
 #: ../modules/notifications/notifications.php:38
 #: ../modules/post-versioning/post-versioning.php:129
 #: ../modules/settings/settings.php:36 ../modules/task-list/task-list.php:68
-#: ../modules/translation/translation.php:54
+#: ../modules/translation/translation.php:56
 #: ../modules/user-groups/user-groups.php:61
 msgid "Übersicht"
 msgstr ""
@@ -180,7 +180,7 @@ msgstr ""
 #: ../modules/notifications/notifications.php:41
 #: ../modules/post-versioning/post-versioning.php:132
 #: ../modules/settings/settings.php:39 ../modules/task-list/task-list.php:71
-#: ../modules/translation/translation.php:57
+#: ../modules/translation/translation.php:59
 #: ../modules/user-groups/user-groups.php:64
 msgid ""
 "<p><strong>Für mehr Information:</strong></p><p><a href=\"http://blogs.fau."
@@ -265,7 +265,7 @@ msgstr ""
 #: ../modules/notifications/notifications.php:409
 #: ../modules/post-versioning/post-versioning.php:239
 #: ../modules/task-list/task-list.php:549
-#: ../modules/translation/translation.php:128
+#: ../modules/translation/translation.php:130
 #: ../modules/user-groups/user-groups.php:343
 msgid "Freigabe"
 msgstr ""
@@ -1337,17 +1337,17 @@ msgid "Neue Version"
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:456
-#: ../modules/post-versioning/post-versioning.php:653
+#: ../modules/post-versioning/post-versioning.php:608
 msgid "Es wurde kein Element geliefert."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:463
-#: ../modules/post-versioning/post-versioning.php:660
+#: ../modules/post-versioning/post-versioning.php:615
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:469
-#: ../modules/post-versioning/post-versioning.php:526
+#: ../modules/post-versioning/post-versioning.php:518
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr ""
@@ -1360,7 +1360,7 @@ msgstr ""
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:618
+#: ../modules/post-versioning/post-versioning.php:573
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1368,67 +1368,67 @@ msgid ""
 "&bdquo;Veröffentlichen&rdquo; klicken."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:622
+#: ../modules/post-versioning/post-versioning.php:577
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
 "a>&ldquo;."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:639
+#: ../modules/post-versioning/post-versioning.php:594
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
 "\"__blank\">%2$s</a>&ldquo; - %3$s - %4$s."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:666
+#: ../modules/post-versioning/post-versioning.php:621
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:670
+#: ../modules/post-versioning/post-versioning.php:625
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:756
-#: ../modules/post-versioning/post-versioning.php:850
+#: ../modules/post-versioning/post-versioning.php:711
+#: ../modules/post-versioning/post-versioning.php:805
 msgid "Netzwerkweite Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:806
+#: ../modules/post-versioning/post-versioning.php:761
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:941
+#: ../modules/post-versioning/post-versioning.php:909
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:948
+#: ../modules/post-versioning/post-versioning.php:919
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:981
+#: ../modules/post-versioning/post-versioning.php:952
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
 "- %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1152
+#: ../modules/post-versioning/post-versioning.php:1125
 msgid "Nr."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1163
+#: ../modules/post-versioning/post-versioning.php:1136
 msgid "Version"
 msgstr ""
 
@@ -1745,39 +1745,39 @@ msgstr ""
 msgid "Der Titel wird benötigt."
 msgstr ""
 
-#: ../modules/translation/translation.php:16
-#: ../modules/translation/translation.php:28
+#: ../modules/translation/translation.php:18
+#: ../modules/translation/translation.php:30
 msgid ""
 "Mit dem Übersetzungsmodul haben Sie die Möglichkeit, mehrsprachige Versionen "
 "Ihrer Seiten zu erstellen, indem Sie XLIFF-Dateien im- und exportieren."
 msgstr ""
 
-#: ../modules/translation/translation.php:16
+#: ../modules/translation/translation.php:18
 msgid ""
 "Sie können auf dieser Seite auswählen, für welche Bereiche die Verwendung "
 "von XLIFF-Dateien freigegeben werden soll."
 msgstr ""
 
-#: ../modules/translation/translation.php:17
-#: ../modules/translation/translation.php:29
+#: ../modules/translation/translation.php:19
+#: ../modules/translation/translation.php:31
 msgid "So erstellen Sie eine anderssprachige Version eines Dokumentes:"
 msgstr ""
 
-#: ../modules/translation/translation.php:19
+#: ../modules/translation/translation.php:21
 msgid ""
 "Erstellen Sie ein neues Dokument oder gehen Sie auf ein bereits erstelltes "
 "Dokument in einem freigegebenen Bereich."
 msgstr ""
 
-#: ../modules/translation/translation.php:19
-#: ../modules/translation/translation.php:31
+#: ../modules/translation/translation.php:21
+#: ../modules/translation/translation.php:33
 msgid ""
 "Das Dokument muss gespeichert, darf aber nicht veröffentlicht sein (Status "
 "<i>Entwurf</i> oder <i>Ausstehender Review</i>)."
 msgstr ""
 
-#: ../modules/translation/translation.php:20
-#: ../modules/translation/translation.php:32
+#: ../modules/translation/translation.php:22
+#: ../modules/translation/translation.php:34
 msgid ""
 "Wählen Sie im Kästchen <i>Übersetzung</i> aus, von welcher Sprache Sie in "
 "welche Sprache übersetzen wollen (wenn diese Box nicht erscheint, überprüfen "
@@ -1785,22 +1785,22 @@ msgid ""
 "<i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen)."
 msgstr ""
 
-#: ../modules/translation/translation.php:21
-#: ../modules/translation/translation.php:33
+#: ../modules/translation/translation.php:23
+#: ../modules/translation/translation.php:35
 msgid ""
 "Nach dem Speichern des Dokumentes können Sie über <i>XLIFF-Datei "
 "herunterladen</i> die XLIFF-Datei des Dokumentes auf Ihrem Rechner speichern "
 "und mit einem externen Übersetzungsprogramm übersetzen lassen."
 msgstr ""
 
-#: ../modules/translation/translation.php:22
-#: ../modules/translation/translation.php:34
+#: ../modules/translation/translation.php:24
+#: ../modules/translation/translation.php:36
 msgid ""
 "Die übersetzte XLIFF-Datei können Sie über die Schaltfläche <i>Durchsuchen..."
 "</i> hochladen."
 msgstr ""
 
-#: ../modules/translation/translation.php:24
+#: ../modules/translation/translation.php:26
 msgid ""
 "Wenn Sie die Versionierung aktiviert haben, können Sie auch ein bestehendes "
 "Dokument kopieren oder eine neue Version erstellen und hieraus ein "
@@ -1810,85 +1810,85 @@ msgid ""
 "angegeben sind."
 msgstr ""
 
-#: ../modules/translation/translation.php:40
-#: ../modules/translation/translation.php:63
-#: ../modules/translation/translation.php:240
+#: ../modules/translation/translation.php:42
+#: ../modules/translation/translation.php:65
+#: ../modules/translation/translation.php:242
 msgid "Übersetzung"
 msgstr ""
 
-#: ../modules/translation/translation.php:41
+#: ../modules/translation/translation.php:43
 msgid "Import und Export von XLIFF-Dateien."
 msgstr ""
 
-#: ../modules/translation/translation.php:131
+#: ../modules/translation/translation.php:133
 msgid "Bereits übersetzte Webseiten"
 msgstr ""
 
-#: ../modules/translation/translation.php:134
+#: ../modules/translation/translation.php:136
 msgid "Bezogenen Webseiten hinzufügen"
 msgstr ""
 
-#: ../modules/translation/translation.php:146
+#: ../modules/translation/translation.php:148
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
 msgstr ""
 
-#: ../modules/translation/translation.php:276
+#: ../modules/translation/translation.php:278
 #, php-format
 msgid "Übersetzung von <i>%1$s</i> nach <i>%2$s</i>."
 msgstr ""
 
-#: ../modules/translation/translation.php:287
+#: ../modules/translation/translation.php:289
 msgid "Aus der Sprache:"
 msgstr ""
 
-#: ../modules/translation/translation.php:289
-#: ../modules/translation/translation.php:299
+#: ../modules/translation/translation.php:291
+#: ../modules/translation/translation.php:301
 msgid "Wählen"
 msgstr ""
 
-#: ../modules/translation/translation.php:297
+#: ../modules/translation/translation.php:299
 msgid "In die Sprache:"
 msgstr ""
 
-#: ../modules/translation/translation.php:307
+#: ../modules/translation/translation.php:309
 msgid "Bitte wählen Sie die Übersetzungssprachen aus"
 msgstr ""
 
-#: ../modules/translation/translation.php:316
+#: ../modules/translation/translation.php:318
 msgid "XLIFF-Datei herunterladen"
 msgstr ""
 
-#: ../modules/translation/translation.php:318
+#: ../modules/translation/translation.php:320
 msgid "XLIFF-Datei hochladen:"
 msgstr ""
 
-#: ../modules/translation/translation.php:371
+#: ../modules/translation/translation.php:373
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr ""
 
-#: ../modules/translation/translation.php:388
+#: ../modules/translation/translation.php:390
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr ""
 
-#: ../modules/translation/translation.php:394
-#: ../modules/translation/translation.php:399
+#: ../modules/translation/translation.php:396
+#: ../modules/translation/translation.php:401
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr ""
 
-#: ../modules/translation/translation.php:405
+#: ../modules/translation/translation.php:407
 msgid ""
 "Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein."
 msgstr ""
 
-#: ../modules/translation/translation.php:438
+#: ../modules/translation/translation.php:440
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
 msgstr ""
 
-#: ../modules/translation/translation.php:500
+#: ../modules/translation/translation.php:502
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr ""
@@ -1901,49 +1901,49 @@ msgstr ""
 msgid "Multisite-Sprachwechsler"
 msgstr ""
 
-#: ../modules/translation/widgets.php:67
+#: ../modules/translation/widgets.php:65
 msgid "Titel:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:71
+#: ../modules/translation/widgets.php:69
 msgid "Sortierung:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:73
+#: ../modules/translation/widgets.php:71
 msgid "nach Webseitennamen"
 msgstr ""
 
-#: ../modules/translation/widgets.php:74
+#: ../modules/translation/widgets.php:72
 msgid "nach Webseiten-ID"
 msgstr ""
 
-#: ../modules/translation/widgets.php:78
+#: ../modules/translation/widgets.php:76
 msgid "Linktyp:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:80
+#: ../modules/translation/widgets.php:78
 msgid "Text"
 msgstr ""
 
-#: ../modules/translation/widgets.php:81
+#: ../modules/translation/widgets.php:79
 msgid "Sprachcode"
 msgstr ""
 
-#: ../modules/translation/widgets.php:85
+#: ../modules/translation/widgets.php:83
 msgid "Aktuelle Webseite zeigen:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:89
+#: ../modules/translation/widgets.php:87
 msgid "Weiterleitungsseite (statische Seite):"
 msgstr ""
 
-#: ../modules/translation/widgets.php:95
+#: ../modules/translation/widgets.php:93
 msgid "— Startseite der übersetzten Webseite —"
 msgstr ""
 
-#: ../modules/translation/widgets.php:101
+#: ../modules/translation/widgets.php:100
 msgid ""
-"Lokale Standardseite, die im Falle einer nicht übersetztes Dokument "
+"Lokale Standardseite, die im Falle eines nicht-übersetzten Dokument "
 "angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite)."
 msgstr ""
 

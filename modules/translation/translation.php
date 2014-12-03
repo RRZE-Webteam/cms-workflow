@@ -5,8 +5,10 @@ class Workflow_Translation extends Workflow_Module {
     const translate_from_lang_post_meta = '_translate_from_lang_post_meta';
     const translate_to_lang_post_meta = '_translate_to_lang_post_meta';
 
+    public static $alternate_posts;
+    
     public $module;
-
+    
     public function __construct() {
         global $cms_workflow;
 
@@ -71,8 +73,6 @@ class Workflow_Translation extends Workflow_Module {
     }
 
     public function init() {
-        require_once( CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/functions.php' );
-
         require_once( CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/widgets.php' );
 
         add_action('widgets_init', array($this, 'register_widgets'));
@@ -84,7 +84,7 @@ class Workflow_Translation extends Workflow_Module {
         add_action('admin_init', array($this, 'register_settings'));
 
         add_action('admin_notices', array($this, 'admin_notices'));
-
+                
         $post_type = $this->get_current_post_type();
 
         if ($this->is_post_type_enabled($post_type)) {
@@ -96,6 +96,8 @@ class Workflow_Translation extends Workflow_Module {
 
             add_action('save_post', array($this, 'save_translate_meta_data'));
         }
+        
+        add_action('template_redirect', array($this, 'set_alternate_posts'));
     }
 
     public function enqueue_admin_scripts() {
@@ -511,4 +513,249 @@ class Workflow_Translation extends Workflow_Module {
         register_widget('Workflow_Translation_Widget');
     }
 
+    public static function get_dropdown_pages($args = '') {
+        $defaults = array(
+            'depth' => 0,
+            'child_of' => 0,
+            'selected' => 0,
+            'name' => 'page_id',
+            'id' => '',
+            'show_option_none' => '',
+            'show_option_no_change' => '',
+            'option_none_value' => '',
+            'class' => 'widefat'
+        );
+
+        $r = wp_parse_args( $args, $defaults );
+        extract( $r, EXTR_SKIP );
+
+        $pages = get_pages($r);
+        $output = '';
+        if (empty($id)) {
+            $id = $name;
+        }
+
+        if (!empty($pages)) {
+            $output = "<select name='" . esc_attr($name) . "' id='" . esc_attr($id) . "' class='" . esc_attr($class) . "'>\n";
+            if ( $show_option_no_change ) {
+                $output .= "\t<option value=\"-1\">$show_option_no_change</option>";
+            }
+            if ( $show_option_none ) {
+                $output .= "\t<option value=\"" . esc_attr($option_none_value) . "\">$show_option_none</option>\n";
+            }
+            $output .= walk_page_dropdown_tree($pages, $depth, $r);
+            $output .= "</select>\n";
+        }
+        
+        return $output;
+    }
+        
+    public static function get_related_posts($args = '') {
+        global $cms_workflow;
+        
+        $defaults = array(
+            'linktext' => 'text',
+            'order' => 'blogid',
+            'show_current_blog' => false,
+            'echo' => false,
+            'redirect_page_id' => 0
+        );
+        
+        $r = wp_parse_args($args, $defaults);
+        
+        $alternate_posts = self::$alternate_posts;
+        
+        if (empty($alternate_posts)) {
+            return '';
+        }
+        
+        extract($r, EXTR_SKIP);
+        
+        extract($alternate_posts, EXTR_SKIP);
+        
+        if ($show_current_blog) {
+            $current_blog = get_blog_details(get_current_blog_id());
+            $sitelang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+
+            $related_sites[] = array(
+                'blog_id' => get_current_blog_id(),
+                'blogname' => $current_blog->blogname,
+                'siteurl' => $current_blog->siteurl,
+                'sitelang' => $sitelang
+            );
+        }
+
+        if ($order == 'blogid') {
+            $related_sites = self::array_orderby($related_sites, 'blog_id', SORT_ASC);
+        } else {
+            $related_sites = self::array_orderby($related_sites, 'blogname', SORT_ASC);
+        }
+        
+        $related_posts = array();
+        $related_posts_output = '<div class="workflow-language mlp_language_box"><ul>';
+
+        foreach ($related_sites as $site) {
+
+            $sitelang = explode('_', $site['sitelang']);
+            $sitelang = end($sitelang);
+            $hreflang = strtolower($sitelang);
+
+            if ('text' == $linktext) {
+                $display = $cms_workflow->translation->get_lang_name($site['sitelang']);
+            } else {
+                $display = $sitelang;
+            }
+
+            $a_id = (get_current_blog_id() == $site['blog_id']) ? 'id="lang-current-locale"' : '';
+            $li_class = (get_current_blog_id() == $site['blog_id']) ? 'class="lang-current current"' : '';
+
+            if (isset($remote_permalink[$site['blog_id']])) {
+                $href = $remote_permalink[$site['blog_id']];
+            } elseif (is_singular() && get_current_blog_id() == $site['blog_id']) {
+                $href = get_permalink($current_post_id);
+            } elseif ($redirect_page_id > 0) {
+                $href = get_permalink($redirect_page_id);
+            } else {
+                $href = get_site_url($site['blog_id']);
+            }
+
+            $related_posts[$href] = $hreflang;
+            $related_posts_output .= sprintf('<li %1$s><a rel="alternate" hreflang="%2$s" href="%3$s" %4$s>%5$s</a></li>', $li_class, $hreflang, $href, $a_id, $display, PHP_EOL);
+        }
+                        
+        $related_posts_output .= '</ul></div>';
+        
+        $output = apply_filters('workflow_translation_related_posts', $related_posts_output, $related_posts, $related_sites, $args);
+        
+        if ($echo === true) {
+            echo $output;
+        }
+
+        else {
+            return $output;
+        }
+    }
+    
+    public static function get_rel_alternate() {
+        $alternate_posts = self::$alternate_posts;
+        
+        if (empty($alternate_posts)) {
+            return '';
+        }
+
+        extract($alternate_posts, EXTR_SKIP);
+        
+        $related_sites = self::array_orderby($related_sites, 'blog_id', SORT_ASC);
+        
+        $rel_alternate = array();
+        $rel_alternate_output = '';
+        
+        foreach ($related_sites as $site) {
+
+            $sitelang = explode('_', $site['sitelang']);
+            $sitelang = end($sitelang);
+            $hreflang = strtolower($sitelang);
+
+            if (isset($remote_permalink[$site['blog_id']])) {
+                $href = $remote_permalink[$site['blog_id']];
+            } elseif (is_singular() && get_current_blog_id() == $site['blog_id']) {
+                $href = get_permalink($current_post_id);
+            } else {
+                $href = '';
+            }
+            
+            if(get_current_blog_id() != $site['blog_id'] && $href) {
+                $rel_alternate[$href] = $hreflang;
+                $rel_alternate_output .= sprintf('<link rel="alternate" hreflang="%1$s" href="%2$s">%3$s', $hreflang, $href, PHP_EOL);
+            }
+            
+        }
+                
+        return apply_filters('workflow_translation_rel_alternate', $rel_alternate_output, $rel_alternate, $related_sites);
+    }
+    
+    public function set_alternate_posts() {
+        self::$alternate_posts = $this->get_alternate_posts();
+    }
+    
+    private function get_alternate_posts() {
+        global $wp_query, $cms_workflow;
+
+        $alternate_posts = array();
+        
+        $related_sites = $cms_workflow->translation->module->options->related_sites;
+
+        if (!( 0 < count($related_sites) )) {
+            return $alternate_posts;
+        }
+
+        $default_post = get_post();
+
+        if ($default_post) {
+            $current_post_id = $default_post->ID;
+        } elseif (!empty($wp_query->queried_object) && !empty($wp_query->queried_object->ID)) {
+            $current_post_id = $wp_query->queried_object->ID;
+        } else {
+            $current_post_id = 0;
+        }
+
+        $translate_from_lang = array();
+        $remote_permalink = array();
+
+        if ($current_post_id && isset($cms_workflow->post_versioning) && $cms_workflow->post_versioning->module->options->activated) {
+
+            $post = get_post($current_post_id);
+
+            $remote_post_metas = get_post_meta($post->ID, Workflow_Post_Versioning::version_remote_post_meta);
+
+            if (empty($remote_post_metas)) {
+                $remote_post_metas = get_post_meta($post->ID, Workflow_Post_Versioning::version_remote_parent_post_meta);
+            }
+
+            foreach ($remote_post_metas as $remote_post_meta) {
+
+                if (isset($remote_post_meta['blog_id']) && isset($remote_post_meta['post_id'])) {
+
+                    if (switch_to_blog($remote_post_meta['blog_id'])) {
+
+                        $remote_post = get_post($remote_post_meta['post_id']);
+
+                        if (!is_null($remote_post) && ( 'publish' === $remote_post->post_status || ( 'private' === $remote_post->post_status && is_super_admin() ))) {
+                            $translate_from_lang[$remote_post_meta['blog_id']] = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                            $remote_permalink[$remote_post_meta['blog_id']] = get_permalink($remote_post_meta['post_id']);
+                        }
+
+                        restore_current_blog();
+                    }
+                }
+            }
+        }
+
+        $alternate_posts = array(
+            'current_post_id' => $current_post_id,
+            'related_sites' => $related_sites,
+            'translate_from_lang' => $translate_from_lang,
+            'remote_permalink' => $remote_permalink
+        );
+        
+        return $alternate_posts;
+    }
+    
+    private static function array_orderby() {
+        $args = func_get_args();
+        $data = array_shift($args);
+        foreach ($args as $n => $field) {
+            if (is_string($field)) {
+                $tmp = array();
+                foreach ($data as $key => $row) {
+                    $tmp[$key] = $row[$field];
+                }
+                $args[$n] = $tmp;
+            }
+        }
+        $args[] = &$data;
+        call_user_func_array('array_multisort', $args);
+        return array_pop($args);
+    }
+    
 }
