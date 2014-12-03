@@ -14,23 +14,22 @@ class Workflow_Translation_Widget extends WP_Widget {
     }
 
     public function widget($args, $instance) {
-
         extract($args, EXTR_SKIP);
 
         if (!isset($instance['widget_sort_order'])) {
             $instance['widget_sort_order'] = 'blogid';
         }
 
-        $output = workflow_get_translated_sites(
-                array(
-                    'linktext' => $instance['widget_link_type'],
-                    'sort' => $instance['widget_sort_order'],
-                    'show_current_blog' => $instance['widget_show_current_blog'] == '1' ? true : false,
-                    'echo' => false,
-                    'redirect_page_id' => $instance['widget_redirect_page_id']
-                )
+        $data = array(
+            'linktext' => $instance['widget_link_type'],
+            'sort' => $instance['widget_sort_order'],
+            'show_current_blog' => $instance['widget_show_current_blog'] == '1' ? true : false,
+            'echo' => false,
+            'redirect_page_id' => $instance['widget_redirect_page_id']
         );
 
+        $output = Workflow_Translation::get_translated_sites($data);
+        
         if ('' == $output) {
             return;
         }
@@ -45,7 +44,6 @@ class Workflow_Translation_Widget extends WP_Widget {
     }
 
     public function update($new_instance, $old_instance) {
-
         $instance = $old_instance;
         $instance['widget_title'] = strip_tags($new_instance['workflow_translation_widget_title']);
         $instance['widget_link_type'] = esc_attr($new_instance['workflow_translation_widget_link_type']);
@@ -88,17 +86,18 @@ class Workflow_Translation_Widget extends WP_Widget {
         <p>
             <label for="<?php echo $this->get_field_id('workflow_translation_widget_redirect_page_id'); ?>"><?php _e('Weiterleitungsseite (statische Seite):', CMS_WORKFLOW_TEXTDOMAIN) ?></label>
             <?php
-            workflow_dropdown_pages(array(
+            $data = array(
                 'id' => $this->get_field_id('workflow_translation_widget_redirect_page_id'),
                 'name' => $this->get_field_name('workflow_translation_widget_redirect_page_id'),
                 'selected' => $redirect_page_id,
                 'show_option_none' => __('— Startseite der übersetzten Webseite —', CMS_WORKFLOW_TEXTDOMAIN),
                 'option_none_value' => 0,
                 'depth' => 2
-            ));
+            );            
+            echo Workflow_Translation::get_dropdown_pages($data);
             ?>
             <br>
-            <small><?php _e('Lokale Standardseite, die im Falle einer nicht übersetztes Dokument angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite).', CMS_WORKFLOW_TEXTDOMAIN) ?></small>
+            <small><?php _e('Lokale Standardseite, die im Falle eines nicht-übersetzten Dokument angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite).', CMS_WORKFLOW_TEXTDOMAIN) ?></small>
         </p>        
         <?php
     }
