@@ -588,10 +588,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
                         $permalink = get_permalink($remote_post_meta['post_id']);
                         if ($permalink) {
                             $blog_name = get_bloginfo('name');
-                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                            $blog_lang = $this->get_lang_name($blog_lang);
+                            $blog_lang = self::get_language(self::get_locale());
                             $post_title = get_the_title($remote_post_meta['post_id']);
-                            echo $this->show_admin_notice(sprintf(__('Netzwerkweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang));
+                            echo $this->show_admin_notice(sprintf(__('Netzwerkweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
                         }
 
                         restore_current_blog();
@@ -741,8 +740,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
 
             $blog_name = get_bloginfo('name');
-            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-            $blog_lang = $this->get_lang_name($blog_lang);
+            $blog_lang = self::get_language(self::get_locale());
 
             restore_current_blog();
 
@@ -751,7 +749,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             <li id="network_connections_<?php echo $blog_id; ?>">
                 <label class="selectit">
                     <input id="connected_blog_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="network_connections[]" value="<?php echo $blog_id ?>" />
-            <?php printf('%1$s - %2$s', $blog_name, $blog_lang); ?>
+            <?php printf('%1$s - %2$s', $blog_name, $blog_lang['native_name']); ?>
                 </label>
             </li>
             <?php
@@ -901,12 +899,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                             $permalink = get_permalink($draft_id);
                             
                             $blog_name = get_bloginfo('name');
-                            $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                            $blog_lang = $this->get_lang_name($blog_lang);
+                            $blog_lang = self::get_language(self::get_locale());
                             $post_title = get_the_title($draft_id);
 
                             restore_current_blog();
-                            $this->flash_admin_notice(sprintf(__('Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang));
+                            $this->flash_admin_notice(sprintf(__('Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
                         }
                         
                         else {
@@ -942,14 +939,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 
                 $permalink = get_permalink($remote_post_id);
                 $blog_name = get_bloginfo('name');
-                $blog_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
-                $blog_lang = $this->get_lang_name($blog_lang);
+                $blog_lang = self::get_language(self::get_locale());
                 $post_title = get_the_title($remote_post_id);
 
                 restore_current_blog();
                 
                 add_post_meta($post_id, self::version_remote_parent_post_meta, array('blog_id' => $blog_id, 'post_id' => $remote_post_id));
-                $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang));
+                $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
 
                 switch_to_blog($blog_id);
                 
@@ -1180,11 +1176,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if ($version_post_id) {
             $permalink = get_permalink($version_post_id);
             $translate_to_lang = get_post_meta($version_post_id, '_translate_to_lang_post_meta', true);
+            
             if (empty($translate_to_lang)) {
-                $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                $translate_to_lang = self::get_locale();
             }
-
-            $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+            
+            $language = self::get_language($translate_to_lang);
+            $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $language['native_name']) : '';
 
             $post_title = get_the_title($version_post_id);
             $documents[] = sprintf('<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);
@@ -1198,10 +1196,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 if ($permalink) {
                     $translate_to_lang = get_post_meta($remote_post_meta['post_id'], '_translate_to_lang_post_meta', true);
                     if (empty($translate_to_lang)) {
-                        $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                        $translate_to_lang = self::get_locale();
                     }
-
-                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+                    
+                    $language = self::get_language($translate_to_lang);
+                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $language['native_name']) : '';
 
                     $post_title = get_the_title($remote_post_meta['post_id']);
                     $documents[] = sprintf('<a class="import" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);
@@ -1232,10 +1231,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                         if ($permalink) {
                             $translate_to_lang = get_post_meta($remote_parent_post_meta['post_id'], '_translate_to_lang_post_meta', true);
                             if (empty($translate_to_lang)) {
-                                $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                                $translate_to_lang = self::get_locale();
                             }
-
-                            $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+                            
+                            $language = self::get_language($translate_to_lang);
+                            $translate_to_lang = sprintf(' - <span class="translation">%s</span></a>', $language['native_name']);
 
                             $post_title = get_the_title($remote_parent_post_meta['post_id']);
                             $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);
@@ -1251,10 +1251,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 if ($permalink) {
                     $translate_to_lang = get_post_meta($remote_parent_post_meta['post_id'], '_translate_to_lang_post_meta', true);
                     if (empty($translate_to_lang)) {
-                        $translate_to_lang = get_option('WPLANG') ? get_option('WPLANG') : 'en_EN';
+                        $translate_to_lang = self::get_locale();
                     }
-
-                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $this->get_lang_name($translate_to_lang)) : '';
+                    
+                    $language = self::get_language($translate_to_lang);
+                    $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $language['native_name']) : '';
 
                     $post_title = get_the_title($remote_parent_post_meta['post_id']);
                     $documents[] = sprintf('<a class="export" href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);

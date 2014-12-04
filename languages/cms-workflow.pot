@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-03 16:02+0100\n"
+"POT-Creation-Date: 2014-12-04 18:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -59,52 +59,40 @@ msgstr ""
 msgid "Das Dokument existiert nicht."
 msgstr ""
 
-#: ../includes/workflow-module.php:68
+#: ../includes/workflow-module.php:66
 msgid "Veröffentlicht"
 msgstr ""
 
-#: ../includes/workflow-module.php:69
+#: ../includes/workflow-module.php:67
 msgid "Entwurf"
 msgstr ""
 
-#: ../includes/workflow-module.php:70
+#: ../includes/workflow-module.php:68
 msgid "Geplant"
 msgstr ""
 
-#: ../includes/workflow-module.php:71
+#: ../includes/workflow-module.php:69
 msgid "Privat"
 msgstr ""
 
-#: ../includes/workflow-module.php:72
+#: ../includes/workflow-module.php:70
 msgid "Ausstehender Review"
 msgstr ""
 
-#: ../includes/workflow-module.php:73
+#: ../includes/workflow-module.php:71
 msgid "Papierkorb"
 msgstr ""
 
-#: ../includes/workflow-module.php:219
+#: ../includes/workflow-module.php:203
 msgid "Kein Benutzer gefunden."
 msgstr ""
 
-#: ../includes/workflow-module.php:331
-msgid "Deutsch"
-msgstr ""
-
-#: ../includes/workflow-module.php:332
-msgid "Englisch"
-msgstr ""
-
-#: ../includes/workflow-module.php:333
-msgid "Spanisch"
-msgstr ""
-
-#: ../includes/workflow-module.php:358
+#: ../includes/workflow-module.php:403
 msgctxt "User role"
 msgid "Editor"
 msgstr ""
 
-#: ../includes/workflow-module.php:405
+#: ../includes/workflow-module.php:449
 msgctxt "User role"
 msgid "Author"
 msgstr ""
@@ -1337,12 +1325,12 @@ msgid "Neue Version"
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:456
-#: ../modules/post-versioning/post-versioning.php:608
+#: ../modules/post-versioning/post-versioning.php:607
 msgid "Es wurde kein Element geliefert."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:463
-#: ../modules/post-versioning/post-versioning.php:615
+#: ../modules/post-versioning/post-versioning.php:614
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr ""
 
@@ -1375,60 +1363,60 @@ msgid ""
 "a>&ldquo;."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:594
+#: ../modules/post-versioning/post-versioning.php:593
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
 "\"__blank\">%2$s</a>&ldquo; - %3$s - %4$s."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:621
+#: ../modules/post-versioning/post-versioning.php:620
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:625
+#: ../modules/post-versioning/post-versioning.php:624
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:711
-#: ../modules/post-versioning/post-versioning.php:805
+#: ../modules/post-versioning/post-versioning.php:710
+#: ../modules/post-versioning/post-versioning.php:803
 msgid "Netzwerkweite Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:761
+#: ../modules/post-versioning/post-versioning.php:759
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:909
+#: ../modules/post-versioning/post-versioning.php:906
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:919
+#: ../modules/post-versioning/post-versioning.php:916
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:952
+#: ../modules/post-versioning/post-versioning.php:948
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
 "- %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1125
+#: ../modules/post-versioning/post-versioning.php:1121
 msgid "Nr."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1136
+#: ../modules/post-versioning/post-versioning.php:1132
 msgid "Version"
 msgstr ""
 
@@ -1812,7 +1800,7 @@ msgstr ""
 
 #: ../modules/translation/translation.php:42
 #: ../modules/translation/translation.php:65
-#: ../modules/translation/translation.php:242
+#: ../modules/translation/translation.php:243
 msgid "Übersetzung"
 msgstr ""
 
@@ -1828,67 +1816,67 @@ msgstr ""
 msgid "Bezogenen Webseiten hinzufügen"
 msgstr ""
 
-#: ../modules/translation/translation.php:148
+#: ../modules/translation/translation.php:149
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
 msgstr ""
 
-#: ../modules/translation/translation.php:278
+#: ../modules/translation/translation.php:281
 #, php-format
 msgid "Übersetzung von <i>%1$s</i> nach <i>%2$s</i>."
 msgstr ""
 
-#: ../modules/translation/translation.php:289
+#: ../modules/translation/translation.php:297
 msgid "Aus der Sprache:"
 msgstr ""
 
-#: ../modules/translation/translation.php:291
-#: ../modules/translation/translation.php:301
+#: ../modules/translation/translation.php:299
+#: ../modules/translation/translation.php:310
 msgid "Wählen"
 msgstr ""
 
-#: ../modules/translation/translation.php:299
+#: ../modules/translation/translation.php:308
 msgid "In die Sprache:"
 msgstr ""
 
-#: ../modules/translation/translation.php:309
+#: ../modules/translation/translation.php:319
 msgid "Bitte wählen Sie die Übersetzungssprachen aus"
 msgstr ""
 
-#: ../modules/translation/translation.php:318
+#: ../modules/translation/translation.php:328
 msgid "XLIFF-Datei herunterladen"
 msgstr ""
 
-#: ../modules/translation/translation.php:320
+#: ../modules/translation/translation.php:330
 msgid "XLIFF-Datei hochladen:"
 msgstr ""
 
-#: ../modules/translation/translation.php:373
+#: ../modules/translation/translation.php:391
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr ""
 
-#: ../modules/translation/translation.php:390
+#: ../modules/translation/translation.php:408
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr ""
 
-#: ../modules/translation/translation.php:396
-#: ../modules/translation/translation.php:401
+#: ../modules/translation/translation.php:414
+#: ../modules/translation/translation.php:419
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr ""
 
-#: ../modules/translation/translation.php:407
+#: ../modules/translation/translation.php:425
 msgid ""
 "Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein."
 msgstr ""
 
-#: ../modules/translation/translation.php:440
+#: ../modules/translation/translation.php:458
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
 msgstr ""
 
-#: ../modules/translation/translation.php:502
+#: ../modules/translation/translation.php:522
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr ""
