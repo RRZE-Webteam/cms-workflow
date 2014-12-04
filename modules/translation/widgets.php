@@ -1,14 +1,14 @@
 <?php
 
-class Workflow_Translation_Widget extends WP_Widget {
+class Workflow_Translation_Lang_Switcher extends WP_Widget {
 
     public function __construct() {
         global $cms_workflow;
 
         parent::__construct(
-            'workflow-translation', __('Sprachwechsler', CMS_WORKFLOW_TEXTDOMAIN), array(
-            'classname' => 'workflow-translation-widget',
-            'description' => __('Multisite-Sprachwechsler', CMS_WORKFLOW_TEXTDOMAIN)
+            'workflow_translation_lang_switcher', __('Sprachwechsler', CMS_WORKFLOW_TEXTDOMAIN), array(
+                'classname' => 'workflow-translation-widget',
+                'description' => __('Multisite-Sprachwechsler', CMS_WORKFLOW_TEXTDOMAIN)
             )
         );
     }

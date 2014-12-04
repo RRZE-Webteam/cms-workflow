@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-03 16:02+0100\n"
+"POT-Creation-Date: 2014-12-04 18:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -63,52 +63,40 @@ msgstr "You do not have the required permissions to perform this action."
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
-#: ../includes/workflow-module.php:68
+#: ../includes/workflow-module.php:66
 msgid "Veröffentlicht"
 msgstr "Published"
 
-#: ../includes/workflow-module.php:69
+#: ../includes/workflow-module.php:67
 msgid "Entwurf"
 msgstr "Draft"
 
-#: ../includes/workflow-module.php:70
+#: ../includes/workflow-module.php:68
 msgid "Geplant"
 msgstr "Scheduled"
 
-#: ../includes/workflow-module.php:71
+#: ../includes/workflow-module.php:69
 msgid "Privat"
 msgstr "Private"
 
-#: ../includes/workflow-module.php:72
+#: ../includes/workflow-module.php:70
 msgid "Ausstehender Review"
 msgstr "Pending Review"
 
-#: ../includes/workflow-module.php:73
+#: ../includes/workflow-module.php:71
 msgid "Papierkorb"
 msgstr "Trash"
 
-#: ../includes/workflow-module.php:219
+#: ../includes/workflow-module.php:203
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
 
-#: ../includes/workflow-module.php:331
-msgid "Deutsch"
-msgstr "German"
-
-#: ../includes/workflow-module.php:332
-msgid "Englisch"
-msgstr "English"
-
-#: ../includes/workflow-module.php:333
-msgid "Spanisch"
-msgstr "Spanish"
-
-#: ../includes/workflow-module.php:358
+#: ../includes/workflow-module.php:403
 msgctxt "User role"
 msgid "Editor"
 msgstr ""
 
-#: ../includes/workflow-module.php:405
+#: ../includes/workflow-module.php:449
 msgctxt "User role"
 msgid "Author"
 msgstr ""
@@ -1352,12 +1340,12 @@ msgid "Neue Version"
 msgstr "New version"
 
 #: ../modules/post-versioning/post-versioning.php:456
-#: ../modules/post-versioning/post-versioning.php:608
+#: ../modules/post-versioning/post-versioning.php:607
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
 #: ../modules/post-versioning/post-versioning.php:463
-#: ../modules/post-versioning/post-versioning.php:615
+#: ../modules/post-versioning/post-versioning.php:614
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
@@ -1394,7 +1382,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:594
+#: ../modules/post-versioning/post-versioning.php:593
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1403,12 +1391,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:621
+#: ../modules/post-versioning/post-versioning.php:620
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:625
+#: ../modules/post-versioning/post-versioning.php:624
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1416,19 +1404,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:711
-#: ../modules/post-versioning/post-versioning.php:805
+#: ../modules/post-versioning/post-versioning.php:710
+#: ../modules/post-versioning/post-versioning.php:803
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:761
+#: ../modules/post-versioning/post-versioning.php:759
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:909
+#: ../modules/post-versioning/post-versioning.php:906
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1437,13 +1425,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:919
+#: ../modules/post-versioning/post-versioning.php:916
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:952
+#: ../modules/post-versioning/post-versioning.php:948
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1452,11 +1440,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1125
+#: ../modules/post-versioning/post-versioning.php:1121
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1136
+#: ../modules/post-versioning/post-versioning.php:1132
 msgid "Version"
 msgstr "Version"
 
@@ -1846,7 +1834,7 @@ msgstr ""
 
 #: ../modules/translation/translation.php:42
 #: ../modules/translation/translation.php:65
-#: ../modules/translation/translation.php:242
+#: ../modules/translation/translation.php:243
 msgid "Übersetzung"
 msgstr "Translation"
 
@@ -1862,78 +1850,78 @@ msgstr "Already translated websites"
 msgid "Bezogenen Webseiten hinzufügen"
 msgstr "Add related websites"
 
-#: ../modules/translation/translation.php:148
+#: ../modules/translation/translation.php:149
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
 msgstr "%2$s (%3$s) (%4$s)"
 
-#: ../modules/translation/translation.php:278
+#: ../modules/translation/translation.php:281
 #, php-format
 msgid "Übersetzung von <i>%1$s</i> nach <i>%2$s</i>."
 msgstr "Translation from <i>%1$s</i> to <i>%2$s</i>."
 
-#: ../modules/translation/translation.php:289
+#: ../modules/translation/translation.php:297
 msgid "Aus der Sprache:"
 msgstr "From the language:"
 
-#: ../modules/translation/translation.php:291
-#: ../modules/translation/translation.php:301
+#: ../modules/translation/translation.php:299
+#: ../modules/translation/translation.php:310
 msgid "Wählen"
 msgstr "Select"
 
-#: ../modules/translation/translation.php:299
+#: ../modules/translation/translation.php:308
 msgid "In die Sprache:"
 msgstr "To the language:"
 
-#: ../modules/translation/translation.php:309
+#: ../modules/translation/translation.php:319
 msgid "Bitte wählen Sie die Übersetzungssprachen aus"
 msgstr "Please select the translation of languages ​​from"
 
-#: ../modules/translation/translation.php:318
+#: ../modules/translation/translation.php:328
 msgid "XLIFF-Datei herunterladen"
 msgstr "Download XLIFF file"
 
-#: ../modules/translation/translation.php:320
+#: ../modules/translation/translation.php:330
 msgid "XLIFF-Datei hochladen:"
 msgstr "Upload XLIFF file:"
 
-#: ../modules/translation/translation.php:373
+#: ../modules/translation/translation.php:391
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr "The type of file you have uploaded is not a XLIFF."
 
-#: ../modules/translation/translation.php:390
+#: ../modules/translation/translation.php:408
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr "The \"Simple XML\" library is missing."
 
-#: ../modules/translation/translation.php:396
-#: ../modules/translation/translation.php:401
+#: ../modules/translation/translation.php:414
+#: ../modules/translation/translation.php:419
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr "The XLIFF file (%s) could not be read."
 
-#: ../modules/translation/translation.php:407
+#: ../modules/translation/translation.php:425
 msgid ""
 "Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein."
 msgstr "The uploaded XLIFF file is not suitable for this document."
 
-#: ../modules/translation/translation.php:440
+#: ../modules/translation/translation.php:458
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
 msgstr "An unexpected error has occurred. The document could not be saved."
 
-#: ../modules/translation/translation.php:502
+#: ../modules/translation/translation.php:522
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr "%1$s. %2$s (%3$s) (%4$s)"
 
 #: ../modules/translation/widgets.php:9
 msgid "Sprachwechsler"
-msgstr "Language changer"
+msgstr "Language switcher"
 
 #: ../modules/translation/widgets.php:11
 msgid "Multisite-Sprachwechsler"
-msgstr "Multisite Language Changer"
+msgstr "Multisite language switcher"
 
 #: ../modules/translation/widgets.php:65
 msgid "Titel:"
@@ -1945,11 +1933,11 @@ msgstr "Sort by:"
 
 #: ../modules/translation/widgets.php:71
 msgid "nach Webseitennamen"
-msgstr "by page title"
+msgstr "Page title"
 
 #: ../modules/translation/widgets.php:72
 msgid "nach Webseiten-ID"
-msgstr "by site-ID"
+msgstr "Site-ID"
 
 #: ../modules/translation/widgets.php:76
 msgid "Linktyp:"
@@ -1961,7 +1949,7 @@ msgstr "Text"
 
 #: ../modules/translation/widgets.php:79
 msgid "Sprachcode"
-msgstr "Language Code"
+msgstr "Language code"
 
 #: ../modules/translation/widgets.php:83
 msgid "Aktuelle Webseite zeigen:"
@@ -2197,6 +2185,15 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:874
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#~ msgid "Deutsch"
+#~ msgstr "German"
+
+#~ msgid "Englisch"
+#~ msgstr "English"
+
+#~ msgid "Spanisch"
+#~ msgstr "Spanish"
 
 #~ msgid "— Startseite des Zielwebauftritts —"
 #~ msgstr "— Home of the target website —"

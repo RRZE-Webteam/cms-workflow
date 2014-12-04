@@ -19,9 +19,7 @@ class Workflow_Module {
         foreach ($all_post_types as $post_type) {
             if (( isset($module_post_types[$post_type]) && $module_post_types[$post_type] ) || post_type_supports($post_type, $post_type_support)) {
                 $normalized_post_type_options[$post_type] = true;
-            }
-            
-            else {
+            } else {
                 $normalized_post_type_options[$post_type] = false;
             }
         }
@@ -96,9 +94,7 @@ class Workflow_Module {
 
         if (is_null($post_type) || !isset($all_post_types[$post_type])) {
             return $all_post_types;
-        }
-        
-        else {
+        } else {
             return $all_post_types[$post_type];
         }
     }
@@ -122,29 +118,17 @@ class Workflow_Module {
 
         if ($post && $post->post_type) {
             $post_type = $post->post_type;
-        }
-
-        elseif ($typenow) {
+        } elseif ($typenow) {
             $post_type = $typenow;
-        }
-
-        elseif ($current_screen && isset($current_screen->post_type)) {
+        } elseif ($current_screen && isset($current_screen->post_type)) {
             $post_type = $current_screen->post_type;
-        }
-
-        elseif (isset($_REQUEST['post_type'])) {
+        } elseif (isset($_REQUEST['post_type'])) {
             $post_type = sanitize_key($_REQUEST['post_type']);
-        }
-
-        elseif ('post.php' == $pagenow && isset($_REQUEST['post']) && isset($post_int) && !empty(get_post($post_int)->post_type)) {
+        } elseif ('post.php' == $pagenow && isset($_REQUEST['post']) && isset($post_int) && !empty(get_post($post_int)->post_type)) {
             $post_type = get_post($post_int)->post_type;
-        }
-
-        elseif ('edit.php' == $pagenow && empty($_REQUEST['post_type'])) {
+        } elseif ('edit.php' == $pagenow && empty($_REQUEST['post_type'])) {
             $post_type = 'post';
-        }
-        
-        else {
+        } else {
             $post_type = null;
         }
 
@@ -215,7 +199,7 @@ class Workflow_Module {
                     </li>
             <?php endforeach; ?>
             </ul>
-            <?php else: ?>
+        <?php else: ?>
             <p><?php _e('Kein Benutzer gefunden.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php endif; ?>
         <?php
@@ -305,11 +289,12 @@ class Workflow_Module {
 
         if (is_array($flash_notices)) {
             foreach ($flash_notices as $class => $messages) {
-                foreach ($messages as $message) : ?>
+                foreach ($messages as $message) :
+                    ?>
                     <div class="<?php echo $class; ?>">
                         <p><?php echo $message; ?></p>
                     </div>
-                <?php
+                    <?php
                 endforeach;
             }
         }
@@ -317,41 +302,101 @@ class Workflow_Module {
         delete_transient($transient);
     }
 
-    public function get_lang_name($lang_code = '') {
-        $lang_codes = $this->lang_codes();
-        if (isset($lang_codes[$lang_code])) {
-            return $lang_codes[$lang_code];
-        }
+    private static function get_languages() {
+        $languages = array(
+            'en_US' => array(
+                'language' => 'en_US',
+                'english_name' => 'English',
+                'native_name' => 'English',
+                'iso' => array(
+                    1 => 'en'
+                )
+            ),
+            'en_EN' => array(
+                'language' => 'en_EN',
+                'english_name' => 'English',
+                'native_name' => 'English',
+                'iso' => array(
+                    1 => 'en'
+                )
+            ),
+            'de_DE' => array(
+                'language' => 'de_DE',
+                'english_name' => 'German',
+                'native_name' => 'Deutsch',
+                'iso' => array(
+                    1 => 'de'
+                ),
+            )
+        );
 
-        return $lang_code;
+        return $languages;
     }
 
-    public function lang_codes() {
+    public static function get_available_languages() {
+        $languages = get_available_languages();
+        return array_merge($languages, array('en_US'));
+    }
+    
+    public static function get_language($locale) {
+        $unknown_language = array(
+            'language' => 'xx_XX',
+            'english_name' => 'Unknown language',
+            'native_name' => 'Unknown language',
+            'iso' => array(
+                1 => 'xx'
+            )
+        );
 
-        $lang_codes['de_DE'] = __('Deutsch', CMS_WORKFLOW_TEXTDOMAIN);
-        $lang_codes['en_EN'] = __('Englisch', CMS_WORKFLOW_TEXTDOMAIN);
-        $lang_codes['es_ES'] = __('Spanisch', CMS_WORKFLOW_TEXTDOMAIN);
+        $languages = self::get_languages();
 
-        asort($lang_codes);
+        if (empty($locale)) {
+            $locale = 'en_US';
+        }
+        
+        if (!isset($languages[$locale])) {
+            return $unknown_language;
+        }
 
-        $lang_codes = apply_filters('workflow_language_codes', $lang_codes);
+        return $languages[$locale];
+    }
 
-        return $lang_codes;
+    public static function get_locale() {
+        if (is_multisite()) {
+            if (defined('WP_INSTALLING') || ( false === $ms_locale = get_option('WPLANG') )) {
+                $ms_locale = get_site_option('WPLANG');
+            }
+
+            if ($ms_locale !== false) {
+                $locale = $ms_locale;
+            }
+        } else {
+            $db_locale = get_option('WPLANG');
+            if ($db_locale !== false) {
+                $locale = $db_locale;
+            }
+        }
+
+        if (empty($locale)) {
+            $locale = 'en_US';
+        }
+
+        return $locale;
     }
 
     public function repopulate_role($role = '') {
         $allowed_roles = array('editor', 'author');
-        
-        if(!in_array($role, $allowed_roles)) {
+
+        if (!in_array($role, $allowed_roles)) {
             return false;
         }
-        
+
         remove_role($role);
-        
+
         $populate_role = sprintf('populate_%s_role', $role);
         $this->$populate_role();
     }
-    
+
     private function populate_editor_role() {
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
@@ -396,16 +441,15 @@ class Workflow_Module {
         $role->add_cap('delete_private_pages');
         $role->add_cap('edit_private_pages');
         $role->add_cap('read_private_pages');
-        
     }
-    
+
     private function populate_author_role() {
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
         _x('Author', 'User role');
-        
+
         add_role('author', 'Author');
-        
+
         // Add caps for Author role
         $role = get_role('author');
         $role->add_cap('upload_files');
@@ -416,9 +460,9 @@ class Workflow_Module {
         $role->add_cap('level_2');
         $role->add_cap('level_1');
         $role->add_cap('level_0');
-        
+
         $role->add_cap('delete_posts');
         $role->add_cap('delete_published_posts');
-        
     }
+
 }
