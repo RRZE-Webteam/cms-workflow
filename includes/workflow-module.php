@@ -355,7 +355,12 @@ class Workflow_Module {
         }
         
         if (!isset($languages[$locale])) {
-            return $unknown_language;
+            require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
+            $wp_available_translations = wp_get_available_translations();
+            $languages = array_merge($languages, $wp_available_translations);
+            if (!isset($languages[$locale])) {
+                return $unknown_language;
+            }
         }
 
         return $languages[$locale];
