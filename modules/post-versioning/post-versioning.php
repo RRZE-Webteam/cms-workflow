@@ -191,6 +191,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_action('save_post', array($this, 'network_connections_save_postmeta'));
             add_action('save_post', array($this, 'network_connections_save_post'));
         }
+        
+        add_action('admin_bar_menu', array($this, 'new_version_node'), 99);
     }
 
     public function deactivation() {
@@ -1271,4 +1273,30 @@ class Workflow_Post_Versioning extends Workflow_Module {
         return implode('<br>', $documents);
     }
 
+    public function new_version_node($wp_admin_bar) {
+        global $post;
+        
+        if(!is_singular()) {
+            return;
+        }
+
+        if (!is_object($this->get_available_post_types($post->post_type)) || !in_array($post->post_type, $this->get_post_types($this->module))) {
+            return;
+        }
+        
+        $cap = $this->get_available_post_types($post->post_type)->cap;
+        
+        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish') {
+            $args = array(
+                'id'     => 'new_version',
+                'title' => __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN),
+                'href'  => admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID),
+                'meta'  => array(
+                    'class' => 'new-version',
+                    'title' => esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN)))
+            );
+            $wp_admin_bar->add_node( $args );            
+        }    
+    }
+    
 }
