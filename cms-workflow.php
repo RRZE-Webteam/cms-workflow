@@ -37,7 +37,7 @@ class CMS_Workflow {
     const version = '1.7'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
-    const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
+    const wp_version = '4.1'; // Minimal erforderliche WordPress-Version
 
     public $workflow_options = '_cms_workflow_';
     public $workflow_options_name = '_cms_workflow_options';
