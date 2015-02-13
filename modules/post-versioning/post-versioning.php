@@ -274,13 +274,16 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
 
-            $blog_name = get_bloginfo('name');
+            $site_name = get_bloginfo('name');
+            $site_url = get_bloginfo('url');
             restore_current_blog();
 
+            $label = ($site_name != '') ? sprintf('%1$s (%2$s)', $site_name, $site_url) : $site_url;
+            
             $connected = is_array($this->module->options->network_connections) && in_array($blog_id, $this->module->options->network_connections) ? true : false;
             ?>
             <label for="network_connections_<?php echo $blog_id; ?>">
-                <input id="network_connections_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[network_connections][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>" /> <?php echo $blog_name; ?>
+                <input id="network_connections_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[network_connections][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>" /> <?php echo $label; ?>
             </label><br>
             <?php
         }
