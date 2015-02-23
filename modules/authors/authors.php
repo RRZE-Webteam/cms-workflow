@@ -114,22 +114,24 @@ class Workflow_Authors extends Workflow_Module {
     }
 
     public function activation() {
-
-        if (!empty($this->module->options->role_caps)) {
-            $role = get_role(self::role);
-
-            $role_caps = array_keys(array_merge($this->wp_role_caps, $this->more_role_caps));
-
-            foreach ($role_caps as $cap) {
-                $role->remove_cap($cap);
+        $all_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps, $this->more_role_caps));
+        $role_caps = array_keys($this->module->options->role_caps);
+        
+        $role = get_role(self::role);
+        $new_role_caps = array();
+        
+        foreach ($all_role_caps as $cap) {
+            if(in_array($cap, $role_caps)) {
+                $new_role_caps[$cap] = true;
             }
-
-            $role_caps = array_keys($this->module->options->role_caps);
-
-            foreach ($role_caps as $cap) {
-                $role->add_cap($cap);
-            }
+            $role->remove_cap($cap);
         }
+        
+        $new_role_caps = array_keys($new_role_caps);
+
+        foreach ($new_role_caps as $cap) {
+            $role->add_cap($cap);
+        }       
     }
 
     public function set_role_caps() {
@@ -1085,23 +1087,19 @@ class Workflow_Authors extends Workflow_Module {
             
         }
                 
-        $more_role_caps = array_keys(array_merge($this->wp_manage_caps, $this->more_role_caps));
+        $all_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps, $this->more_role_caps));
+
+        $role = get_role(self::role);
         
-        foreach ($more_role_caps as $cap) {
+        foreach ($all_role_caps as $cap) {
             if(!empty($new_options['role_caps'][$cap])) {
-                $new_role_caps[$cap] = 1;
+                $new_role_caps[$cap] = true;
             }
+            $role->remove_cap($cap);
         }
         
         $new_options['role_caps'] = $new_role_caps;
-        $new_role_caps = array_keys($new_options['role_caps']);
-        
-        $role = get_role(self::role);
-        $role_caps = array_keys($this->module->options->role_caps);
-
-        foreach ($role_caps as $cap) {
-            $role->remove_cap($cap);
-        }
+        $new_role_caps = array_keys($new_role_caps);
 
         foreach ($new_role_caps as $cap) {
             $role->add_cap($cap);
