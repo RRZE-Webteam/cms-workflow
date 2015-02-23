@@ -517,7 +517,7 @@ class Workflow_Translation extends Workflow_Module {
             $sitelang = self::get_locale();
             restore_current_blog();
 
-            $language = self::get_language($locale);
+            $language = self::get_language($sitelang);
             
             $value = sprintf(__('%1$s. %2$s (%3$s) (%4$s)'), $blog_id, $site->blogname, $site->siteurl, $language['native_name']);
             $return[] = array(
@@ -618,7 +618,7 @@ class Workflow_Translation extends Workflow_Module {
             $hreflang = $language['iso'][1];
 
             if ('text' == $linktext) {
-                $display = $translations[$locale]['native_name'];
+                $display = $language['native_name'];
             } else {
                 $display = $hreflang;
             }
