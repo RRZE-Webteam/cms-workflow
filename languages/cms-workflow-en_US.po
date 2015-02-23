@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-04 18:31+0100\n"
+"POT-Creation-Date: 2015-02-23 15:48+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -36,30 +36,30 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../cms-workflow.php:210
+#: ../cms-workflow.php:211
 msgid "Konfigurieren"
 msgstr "Configure"
 
-#: ../cms-workflow.php:212
+#: ../cms-workflow.php:213
 msgid "Einstellungen gespeichert."
 msgstr "Settings saved."
 
-#: ../cms-workflow.php:213
+#: ../cms-workflow.php:214
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:214 ../modules/settings/settings.php:394
+#: ../cms-workflow.php:215 ../modules/settings/settings.php:394
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
-#: ../cms-workflow.php:215
+#: ../cms-workflow.php:216
 #: ../modules/editorial-comments/editorial-comments.php:320
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr "You do not have the required permissions to perform this action."
 
-#: ../cms-workflow.php:216
+#: ../cms-workflow.php:217
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
@@ -91,15 +91,15 @@ msgstr "Trash"
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
 
-#: ../includes/workflow-module.php:403
+#: ../includes/workflow-module.php:408
 msgctxt "User role"
 msgid "Editor"
-msgstr ""
+msgstr "Redakteur"
 
-#: ../includes/workflow-module.php:449
+#: ../includes/workflow-module.php:454
 msgctxt "User role"
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
 #: ../modules/authors/authors.php:23
 msgid "Beitrag veröffentlichen"
@@ -146,8 +146,8 @@ msgid ""
 "ansehen, erstellen, bearbeiten und löschen, Dateien hochladen)."
 msgstr ""
 
-#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:216
-#: ../modules/authors/authors.php:622
+#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:218
+#: ../modules/authors/authors.php:624
 msgid "Autoren"
 msgstr "Authors"
 
@@ -155,7 +155,7 @@ msgstr "Authors"
 msgid "Verwaltung der Autoren."
 msgstr "Authors administration."
 
-#: ../modules/authors/authors.php:69 ../modules/dashboard/dashboard.php:42
+#: ../modules/authors/authors.php:69 ../modules/dashboard/dashboard.php:55
 #: ../modules/editorial-comments/editorial-comments.php:56
 #: ../modules/editors/editors.php:100
 #: ../modules/notifications/notifications.php:38
@@ -166,7 +166,7 @@ msgstr "Authors administration."
 msgid "Übersicht"
 msgstr "Overall view"
 
-#: ../modules/authors/authors.php:72 ../modules/dashboard/dashboard.php:45
+#: ../modules/authors/authors.php:72 ../modules/dashboard/dashboard.php:58
 #: ../modules/editorial-comments/editorial-comments.php:59
 #: ../modules/editors/editors.php:103
 #: ../modules/notifications/notifications.php:41
@@ -185,64 +185,64 @@ msgstr ""
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
 
-#: ../modules/authors/authors.php:153 ../modules/editors/editors.php:155
+#: ../modules/authors/authors.php:155 ../modules/editors/editors.php:157
 #, php-format
 msgid "%s bearbeiten"
 msgstr "Edit %s"
 
-#: ../modules/authors/authors.php:157 ../modules/editors/editors.php:163
+#: ../modules/authors/authors.php:159 ../modules/editors/editors.php:165
 #, php-format
 msgid "%s löschen"
 msgstr "Delete %s"
 
-#: ../modules/authors/authors.php:161 ../modules/editors/editors.php:159
+#: ../modules/authors/authors.php:163 ../modules/editors/editors.php:161
 #, php-format
 msgid "%s veröffentlichen"
 msgstr "Publish %s"
 
-#: ../modules/authors/authors.php:165 ../modules/editors/editors.php:167
+#: ../modules/authors/authors.php:167 ../modules/editors/editors.php:169
 #, php-format
 msgid "Veröffentlichte %s bearbeiten"
 msgstr "Edit Published %s"
 
-#: ../modules/authors/authors.php:169 ../modules/editors/editors.php:171
+#: ../modules/authors/authors.php:171 ../modules/editors/editors.php:173
 #, php-format
 msgid "Veröffentlichte %s löschen"
 msgstr "Delete Published %s"
 
-#: ../modules/authors/authors.php:198
+#: ../modules/authors/authors.php:200
 #: ../modules/user-groups/user-groups.php:120
 msgid "Alle"
 msgstr "All"
 
-#: ../modules/authors/authors.php:199
+#: ../modules/authors/authors.php:201
 #: ../modules/user-groups/user-groups.php:121
 msgid "Ausgewählt"
 msgstr "Selected"
 
-#: ../modules/authors/authors.php:200
+#: ../modules/authors/authors.php:202
 #: ../modules/user-groups/user-groups.php:122
 msgid "Suchen..."
 msgstr "Search..."
 
-#: ../modules/authors/authors.php:223
+#: ../modules/authors/authors.php:225
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr "Select the authors for this document"
 
-#: ../modules/authors/authors.php:225
+#: ../modules/authors/authors.php:227
 #: ../modules/user-groups/user-groups.php:380
 #: ../modules/user-groups/user-groups.php:809
 msgid "Benutzer"
 msgstr "User"
 
-#: ../modules/authors/authors.php:242
+#: ../modules/authors/authors.php:244
 #: ../modules/user-groups/user-groups.php:41
 #: ../modules/user-groups/user-groups.php:70
 #: ../modules/user-groups/user-groups.php:473
 msgid "Benutzergruppen"
 msgstr "User Groups"
 
-#: ../modules/authors/authors.php:748
+#: ../modules/authors/authors.php:750
 #, php-format
 msgctxt "authors"
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
@@ -250,23 +250,23 @@ msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] "My %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[1] "My %1$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:752
+#: ../modules/authors/authors.php:754
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:1019
+#: ../modules/authors/authors.php:1021
 #: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:193
+#: ../modules/editors/editors.php:195
 #: ../modules/notifications/notifications.php:409
-#: ../modules/post-versioning/post-versioning.php:239
+#: ../modules/post-versioning/post-versioning.php:241
 #: ../modules/task-list/task-list.php:549
 #: ../modules/translation/translation.php:130
 #: ../modules/user-groups/user-groups.php:343
 msgid "Freigabe"
 msgstr "Allowed Post Types"
 
-#: ../modules/authors/authors.php:1020
+#: ../modules/authors/authors.php:1022
 msgid "Autorenrechte"
 msgstr "Authors Capabilities"
 
@@ -325,114 +325,174 @@ msgstr "Dashboard"
 msgid "Inhalte im Dashboard verfolgen."
 msgstr "Track content using dashboard widgets."
 
-#: ../modules/dashboard/dashboard.php:51 ../modules/settings/settings.php:62
+#: ../modules/dashboard/dashboard.php:64 ../modules/settings/settings.php:62
 msgid "Workflow"
 msgstr "Workflow"
 
-#: ../modules/dashboard/dashboard.php:81
+#: ../modules/dashboard/dashboard.php:84
+msgid "Wählen Sie beliebige Post-Types aus"
+msgstr "Select any Post Type"
+
+#: ../modules/dashboard/dashboard.php:85
+msgid "Alle auswählen"
+msgstr "Select all"
+
+#: ../modules/dashboard/dashboard.php:86
+msgid "Alle ausgewählt"
+msgstr "All selected"
+
+#: ../modules/dashboard/dashboard.php:87
+msgid "# von % ausgewählt"
+msgstr "# of % selected"
+
+#: ../modules/dashboard/dashboard.php:106
 msgid "Auf einen Blick"
 msgstr "Right Now"
 
-#: ../modules/dashboard/dashboard.php:99
-#: ../modules/dashboard/dashboard.php:477
+#: ../modules/dashboard/dashboard.php:113
+msgid "Aktivität"
+msgstr "Activity"
+
+#: ../modules/dashboard/dashboard.php:130
+#: ../modules/dashboard/dashboard.php:604
 msgid "Aktuelle Entwürfe"
 msgstr "Recent Drafts"
 
-#: ../modules/dashboard/dashboard.php:103
-#: ../modules/dashboard/dashboard.php:478
+#: ../modules/dashboard/dashboard.php:134
+#: ../modules/dashboard/dashboard.php:605
 msgid "Aktuelle ausstehende Reviews"
 msgstr "Recent Pending Reviews"
 
-#: ../modules/dashboard/dashboard.php:107
-#: ../modules/dashboard/dashboard.php:481
+#: ../modules/dashboard/dashboard.php:138
+#: ../modules/dashboard/dashboard.php:608
 #: ../modules/task-list/task-list.php:54 ../modules/task-list/task-list.php:77
 #: ../modules/task-list/task-list.php:85
 #: ../modules/task-list/task-list.php:162
 msgid "Aufgabenliste"
 msgstr "Task List"
 
-#: ../modules/dashboard/dashboard.php:135
+#: ../modules/dashboard/dashboard.php:173
 msgid "Kommentar"
 msgid_plural "Kommentare"
 msgstr[0] "comment"
 msgstr[1] "comments"
 
-#: ../modules/dashboard/dashboard.php:138
+#: ../modules/dashboard/dashboard.php:176
 msgid "Offen"
 msgid_plural "Offen"
 msgstr[0] "Pending"
 msgstr[1] "Pending"
 
-#: ../modules/dashboard/dashboard.php:145
+#: ../modules/dashboard/dashboard.php:183
 #, php-format
 msgid "<b>WordPress Version</b> %1$s"
 msgstr "<b>WordPress Version</b> %1$s"
 
-#: ../modules/dashboard/dashboard.php:146
+#: ../modules/dashboard/dashboard.php:184
 #, php-format
 msgid "<b>Theme</b> %1$s</b>"
 msgstr "<b>Theme</b> %1$s</b>"
 
-#: ../modules/dashboard/dashboard.php:149
+#: ../modules/dashboard/dashboard.php:187
 msgid ""
 "Suchmaschinen werden angehalten, den Inhalt der Website nicht zu indexieren"
 msgstr "Your site is asking search engines not to index its content"
 
-#: ../modules/dashboard/dashboard.php:150
+#: ../modules/dashboard/dashboard.php:188
 msgid "Suchmaschinen blockiert"
 msgstr "Search Engines Discouraged"
 
-#: ../modules/dashboard/dashboard.php:188
+#: ../modules/dashboard/dashboard.php:226
 msgid "Speicherplatz"
 msgstr "Storage Space"
 
-#: ../modules/dashboard/dashboard.php:192
-#: ../modules/dashboard/dashboard.php:195
+#: ../modules/dashboard/dashboard.php:230
+#: ../modules/dashboard/dashboard.php:233
 msgid "Uploads verwalten"
 msgstr "Manage Uploads"
 
-#: ../modules/dashboard/dashboard.php:192
+#: ../modules/dashboard/dashboard.php:230
 msgid "Speicherplatz erlaubt"
 msgstr "Space Allowed"
 
-#: ../modules/dashboard/dashboard.php:195
+#: ../modules/dashboard/dashboard.php:233
 msgid "Speicherplatz verbraucht"
 msgstr "Space Used"
 
-#: ../modules/dashboard/dashboard.php:280
-#: ../modules/dashboard/dashboard.php:349
+#: ../modules/dashboard/dashboard.php:326
+#: ../modules/dashboard/dashboard.php:437
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Last modified by <i>%1$s</i> on %2$s at %3$s"
 
-#: ../modules/dashboard/dashboard.php:296
+#: ../modules/dashboard/dashboard.php:338
 msgid "Zurzeit gibt es keine Entwürfe."
 msgstr "There are no drafts at the moment."
 
-#: ../modules/dashboard/dashboard.php:365
+#: ../modules/dashboard/dashboard.php:364
+#: ../modules/dashboard/dashboard.php:475
+#: ../modules/dashboard/dashboard.php:744
+msgid "Post-Types:"
+msgstr "Post Types:"
+
+#: ../modules/dashboard/dashboard.php:379
+#: ../modules/dashboard/dashboard.php:490
+#: ../modules/dashboard/dashboard.php:759
+msgid "Anzahl der Einträge in Listen"
+msgstr "Number of entries in lists"
+
+#: ../modules/dashboard/dashboard.php:449
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr "There are no pending reviews at the moment."
 
-#: ../modules/dashboard/dashboard.php:424
+#: ../modules/dashboard/dashboard.php:552
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Task added by <i>%1$s</i> on %2$s at %3$s"
 
-#: ../modules/dashboard/dashboard.php:437
+#: ../modules/dashboard/dashboard.php:564
 msgid "Zurzeit gibt es keine Aufgaben."
 msgstr "There are no tasks at the moment."
 
-#: ../modules/dashboard/dashboard.php:487
-#: ../modules/dashboard/dashboard.php:501
-#: ../modules/dashboard/dashboard.php:515 ../modules/settings/settings.php:263
+#: ../modules/dashboard/dashboard.php:614
+#: ../modules/dashboard/dashboard.php:628
+#: ../modules/dashboard/dashboard.php:642 ../modules/settings/settings.php:263
 msgid "Deaktiviert"
 msgstr "Disabled"
 
-#: ../modules/dashboard/dashboard.php:488
-#: ../modules/dashboard/dashboard.php:502
-#: ../modules/dashboard/dashboard.php:516 ../modules/settings/settings.php:264
+#: ../modules/dashboard/dashboard.php:615
+#: ../modules/dashboard/dashboard.php:629
+#: ../modules/dashboard/dashboard.php:643 ../modules/settings/settings.php:264
 msgid "Aktiviert"
 msgstr "Enabled"
+
+#: ../modules/dashboard/dashboard.php:696
+msgid "in Kürze veröffentlichen"
+msgstr "Publishing Soon"
+
+#: ../modules/dashboard/dashboard.php:706
+msgid "Kürzlich veröffentlicht"
+msgstr "Recently Published"
+
+#: ../modules/dashboard/dashboard.php:715
+msgid "Bisher keine Aktivitäten!"
+msgstr "No activity yet!"
+
+#: ../modules/dashboard/dashboard.php:795
+msgid "Heute"
+msgstr "Today"
+
+#: ../modules/dashboard/dashboard.php:797
+msgid "Morgen"
+msgstr "Tomorrow"
+
+#: ../modules/dashboard/dashboard.php:799
+msgid "d.m."
+msgstr "M jS"
+
+#: ../modules/dashboard/dashboard.php:851
+msgid "Kommentare"
+msgstr "Comments"
 
 #: ../modules/editorial-comments/editorial-comments.php:15
 #: ../modules/editorial-comments/editorial-comments.php:26
@@ -688,22 +748,22 @@ msgstr "Editors"
 msgid "Verwaltung der Redakteure."
 msgstr "Editors administration."
 
-#: ../modules/editors/editors.php:175
+#: ../modules/editors/editors.php:177
 #, php-format
 msgid "Private %s lesen"
 msgstr "Read Private %s"
 
-#: ../modules/editors/editors.php:179
+#: ../modules/editors/editors.php:181
 #, php-format
 msgid "Private %s bearbeiten"
 msgstr "Edit Private %s"
 
-#: ../modules/editors/editors.php:183
+#: ../modules/editors/editors.php:185
 #, php-format
 msgid "Private %s löschen"
 msgstr "Delete Private %s"
 
-#: ../modules/editors/editors.php:194
+#: ../modules/editors/editors.php:196
 msgid "Redakteurerechte"
 msgstr "Editors Capabilities"
 
@@ -1303,19 +1363,19 @@ msgstr "Create a new version or a copy of an existing document."
 msgid "Versionen verwalten"
 msgstr "Manage Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:221
+#: ../modules/post-versioning/post-versioning.php:223
 msgid "Lokale Freigabe"
 msgstr "Local allowance"
 
-#: ../modules/post-versioning/post-versioning.php:223
+#: ../modules/post-versioning/post-versioning.php:225
 msgid "Netzwerkweite Freigabe"
 msgstr "Network-Wide allowance"
 
-#: ../modules/post-versioning/post-versioning.php:234
+#: ../modules/post-versioning/post-versioning.php:236
 msgid "Vorhandene Webseiten"
 msgstr "Existing Web sites"
 
-#: ../modules/post-versioning/post-versioning.php:286
+#: ../modules/post-versioning/post-versioning.php:291
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "dupliziert werden."
@@ -1323,47 +1383,49 @@ msgstr ""
 "Local documents can be as a new version (draft) duplicated in these web "
 "sites."
 
-#: ../modules/post-versioning/post-versioning.php:441
+#: ../modules/post-versioning/post-versioning.php:446
 msgid "Dieses Element als neuen Entwurf kopieren"
 msgstr "Copy this item as a new draft"
 
-#: ../modules/post-versioning/post-versioning.php:442
+#: ../modules/post-versioning/post-versioning.php:447
 msgid "Kopieren"
 msgstr "Copy"
 
-#: ../modules/post-versioning/post-versioning.php:447
+#: ../modules/post-versioning/post-versioning.php:452
+#: ../modules/post-versioning/post-versioning.php:1299
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
-#: ../modules/post-versioning/post-versioning.php:448
+#: ../modules/post-versioning/post-versioning.php:453
+#: ../modules/post-versioning/post-versioning.php:1295
 msgid "Neue Version"
 msgstr "New version"
 
-#: ../modules/post-versioning/post-versioning.php:456
-#: ../modules/post-versioning/post-versioning.php:607
+#: ../modules/post-versioning/post-versioning.php:461
+#: ../modules/post-versioning/post-versioning.php:612
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
-#: ../modules/post-versioning/post-versioning.php:463
-#: ../modules/post-versioning/post-versioning.php:614
+#: ../modules/post-versioning/post-versioning.php:468
+#: ../modules/post-versioning/post-versioning.php:619
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
-#: ../modules/post-versioning/post-versioning.php:469
-#: ../modules/post-versioning/post-versioning.php:518
+#: ../modules/post-versioning/post-versioning.php:474
+#: ../modules/post-versioning/post-versioning.php:523
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr "You do not have the necessary rights to create a new version."
 
-#: ../modules/post-versioning/post-versioning.php:473
+#: ../modules/post-versioning/post-versioning.php:478
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr "This action is not allowed."
 
-#: ../modules/post-versioning/post-versioning.php:477
+#: ../modules/post-versioning/post-versioning.php:482
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:573
+#: ../modules/post-versioning/post-versioning.php:578
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1373,7 +1435,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:577
+#: ../modules/post-versioning/post-versioning.php:582
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1382,7 +1444,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:593
+#: ../modules/post-versioning/post-versioning.php:598
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1391,12 +1453,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:620
+#: ../modules/post-versioning/post-versioning.php:625
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:624
+#: ../modules/post-versioning/post-versioning.php:629
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1404,19 +1466,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:710
-#: ../modules/post-versioning/post-versioning.php:803
+#: ../modules/post-versioning/post-versioning.php:715
+#: ../modules/post-versioning/post-versioning.php:808
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:759
+#: ../modules/post-versioning/post-versioning.php:764
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:906
+#: ../modules/post-versioning/post-versioning.php:911
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1425,13 +1487,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:916
+#: ../modules/post-versioning/post-versioning.php:921
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:948
+#: ../modules/post-versioning/post-versioning.php:953
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1440,11 +1502,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1121
+#: ../modules/post-versioning/post-versioning.php:1126
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1132
+#: ../modules/post-versioning/post-versioning.php:1137
 msgid "Version"
 msgstr "Version"
 
@@ -2185,6 +2247,14 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:874
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Enabled"
+
+#, fuzzy
+#~ msgid "Comments"
+#~ msgstr "comment"
 
 #~ msgid "Deutsch"
 #~ msgstr "German"

@@ -1,13 +1,13 @@
-#workflow-recent-drafts ul,
-#workflow-pending-drafts ul {
+#workflow-recent-drafts ul.status-draft,
+#workflow-pending-drafts ul.status-pending {
     margin: 0;
     padding: 0;
     word-wrap: break-word;
     list-style: none outside none;
 }
 
-#workflow-recent-drafts ul li,
-#workflow-pending-drafts ul li {
+#workflow-recent-drafts ul.status-draft li,
+#workflow-pending-drafts ul.status-pending li {
     margin-bottom: 1em;
 }
 
@@ -103,7 +103,9 @@
 
 #dashboard-right-now li a:before,
 #workflow-recent-drafts li a:before,
-#workflow-pending-drafts li a:before {
+#workflow-pending-drafts li a:before,
+#published-posts li a:before,
+#future-posts li a:before {
 	content: '\f159';
 	font: normal 20px/1 'dashicons';
 	speak: none;
@@ -120,13 +122,17 @@
 
 #dashboard-right-now .post-count a:before,
 #workflow-recent-drafts .post-draft a:before,
-#workflow-pending-drafts .post-pending a:before {
+#workflow-pending-drafts .post-pending a:before,
+#published-posts .post-activity a:before,
+#future-posts .post-activity a:before {
 	content: '\f109';
 }
 
 #dashboard-right-now .page-count a:before,
 #workflow-recent-drafts .page-draft a:before,
-#workflow-pending-drafts .page-pending a:before {
+#workflow-pending-drafts .page-pending a:before,
+#published-posts .page-activity a:before,
+#future-posts .page-activity a:before {
 	content: '\f105';
 }
 
@@ -138,12 +144,21 @@
 	content: '\f125';
 }
 
-#dashboard-right-now .storage-count a:before {
+#dashboard-right-now .storage-count a:before,
+#dashboard-right-now .attachment-count a:before {
 	content: '\f104';
 }
 
 #dashboard-right-now .storage-count.warning a:before {
 	content: '\f153';
+}
+
+#dashboard-right-now .event-count a:before {
+	content: "\f469";
+}
+
+#dashboard-right-now .studienangebot-count a:before {
+	content: "\f118";
 }
 
 #future-posts .show-more {
@@ -156,4 +171,48 @@
 
 #future-posts ul span {
 	color: #aaa;
+}
+
+.no-results {
+    padding: 10px 12px 6px;    
+}
+
+.no-results-np {
+    padding: 0;
+}
+
+.showing_dropdown {
+    position: inherit !important;
+}
+
+.hiding_dropdown {
+    position: absolute !important;
+}
+
+.ms-choice {
+    height: 28px;
+    line-height: 28px;
+    padding: 2px;
+    vertical-align: middle;
+    border-radius: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+    color: #333;
+    outline: 0 none;
+    transition: border-color 0.05s ease-in-out 0s;    
+}
+
+.ms-drop {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 0;
+    border: 1px solid #ddd;
+    color: #333;
+    display: none;
+    margin-top: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
 }

@@ -32,16 +32,21 @@ class Workflow_Dashboard extends Workflow_Module {
             'slug' => 'dashboard',
             'default_options' => array(
                 'right_now' => true,
+                'site_activity' => true,
+                'control_site_activity' => array(
+                    'post_type' => array('post', 'page'),
+                    'posts_per_page' => 10
+                ),
                 'recent_drafts_widget' => true,
                 'control_recent_drafts' => array(
-                    'post_type' => 0,
+                    'post_type' => array('post', 'page'),
                     'posts_per_page' => 10
                 ),
                 'recent_pending_widget' => true,
                 'control_recent_pending' => array(
-                    'post_type' => 0,
+                    'post_type' => array('post', 'page'),
                     'posts_per_page' => 10
-                ),                
+                ),
                 'task_list_widget' => true,
             ),
             'configure_callback' => 'print_configure_view',
@@ -67,13 +72,25 @@ class Workflow_Dashboard extends Workflow_Module {
     }
 
     public function init() {
-        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_register_scripts'));
         add_action('wp_dashboard_setup', array($this, 'dashboard_setup'));
         add_action('admin_init', array($this, 'register_settings'));
     }
 
+    public function admin_register_scripts() {
+        wp_register_style('workflow-dashboard', $this->module_url . 'dashboard.css', array('jquery-multiselect'), CMS_WORKFLOW_VERSION, 'all');
+        wp_register_script('workflow-dashboard', $this->module_url . 'dashboard.js', array('jquery-multiselect'), CMS_WORKFLOW_VERSION, true);
+        wp_localize_script('workflow-dashboard', 'workflow_dashboard_vars', array(
+            'placeholder' => __('Wählen Sie beliebige Post-Types aus', CMS_WORKFLOW_TEXTDOMAIN),
+            'selectAllText' => __('Alle auswählen', CMS_WORKFLOW_TEXTDOMAIN),
+            'allSelected' => __('Alle ausgewählt', CMS_WORKFLOW_TEXTDOMAIN),
+            'countSelected' => __('# von % ausgewählt', CMS_WORKFLOW_TEXTDOMAIN)
+        ));        
+    }
+    
     public function admin_enqueue_scripts() {
-        wp_enqueue_style('workflow-dashboard', $this->module_url . 'dashboard.css', false, CMS_WORKFLOW_VERSION, 'all');
+        wp_enqueue_style('workflow-dashboard');
+        wp_enqueue_script('workflow-dashboard');
     }
 
     public function dashboard_setup() {
@@ -87,11 +104,15 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($this->module->options->right_now) {
             remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
             add_meta_box('dashboard-right-now', __('Auf einen Blick', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'right_now'), 'dashboard', 'normal', 'high');
-
             remove_action('activity_box_end', 'wp_dashboard_quota');
-            add_action('activity_box_end', array($this, 'dashboard_quota'));
+            add_action('activity_box_end', array($this, 'dashboard_quota'));            
         }
 
+        if ($this->module->options->site_activity) {            
+            remove_meta_box('dashboard_activity', 'dashboard', 'normal');
+            wp_add_dashboard_widget('custom_dashboard_activity', __('Aktivität', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'dashboard_site_activity'), array($this, 'control_site_activity'));
+        }
+        
         $all_post_types = $this->get_available_post_types();
         foreach ($all_post_types as $key => $post_type) {
             if (current_user_can($post_type->cap->edit_posts)) {
@@ -102,9 +123,9 @@ class Workflow_Dashboard extends Workflow_Module {
         if (empty($this->allowed_post_types)) {
             return;
         }
-
-        remove_meta_box('dashboard_activity', 'dashboard', 'normal');
         
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+                
         if ($this->module->options->recent_drafts_widget) {
             wp_add_dashboard_widget('workflow-recent-drafts', __('Aktuelle Entwürfe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'recent_drafts_widget'), array($this, 'control_recent_drafts_widget'));
         }
@@ -116,8 +137,6 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($this->module_activated('task_list') && $this->module->options->task_list_widget) {
             wp_add_dashboard_widget('workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'task_list_widget'));
         }
-        
-        wp_add_dashboard_widget('custom_dashboard_activity', __('Activities'), array($this, 'dashboard_site_activity'));
     }
 
     public function right_now() {
@@ -140,10 +159,12 @@ class Workflow_Dashboard extends Workflow_Module {
             if($post_type != 'attachment') {
                 $num_posts = wp_count_posts($post_type);
                 $num_posts = $num_posts->publish;
+                $display_link = (isset($post_type_obj->cap->edit_posts) && current_user_can($post_type_obj->cap->edit_posts)) ? true : false;
             } else {
                 $num_posts = $this->count_attachments();
+                $display_link = current_user_can('upload_files') ? true : false;
             }
-            if ($num_posts) {
+            if ($num_posts && $display_link) {
                 printf('<li class="%1$s-count"><a href="edit.php?post_type=%1$s">%2$s %3$s</a></li>', $post_type, number_format_i18n($num_posts), $post_type_obj->label);
             }
         }
@@ -257,7 +278,7 @@ class Workflow_Dashboard extends Workflow_Module {
             $options = $this->module->options->control_recent_drafts;
             $posts_query = new WP_Query(
                 array(
-                    'post_type' => !empty($options['post_type']) ? $options['post_type'] : array_keys($this->allowed_post_types),
+                    'post_type' => !empty($options['post_type']) ? (array) $options['post_type'] : array('post', 'page'),
                     'post_status' => 'draft',
                     'posts_per_page' => $options['posts_per_page'],
                     'orderby' => 'modified',
@@ -288,7 +309,7 @@ class Workflow_Dashboard extends Workflow_Module {
                 $authors[$post->post_author] = $post->post_author;
                 $authors = array_unique($authors);
                 
-                if (!current_user_can('manage_options') && !in_array($current_user->ID, $authors)) {
+                if (!current_user_can($post_type->cap->publish_posts) && !in_array($current_user->ID, $authors)) {
                     continue;
                 }
 
@@ -314,20 +335,17 @@ class Workflow_Dashboard extends Workflow_Module {
             </ul>
             <?php
         } else {
-            _e('Zurzeit gibt es keine Entwürfe.', CMS_WORKFLOW_TEXTDOMAIN);
+            printf('<div class="no-results-np">%s</div>', __('Zurzeit gibt es keine Entwürfe.', CMS_WORKFLOW_TEXTDOMAIN));
         }
     }
 
     public function control_recent_drafts_widget() {
         global $cms_workflow;
         
-        if (!current_user_can('manage_options')) {
-            return;
-        }
         if (!empty($_POST['recent_drafts_widget'])) {
             check_admin_referer('_recent_drafts_widget');
             $control_recent_drafts = array(
-                'post_type' => (string) @$_POST['recent_drafts_widget']['post_type'],
+                'post_type' => (array) @$_POST['recent_drafts_widget']['post_type'],
                 'posts_per_page' => (int) @$_POST['recent_drafts_widget']['posts_per_page'],
             );
             
@@ -335,73 +353,30 @@ class Workflow_Dashboard extends Workflow_Module {
         }
 
         $options = $this->module->options->control_recent_drafts;
+        if(empty($options['post_type'])) {
+            $options['post_type'] = array_keys($this->allowed_post_types);
+        }
         wp_nonce_field('_recent_drafts_widget');
         ?>
         <table class="form-table">
             <tr>
                 <td>
-                    <select name="recent_drafts_widget[post_type]" id="statistik_days">
-                        <option value="" <?php selected($options['post_type'], ''); ?>><?php _e('Alle', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
+                    <label for="recent_drafts_widget_post_type"><?php _e('Post-Types:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                    <select name="recent_drafts_widget[post_type][]" multiple tabindex="3" id="recent-drafts-widget-post-type-select">
                         <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
-                            <option value="<?php echo $post_type; ?>" <?php selected($options['post_type'], $post_type); ?>><?php echo $pt->label; ?></option>
+                            <option value="<?php echo $post_type; ?>" <?php selected(in_array($post_type, (array) $options['post_type']) ? $post_type : null, $post_type); ?>><?php echo $pt->label; ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <label for="recent_drafts_widget_post_type"><?php _e('Post-Type', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <select name="recent_drafts_widget[posts_per_page]" id="statistik_limit">
+                    <select name="recent_drafts_widget[posts_per_page]" id="recent-drafts-widget-posts-per-page">
                         <?php foreach (array(5, 10, 15, 20) as $num) : ?>
                             <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <label for="recent_drafts_widget_posts_per_page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
-                </td>
-            </tr>
-        </table>
-        <?php
-    }
-    
-    public function control_recent_pending_widget() {
-        global $cms_workflow;
-        
-        if (!current_user_can('manage_options')) {
-            return;
-        }
-        if (!empty($_POST['recent_pending_widget'])) {
-            check_admin_referer('_recent_pending_widget');
-            $control_recent_pending = array(
-                'post_type' => (string) @$_POST['recent_pending_widget']['post_type'],
-                'posts_per_page' => (int) @$_POST['recent_pending_widget']['posts_per_page'],
-            );
-            
-            $cms_workflow->update_module_option($this->module->name, 'control_recent_pending', $control_recent_pending);
-        }
-
-        $options = $this->module->options->control_recent_pending;
-        wp_nonce_field('_recent_pending_widget');
-        ?>
-        <table class="form-table">
-            <tr>
-                <td>
-                    <select name="recent_drafts_widget[post_type]" id="statistik_days">
-                        <option value="" <?php selected($options['post_type'], ''); ?>><?php _e('Alle', CMS_WORKFLOW_TEXTDOMAIN); ?></option>
-                        <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
-                            <option value="<?php echo $post_type; ?>" <?php selected($options['post_type'], $post_type); ?>><?php echo $pt->label; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <label for="recent_pending_widget_post_type"><?php _e('Post-Type', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <select name="recent_pending_widget[posts_per_page]" id="statistik_limit">
-                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
-                            <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <label for="recent_pending_widget_posts_per_page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                    <label for="recent-drafts-widget-posts-per-page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                 </td>
             </tr>
         </table>
@@ -413,7 +388,7 @@ class Workflow_Dashboard extends Workflow_Module {
             $options = $this->module->options->control_recent_pending;
             $posts_query = new WP_Query(
                 array(
-                    'post_type' => !empty($options['post_type']) ? $options['post_type'] : array_keys($this->allowed_post_types),
+                    'post_type' => !empty($options['post_type']) ? (array) $options['post_type'] : array('post', 'page'),
                     'post_status' => 'pending',
                     'posts_per_page' => $options['posts_per_page'],
                     'orderby' => 'modified',
@@ -444,7 +419,7 @@ class Workflow_Dashboard extends Workflow_Module {
                 $authors[$post->post_author] = $post->post_author;
                 $authors = array_unique($authors);
 
-                if (!current_user_can('manage_options') && !in_array($current_user->ID, $authors)) {
+                if (!current_user_can($post_type->cap->publish_posts) && !in_array($current_user->ID, $authors)) {
                     continue;
                 }
 
@@ -471,10 +446,54 @@ class Workflow_Dashboard extends Workflow_Module {
             </ul>
             <?php
         } else {
-            _e('Zurzeit gibt es keine ausstehenden Reviews.', CMS_WORKFLOW_TEXTDOMAIN);
+            printf('<div class="no-results-np">%s</div>', __('Zurzeit gibt es keine ausstehenden Reviews.', CMS_WORKFLOW_TEXTDOMAIN));
         }
     }
 
+    public function control_recent_pending_widget() {
+        global $cms_workflow;
+        
+        if (!empty($_POST['recent_pending_widget'])) {
+            check_admin_referer('_recent_pending_widget');
+            $control_recent_pending = array(
+                'post_type' => (array) @$_POST['recent_pending_widget']['post_type'],
+                'posts_per_page' => (int) @$_POST['recent_pending_widget']['posts_per_page'],
+            );
+            
+            $cms_workflow->update_module_option($this->module->name, 'control_recent_pending', $control_recent_pending);
+        }
+
+        $options = $this->module->options->control_recent_pending;
+        if(empty($options['post_type'])) {
+            $options['post_type'] = array_keys($this->allowed_post_types);
+        }        
+        wp_nonce_field('_recent_pending_widget');
+        ?>
+        <table class="form-table">
+            <tr>
+                <td>
+                    <label for="recent-pending-widget-post-type"><?php _e('Post-Types:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                    <select name="recent_pending_widget[post_type][]" multiple tabindex="3" id="recent-pending-widget-post-type-select">
+                        <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
+                            <option value="<?php echo $post_type; ?>" <?php selected(in_array($post_type, (array) $options['post_type']) ? $post_type : null, $post_type); ?>><?php echo $pt->label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="recent_pending_widget[posts_per_page]" id="recent-pending-widget-posts-per-page">
+                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
+                            <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label for="recent-pending-widget-posts-per-page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+        
     public function task_list_widget($posts = false) {
         if (!$posts) {
             $posts_query = new WP_Query(
@@ -490,10 +509,10 @@ class Workflow_Dashboard extends Workflow_Module {
 
         $current_user = wp_get_current_user();
 
+        $list = array();
+        
         if ($posts && is_array($posts)) {
             $tasks = $this->task_list_order($posts);
-
-            $list = array();
 
             foreach ($tasks as $value) {
 
@@ -519,7 +538,7 @@ class Workflow_Dashboard extends Workflow_Module {
                     $authors[$post->post_author] = $post->post_author;
                     $authors = array_unique($authors);
 
-                    if (!in_array($current_user->ID, $authors)) {
+                    if (!current_user_can($post_type->cap->publish_posts) && !in_array($current_user->ID, $authors)) {
                         continue;
                     }
 
@@ -537,11 +556,12 @@ class Workflow_Dashboard extends Workflow_Module {
                     $list[] = $item;
                 }
             }
-            ?>
-            <?php echo implode(PHP_EOL, $list); ?>
-            <?php
+        }
+
+        if(!empty($list)) {
+            echo implode(PHP_EOL, $list);
         } else {
-            _e('Zurzeit gibt es keine Aufgaben.', CMS_WORKFLOW_TEXTDOMAIN);
+            printf('<div class="no-results">%s</div>', __('Zurzeit gibt es keine Aufgaben.', CMS_WORKFLOW_TEXTDOMAIN));
         }
     }
 
@@ -662,30 +682,32 @@ class Workflow_Dashboard extends Workflow_Module {
     }
     
     public function dashboard_site_activity() {
-
+        $options = $this->module->options->control_site_activity;
+        $post_types = !empty($options['post_type']) ? (array) $options['post_type'] : array('post', 'page');
+        
         echo '<div id="activity-widget">';
 
-        $future_posts = $this->dashboard_recent_post_types( array(
-            'post_type' => array_keys($this->allowed_post_types),
-            'display' => 5,
-            'max' => 5,
+        $future_posts = $this->dashboard_recent_posts(array(
+            'post_type' => $post_types,
+            'display' => $options['posts_per_page'],
+            'max' => $options['posts_per_page'],
             'status' => 'future',
             'order' => 'ASC',
             'title' => __('in Kürze veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
             'id' => 'future-posts',
         ) );
 
-        $recent_posts = $this->dashboard_recent_post_types( array(
-            'post_type'  => array_keys($this->allowed_post_types),
-            'display' => 5,
-            'max' => 5,
+        $recent_posts = $this->dashboard_recent_posts(array(
+            'post_type'  => $post_types,
+            'display' => $options['posts_per_page'],
+            'max' => $options['posts_per_page'],
             'status' => 'publish',
             'order' => 'DESC',
             'title' => __('Kürzlich veröffentlicht', CMS_WORKFLOW_TEXTDOMAIN),
             'id' => 'published-posts',
         ) );
 
-        $recent_comments = wp_dashboard_recent_comments();
+        $recent_comments = $this->dashboard_recent_comments();
 
         if ( !$future_posts && !$recent_posts && !$recent_comments ) {
             echo '<div class="no-activity">';
@@ -697,7 +719,51 @@ class Workflow_Dashboard extends Workflow_Module {
         echo '</div>';
     }
     
-    private function dashboard_recent_post_types($args) {
+    public function control_site_activity() {
+        global $cms_workflow;
+        
+        if (!empty($_POST['site_activity'])) {
+            check_admin_referer('_site_activity');
+            $control_site_activity = array(
+                'post_type' => (array) @$_POST['site_activity']['post_type'],
+                'posts_per_page' => (int) @$_POST['site_activity']['posts_per_page'],
+            );
+            
+            $cms_workflow->update_module_option($this->module->name, 'control_site_activity', $control_site_activity);
+        }
+
+        $options = $this->module->options->control_site_activity;
+        if(empty($options['post_type'])) {
+            $options['post_type'] = array_keys($this->allowed_post_types);
+        }        
+        wp_nonce_field('_site_activity');
+        ?>
+        <table class="form-table">
+            <tr>
+                <td>
+                    <label for="site-activity-post-type"><?php _e('Post-Types:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                    <select name="site_activity[post_type][]" multiple tabindex="3" id="site-activity-post-type-select">
+                        <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
+                            <option value="<?php echo $post_type; ?>" <?php selected(in_array($post_type, (array) $options['post_type']) ? $post_type : null, $post_type); ?>><?php echo $pt->label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="site_activity[posts_per_page]" id="site-activity-posts-per-page">
+                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
+                            <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label for="site-activity-posts-per-page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+    
+    private function dashboard_recent_posts($args) {
         $query_args = array(
             'post_type' => $args['post_type'],
             'post_status' => $args['status'],
@@ -705,27 +771,23 @@ class Workflow_Dashboard extends Workflow_Module {
             'order' => $args['order'],
             'posts_per_page' => intval($args['max']),
             'no_found_rows' => true,
-            'cache_results' => false
+            'cache_results' => false,
+            'perm' => ('future' === $args['status']) ? 'editable' : 'readable',
         );
         $posts = new WP_Query($query_args);
 
-        if ($posts->have_posts()) {
+        if ( $posts->have_posts() ) {
 
             echo '<div id="' . $args['id'] . '" class="activity-block">';
-
-            if ($posts->post_count > $args['display']) {
-                echo '<small class="show-more hide-if-no-js"><a href="#">' . sprintf(__('%s weitere&#8230;', CMS_WORKFLOW_TEXTDOMAIN), $posts->post_count - intval($args['display'])) . '</a></small>';
-            }
 
             echo '<h4>' . $args['title'] . '</h4>';
 
             echo '<ul>';
 
-            $i = 0;
             $today = date('Y-m-d', current_time('timestamp'));
             $tomorrow = date('Y-m-d', strtotime('+1 day', current_time('timestamp')));
 
-            while ($posts->have_posts()) {
+            while ( $posts->have_posts() ) {
                 $posts->the_post();
 
                 $time = get_the_time('U');
@@ -737,17 +799,13 @@ class Workflow_Dashboard extends Workflow_Module {
                     $relative = date_i18n(__('d.m.', CMS_WORKFLOW_TEXTDOMAIN), $time);
                 }
 
-                $text = sprintf(
-                    __('<span>%1$s, %2$s</span> <a href="%3$s">%4$s</a>', CMS_WORKFLOW_TEXTDOMAIN),
-                    $relative,
-                    get_the_time(),
-                    get_edit_post_link(),
-                    _draft_or_post_title()
-                );
-
-                $hidden = $i >= $args['display'] ? ' class="hidden"' : '';
-                echo "<li{$hidden}>$text</li>";
-                $i++;
+                $post_type = get_post_type(get_the_ID());
+                
+                if (current_user_can('edit_post', get_the_ID())) {
+                    printf('<li class="%1$s-activity"><span>%2$s, %3$s</span> <a href="%4$s">%5$s</a></li>', $post_type, $relative, get_the_time(), get_edit_post_link(), _draft_or_post_title());
+                } else {
+                    printf('<li class="%1$s-activity"><span>%2$s, %3$s</span> %4$s</li>', $post_type, $relative, get_the_time(), _draft_or_post_title());
+                }
             }
 
             echo '</ul>';
@@ -761,5 +819,55 @@ class Workflow_Dashboard extends Workflow_Module {
 
         return true;
     }
-        
+    
+    private function dashboard_recent_comments() {
+        $options = $this->module->options->control_site_activity;
+        $total_items = $options['posts_per_page'];
+        $comments = array();
+
+        $comments_query = array(
+            'number' => $total_items * 5,
+            'offset' => 0
+        );
+        if (!current_user_can('edit_posts'))
+            $comments_query['status'] = 'approve';
+
+        while (count($comments) < $total_items && $possible = get_comments($comments_query)) {
+            foreach ( $possible as $comment ) {
+                if (!current_user_can('read_post', $comment->comment_post_ID)) {
+                    continue;
+                }
+                $comments[] = $comment;
+                if (count($comments) == $total_items) {
+                    break 2;
+                }
+            }
+            $comments_query['offset'] += $comments_query['number'];
+            $comments_query['number'] = $total_items * 10;
+        }
+
+        if ($comments) {
+            echo '<div id="latest-comments" class="activity-block">';
+            echo '<h4>' . __('Kommentare', CMS_WORKFLOW_TEXTDOMAIN) . '</h4>';
+
+            echo '<div id="the-comment-list" data-wp-lists="list:comment">';
+            foreach ($comments as $comment) {
+                _wp_dashboard_recent_comments_row($comment);
+            }
+            echo '</div>';
+
+            if (current_user_can('edit_posts')) {
+                _get_list_table('WP_Comments_List_Table')->views();
+            }
+
+            wp_comment_reply(-1, false, 'dashboard', false);
+            wp_comment_trashnotice();
+
+            echo '</div>';
+        } else {
+            return false;
+        }
+        return true;
+    }
+    
 }
