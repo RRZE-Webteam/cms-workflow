@@ -1,122 +1,79 @@
-#workflow-recent-drafts ul {
-    list-style: none outside none;
-}
-
-#workflow-recent-drafts ul, #workflow-recent-drafts p {
+#workflow-recent-drafts ul.status-draft,
+#workflow-pending-drafts ul.status-pending {
     margin: 0;
     padding: 0;
     word-wrap: break-word;
-}
-
-#workflow-recent-drafts ul li {
-    margin-bottom: 1em;
-}
-
-#workflow-recent-drafts h4 {
-    line-height: 1.7em;
-    word-wrap: break-word;
-}
-
-#workflow-recent-drafts abbr {
-    color: #999999;
-    font-family: sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    margin-left: 3px;
-}
-
-#workflow-pending-drafts ul {
     list-style: none outside none;
 }
 
-#workflow-pending-drafts ul, #workflow-pending-drafts p {
-    margin: 0;
-    padding: 0;
-    word-wrap: break-word;
-}
-
-#workflow-pending-drafts ul li {
+#workflow-recent-drafts ul.status-draft li,
+#workflow-pending-drafts ul.status-pending li {
     margin-bottom: 1em;
 }
 
-#workflow-pending-drafts h4 {
-    line-height: 1.7em;
-    word-wrap: break-word;
-}
-
-#workflow-pending-drafts abbr {
-    color: #999999;
-    font-family: sans-serif;
-    font-size: 12px;
-    font-weight: normal;
-    margin-left: 3px;
-}
-
-#workflow-task-list ul {
-    list-style: none outside none;
-}
-
-#workflow-task-list ul, #workflow-task-list p {
-    margin: 0;
-    padding: 0;
-    word-wrap: break-word;
-}
-
-#workflow-task-list ul li {
-    margin-bottom: 1em;
-}
-
-#workflow-task-list h4 {
-    line-height: 1.7em;
-    word-wrap: break-word;
-}
-
+#workflow-recent-drafts abbr,
+#workflow-pending-drafts abbr,
 #workflow-task-list abbr {
-    color: #999999;
+    color: #777;
     font-family: sans-serif;
-    font-size: 12px;
     font-weight: normal;
     margin-left: 3px;
+}
+
+.priority-1,
+.priority-2,
+.priority-3 {
+    border-bottom: 1px solid #eee;
+    padding: 10px 12px 6px;    
+}
+
+.priority-1 {
+    background: none repeat scroll 0 0 #f5f5f5;  
 }
 
 .priority-2 {
-    background-color: #FFFBCC !important;
+    background: none repeat scroll 0 0 #fffbcc;
 }
 
 .priority-3 {
-    background-color: #FFECE6 !important;
+    background: none repeat scroll 0 0 #ffece6;
 }
 
-#dashboard-right-now {}
+#workflow-task-list .inside {
+    margin-top: 0;
+}
 
+#workflow-task-list .inside,
 #dashboard-right-now .inside {
-	margin-bottom: 0;
-	overflow: hidden;
-	padding: 0;
+    overflow: hidden;
+    padding: 0;
 }
 
 #dashboard-right-now .main {
-	padding: 0 12px;
+    overflow: hidden;
+    padding: 0 12px 11px;
 }
 
 #dashboard-right-now .main p {
-	margin-top: 10px;
+	margin: 0;
 }
 
-#dashboard-right-now ul,
-.mu-storage {
+#dashboard-right-now ul {
+    margin: 0;
 	overflow: hidden;
 }
 
 #dashboard-right-now li {
-	width: 50%;
-	float: left;
-	margin-bottom: 10px;
+    float: left;
+    margin-bottom: 10px;
+    width: 50%;
 }
 
 #dashboard-right-now .sub {
-	padding: 12px;
-	border-top: 1px solid;
+    background: none repeat scroll 0 0 #f5f5f5;
+    border-top: 1px solid #eee;
+    color: #777;
+    padding: 10px 12px 6px;
 }
 
 #dashboard-right-now .sub p {
@@ -124,25 +81,31 @@
 	font-size: 11px;
 }
 
-#dashboard-right-now .sub {
-	color: #bfbbbb;
-	background: #f5f5f5;
-	border-top-color: #dedede;
-}
-
 #dashboard-right-now .sub h4 {
 	color: #555;
 }
 
-#dashboard-right-now li a:before {
+.mu-storage {
+    overflow: hidden;
+}
+
+#dashboard-right-now li a:before,
+#workflow-recent-drafts li a:before,
+#workflow-pending-drafts li a:before {
 	color: #888;
 }
 
-#dashboard-right-now .warning a:before {
+#dashboard-right-now .warning a:before,
+#workflow-recent-drafts .warning a:before,
+#workflow-pending-drafts .warning a:before {
 	color: #d54e21;
 }
 
-#dashboard-right-now li a:before {
+#dashboard-right-now li a:before,
+#workflow-recent-drafts li a:before,
+#workflow-pending-drafts li a:before,
+#published-posts li a:before,
+#future-posts li a:before {
 	content: '\f159';
 	font: normal 20px/1 'dashicons';
 	speak: none;
@@ -157,11 +120,19 @@
 	text-decoration: none !important;
 }
 
-#dashboard-right-now .post-count a:before {
+#dashboard-right-now .post-count a:before,
+#workflow-recent-drafts .post-draft a:before,
+#workflow-pending-drafts .post-pending a:before,
+#published-posts .post-activity a:before,
+#future-posts .post-activity a:before {
 	content: '\f109';
 }
 
-#dashboard-right-now .page-count a:before {
+#dashboard-right-now .page-count a:before,
+#workflow-recent-drafts .page-draft a:before,
+#workflow-pending-drafts .page-pending a:before,
+#published-posts .page-activity a:before,
+#future-posts .page-activity a:before {
 	content: '\f105';
 }
 
@@ -173,12 +144,21 @@
 	content: '\f125';
 }
 
-#dashboard-right-now .storage-count a:before {
+#dashboard-right-now .storage-count a:before,
+#dashboard-right-now .attachment-count a:before {
 	content: '\f104';
 }
 
 #dashboard-right-now .storage-count.warning a:before {
 	content: '\f153';
+}
+
+#dashboard-right-now .event-count a:before {
+	content: "\f469";
+}
+
+#dashboard-right-now .studienangebot-count a:before {
+	content: "\f118";
 }
 
 #future-posts .show-more {
@@ -191,4 +171,48 @@
 
 #future-posts ul span {
 	color: #aaa;
+}
+
+.no-results {
+    padding: 10px 12px 6px;    
+}
+
+.no-results-np {
+    padding: 0;
+}
+
+.showing_dropdown {
+    position: inherit !important;
+}
+
+.hiding_dropdown {
+    position: absolute !important;
+}
+
+.ms-choice {
+    height: 28px;
+    line-height: 28px;
+    padding: 2px;
+    vertical-align: middle;
+    border-radius: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+    color: #333;
+    outline: 0 none;
+    transition: border-color 0.05s ease-in-out 0s;    
+}
+
+.ms-drop {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 0;
+    border: 1px solid #ddd;
+    color: #333;
+    display: none;
+    margin-top: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
 }

@@ -3,7 +3,7 @@
 /**
  * Plugin Name: CMS-Workflow
  * Description: Redaktioneller Workflow.
- * Version: 1.7
+ * Version: 1.7.1
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * Text Domain: cms-workflow
@@ -34,10 +34,10 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.7'; // Plugin-Version
+    const version = '1.7.1'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
-    const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
+    const wp_version = '4.1'; // Minimal erforderliche WordPress-Version
 
     public $workflow_options = '_cms_workflow_';
     public $workflow_options_name = '_cms_workflow_options';
@@ -185,12 +185,13 @@ class CMS_Workflow {
             update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
         }
 
-        wp_enqueue_style('workflow-common', CMS_WORKFLOW_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');
-
-        wp_register_script('jquery-listfilterizer', CMS_WORKFLOW_URL . 'js/jquery.listfilterizer.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
+        wp_register_style('jquery-multiselect', CMS_WORKFLOW_URL . 'css/jquery.multiple.select.css', false, '1.1.0', 'all');
+        wp_register_script('jquery-multiselect', CMS_WORKFLOW_URL . 'js/jquery.multiple.select.js', array('jquery'), '1.13', true);        
         wp_register_style('jquery-listfilterizer', CMS_WORKFLOW_URL . 'css/jquery.listfilterizer.css', false, CMS_WORKFLOW_VERSION, 'all');
-
+        wp_register_script('jquery-listfilterizer', CMS_WORKFLOW_URL . 'js/jquery.listfilterizer.js', array('jquery'), CMS_WORKFLOW_VERSION, true);        
         wp_register_script('sprintf', CMS_WORKFLOW_URL . 'js/sprintf.js', false, CMS_WORKFLOW_VERSION, true);
+        
+        wp_enqueue_style('workflow-common', CMS_WORKFLOW_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');        
     }
 
     public function register_module($name, $args = array()) {
