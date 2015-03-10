@@ -74,3 +74,16 @@
 table#workflow-user-usergroups td {
     padding: 80px 10px 25px;
 }
+
+.usergroups-wrap p {
+    font-size: 13px;
+    font-style: italic;
+    color: #666;
+    margin: 1em 0;
+}
+
+.usergroups-wrap label {
+    display: inline;
+    font-size: 12px;
+    padding: 2px;
+}

@@ -421,7 +421,7 @@ class Workflow_User_Groups extends Workflow_Module {
                     <?php $wp_list_table->display(); ?>
                 </div>
             </div>
-            <div id="col-left"><div class="col-wrap"><div class="form-wrap">
+            <div id="col-left"><div class="col-wrap"><div class="form-wrap usergroups-wrap">
                 <h2 class="nav-tab-wrapper">
                     <a href="<?php echo esc_url($this->get_link()); ?>" class="nav-tab<?php if (!isset($_GET['action']) || $_GET['action'] != 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
                     <a href="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>" class="nav-tab<?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Einstellungen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
