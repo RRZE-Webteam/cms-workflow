@@ -4,6 +4,8 @@ class Workflow_Notifications extends Workflow_Module {
 
     public $schedule_notifications = false;
     public $module;
+    
+    private $alt_body;
 
     public function __construct() {
         global $cms_workflow;
@@ -44,8 +46,8 @@ class Workflow_Notifications extends Workflow_Module {
         $this->module = $cms_workflow->register_module('notifications', $args);
     }
 
-    public function init() {
-
+    public function init() {        
+        add_action('post_updated', array($this, 'post_updated'), 10, 3);
         add_action('transition_post_status', array($this, 'notification_status_change'), 10, 3);
         add_action('workflow_editorial_comments_new_comment', array($this, 'notification_editorial_comments'));
         add_action('workflow_task_list_new_task', array($this, 'notification_task_list'));
@@ -55,6 +57,234 @@ class Workflow_Notifications extends Workflow_Module {
         add_action('admin_init', array($this, 'register_settings'));
     }
 
+    public function post_updated($post_id, $post_after, $post_before) {
+        if (!$this->is_post_type_enabled($post_before->post_type)) {
+            return;
+        }
+
+		if ($post_before->post_status !== 'publish' || $post_after->post_status !== 'publish') {
+			return;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        // If this is a new post, set an empty title for $post_before so that it appears in the diff.
+        $child_posts = wp_get_post_revisions($post_id, array('numberposts' => 1));
+        if (count($child_posts) == 0) {
+            $post_before->post_title = '';
+        }
+
+        if (!$post_before || !$post_after) {
+            return;
+        }
+
+        if (!class_exists('WP_Text_Diff_Renderer_Table')) {
+            require(ABSPATH . WPINC . '/wp-diff.php');
+        }
+        
+        require_once(CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/text-diff-render-table.php');
+        require_once(CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/text-diff-renderer-unified.php');
+        
+        $html_diffs = array();
+        $text_diffs = array();
+        $identical = true;
+        
+        foreach (_wp_post_revision_fields() as $field => $field_title) {
+            $left = apply_filters("_wp_post_revision_field_$field", $post_before->$field, $field);
+            $right = apply_filters("_wp_post_revision_field_$field", $post_after->$field, $field);
+
+            if (!$diff = $this->text_diff($left, $right)) {
+                continue;
+            }
+            
+            $html_diffs[$field_title] = $diff;
+
+            $left = normalize_whitespace($left);
+            $right = normalize_whitespace($right);
+
+            $left_lines = explode(PHP_EOL, $left);
+            $right_lines = explode(PHP_EOL, $right);
+
+            $text_diff = new Text_Diff($left_lines, $right_lines);
+            $renderer = new Text_Diff_Renderer_Unified();
+            $text_diffs[$field_title] = $renderer->render($text_diff);
+
+            $identical = false;
+        }
+
+        if ($identical) {
+            $post_before = null;
+            $post_after = null;
+            return;
+        }
+
+        $left_title = __('Revision', CMS_WORKFLOW_TEXTDOMAIN);
+        $right_title = __('Aktuelles Dokument', CMS_WORKFLOW_TEXTDOMAIN);
+        
+        $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
+        $view_link = htmlspecialchars_decode(get_permalink($post_id));
+        
+        $post_title = $this->draft_or_post_title($post_before->post_title);
+        $post_type = get_post_type_object($post_before->post_type)->labels->singular_name;
+
+        $current_user = wp_get_current_user();
+
+        if ($current_user->ID) {
+            $current_user_display_name = $current_user->display_name;
+            $current_user_email = sprintf('(%s)', $current_user->user_email);
+        } else {
+            $current_user_display_name = __('CMS-Workflow', CMS_WORKFLOW_TEXTDOMAIN);
+            $current_user_email = '';
+        }
+
+        $authors = array();
+
+        if ($this->module_activated('authors')) {
+            $authors = $this->get_authors_details($post_id);
+        }
+
+        $post_status = $this->get_post_status_name($post_before->post_status);
+        
+        $post_author = get_userdata($post_before->post_author);
+        $authors[$post_before->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
+        $authors = array_unique($authors);
+
+        $blogname = get_option('blogname');
+        $admin_email = get_option('admin_email');
+                
+        $subject = sprintf(__('%1$s - Das Dokument „%2$s“ hat sich geändert.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
+        
+        // PLAIN TEXT Body
+        $body = '';
+        
+        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";       
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        
+        $body .= "\r\n";
+        
+        $length = max( strlen($left_title), strlen( $right_title));
+        $left_title = str_pad($left_title, $length + 2);
+        $right_title = str_pad($right_title, $length + 2);
+        
+        $text_diff = '';
+        
+        foreach ($text_diffs as $field_title => $diff) {
+            $text_diff .= "$field_title\n";
+            $text_diff .= "===================================================================\n";
+            $text_diff .= "--- $left_title	({$post_before->post_date_gmt})\n";
+            $text_diff .= "+++ $right_title	({$post_after->post_modified_gmt})\n";
+            $text_diff .= "$diff\n\n";
+        }      
+        
+        $text_diff = rtrim($text_diff);
+        
+        $body .= $text_diff;
+        
+        $body .= "\r\n \r\n";
+        
+        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status) . "\r\n";
+
+        $body .= "\r\n";
+        
+        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
+        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        
+        $body .= "\r\n";
+        
+        $body .= $this->get_notification_footer($post_before);
+        
+        $this->alt_body = $body;
+        
+        // MIME Body
+        $body = '';
+        
+        $body .= "<div>\r\n";
+        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";       
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        $body .= "</div>\r\n";
+        
+        $body .= "<br>\r\n";
+        
+        $html_diff_head = '';
+        $html_diff_head .= "<table style='width: 100%; border-collapse: collapse; border: none;'><tr>\n";
+        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($left_title) . ' @ ' . esc_html($post_before->post_date_gmt) . "</td>\n";
+        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($right_title) . ' @ ' . esc_html($post_after->post_modified_gmt) . "</td>\n";
+        $html_diff_head .= "</tr></table>\n\n";
+
+        $html_diff = '';
+        foreach ($html_diffs as $field_title => $diff) {
+            $html_diff .= '<h3>' . esc_html($field_title) . "</h3>\n";
+            $html_diff .= "$diff\n\n";
+        }
+
+        $html_diff = rtrim($html_diff);
+
+        $html_diff = str_replace("class='diff'", 'style="width: 100%; border-collapse: collapse; border: none; white-space: pre-wrap; word-wrap: break-word; font-family: Consolas,Monaco,Courier,monospace;"', $html_diff);
+        $html_diff = preg_replace('#<col[^>]+/?>#i', '', $html_diff);
+        $html_diff = str_replace("class='diff-deletedline'", 'style="padding: 5px; width: 50%; background-color: #fdd;"', $html_diff);
+        $html_diff = str_replace("class='diff-addedline'", 'style="padding: 5px; width: 50%; background-color: #dfd;"', $html_diff);
+        $html_diff = str_replace("class='diff-context'", 'style="padding: 5px; width: 50%;"', $html_diff);
+        $html_diff = str_replace('<td>', '<td style="padding: 5px;">', $html_diff);
+        $html_diff = str_replace('<del>', '<del style="text-decoration: none; background-color: #f99;">', $html_diff);
+        $html_diff = str_replace('<ins>', '<ins style="text-decoration: none; background-color: #9f9;">', $html_diff);
+        $html_diff = str_replace(array('</td>', '</tr>', '</tbody>'), array("</td>\n", "</tr>\n", "</tbody>\n"), $html_diff);
+
+        $html_diff = $html_diff_head . $html_diff;
+        
+        $body .= $html_diff;
+        $body .= "<br>\r\n";
+        
+        $body .= "<div>\r\n";
+        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status) . "\r\n";
+        $body .= "</div>\r\n";
+        
+        $body .= "<br>\r\n";
+        
+        $body .= "<div>\r\n";
+        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
+        $body .= "</div><div>\r\n";
+        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        $body .= "</div>\r\n";
+        
+        $body .= "<br>\r\n";
+        
+        $body .= "<div>\r\n";
+        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN), $this->draft_or_post_title($post_before->post_title)) . "\r\n";
+        $body .= "</div>\r\n";
+        
+        $body .= "<br>\r\n";
+        
+        $body .= "<div>\r\n";
+        $body .= get_option('blogname') . "\r\n" . get_bloginfo('url') . "\r\n" . admin_url() . "\r\n";
+        $body .= "</div>\r\n";
+        
+        add_action('phpmailer_init', array($this, 'phpmailer_init'));
+        
+        $this->send_email('post-updated', $post_before, $subject, $body);
+    }
+    
     public function notification_status_change($new_status, $old_status, $post) {
         global $cms_workflow;
 
@@ -71,7 +301,7 @@ class Workflow_Notifications extends Workflow_Module {
         if (!in_array($new_status, $ignored_statuses)) {
 
             $post_id = $post->ID;
-            $post_title = $this->draft_or_post_title($post_id);
+            $post_title = $this->draft_or_post_title($post->post_title);
             $post_type = get_post_type_object($post->post_type)->labels->singular_name;
 
             $current_user = wp_get_current_user();
@@ -162,12 +392,15 @@ class Workflow_Notifications extends Workflow_Module {
                 $view_link = htmlspecialchars_decode(get_permalink($post_id));
             }
 
-            $body .= "\r\n \r\n";
+            $body .= "\r\n";
+            
             $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
             $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
             $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
             $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
 
+            $body .= "\r\n";
+            
             $body .= $this->get_notification_footer($post);
 
             $this->send_email('status-change', $post, $subject, $body);
@@ -191,7 +424,7 @@ class Workflow_Notifications extends Workflow_Module {
 
         $post_id = $post->ID;
         $post_type = get_post_type_object($post->post_type)->labels->singular_name;
-        $post_title = $this->draft_or_post_title($post_id);
+        $post_title = $this->draft_or_post_title($post->post_title);
 
         $blogname = get_option('blogname');
 
@@ -216,6 +449,8 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= "\r\n" . __('Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: ', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
         $body .= $edit_link . "#editorial-comments" . "\r\n\r\n";
 
+        $body .= "\r\n";
+        
         $body .= $this->get_notification_footer($post);
 
         $this->send_email('comment', $post, $subject, $body);
@@ -272,11 +507,14 @@ class Workflow_Notifications extends Workflow_Module {
         $view_link = htmlspecialchars_decode(get_permalink($post_id));
 
         $body .= "\r\n";
+        
         $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
         $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
         $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
         $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
 
+        $body .= "\r\n";
+        
         $body .= $this->get_notification_footer($post);
 
         $this->send_email('new_task', $post, $subject, $body);
@@ -284,19 +522,21 @@ class Workflow_Notifications extends Workflow_Module {
 
     public function get_notification_footer($post) {
         $body = "";
-        $body .= "\r\n \r\n";
-        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN), $this->draft_or_post_title($post->ID));
+        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN), $this->draft_or_post_title($post->post_title));
         $body .= "\r\n \r\n";
         $body .= get_option('blogname') . "\r\n" . get_bloginfo('url') . "\r\n" . admin_url() . "\r\n";
         return $body;
     }
-
+    
+	public function phpmailer_init(&$phpmailer) {
+		$phpmailer->AltBody = $this->alt_body;
+	}
+    
     public function send_email($action, $post, $subject, $message, $headers = '') {
-
         if (empty($headers)) {
             $headers[] = sprintf('From: %1$s <%2$s>', get_option('blogname'), get_option('admin_email'));
         }
-
+        
         $recipients = $this->get_notification_recipients($post, true);
 
         if ($recipients && !is_array($recipients)) {
@@ -330,7 +570,7 @@ class Workflow_Notifications extends Workflow_Module {
     }
 
     public function send_single_email($to, $subject, $message, $headers = '') {
-        wp_mail($to, $subject, $message, $headers);
+        wp_mail($to, $subject, $message, $headers);      
     }
 
     private function get_notification_recipients($post, $string = false) {
@@ -457,9 +697,58 @@ class Workflow_Notifications extends Workflow_Module {
         <?php
     }
 
-    private function draft_or_post_title($post_id = 0) {
-        $post = get_post($post_id);
-        return !empty($post->post_title) ? $post->post_title : __('(Kein Titel)', CMS_WORKFLOW_TEXTDOMAIN);
+    private function draft_or_post_title($post_title) {
+        return !empty($post_title) ? $post_title : __('(Kein Titel)', CMS_WORKFLOW_TEXTDOMAIN);
     }
 
+	private function text_diff($left_string, $right_string, $args = null) {
+		$defaults = array(
+            'title' => '',
+            'title_left' => '',
+            'title_right' => ''
+        );
+        
+		$args = wp_parse_args($args, $defaults);
+
+		$left_string  = normalize_whitespace( $left_string);
+		$right_string = normalize_whitespace( $right_string);
+		$left_lines  = explode("\n", $left_string);
+		$right_lines = explode("\n", $right_string);
+
+		$text_diff = new Text_Diff( $left_lines, $right_lines);
+		$renderer  = new Workflow_Text_Diff_Renderer_Table();
+		$diff = $renderer->render( $text_diff );
+
+		if (!$diff) {
+			return '';
+        }
+
+		$r  = "<table class='diff'>\n";
+		$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
+
+		if ($args['title'] || $args['title_left'] || $args['title_right']) {
+			$r .= "<thead>";
+        }
+        
+		if ($args['title']) {
+			$r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
+        }
+        
+		if ($args['title_left'] || $args['title_right']) {
+			$r .= "<tr class='diff-sub-title'>\n";
+			$r .= "\t<td></td><th>$args[title_left]</th>\n";
+			$r .= "\t<td></td><th>$args[title_right]</th>\n";
+			$r .= "</tr>\n";
+		}
+        
+		if ($args['title'] || $args['title_left'] || $args['title_right']) {
+			$r .= "</thead>\n";
+        }
+        
+		$r .= "<tbody>\n$diff\n</tbody>\n";
+		$r .= "</table>";
+        
+		return $r;
+	}
+    
 }
