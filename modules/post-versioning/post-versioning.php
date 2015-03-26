@@ -172,7 +172,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $allowed_post_types = $this->get_post_types($this->module);
 
         foreach ($allowed_post_types as $post_type) {
-            add_action('publish_' . $post_type, array($this, 'version_save_post'), 999, 2);
+            add_action('publish_' . $post_type, array($this, 'version_post_replace_on_publish'), 999, 2);
 
             $filter_row_actions = is_post_type_hierarchical($post_type) ? 'page_row_actions' : 'post_row_actions';
             add_filter($filter_row_actions, array($this, 'filter_post_row_actions'), 10, 2);
@@ -499,23 +499,23 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_post_meta($draft_id, self::version_post_id, $post_id);
             
             $post_meta = $this->get_post_meta($post_id);
-            $post_attached_data = $this->get_post_attached_file($post_id);
+            
+            $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
+            if($thumbnail_id) {
+                add_post_meta($draft_id, '_thumbnail_id', $thumbnail_id);
+            }
             
             $this->add_taxonomies($draft_id, $post);
             
-            $this->add_attachments($draft_id, $post_id);
-            
             $this->add_post_meta($draft_id, $post_meta);
-
-            $this->add_post_attached_file($draft_id, $post_attached_data);      
-            
+                 
             wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
             exit;
         }
         
     }
 
-    public function version_save_post($post_id, $post) {
+    public function version_post_replace_on_publish($post_id, $post) {
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
@@ -523,7 +523,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
-        $post_attached_data = $this->get_post_attached_file($post_id);
+        $post_meta = $this->get_post_meta($post_id);
+        
+        $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
         
         $version_post_id = get_post_meta($post_id, self::version_post_id, true);
 
@@ -542,14 +544,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_update_post($new_post);
             
             $this->add_taxonomies($version_post_id, $post);
+                        
+            if($thumbnail_id) {
+                update_post_meta($version_post_id, '_thumbnail_id', $thumbnail_id);
+            }
             
-            if(isset($post_attached_data['attachment'])) {
-                $attachment = $post_attached_data['attachment'];
-                set_post_thumbnail($version_post_id, $attachment->ID);
-            }          
+            $this->update_post_meta($version_post_id, $post_meta);
             
-            $this->add_attachments($version_post_id, $post_id);
-
             $post->post_status = 'draft';
             wp_update_post($post);
 
@@ -629,26 +630,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_die(__('Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte kehren Sie zurück und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN));
         }
         
-        $draft_id = $this->copy_as_new_post($post_id, $post);
-        
-        if ($draft_id) {
-            add_post_meta($draft_id, self::source_post_id, $post_id);
-            
-            $post_meta = $this->get_post_meta($post_id);        
-            $post_attached_data = $this->get_post_attached_file($post_id);
-            
-            $this->add_post_meta($draft_id, $post_meta);
-            
-            $this->add_post_attached_file($draft_id, $post_attached_data);
-            
-            wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
-            exit;
-        }
-    }
-
-
-    private function copy_as_new_post($post_id, $post) {
-        
         $post_author = get_current_user_id();
         $post_status = 'draft';
 
@@ -661,7 +642,23 @@ class Workflow_Post_Versioning extends Workflow_Module {
             'post_type' => $post->post_type
         );
 
-        return wp_insert_post($new_post);
+        $draft_id = wp_insert_post($new_post);
+                
+        if ($draft_id) {
+            add_post_meta($draft_id, self::source_post_id, $post_id);
+            
+            $post_meta = $this->get_post_meta($post_id);
+            
+            $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
+            if($thumbnail_id) {
+                add_post_meta($draft_id, '_thumbnail_id', $thumbnail_id);
+            }            
+            
+            $this->add_post_meta($draft_id, $post_meta);
+                        
+            wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
+            exit;
+        }
     }
 
     public function network_connections_meta_box($post_type, $post) {
@@ -874,9 +871,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     restore_current_blog();
                     delete_post_meta($post_id, self::version_remote_parent_post_meta);
                     switch_to_blog($blog_id);
-                } 
-                
-                else {
+                } else {
                     
                     if ($remote_post->post_status == 'publish') {
                         
@@ -896,7 +891,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
                         if($draft_id) {
                             add_post_meta($draft_id, self::version_post_id, $remote_post_id);
                             
-                            $this->add_taxonomies($draft_id, $remote_post);                            
+                            $this->add_taxonomies($draft_id, $remote_post);
+                            
                             $this->add_post_meta($draft_id, $post_meta);
                             
                             $this->add_post_attached_file($draft_id, $post_attached_data);
@@ -909,14 +905,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
                             restore_current_blog();
                             $this->flash_admin_notice(sprintf(__('Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
-                        }
-                        
-                        else {
+                        } else {
                             restore_current_blog();
                         }
-                    } 
-                    
-                    else {
+                    } else {
                         restore_current_blog();
                         $this->flash_admin_notice(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
                     }
@@ -993,7 +985,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
         
         return $post_meta;
     }
-
     
     private function add_post_meta($post_id, $post_meta) {
         foreach ($post_meta as $meta) {
@@ -1003,8 +994,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 }
             }
         }
-    }
-        
+    }    
+    
+    private function update_post_meta($post_id, $post_meta) {
+        foreach ($post_meta as $meta) {
+            foreach ($meta as $key => $value) {
+                if (strpos($key, '_') !== 0) {
+                    update_post_meta($post_id, $key, $value);
+                }
+            }
+        }
+    }    
+            
     private function add_attachments($post_id, $source_post_id) {
         $args = array(
             'post_type' => 'attachment',
