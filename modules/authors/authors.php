@@ -556,13 +556,14 @@ class Workflow_Authors extends Workflow_Module {
         $post_id = isset($args[2]) ? $args[2] : 0;
 
         $post_type = get_post_type($post_id);
-
-        if (!$this->is_post_type_enabled($post_type)) {
+        $revision_parent_id = wp_is_post_revision($post_id);
+        
+        if (!$this->is_post_type_enabled($post_type) && !$revision_parent_id) {
             return $allcaps;
         }
 
         $post_type_obj = get_post_type_object($post_type);
-
+        
         if (!$post_type_obj) {
             return $allcaps;
         }
@@ -570,10 +571,10 @@ class Workflow_Authors extends Workflow_Module {
         if (!is_user_logged_in()) {
             return $allcaps;
         }
-
+        
         $current_user = wp_get_current_user();
 
-        if (!$this->is_post_author($current_user->user_login, $post_id)) {
+        if (!$this->is_post_author($current_user->user_login, $post_id) && !$this->is_post_author($current_user->user_login, $revision_parent_id)) {
             return $allcaps;
         }
 
