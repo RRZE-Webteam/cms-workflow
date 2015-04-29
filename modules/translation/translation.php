@@ -94,7 +94,7 @@ class Workflow_Translation extends Workflow_Module {
 
             add_action('add_meta_boxes', array($this, 'translate_meta_box'), 10, 2);
 
-            add_action('save_post', array($this, 'save_translate_meta_data'));
+            add_action('save_post', array($this, 'save_translate_meta_data'), 999);
         }
         
         add_action('template_redirect', array($this, 'set_alternate_posts'));
@@ -380,12 +380,12 @@ class Workflow_Translation extends Workflow_Module {
 
                 if (in_array($arr_file_type['type'], $supported_types)) {
 
-                    remove_action('save_post', array($this, 'save_translate_meta_data'));
+                    remove_action('save_post', array($this, 'save_translate_meta_data'), 999);
                     $error = $this->import_xliff($post_id, $_FILES['translate_xliff_attachment']);
                     if (is_wp_error($error)) {
                         $this->flash_admin_notice($error->get_error_message(), 'error');
                     }
-                    add_action('save_post', array($this, 'save_translate_meta_data'));
+                    add_action('save_post', array($this, 'save_translate_meta_data'), 999);
                     
                 } else {
                     $this->flash_admin_notice(__('Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
