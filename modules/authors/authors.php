@@ -83,7 +83,7 @@ class Workflow_Authors extends Workflow_Module {
 
         add_action('add_meta_boxes', array($this, 'add_post_meta_box'));
 
-        add_action('transition_post_status', array($this, 'transition_post_status'), 0, 3);
+        add_action('save_post', array($this, 'save_post'), 10, 2);
 
         add_action('delete_user', array($this, 'delete_user_action'));
 
@@ -259,7 +259,7 @@ class Workflow_Authors extends Workflow_Module {
         <?php
     }
 
-    public function transition_post_status($new_status, $old_status, $post) {
+    public function save_post($post_id, $post) {
         global $cms_workflow;
 
         if ((!wp_is_post_revision($post) && !wp_is_post_autosave($post) ) && isset($_POST['workflow_save_authors']) && current_user_can('manage_categories')) {
