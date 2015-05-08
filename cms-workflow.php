@@ -3,7 +3,7 @@
 /*
   Plugin Name: CMS-Workflow
   Plugin URI: https://github.com/RRZE-Webteam/cms-basis
-  Version: 1.7.6
+  Version: 1.7.7
   Description: Redaktioneller Workflow.
   Author: RRZE-Webteam
   Author URI: https://github.com/RRZE-Webteam/cms-workflow
@@ -33,7 +33,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.7.6'; // Plugin-Version
+    const version = '1.7.7'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.4'; // Minimal erforderliche PHP-Version
     const wp_version = '4.1'; // Minimal erforderliche WordPress-Version

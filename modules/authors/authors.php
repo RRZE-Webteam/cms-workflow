@@ -105,8 +105,6 @@ class Workflow_Authors extends Workflow_Module {
         add_filter('posts_groupby', array($this, 'posts_groupby_filter'));
 
         add_action('load-edit.php', array($this, 'load_edit'));
-
-        add_filter('author_edit_pre', array($this, 'author_edit_pre_filter'), 10, 2);
     }
 
     public function deactivation($network_wide = false) {
@@ -273,21 +271,6 @@ class Workflow_Authors extends Workflow_Module {
         }
     }
 
-    public function author_edit_pre_filter($user_id, $post_id) {
-        $user_data = get_userdata($user_id);
-
-        if ($user_data) {
-            $name = $user_data->user_login;
-            $term = $this->add_term_if_not_exists($name, self::taxonomy_key);
-
-            if (!is_wp_error($term)) {
-                wp_set_object_terms($post_id, $name, self::taxonomy_key, true);
-            }
-        }
-
-        return $user_id;
-    }
-
     public function save_post_authors($post, $users = null) {
         if (!is_array($users)) {
             $users = array();
@@ -322,11 +305,11 @@ class Workflow_Authors extends Workflow_Module {
         $user_terms = array();
         foreach ($users as $user) {
             if (is_int($user)) {
-                $user_data = get_userdata($user);
+                $user_data = get_user_by('id', $user);
             }
 
             elseif (is_string($user)) {
-                $user_data = get_userdatabylogin($user);
+                $user_data = get_user_by('login', $user);
             }
             
             else {
@@ -398,14 +381,14 @@ class Workflow_Authors extends Workflow_Module {
         wp_set_object_terms($post_id, $usergroups, $usergroups_taxonomy, $append);
     }
 
-    public function delete_user_action($id) {
+    public function delete_user_action($user_id) {
         global $wpdb;
 
-        if (!$id) {
+        if (!$user_id) {
             return;
         }
 
-        $user = get_userdata($id);
+        $user = get_userdata($user_id);
 
         if ($user) {
 
@@ -420,7 +403,7 @@ class Workflow_Authors extends Workflow_Module {
         if ($reassign_id) {
             $reassign_user = get_user_by('id', $reassign_id);
             if (is_object($reassign_user)) {
-                $post_ids = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_author = %d", $id));
+                $post_ids = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_author = %d", $user_id));
 
                 if ($post_ids) {
                     foreach ($post_ids as $post_id) {
@@ -633,11 +616,11 @@ class Workflow_Authors extends Workflow_Module {
         return $new_columns;
     }
 
-    public function manage_posts_custom_column($column_name, $id) {
+    public function manage_posts_custom_column($column_name, $post_id) {
         if ($column_name == 'coauthors') {
             global $post;
 
-            $authors = $this->get_post_authors($id);
+            $authors = $this->get_post_authors($post_id);
 
             $count = 1;
             foreach ($authors as $author) {
@@ -763,10 +746,9 @@ class Workflow_Authors extends Workflow_Module {
         return $views;
     }
 
-    public function get_post_authors($post_id = 0, $args = array()) {
+    public function get_post_authors($post_id = 0) {
         global $post, $post_ID, $wpdb;
-
-        $authors = array();
+        
         $post_id = (int) $post_id;
 
         if (!$post_id && $post_ID) {
@@ -776,39 +758,18 @@ class Workflow_Authors extends Workflow_Module {
         if (!$post_id && $post) {
             $post_id = $post->ID;
         }
-
-        $defaults = array('orderby' => 'term_order', 'order' => 'ASC');
-        $args = wp_parse_args($args, $defaults);
-
-        if ($post_id) {
-            $author_terms = get_the_terms($post_id, self::taxonomy_key, $args);
-
-            if (is_array($author_terms) && !empty($author_terms)) {
-                foreach ($author_terms as $author) {
-                    $author_slug = preg_replace(self::taxonomy_pattern, '', $author->slug);
-                    $post_author = $this->get_author_by('user_nicename', $author_slug);
-
-                    if (!empty($post_author)) {
-                        $authors[] = $post_author;
-                    }
-                }
-            } 
-            
-            else {
-                if ($post) {
-                    $post_author = get_userdata($post->post_author);
-                }
-                
-                else {
-                    $post_author = get_userdata($wpdb->get_var($wpdb->prepare("SELECT post_author FROM $wpdb->posts WHERE ID = %d", $post_id)));
-                }
-
-                if (!empty($post_author)) {
-                    $authors[] = $post_author;
-                }
-            }
+        
+        if ($post) {
+            $post_author = $post->post_author;
         }
 
+        else {
+            $post_author = $wpdb->get_var($wpdb->prepare("SELECT post_author FROM $wpdb->posts WHERE ID = %d", $post_id));
+        }
+       
+        $authors = self::get_authors($post_id);
+        $authors[$post_author] = get_userdata($post_author);
+        
         return $authors;
     }
 
@@ -986,7 +947,7 @@ class Workflow_Authors extends Workflow_Module {
         return $usergroups;
     }
 
-    public function is_post_author($user = 0, $post_id = 0) {
+    public function is_post_author($user, $post_id) {
         global $post;
 
         if (!$post_id && $post) {
@@ -1000,18 +961,23 @@ class Workflow_Authors extends Workflow_Module {
         if (!$user) {
             $user = wp_get_current_user()->ID;
         }
-
-        $authors = $this->get_post_authors($post_id);
-
-        if (is_numeric($user)) {
-            $user = get_userdata($user);
-            $user = $user->user_login;
+        
+        if (is_int($user)) {
+            $user_data = get_user_by('id', $user);
         }
 
-        foreach ($authors as $author) {
-            if ($user == $author->user_login) {
-                return true;
-            }
+        elseif (is_string($user)) {
+            $user_data = get_user_by('login', $user);
+        }
+        
+        else {
+            return false;
+        }
+        
+        $authors = $this->get_post_authors($post_id);
+                
+        if(isset($authors[$user_data->ID])) {
+            return true;
         }
 
         return false;
