@@ -566,9 +566,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function admin_notices() {
-        if (isset($_REQUEST['post'])) {
-            global $post;
-
+        global $post;
+        
+        if ($post && isset($_REQUEST['post'])) {
+                        
             $old_post_id = get_post_meta($post->ID, self::version_post_id, true);
 
             if ($old_post_id) {
