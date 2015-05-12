@@ -84,6 +84,7 @@ class Workflow_Module {
         $buildin_post_types = $this->get_buildin_post_types();
         $all_post_types['post'] = $buildin_post_types['post'];
         $all_post_types['page'] = $buildin_post_types['page'];
+        $all_post_types['attachment'] = $buildin_post_types['attachment'];
 
         $custom_post_types = $this->get_custom_post_types();
         if (count($custom_post_types)) {
@@ -135,14 +136,24 @@ class Workflow_Module {
         return $post_type;
     }
 
-    public function is_post_type_enabled($post_type = null) {
+    public function is_post_type_enabled($post_type = null, $module = null) {
 
-        $allowed_post_types = $this->get_post_types($this->module);
+        if(!$module) {
+            $module = $this->module;
+        }
+        
+        $allowed_post_types = $this->get_post_types($module);
 
         if (!$post_type) {
             $post_type = get_post_type();
         }
-
+        
+        if(in_array($module->name, array('authors', 'user_groups'))) {
+            if($post_type == 'attachment') {
+                $post_type = 'post';
+            }
+        }
+        
         return (bool) in_array($post_type, $allowed_post_types);
     }
 

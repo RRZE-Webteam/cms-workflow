@@ -5,9 +5,7 @@ class Workflow_Editors extends Workflow_Module {
     const role = 'editor';
 
     private $wp_post_caps = array();
-    private $wp_manage_caps = array();
     private $wp_role_caps = array();
-    private $more_role_caps = array();
     public $role_caps = array();
     public $module;
 
@@ -39,18 +37,7 @@ class Workflow_Editors extends Workflow_Module {
             'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
-        $this->wp_manage_caps = array(
-            'upload_files' => __('Dateien hochladen', CMS_WORKFLOW_TEXTDOMAIN),            
-            'moderate_comments' => __('Kommentare moderieren', CMS_WORKFLOW_TEXTDOMAIN),
-            'manage_categories' => __('Taxonomien verwalten', CMS_WORKFLOW_TEXTDOMAIN),
-            'manage_links' => __('Links verwalten', CMS_WORKFLOW_TEXTDOMAIN),
-        );
-        
-        $this->more_role_caps = array(
-            'edit_theme_options' => __('Design bearbeiten', CMS_WORKFLOW_TEXTDOMAIN)
-        );
-
-        $this->wp_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps));
+        $this->wp_role_caps = array_keys($this->wp_post_caps);
         
         $content_help_tab = array(
             '<p>' . __('Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure detaillierter vergeben zu könnnen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
@@ -109,6 +96,7 @@ class Workflow_Editors extends Workflow_Module {
     public function init() {
         add_action('admin_init', array($this, 'set_role_caps'));
         add_action('admin_init', array($this, 'register_settings'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
     }
 
     public function deactivation($network_wide = false) {
@@ -116,7 +104,7 @@ class Workflow_Editors extends Workflow_Module {
     }
 
     public function activation() {
-        $all_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps, $this->more_role_caps));
+        $all_role_caps = array_keys($this->wp_post_caps);
         $role_caps = array_keys($this->module->options->role_caps);
         
         $role = get_role(self::role);
@@ -187,9 +175,12 @@ class Workflow_Editors extends Workflow_Module {
                 
         }
         
-        $this->role_caps = array_merge($this->role_caps, $this->wp_manage_caps, $this->more_role_caps);
     }
 
+    public function enqueue_admin_styles() {
+        wp_enqueue_style('workflow-editors', $this->module->module_url . 'editors.css', false, CMS_WORKFLOW_VERSION);
+    }
+    
     public function register_settings() {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
         add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');        
@@ -202,16 +193,55 @@ class Workflow_Editors extends Workflow_Module {
     }
     
     public function settings_role_caps_option() {
-        foreach ($this->role_caps as $key => $value) {
-            echo '<label for="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '">';
-            echo '<input id="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '" name="'
-            . $this->module->workflow_options_name . '[role_caps][' . esc_attr($key) . ']"';
-            if (isset($this->module->options->role_caps[$key])) {
-                checked(true, true);
-            }
-            echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($value) . '</label>';
-            echo '<br>';
+        $all_post_types = $this->get_available_post_types();
+
+        $sorted_cap_types = array();
+        
+        foreach ($all_post_types as $post_type => $args) {
+            $sorted_cap_types[$args->capability_type][$post_type] = $args;
         }
+
+        echo '<dl class="workflow-authors">';
+        foreach ($sorted_cap_types as $cap_type) {
+            $labels = array();
+            foreach ($cap_type as $post_type => $args) {
+                if ($post_type != $args->capability_type) {
+                    $labels[] = $args->label;
+                }
+            }
+        
+            foreach ($cap_type as $post_type => $args) {
+                if ($post_type == $args->capability_type && !empty($this->module->options->post_types[$post_type])) {
+                    
+                    if (!empty($labels)) {
+                        sort($labels);
+                        $labels = $args->label . ', ' . implode(', ', $labels);
+                    } 
+
+                    else {
+                        $labels = $args->label;
+                    }
+                    
+                    $caps = array_flip((array) $args->cap);
+                                        
+                    echo '<dt>' . esc_html($labels) . '</dt>';
+                    foreach ($this->role_caps as $key => $value) {
+                        if(isset($caps[$key])) {
+                            echo '<dd>';
+                            echo '<label for="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '">';
+                            echo '<input id="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($key) . '" name="'
+                            . $this->module->workflow_options_name . '[role_caps][' . esc_attr($key) . ']"';
+                            if (isset($this->module->options->role_caps[$key])) {
+                                checked(true, true);
+                            }
+                            echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($value) . '</label>';
+                            echo '</dd>';
+                        }
+                    }
+                }
+            }
+        }
+        echo '</dl>';
     }
 
     public function settings_validate($new_options) {
@@ -224,15 +254,11 @@ class Workflow_Editors extends Workflow_Module {
             $new_options['role_caps'] = array();
         }
 
-        $new_options['post_types']['post'] = 1; //dirty fix
-        $new_options['role_caps']['edit_posts'] = 1; //dirty fix
-
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
-
         $new_role_caps = array();
         
         $all_post_types = $this->get_available_post_types();
-        
+
         foreach ($all_post_types as $post_type => $args) {
             if (!empty($new_options['post_types'][$post_type]) && $post_type == $args->capability_type) {
                 
@@ -275,8 +301,8 @@ class Workflow_Editors extends Workflow_Module {
             }
             
         }
-        
-        $all_role_caps = array_keys(array_merge($this->wp_post_caps, $this->wp_manage_caps, $this->more_role_caps));
+            
+        $all_role_caps = array_keys($this->wp_post_caps);
 
         $role = get_role(self::role);
         
