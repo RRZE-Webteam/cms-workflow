@@ -84,8 +84,6 @@ class Workflow_Authors extends Workflow_Module {
         add_action('admin_init', array($this, 'register_settings'));
         add_action('admin_init', array($this, 'custom_columns'));
         add_action('admin_init', array($this, 'custom_attachment_columns'));
-        // Order admin backend post list by post_modified
-        add_filter('pre_get_posts', array($this, 'post_list_pre_get_posts'));        
 
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
@@ -628,27 +626,6 @@ class Workflow_Authors extends Workflow_Module {
                 $count++;
             }
         }
-    }
-        
-    public function post_list_pre_get_posts($query) {
-        if(!is_admin()) {
-            return;
-        }
-
-        global $pagenow;
-
-        if(!in_array($pagenow, array('edit.php', 'upload.php'))) {
-            return;
-        }
-        
-        if(isset($_GET['orderby'])) {
-            return;
-        }
-        
-        remove_action('pre_get_posts', __FUNCTION__);
-        add_filter('posts_orderby', function() {return ' post_modified DESC';});
-        
-        return;        
     }
     
     public function load_edit() {
