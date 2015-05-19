@@ -12,12 +12,21 @@ class Workflow_Module {
         $normalized_post_type_options = array();
         $custom_post_types = wp_list_pluck($this->get_custom_post_types(), 'name');
 
-        array_push($custom_post_types, 'post', 'page');
+        array_push($custom_post_types, 'post', 'page', 'attachment');
 
         $all_post_types = array_merge($custom_post_types, array_keys($module_post_types));
 
+        $available_post_types = $this->get_available_post_types();
+
         foreach ($all_post_types as $post_type) {
-            if (( isset($module_post_types[$post_type]) && $module_post_types[$post_type] ) || post_type_supports($post_type, $post_type_support)) {
+            $capability_type = '';
+            if(isset($available_post_types[$post_type])) {
+                $capability_type = $available_post_types[$post_type]->capability_type;
+            }
+            
+            if ((isset($module_post_types[$post_type]) && $module_post_types[$post_type]) || post_type_supports($post_type, $post_type_support)) {
+                $normalized_post_type_options[$post_type] = true;            
+            } elseif($capability_type && $capability_type != $post_type && (isset($module_post_types[$capability_type]) && $module_post_types[$capability_type]) || post_type_supports($capability_type, $post_type_support)) {               
                 $normalized_post_type_options[$post_type] = true;
             } else {
                 $normalized_post_type_options[$post_type] = false;

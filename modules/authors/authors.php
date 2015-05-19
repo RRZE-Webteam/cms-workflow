@@ -612,16 +612,23 @@ class Workflow_Authors extends Workflow_Module {
             foreach ($authors as $author) {
                 $args = array();
 
-                if ('post' != $post->post_type) {
+                if (!in_array($post->post_type, array('post', 'attachment'))) {
                     $args['post_type'] = $post->post_type;
                 }
 
                 $args['author'] = $author->ID;
 
-                $author_filter_url = add_query_arg($args, admin_url('edit.php'));
+                if ($post->post_type == 'attachment') {
+                    $author_url = add_query_arg($args, admin_url('upload.php'));
+                }
+                
+                else {
+                    $author_url = add_query_arg($args, admin_url('edit.php'));
+                }
+
                 $separator = $count < count($authors) ? ', ' : '';
 
-                printf('<a href="%s">%s</a>%s', esc_url($author_filter_url), esc_html($author->display_name), $separator);
+                printf('<a href="%1$s">%2$s</a>%3$s', esc_url($author_url), esc_html($author->display_name), $separator);
 
                 $count++;
             }
