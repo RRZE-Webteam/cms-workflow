@@ -364,6 +364,7 @@ class Workflow_Dashboard extends Workflow_Module {
                     <label for="recent_drafts_widget_post_type"><?php _e('Post-Types:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                     <select name="recent_drafts_widget[post_type][]" multiple tabindex="3" id="recent-drafts-widget-post-type-select">
                         <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
+                            <?php if ($post_type == 'attachment') continue; ?>
                             <option value="<?php echo $post_type; ?>" <?php selected(in_array($post_type, (array) $options['post_type']) ? $post_type : null, $post_type); ?>><?php echo $pt->label; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -475,6 +476,7 @@ class Workflow_Dashboard extends Workflow_Module {
                     <label for="recent-pending-widget-post-type"><?php _e('Post-Types:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
                     <select name="recent_pending_widget[post_type][]" multiple tabindex="3" id="recent-pending-widget-post-type-select">
                         <?php foreach ($this->allowed_post_types as $post_type => $pt) : ?>
+                            <?php if ($post_type == 'attachment') continue; ?>
                             <option value="<?php echo $post_type; ?>" <?php selected(in_array($post_type, (array) $options['post_type']) ? $post_type : null, $post_type); ?>><?php echo $pt->label; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -499,6 +501,7 @@ class Workflow_Dashboard extends Workflow_Module {
             $posts_query = new WP_Query(
                 array(
                     'post_type' => array_keys($this->allowed_post_types),
+                    'post_status' => 'any',
                     'meta_key' => Workflow_Task_List::postmeta_key,
                     'posts_per_page' => 50
                 )

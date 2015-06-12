@@ -216,17 +216,18 @@ class Workflow_Editorial_Comments extends Workflow_Module {
                     'status' => -1,
                 )
             );
+            if(!empty($editorial_comments)) :
             ?>
             <ul id="workflow-comments">
             <?php
-            wp_list_comments(
-                    array(
+            wp_list_comments(array(
                 'type' => self::comment_type,
                 'callback' => array($this, 'the_comment'),
-                    ), $editorial_comments
+                ), $editorial_comments
             );
             ?>
             </ul>
+            <?php endif; ?>
             <?php $this->the_comment_form(); ?>
         <?php
         else :

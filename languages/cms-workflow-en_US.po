@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-23 15:48+0100\n"
+"POT-Creation-Date: 2015-06-12 10:52+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cms-workflow.php:71
+#: ../cms-workflow.php:70
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
@@ -27,7 +27,7 @@ msgstr ""
 "Your server is running PHP version %s. Please upgrade at least to PHP "
 "version %s."
 
-#: ../cms-workflow.php:75
+#: ../cms-workflow.php:74
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
@@ -36,129 +36,125 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../cms-workflow.php:211
+#: ../cms-workflow.php:210
 msgid "Konfigurieren"
 msgstr "Configure"
 
-#: ../cms-workflow.php:213
+#: ../cms-workflow.php:212
 msgid "Einstellungen gespeichert."
 msgstr "Settings saved."
 
-#: ../cms-workflow.php:214
+#: ../cms-workflow.php:213
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:215 ../modules/settings/settings.php:394
+#: ../cms-workflow.php:214 ../modules/settings/settings.php:370
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
-#: ../cms-workflow.php:216
-#: ../modules/editorial-comments/editorial-comments.php:320
+#: ../cms-workflow.php:215
+#: ../modules/editorial-comments/editorial-comments.php:321
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr "You do not have the required permissions to perform this action."
 
-#: ../cms-workflow.php:217
+#: ../cms-workflow.php:216
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
-#: ../includes/workflow-module.php:66
+#: ../includes/workflow-module.php:69
 msgid "Veröffentlicht"
 msgstr "Published"
 
-#: ../includes/workflow-module.php:67
+#: ../includes/workflow-module.php:70
 msgid "Entwurf"
 msgstr "Draft"
 
-#: ../includes/workflow-module.php:68
+#: ../includes/workflow-module.php:71
 msgid "Geplant"
 msgstr "Scheduled"
 
-#: ../includes/workflow-module.php:69
+#: ../includes/workflow-module.php:72
 msgid "Privat"
 msgstr "Private"
 
-#: ../includes/workflow-module.php:70
+#: ../includes/workflow-module.php:73
 msgid "Ausstehender Review"
 msgstr "Pending Review"
 
-#: ../includes/workflow-module.php:71
+#: ../includes/workflow-module.php:74
 msgid "Papierkorb"
 msgstr "Trash"
 
-#: ../includes/workflow-module.php:203
+#: ../includes/workflow-module.php:211
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
 
-#: ../includes/workflow-module.php:408
+#: ../includes/workflow-module.php:416
 msgctxt "User role"
 msgid "Editor"
 msgstr "Redakteur"
 
-#: ../includes/workflow-module.php:454
+#: ../includes/workflow-module.php:462
 msgctxt "User role"
 msgid "Author"
 msgstr "Autor"
 
-#: ../modules/authors/authors.php:23
+#: ../modules/authors/authors.php:20
 msgid "Beitrag veröffentlichen"
 msgstr "Publish Posts"
 
-#: ../modules/authors/authors.php:24 ../modules/editors/editors.php:35
+#: ../modules/authors/authors.php:21 ../modules/editors/editors.php:33
 msgid "Veröffentlichte Beiträge bearbeiten"
 msgstr "Edit Published Posts"
 
-#: ../modules/authors/authors.php:25 ../modules/editors/editors.php:37
+#: ../modules/authors/authors.php:22 ../modules/editors/editors.php:35
 msgid "Veröffentlichte Beiträge löschen"
 msgstr "Delete Published Posts"
 
-#: ../modules/authors/authors.php:26 ../modules/editors/editors.php:38
+#: ../modules/authors/authors.php:23 ../modules/editors/editors.php:36
 msgid "Beiträge bearbeiten"
 msgstr "Edit Posts"
 
-#: ../modules/authors/authors.php:27 ../modules/editors/editors.php:39
+#: ../modules/authors/authors.php:24 ../modules/editors/editors.php:37
 msgid "Beiträge löschen"
 msgstr "Delete Posts"
 
-#: ../modules/authors/authors.php:31 ../modules/editors/editors.php:43
-msgid "Dateien hochladen"
-msgstr "Upload Files"
-
-#: ../modules/authors/authors.php:39
+#: ../modules/authors/authors.php:30
 msgid ""
 "Verwenden Sie die Autorenverwaltung, um die Rechte für Autoren detaillierter "
 "vergeben zu können. Sie können angeben"
 msgstr ""
 
-#: ../modules/authors/authors.php:41
+#: ../modules/authors/authors.php:32
 msgid "für welche Bereiche die Autorenverwaltung freigegeben werden soll und"
 msgstr ""
 
-#: ../modules/authors/authors.php:42
+#: ../modules/authors/authors.php:33
 msgid "welche Rechte ein Autor erhalten darf."
 msgstr ""
 
-#: ../modules/authors/authors.php:44
+#: ../modules/authors/authors.php:35
 msgid ""
 "Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die "
 "standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten "
 "ansehen, erstellen, bearbeiten und löschen, Dateien hochladen)."
 msgstr ""
 
-#: ../modules/authors/authors.php:48 ../modules/authors/authors.php:218
-#: ../modules/authors/authors.php:624
+#: ../modules/authors/authors.php:39 ../modules/authors/authors.php:209
+#: ../modules/authors/authors.php:594
 msgid "Autoren"
 msgstr "Authors"
 
-#: ../modules/authors/authors.php:49
+#: ../modules/authors/authors.php:40
 msgid "Verwaltung der Autoren."
 msgstr "Authors administration."
 
-#: ../modules/authors/authors.php:69 ../modules/dashboard/dashboard.php:55
+#: ../modules/authors/authors.php:60 ../modules/dashboard/dashboard.php:55
 #: ../modules/editorial-comments/editorial-comments.php:56
-#: ../modules/editors/editors.php:100
-#: ../modules/notifications/notifications.php:38
+#: ../modules/editors/editors.php:87
+#: ../modules/notifications/notifications.php:40
 #: ../modules/post-versioning/post-versioning.php:129
 #: ../modules/settings/settings.php:36 ../modules/task-list/task-list.php:68
 #: ../modules/translation/translation.php:56
@@ -166,10 +162,10 @@ msgstr "Authors administration."
 msgid "Übersicht"
 msgstr "Overall view"
 
-#: ../modules/authors/authors.php:72 ../modules/dashboard/dashboard.php:58
+#: ../modules/authors/authors.php:63 ../modules/dashboard/dashboard.php:58
 #: ../modules/editorial-comments/editorial-comments.php:59
-#: ../modules/editors/editors.php:103
-#: ../modules/notifications/notifications.php:41
+#: ../modules/editors/editors.php:90
+#: ../modules/notifications/notifications.php:43
 #: ../modules/post-versioning/post-versioning.php:132
 #: ../modules/settings/settings.php:39 ../modules/task-list/task-list.php:71
 #: ../modules/translation/translation.php:59
@@ -185,64 +181,64 @@ msgstr ""
 "\">RRZE-Webworking</a></p><p><a href=\"https://github.com/RRZE-Webteam"
 "\">RRZE-Webteam in Github</a></p>"
 
-#: ../modules/authors/authors.php:155 ../modules/editors/editors.php:157
+#: ../modules/authors/authors.php:145 ../modules/editors/editors.php:145
 #, php-format
 msgid "%s bearbeiten"
 msgstr "Edit %s"
 
-#: ../modules/authors/authors.php:159 ../modules/editors/editors.php:165
+#: ../modules/authors/authors.php:149 ../modules/editors/editors.php:153
 #, php-format
 msgid "%s löschen"
 msgstr "Delete %s"
 
-#: ../modules/authors/authors.php:163 ../modules/editors/editors.php:161
+#: ../modules/authors/authors.php:153 ../modules/editors/editors.php:149
 #, php-format
 msgid "%s veröffentlichen"
 msgstr "Publish %s"
 
-#: ../modules/authors/authors.php:167 ../modules/editors/editors.php:169
+#: ../modules/authors/authors.php:157 ../modules/editors/editors.php:157
 #, php-format
 msgid "Veröffentlichte %s bearbeiten"
 msgstr "Edit Published %s"
 
-#: ../modules/authors/authors.php:171 ../modules/editors/editors.php:173
+#: ../modules/authors/authors.php:161 ../modules/editors/editors.php:161
 #, php-format
 msgid "Veröffentlichte %s löschen"
 msgstr "Delete Published %s"
 
-#: ../modules/authors/authors.php:200
+#: ../modules/authors/authors.php:189
 #: ../modules/user-groups/user-groups.php:120
 msgid "Alle"
 msgstr "All"
 
-#: ../modules/authors/authors.php:201
+#: ../modules/authors/authors.php:190
 #: ../modules/user-groups/user-groups.php:121
 msgid "Ausgewählt"
 msgstr "Selected"
 
-#: ../modules/authors/authors.php:202
+#: ../modules/authors/authors.php:191
 #: ../modules/user-groups/user-groups.php:122
 msgid "Suchen..."
 msgstr "Search..."
 
-#: ../modules/authors/authors.php:225
+#: ../modules/authors/authors.php:216
 msgid "Wählen Sie die Autoren zum Dokument"
 msgstr "Select the authors for this document"
 
-#: ../modules/authors/authors.php:227
+#: ../modules/authors/authors.php:218
 #: ../modules/user-groups/user-groups.php:380
 #: ../modules/user-groups/user-groups.php:809
 msgid "Benutzer"
 msgstr "User"
 
-#: ../modules/authors/authors.php:244
+#: ../modules/authors/authors.php:235
 #: ../modules/user-groups/user-groups.php:41
 #: ../modules/user-groups/user-groups.php:70
 #: ../modules/user-groups/user-groups.php:473
 msgid "Benutzergruppen"
 msgstr "User Groups"
 
-#: ../modules/authors/authors.php:750
+#: ../modules/authors/authors.php:727
 #, php-format
 msgctxt "authors"
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
@@ -250,15 +246,15 @@ msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] "My %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[1] "My %1$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:754
+#: ../modules/authors/authors.php:731
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 
-#: ../modules/authors/authors.php:1021
-#: ../modules/editorial-comments/editorial-comments.php:381
-#: ../modules/editors/editors.php:195
-#: ../modules/notifications/notifications.php:409
+#: ../modules/authors/authors.php:981
+#: ../modules/editorial-comments/editorial-comments.php:382
+#: ../modules/editors/editors.php:186
+#: ../modules/notifications/notifications.php:649
 #: ../modules/post-versioning/post-versioning.php:241
 #: ../modules/task-list/task-list.php:549
 #: ../modules/translation/translation.php:130
@@ -266,7 +262,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 msgid "Freigabe"
 msgstr "Allowed Post Types"
 
-#: ../modules/authors/authors.php:1022
+#: ../modules/authors/authors.php:982
 msgid "Autorenrechte"
 msgstr "Authors Capabilities"
 
@@ -354,17 +350,17 @@ msgid "Aktivität"
 msgstr "Activity"
 
 #: ../modules/dashboard/dashboard.php:130
-#: ../modules/dashboard/dashboard.php:604
+#: ../modules/dashboard/dashboard.php:607
 msgid "Aktuelle Entwürfe"
 msgstr "Recent Drafts"
 
 #: ../modules/dashboard/dashboard.php:134
-#: ../modules/dashboard/dashboard.php:605
+#: ../modules/dashboard/dashboard.php:608
 msgid "Aktuelle ausstehende Reviews"
 msgstr "Recent Pending Reviews"
 
 #: ../modules/dashboard/dashboard.php:138
-#: ../modules/dashboard/dashboard.php:608
+#: ../modules/dashboard/dashboard.php:611
 #: ../modules/task-list/task-list.php:54 ../modules/task-list/task-list.php:77
 #: ../modules/task-list/task-list.php:85
 #: ../modules/task-list/task-list.php:162
@@ -420,7 +416,7 @@ msgid "Speicherplatz verbraucht"
 msgstr "Space Used"
 
 #: ../modules/dashboard/dashboard.php:326
-#: ../modules/dashboard/dashboard.php:437
+#: ../modules/dashboard/dashboard.php:438
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Last modified by <i>%1$s</i> on %2$s at %3$s"
@@ -430,67 +426,67 @@ msgid "Zurzeit gibt es keine Entwürfe."
 msgstr "There are no drafts at the moment."
 
 #: ../modules/dashboard/dashboard.php:364
-#: ../modules/dashboard/dashboard.php:475
-#: ../modules/dashboard/dashboard.php:744
+#: ../modules/dashboard/dashboard.php:476
+#: ../modules/dashboard/dashboard.php:747
 msgid "Post-Types:"
 msgstr "Post Types:"
 
-#: ../modules/dashboard/dashboard.php:379
-#: ../modules/dashboard/dashboard.php:490
-#: ../modules/dashboard/dashboard.php:759
+#: ../modules/dashboard/dashboard.php:380
+#: ../modules/dashboard/dashboard.php:492
+#: ../modules/dashboard/dashboard.php:762
 msgid "Anzahl der Einträge in Listen"
 msgstr "Number of entries in lists"
 
-#: ../modules/dashboard/dashboard.php:449
+#: ../modules/dashboard/dashboard.php:450
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr "There are no pending reviews at the moment."
 
-#: ../modules/dashboard/dashboard.php:552
+#: ../modules/dashboard/dashboard.php:555
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr "Task added by <i>%1$s</i> on %2$s at %3$s"
 
-#: ../modules/dashboard/dashboard.php:564
+#: ../modules/dashboard/dashboard.php:567
 msgid "Zurzeit gibt es keine Aufgaben."
 msgstr "There are no tasks at the moment."
 
-#: ../modules/dashboard/dashboard.php:614
-#: ../modules/dashboard/dashboard.php:628
-#: ../modules/dashboard/dashboard.php:642 ../modules/settings/settings.php:263
+#: ../modules/dashboard/dashboard.php:617
+#: ../modules/dashboard/dashboard.php:631
+#: ../modules/dashboard/dashboard.php:645 ../modules/settings/settings.php:263
 msgid "Deaktiviert"
 msgstr "Disabled"
 
-#: ../modules/dashboard/dashboard.php:615
-#: ../modules/dashboard/dashboard.php:629
-#: ../modules/dashboard/dashboard.php:643 ../modules/settings/settings.php:264
+#: ../modules/dashboard/dashboard.php:618
+#: ../modules/dashboard/dashboard.php:632
+#: ../modules/dashboard/dashboard.php:646 ../modules/settings/settings.php:264
 msgid "Aktiviert"
 msgstr "Enabled"
 
-#: ../modules/dashboard/dashboard.php:696
+#: ../modules/dashboard/dashboard.php:699
 msgid "in Kürze veröffentlichen"
 msgstr "Publishing Soon"
 
-#: ../modules/dashboard/dashboard.php:706
+#: ../modules/dashboard/dashboard.php:709
 msgid "Kürzlich veröffentlicht"
 msgstr "Recently Published"
 
-#: ../modules/dashboard/dashboard.php:715
+#: ../modules/dashboard/dashboard.php:718
 msgid "Bisher keine Aktivitäten!"
 msgstr "No activity yet!"
 
-#: ../modules/dashboard/dashboard.php:795
+#: ../modules/dashboard/dashboard.php:798
 msgid "Heute"
 msgstr "Today"
 
-#: ../modules/dashboard/dashboard.php:797
+#: ../modules/dashboard/dashboard.php:800
 msgid "Morgen"
 msgstr "Tomorrow"
 
-#: ../modules/dashboard/dashboard.php:799
+#: ../modules/dashboard/dashboard.php:802
 msgid "d.m."
 msgstr "M jS"
 
-#: ../modules/dashboard/dashboard.php:851
+#: ../modules/dashboard/dashboard.php:854
 msgid "Kommentare"
 msgstr "Comments"
 
@@ -601,31 +597,31 @@ msgstr "Pings"
 msgid "Standard"
 msgstr "Default"
 
-#: ../modules/editorial-comments/editorial-comments.php:234
+#: ../modules/editorial-comments/editorial-comments.php:235
 msgid ""
 "Sie können redaktionelle Kommentare zu einem Beitrag hinzufügen, sobald Sie "
 "diesen gespeichert haben."
 msgstr ""
 "You can add editorial comments on a document if you have already saved it."
 
-#: ../modules/editorial-comments/editorial-comments.php:247
+#: ../modules/editorial-comments/editorial-comments.php:248
 msgid "Kommentar hinzufügen"
 msgstr "Add Comment"
 
-#: ../modules/editorial-comments/editorial-comments.php:254
+#: ../modules/editorial-comments/editorial-comments.php:255
 msgid "Senden"
 msgstr "Send"
 
-#: ../modules/editorial-comments/editorial-comments.php:255
+#: ../modules/editorial-comments/editorial-comments.php:256
 #: ../modules/user-groups/user-groups.php:873
 msgid "Abbrechen"
 msgstr "Abort"
 
-#: ../modules/editorial-comments/editorial-comments.php:282
+#: ../modules/editorial-comments/editorial-comments.php:283
 msgid "Antworten"
 msgstr "Reply"
 
-#: ../modules/editorial-comments/editorial-comments.php:299
+#: ../modules/editorial-comments/editorial-comments.php:300
 #, php-format
 msgid ""
 "<span class=\"comment-author\">%1$s</span><span class=\"meta\"> am %2$s um "
@@ -634,162 +630,146 @@ msgstr ""
 "<span class=\"comment-author\">%1$s</span><span class=\"meta\"> on %2$s at "
 "%3$s</span>"
 
-#: ../modules/editorial-comments/editorial-comments.php:311
+#: ../modules/editorial-comments/editorial-comments.php:312
 msgid "Bitte stellen Sie sicher, dass Sie Kommentare hinzufügen dürfen."
 msgstr "Please make sure that you can add comments."
 
-#: ../modules/editorial-comments/editorial-comments.php:325
+#: ../modules/editorial-comments/editorial-comments.php:326
 msgid "Bitte geben Sie einen Kommentar ein."
 msgstr "Please enter a comment."
 
-#: ../modules/editorial-comments/editorial-comments.php:375
+#: ../modules/editorial-comments/editorial-comments.php:376
 #: ../modules/task-list/task-list.php:378
 #: ../modules/task-list/task-list.php:529
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
 msgstr "An unexpected error has occurred. Please try again."
 
-#: ../modules/editors/editors.php:20
+#: ../modules/editors/editors.php:18
 msgid "Andere Beiträge bearbeiten"
 msgstr "Edit Others Posts"
 
-#: ../modules/editors/editors.php:21
+#: ../modules/editors/editors.php:19
 msgid "Seiten bearbeiten"
 msgstr "Edit Pages"
 
-#: ../modules/editors/editors.php:22
+#: ../modules/editors/editors.php:20
 msgid "Andere Seiten bearbeiten"
 msgstr "Edit Others Pages"
 
-#: ../modules/editors/editors.php:23
+#: ../modules/editors/editors.php:21
 msgid "Veröffentlichte Seiten bearbeiten"
 msgstr "Edit Published Pages"
 
-#: ../modules/editors/editors.php:24
+#: ../modules/editors/editors.php:22
 msgid "Seiten veröffentlichen"
 msgstr "Publish Pages"
 
-#: ../modules/editors/editors.php:25
+#: ../modules/editors/editors.php:23
 msgid "Seiten löschen"
 msgstr "Delete Pages"
 
-#: ../modules/editors/editors.php:26
+#: ../modules/editors/editors.php:24
 msgid "Andere Seiten löschen"
 msgstr "Delete Others Pages"
 
-#: ../modules/editors/editors.php:27
+#: ../modules/editors/editors.php:25
 msgid "Veröffentlichte Seiten löschen"
 msgstr "Delete Published Pages"
 
-#: ../modules/editors/editors.php:28
+#: ../modules/editors/editors.php:26
 msgid "Andere Beiträge löschen"
 msgstr "Delete Others Posts"
 
-#: ../modules/editors/editors.php:29
+#: ../modules/editors/editors.php:27
 msgid "Private Beiträge löschen"
 msgstr "Delete Private Posts"
 
-#: ../modules/editors/editors.php:30
+#: ../modules/editors/editors.php:28
 msgid "Private Beiträge bearbeiten"
 msgstr "Edit Private Posts"
 
-#: ../modules/editors/editors.php:31
+#: ../modules/editors/editors.php:29
 msgid "Private Beiträge lesen"
 msgstr "Read Private Posts"
 
-#: ../modules/editors/editors.php:32
+#: ../modules/editors/editors.php:30
 msgid "Private Seiten löschen"
 msgstr "Delete Private Pages"
 
-#: ../modules/editors/editors.php:33
+#: ../modules/editors/editors.php:31
 msgid "Private Seiten bearbeiten"
 msgstr "Edit Private Pages"
 
-#: ../modules/editors/editors.php:34
+#: ../modules/editors/editors.php:32
 msgid "Private Seiten lesen"
 msgstr "Read Private Pages"
 
-#: ../modules/editors/editors.php:36
+#: ../modules/editors/editors.php:34
 msgid "Beiträge veröffentlichen"
 msgstr "Publish Posts"
 
-#: ../modules/editors/editors.php:44
-msgid "Kommentare moderieren"
-msgstr "Moderate Comments"
-
-#: ../modules/editors/editors.php:45
-msgid "Taxonomien verwalten"
-msgstr "Manage Taxonomies"
-
-#: ../modules/editors/editors.php:46
-msgid "Links verwalten"
-msgstr "Manage Links"
-
-#: ../modules/editors/editors.php:50
-msgid "Design bearbeiten"
-msgstr "Edit Appearance"
-
-#: ../modules/editors/editors.php:56
+#: ../modules/editors/editors.php:43
 msgid ""
 "Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure "
 "detaillierter vergeben zu könnnen."
 msgstr ""
 
-#: ../modules/editors/editors.php:57
+#: ../modules/editors/editors.php:44
 msgid ""
 "Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die "
 "standardmäßig von WordPress vorgegebenen Rechte."
 msgstr ""
 
-#: ../modules/editors/editors.php:61
+#: ../modules/editors/editors.php:48
 msgid "Redakteure"
 msgstr "Editors"
 
-#: ../modules/editors/editors.php:62
+#: ../modules/editors/editors.php:49
 msgid "Verwaltung der Redakteure."
 msgstr "Editors administration."
 
-#: ../modules/editors/editors.php:177
+#: ../modules/editors/editors.php:165
 #, php-format
 msgid "Private %s lesen"
 msgstr "Read Private %s"
 
-#: ../modules/editors/editors.php:181
+#: ../modules/editors/editors.php:169
 #, php-format
 msgid "Private %s bearbeiten"
 msgstr "Edit Private %s"
 
-#: ../modules/editors/editors.php:185
+#: ../modules/editors/editors.php:173
 #, php-format
 msgid "Private %s löschen"
 msgstr "Delete Private %s"
 
-#: ../modules/editors/editors.php:196
+#: ../modules/editors/editors.php:187
 msgid "Redakteurerechte"
 msgstr "Editors Capabilities"
 
-#: ../modules/notifications/notifications.php:14
+#: ../modules/notifications/notifications.php:16
 msgid ""
 "Über die Benachrichtigungsfunktion können Sie sich informieren lassen, "
 "sobald Änderungen an Ihren Dokumenten durchgeführt wurden."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:15
+#: ../modules/notifications/notifications.php:17
 msgid "Geben Sie hierzu an"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:17
+#: ../modules/notifications/notifications.php:19
 msgid ""
 "bei Änderungen in welchen Bereichen die jeweiligen Autoren benachrichtigt "
 "werden sollen und"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:18
+#: ../modules/notifications/notifications.php:20
 msgid ""
 "ob zusätzlich der Administrator der Webseite per E-Mail benachrichtigt "
 "werden soll."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:20
+#: ../modules/notifications/notifications.php:22
 msgid ""
 "Der Autor der Dokumente (bzw. je nach Einstellung zusätzlich der "
 "Administrator) erhält dann die entsprechenden Änderungen in einer E-Mail an "
@@ -797,112 +777,64 @@ msgid ""
 "angegeben ist."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:24
+#: ../modules/notifications/notifications.php:26
 msgid "Benachrichtigungen"
 msgstr "Notifications"
 
-#: ../modules/notifications/notifications.php:25
+#: ../modules/notifications/notifications.php:27
 msgid "Benachrichtigungen über wichtige Änderungen an einem Dokument."
 msgstr "Notifications on major changes in a document."
 
-#: ../modules/notifications/notifications.php:85
-#: ../modules/notifications/notifications.php:256
+#: ../modules/notifications/notifications.php:123
+#, fuzzy
+msgid "Revision"
+msgstr "Version"
+
+#: ../modules/notifications/notifications.php:124
+#, fuzzy
+msgid "Aktuelles Dokument"
+msgstr "Recent Drafts"
+
+#: ../modules/notifications/notifications.php:138
+#: ../modules/notifications/notifications.php:315
+#: ../modules/notifications/notifications.php:491
 msgid "CMS-Workflow"
 msgstr "CMS-Workflow"
 
-#: ../modules/notifications/notifications.php:104
-#, php-format
-msgid "%1$s - Neues Dokument wurde erstellt: \"%2$s\""
-msgstr "%1$s - New document was added: \"%2$s\""
-
-#: ../modules/notifications/notifications.php:105
-#, php-format
-msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt."
-msgstr "The document #%1$s \"%2$s\" was created by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:109
-#, php-format
-msgid "%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben."
-msgstr "%1$s - The document \"%2$s\" has been moved to the Trash."
-
-#: ../modules/notifications/notifications.php:110
-#, php-format
-msgid ""
-"Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben."
-msgstr "The document #%1$s \"%2$s\" was moved to the Trash  by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:114
-#, php-format
-msgid "%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt."
-msgstr "%1$s - The document \"%2$s\" was recovered from the Trash."
-
-#: ../modules/notifications/notifications.php:115
-#, php-format
-msgid ""
-"Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb "
-"wiederhergestellt."
-msgstr "The document #%1$s \"%2$s\" was restored from the Trash by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:119
-#, php-format
-msgid "%1$s - Das Dokument „%2$s“ wurde zeitlich geplant."
-msgstr "%1$s - The document \"%2$s\" was scheduled."
-
-#: ../modules/notifications/notifications.php:120
-#, php-format
-msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s zeitlich geplant."
-msgstr "Das Dokument #%1$s \"%2$s\" was scheduled by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:124
-#, php-format
-msgid "%1$s - Das Dokument „%2$s“ wurde veröffentlicht."
-msgstr "%1$s - The document \"%2$s\" was published."
-
-#: ../modules/notifications/notifications.php:125
-#, php-format
-msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich."
-msgstr "The document #%1$s \"%2$s\" was published by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:129
-#, php-format
-msgid "%1$s - Das Dokument „%2$s“ wurde unveröffentlicht."
-msgstr "%1$s - The document \"%2$s\" was unpublished."
-
-#: ../modules/notifications/notifications.php:130
-#, php-format
-msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht."
-msgstr "The document #%1$s \"%2$s\" was unpublished by %3$s %4$s."
-
-#: ../modules/notifications/notifications.php:134
-#, php-format
-msgid "%1$s - Der Status des Dokuments „%2$s“ hat sich geändert."
+#: ../modules/notifications/notifications.php:157
+#, fuzzy, php-format
+msgid "%1$s - Das Dokument „%2$s“ hat sich geändert."
 msgstr "%1$s - The status of the document \"%2$s\" has changed."
 
-#: ../modules/notifications/notifications.php:135
-#, php-format
-msgid "Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert."
+#: ../modules/notifications/notifications.php:162
+#: ../modules/notifications/notifications.php:211
+#, fuzzy, php-format
+msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert."
 msgstr "The status the document #%1$s \"%2$s\" was changed by %3$s %4$s."
 
-#: ../modules/notifications/notifications.php:138
+#: ../modules/notifications/notifications.php:163
+#: ../modules/notifications/notifications.php:213
+#: ../modules/notifications/notifications.php:368
 #, php-format
 msgid "Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt."
 msgstr "This action was performed on %1$s at %2$s %3$s."
 
-#: ../modules/notifications/notifications.php:145
-#, php-format
-msgid "%1$s  >>>  %2$s"
-msgstr "%1$s  >>>  %2$s"
-
-#: ../modules/notifications/notifications.php:148
+#: ../modules/notifications/notifications.php:187
+#: ../modules/notifications/notifications.php:248
+#: ../modules/notifications/notifications.php:378
 msgid "Dokumenteinzelheiten"
 msgstr "Document details"
 
-#: ../modules/notifications/notifications.php:149
+#: ../modules/notifications/notifications.php:188
+#: ../modules/notifications/notifications.php:250
+#: ../modules/notifications/notifications.php:379
 #, php-format
 msgid "Titel: %s"
 msgstr "Title: %s"
 
-#: ../modules/notifications/notifications.php:151
+#: ../modules/notifications/notifications.php:190
+#: ../modules/notifications/notifications.php:252
+#: ../modules/notifications/notifications.php:381
 #, php-format
 msgctxt "notifications"
 msgid "Autor: %1$s"
@@ -910,116 +842,207 @@ msgid_plural "Autoren: %1$s"
 msgstr[0] "Author: %1$s"
 msgstr[1] "Authors: %1$s"
 
-#: ../modules/notifications/notifications.php:152
+#: ../modules/notifications/notifications.php:191
+#: ../modules/notifications/notifications.php:254
+#: ../modules/notifications/notifications.php:382
 #, php-format
 msgid "Art: %1$s"
 msgstr "Type: %1$s"
 
-#: ../modules/notifications/notifications.php:153
+#: ../modules/notifications/notifications.php:192
+#: ../modules/notifications/notifications.php:256
+#: ../modules/notifications/notifications.php:383
 #, php-format
 msgid "Status: %1$s"
 msgstr "Status: %1$s"
 
-#: ../modules/notifications/notifications.php:166
-#: ../modules/notifications/notifications.php:210
-#: ../modules/notifications/notifications.php:275
+#: ../modules/notifications/notifications.php:196
+#: ../modules/notifications/notifications.php:262
+#: ../modules/notifications/notifications.php:397
+#: ../modules/notifications/notifications.php:443
+#: ../modules/notifications/notifications.php:511
 msgid "Weitere Aktionen"
 msgstr "More"
 
-#: ../modules/notifications/notifications.php:167
-#: ../modules/notifications/notifications.php:212
-#: ../modules/notifications/notifications.php:276
+#: ../modules/notifications/notifications.php:197
+#: ../modules/notifications/notifications.php:264
+#: ../modules/notifications/notifications.php:398
+#: ../modules/notifications/notifications.php:445
+#: ../modules/notifications/notifications.php:512
 #, php-format
 msgid "Redaktionellen Kommentar hinzufügen: %s"
 msgstr "Add Editorial Comment: %s"
 
-#: ../modules/notifications/notifications.php:168
-#: ../modules/notifications/notifications.php:213
-#: ../modules/notifications/notifications.php:277
+#: ../modules/notifications/notifications.php:198
+#: ../modules/notifications/notifications.php:266
+#: ../modules/notifications/notifications.php:399
+#: ../modules/notifications/notifications.php:446
+#: ../modules/notifications/notifications.php:513
 #, php-format
 msgid "Dokument bearbeiten: %s"
 msgstr "Edit document: %s"
 
-#: ../modules/notifications/notifications.php:169
-#: ../modules/notifications/notifications.php:214
-#: ../modules/notifications/notifications.php:278
+#: ../modules/notifications/notifications.php:199
+#: ../modules/notifications/notifications.php:268
+#: ../modules/notifications/notifications.php:400
+#: ../modules/notifications/notifications.php:447
+#: ../modules/notifications/notifications.php:514
 #, php-format
 msgid "Dokument ansehen: %s"
 msgstr "Show document: %s"
 
-#: ../modules/notifications/notifications.php:198
-#, php-format
-msgid "%1$s - Neuer redaktioneller Kommentar zum \"%2$s\""
-msgstr "%1$s - New Editorial Comment to \"%2$s\""
-
-#: ../modules/notifications/notifications.php:200
-#, php-format
-msgid ""
-"Ein neuer redaktioneller Kommentar wurde zum Dokument %1$s „%2$s“ "
-"hinzugefügt."
-msgstr "A new editorial comment has been added to the document #%1$s \"%2$s\"."
-
-#: ../modules/notifications/notifications.php:201
-#, php-format
-msgid "%1$s (%2$s) kommentiert am %3$s um %4$s:"
-msgstr "%1$s (%2$s) commented on %3$s at %4$s:"
-
-#: ../modules/notifications/notifications.php:211
-#, php-format
-msgid "Antworten: %s"
-msgstr "Replies: %s"
-
-#: ../modules/notifications/notifications.php:216
-msgid ""
-"Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: "
-msgstr "You can find all editorial comments on this document here:"
-
-#: ../modules/notifications/notifications.php:235
-#: ../modules/notifications/notifications.php:462
-msgid "(Kein Titel)"
-msgstr "(No Title)"
-
-#: ../modules/notifications/notifications.php:260
-#, php-format
-msgid "%1$s - Neue Aufgabe für „%2$s“ wurde hinzugefügt."
-msgstr "%1$s - New task for \"%2$s\" has been added."
-
-#: ../modules/notifications/notifications.php:261
-#, php-format
-msgid "Eine neue Aufgabe wurde zum Dokument %1$s „%2$s“ hinzugefügt."
-msgstr "A new Task was added to document #%1$s \"%2$s\"."
-
-#: ../modules/notifications/notifications.php:263
-#, php-format
-msgid "Diese Aktion wurde von %1$s %2$s am %3$s um %4$s %5$s ausgeführt."
-msgstr "This action was performed by %1$s %2$s on %3$s at %4$s %5$s."
-
-#: ../modules/notifications/notifications.php:267
-#, php-format
-msgid "Aufgabe: %s"
-msgstr "Task: %s"
-
-#: ../modules/notifications/notifications.php:268
-#, php-format
-msgid "Priorität: %s"
-msgstr "Priority: %s"
-
-#: ../modules/notifications/notifications.php:288
+#: ../modules/notifications/notifications.php:274
+#: ../modules/notifications/notifications.php:525
 #, php-format
 msgid "Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind."
 msgstr ""
 "You are receiving this email because you are a co-author of the document \"%s"
 "\"."
 
-#: ../modules/notifications/notifications.php:410
+#: ../modules/notifications/notifications.php:334
+#, php-format
+msgid "%1$s - Neues Dokument wurde erstellt: \"%2$s\""
+msgstr "%1$s - New document was added: \"%2$s\""
+
+#: ../modules/notifications/notifications.php:335
+#, php-format
+msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt."
+msgstr "The document #%1$s \"%2$s\" was created by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:339
+#, php-format
+msgid "%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben."
+msgstr "%1$s - The document \"%2$s\" has been moved to the Trash."
+
+#: ../modules/notifications/notifications.php:340
+#, php-format
+msgid ""
+"Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben."
+msgstr "The document #%1$s \"%2$s\" was moved to the Trash  by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:344
+#, php-format
+msgid "%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt."
+msgstr "%1$s - The document \"%2$s\" was recovered from the Trash."
+
+#: ../modules/notifications/notifications.php:345
+#, php-format
+msgid ""
+"Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb "
+"wiederhergestellt."
+msgstr "The document #%1$s \"%2$s\" was restored from the Trash by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:349
+#, php-format
+msgid "%1$s - Das Dokument „%2$s“ wurde zeitlich geplant."
+msgstr "%1$s - The document \"%2$s\" was scheduled."
+
+#: ../modules/notifications/notifications.php:350
+#, php-format
+msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s zeitlich geplant."
+msgstr "Das Dokument #%1$s \"%2$s\" was scheduled by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:354
+#, php-format
+msgid "%1$s - Das Dokument „%2$s“ wurde veröffentlicht."
+msgstr "%1$s - The document \"%2$s\" was published."
+
+#: ../modules/notifications/notifications.php:355
+#, php-format
+msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich."
+msgstr "The document #%1$s \"%2$s\" was published by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:359
+#, php-format
+msgid "%1$s - Das Dokument „%2$s“ wurde unveröffentlicht."
+msgstr "%1$s - The document \"%2$s\" was unpublished."
+
+#: ../modules/notifications/notifications.php:360
+#, php-format
+msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht."
+msgstr "The document #%1$s \"%2$s\" was unpublished by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:364
+#, php-format
+msgid "%1$s - Der Status des Dokuments „%2$s“ hat sich geändert."
+msgstr "%1$s - The status of the document \"%2$s\" has changed."
+
+#: ../modules/notifications/notifications.php:365
+#, php-format
+msgid "Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert."
+msgstr "The status the document #%1$s \"%2$s\" was changed by %3$s %4$s."
+
+#: ../modules/notifications/notifications.php:375
+#, php-format
+msgid "%1$s  >>>  %2$s"
+msgstr "%1$s  >>>  %2$s"
+
+#: ../modules/notifications/notifications.php:431
+#, php-format
+msgid "%1$s - Neuer redaktioneller Kommentar zum \"%2$s\""
+msgstr "%1$s - New Editorial Comment to \"%2$s\""
+
+#: ../modules/notifications/notifications.php:433
+#, php-format
+msgid ""
+"Ein neuer redaktioneller Kommentar wurde zum Dokument %1$s „%2$s“ "
+"hinzugefügt."
+msgstr "A new editorial comment has been added to the document #%1$s \"%2$s\"."
+
+#: ../modules/notifications/notifications.php:434
+#, php-format
+msgid "%1$s (%2$s) kommentiert am %3$s um %4$s:"
+msgstr "%1$s (%2$s) commented on %3$s at %4$s:"
+
+#: ../modules/notifications/notifications.php:444
+#, php-format
+msgid "Antworten: %s"
+msgstr "Replies: %s"
+
+#: ../modules/notifications/notifications.php:449
+msgid ""
+"Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: "
+msgstr "You can find all editorial comments on this document here:"
+
+#: ../modules/notifications/notifications.php:470
+#: ../modules/notifications/notifications.php:701
+msgid "(Kein Titel)"
+msgstr "(No Title)"
+
+#: ../modules/notifications/notifications.php:495
+#, php-format
+msgid "%1$s - Neue Aufgabe für „%2$s“ wurde hinzugefügt."
+msgstr "%1$s - New task for \"%2$s\" has been added."
+
+#: ../modules/notifications/notifications.php:496
+#, php-format
+msgid "Eine neue Aufgabe wurde zum Dokument %1$s „%2$s“ hinzugefügt."
+msgstr "A new Task was added to document #%1$s \"%2$s\"."
+
+#: ../modules/notifications/notifications.php:498
+#, php-format
+msgid "Diese Aktion wurde von %1$s %2$s am %3$s um %4$s %5$s ausgeführt."
+msgstr "This action was performed by %1$s %2$s on %3$s at %4$s %5$s."
+
+#: ../modules/notifications/notifications.php:502
+#, php-format
+msgid "Aufgabe: %s"
+msgstr "Task: %s"
+
+#: ../modules/notifications/notifications.php:503
+#, php-format
+msgid "Priorität: %s"
+msgstr "Priority: %s"
+
+#: ../modules/notifications/notifications.php:650
 msgid "Administrator benachrichtigen?"
 msgstr "Always notify the admin?"
 
-#: ../modules/notifications/notifications.php:420
+#: ../modules/notifications/notifications.php:660
 msgid "Nein"
 msgstr "No"
 
-#: ../modules/notifications/notifications.php:421
+#: ../modules/notifications/notifications.php:661
 msgid "Ja"
 msgstr "Yes"
 
@@ -1392,22 +1415,22 @@ msgid "Kopieren"
 msgstr "Copy"
 
 #: ../modules/post-versioning/post-versioning.php:452
-#: ../modules/post-versioning/post-versioning.php:1299
+#: ../modules/post-versioning/post-versioning.php:1297
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
 #: ../modules/post-versioning/post-versioning.php:453
-#: ../modules/post-versioning/post-versioning.php:1295
+#: ../modules/post-versioning/post-versioning.php:1293
 msgid "Neue Version"
 msgstr "New version"
 
 #: ../modules/post-versioning/post-versioning.php:461
-#: ../modules/post-versioning/post-versioning.php:612
+#: ../modules/post-versioning/post-versioning.php:614
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
 #: ../modules/post-versioning/post-versioning.php:468
-#: ../modules/post-versioning/post-versioning.php:619
+#: ../modules/post-versioning/post-versioning.php:621
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
@@ -1425,7 +1448,7 @@ msgstr "This action is not allowed."
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:578
+#: ../modules/post-versioning/post-versioning.php:580
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1435,7 +1458,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:582
+#: ../modules/post-versioning/post-versioning.php:584
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1444,7 +1467,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:598
+#: ../modules/post-versioning/post-versioning.php:600
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1453,12 +1476,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:625
+#: ../modules/post-versioning/post-versioning.php:627
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:629
+#: ../modules/post-versioning/post-versioning.php:631
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1466,19 +1489,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:715
-#: ../modules/post-versioning/post-versioning.php:808
+#: ../modules/post-versioning/post-versioning.php:713
+#: ../modules/post-versioning/post-versioning.php:806
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:764
+#: ../modules/post-versioning/post-versioning.php:762
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:911
+#: ../modules/post-versioning/post-versioning.php:904
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1487,13 +1510,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:921
+#: ../modules/post-versioning/post-versioning.php:910
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:953
+#: ../modules/post-versioning/post-versioning.php:942
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1502,11 +1525,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1126
+#: ../modules/post-versioning/post-versioning.php:1124
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1137
+#: ../modules/post-versioning/post-versioning.php:1135
 msgid "Version"
 msgstr "Version"
 
@@ -1602,7 +1625,7 @@ msgstr "Workflow &rsaquo; %s"
 msgid "Es sind keine Module registriert"
 msgstr "There are no registered modules"
 
-#: ../modules/settings/settings.php:371
+#: ../modules/settings/settings.php:350
 #, php-format
 msgid ""
 "Deaktiviert, da die Funktion add_post_type_support( '%1$s', '%2$s' ) in "
@@ -2249,12 +2272,44 @@ msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
 
 #, fuzzy
-#~ msgid "Activity"
-#~ msgstr "Enabled"
+#~ msgid "Edit comment"
+#~ msgstr "comment"
 
 #, fuzzy
-#~ msgid "Comments"
-#~ msgstr "comment"
+#~ msgid "Edit"
+#~ msgstr "Redakteur"
+
+#, fuzzy
+#~ msgid "Pingback"
+#~ msgstr "Pings"
+
+#, fuzzy
+#~ msgid "Redaktionellen Kommentar"
+#~ msgstr "Editorial Comments"
+
+#, fuzzy
+#~ msgctxt "dashboard"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s  >>>  %2$s"
+
+#~ msgid "Dateien hochladen"
+#~ msgstr "Upload Files"
+
+#~ msgid "Kommentare moderieren"
+#~ msgstr "Moderate Comments"
+
+#~ msgid "Taxonomien verwalten"
+#~ msgstr "Manage Taxonomies"
+
+#~ msgid "Links verwalten"
+#~ msgstr "Manage Links"
+
+#~ msgid "Design bearbeiten"
+#~ msgstr "Edit Appearance"
+
+#, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Enabled"
 
 #~ msgid "Deutsch"
 #~ msgstr "German"

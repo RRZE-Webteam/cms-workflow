@@ -829,15 +829,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
 
         $post = get_post($post_id);
-        
+                
         $post_meta = $this->get_post_meta($post_id);
         
         $post_attached_data = $this->get_post_attached_file($post_id);
         
-        if ('post' != $post->post_type && 'page' != $post->post_type) {
-            return;
-        }
-
         $blogs = get_post_meta($post_id, $this->module->workflow_options_name . '_network_connections');
         
         if (!empty($blogs)) {

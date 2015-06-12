@@ -19,19 +19,13 @@ class Workflow_Module {
         $available_post_types = $this->get_available_post_types();
 
         foreach ($all_post_types as $post_type) {
-            $capability_type = '';
-            if(isset($available_post_types[$post_type])) {
-                $capability_type = $available_post_types[$post_type]->capability_type;
-            }
-            
             if ((isset($module_post_types[$post_type]) && $module_post_types[$post_type]) || post_type_supports($post_type, $post_type_support)) {
                 $normalized_post_type_options[$post_type] = true;            
-            } elseif($capability_type && $capability_type != $post_type && (isset($module_post_types[$capability_type]) && $module_post_types[$capability_type]) || post_type_supports($capability_type, $post_type_support)) {               
-                $normalized_post_type_options[$post_type] = true;
             } else {
                 $normalized_post_type_options[$post_type] = false;
             }
         }
+        
         return $normalized_post_type_options;
     }
 
@@ -156,13 +150,7 @@ class Workflow_Module {
         if (!$post_type) {
             $post_type = get_post_type();
         }
-        
-        if(in_array($module->name, array('authors', 'user_groups'))) {
-            if($post_type == 'attachment') {
-                $post_type = 'post';
-            }
-        }
-        
+                
         return (bool) in_array($post_type, $allowed_post_types);
     }
 
