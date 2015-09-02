@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-12 10:52+0100\n"
+"POT-Creation-Date: 2015-09-02 16:51+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -87,12 +87,12 @@ msgstr ""
 msgid "Kein Benutzer gefunden."
 msgstr ""
 
-#: ../includes/workflow-module.php:416
+#: ../includes/workflow-module.php:431
 msgctxt "User role"
 msgid "Editor"
 msgstr ""
 
-#: ../includes/workflow-module.php:462
+#: ../includes/workflow-module.php:477
 msgctxt "User role"
 msgid "Author"
 msgstr ""
@@ -342,17 +342,17 @@ msgid "Aktivität"
 msgstr ""
 
 #: ../modules/dashboard/dashboard.php:130
-#: ../modules/dashboard/dashboard.php:607
+#: ../modules/dashboard/dashboard.php:615
 msgid "Aktuelle Entwürfe"
 msgstr ""
 
 #: ../modules/dashboard/dashboard.php:134
-#: ../modules/dashboard/dashboard.php:608
+#: ../modules/dashboard/dashboard.php:616
 msgid "Aktuelle ausstehende Reviews"
 msgstr ""
 
 #: ../modules/dashboard/dashboard.php:138
-#: ../modules/dashboard/dashboard.php:611
+#: ../modules/dashboard/dashboard.php:619
 #: ../modules/task-list/task-list.php:54 ../modules/task-list/task-list.php:77
 #: ../modules/task-list/task-list.php:85
 #: ../modules/task-list/task-list.php:162
@@ -407,78 +407,78 @@ msgstr ""
 msgid "Speicherplatz verbraucht"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:326
-#: ../modules/dashboard/dashboard.php:438
+#: ../modules/dashboard/dashboard.php:330
+#: ../modules/dashboard/dashboard.php:446
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:338
+#: ../modules/dashboard/dashboard.php:342
 msgid "Zurzeit gibt es keine Entwürfe."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:364
-#: ../modules/dashboard/dashboard.php:476
-#: ../modules/dashboard/dashboard.php:747
+#: ../modules/dashboard/dashboard.php:368
+#: ../modules/dashboard/dashboard.php:484
+#: ../modules/dashboard/dashboard.php:755
 msgid "Post-Types:"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:380
-#: ../modules/dashboard/dashboard.php:492
-#: ../modules/dashboard/dashboard.php:762
+#: ../modules/dashboard/dashboard.php:384
+#: ../modules/dashboard/dashboard.php:500
+#: ../modules/dashboard/dashboard.php:770
 msgid "Anzahl der Einträge in Listen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:450
+#: ../modules/dashboard/dashboard.php:458
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:555
+#: ../modules/dashboard/dashboard.php:563
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:567
+#: ../modules/dashboard/dashboard.php:575
 msgid "Zurzeit gibt es keine Aufgaben."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:617
-#: ../modules/dashboard/dashboard.php:631
-#: ../modules/dashboard/dashboard.php:645 ../modules/settings/settings.php:263
+#: ../modules/dashboard/dashboard.php:625
+#: ../modules/dashboard/dashboard.php:639
+#: ../modules/dashboard/dashboard.php:653 ../modules/settings/settings.php:263
 msgid "Deaktiviert"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:618
-#: ../modules/dashboard/dashboard.php:632
-#: ../modules/dashboard/dashboard.php:646 ../modules/settings/settings.php:264
+#: ../modules/dashboard/dashboard.php:626
+#: ../modules/dashboard/dashboard.php:640
+#: ../modules/dashboard/dashboard.php:654 ../modules/settings/settings.php:264
 msgid "Aktiviert"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:699
+#: ../modules/dashboard/dashboard.php:707
 msgid "in Kürze veröffentlichen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:709
+#: ../modules/dashboard/dashboard.php:717
 msgid "Kürzlich veröffentlicht"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:718
+#: ../modules/dashboard/dashboard.php:726
 msgid "Bisher keine Aktivitäten!"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:798
+#: ../modules/dashboard/dashboard.php:806
 msgid "Heute"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:800
+#: ../modules/dashboard/dashboard.php:808
 msgid "Morgen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:802
+#: ../modules/dashboard/dashboard.php:810
 msgid "d.m."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:854
+#: ../modules/dashboard/dashboard.php:862
 msgid "Kommentare"
 msgstr ""
 
@@ -1972,47 +1972,47 @@ msgstr ""
 msgid "Multisite-Sprachwechsler"
 msgstr ""
 
-#: ../modules/translation/widgets.php:65
+#: ../modules/translation/widgets.php:61
 msgid "Titel:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:69
+#: ../modules/translation/widgets.php:65
 msgid "Sortierung:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:71
+#: ../modules/translation/widgets.php:67
 msgid "nach Webseitennamen"
 msgstr ""
 
-#: ../modules/translation/widgets.php:72
+#: ../modules/translation/widgets.php:68
 msgid "nach Webseiten-ID"
 msgstr ""
 
-#: ../modules/translation/widgets.php:76
+#: ../modules/translation/widgets.php:72
 msgid "Linktyp:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:78
+#: ../modules/translation/widgets.php:74
 msgid "Text"
 msgstr ""
 
-#: ../modules/translation/widgets.php:79
+#: ../modules/translation/widgets.php:75
 msgid "Sprachcode"
 msgstr ""
 
-#: ../modules/translation/widgets.php:83
+#: ../modules/translation/widgets.php:79
 msgid "Aktuelle Webseite zeigen:"
 msgstr ""
 
-#: ../modules/translation/widgets.php:87
+#: ../modules/translation/widgets.php:83
 msgid "Weiterleitungsseite (statische Seite):"
 msgstr ""
 
-#: ../modules/translation/widgets.php:93
+#: ../modules/translation/widgets.php:89
 msgid "— Startseite der übersetzten Webseite —"
 msgstr ""
 
-#: ../modules/translation/widgets.php:100
+#: ../modules/translation/widgets.php:96
 msgid ""
 "Lokale Standardseite, die im Falle eines nicht-übersetzten Dokument "
 "angezeigt soll (standardmäßig ist die Startseite der übersetzten Webseite)."

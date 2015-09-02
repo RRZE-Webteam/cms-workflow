@@ -335,7 +335,7 @@ class Workflow_Module {
                 'iso' => array(
                     1 => 'de'
                 ),
-            )
+            )            
         );
 
         return $languages;
@@ -343,10 +343,15 @@ class Workflow_Module {
 
     public static function get_available_languages() {
         $languages = get_available_languages();
+        foreach ($languages as $k => $lang) {
+            if (strlen($lang) > 5) {
+                unset($languages[$k]);
+            }
+        }
         return array_merge($languages, array('en_US'));
     }
     
-    public static function get_language($locale) {
+    public static function get_language($locale = 'en_US') {
         $unknown_language = array(
             'language' => 'xx_XX',
             'english_name' => 'Unknown language',
@@ -357,11 +362,7 @@ class Workflow_Module {
         );
 
         $languages = self::get_languages();
-
-        if (empty($locale)) {
-            $locale = 'en_US';
-        }
-        
+        /**
         if (!isset($languages[$locale])) {
             require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
             $wp_available_translations = wp_get_available_translations();
@@ -370,13 +371,27 @@ class Workflow_Module {
                 return $unknown_language;
             }
         }
+         * 
+         */
 
         return $languages[$locale];
     }
 
     public static function get_locale() {
+        global $wp_local_package;
+
+        if (isset($wp_local_package)) {
+            $locale = $wp_local_package;
+        }
+
+        // WPLANG was defined in wp-config.
+        if (defined('WPLANG')) {
+            $locale = WPLANG;
+        }
+
+        // If multisite, check options.
         if (is_multisite()) {
-            if (defined('WP_INSTALLING') || ( false === $ms_locale = get_option('WPLANG') )) {
+            if (false === $ms_locale = get_option('WPLANG')) {
                 $ms_locale = get_site_option('WPLANG');
             }
 
@@ -394,9 +409,9 @@ class Workflow_Module {
             $locale = 'en_US';
         }
 
-        return $locale;
+        return substr($locale, 0, 5);
     }
-
+    
     public function repopulate_role($role = '') {
         $allowed_roles = array('editor', 'author');
 

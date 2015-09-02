@@ -68,16 +68,14 @@ function get_xliff_file($post_id, $post) {
         return false;
     }
 
-    $source_language_code = explode('_', $source_language_code);
-    $source_language_code = $source_language_code[0];
+    $source_language_code = substr($source_language_code, 0, 2);
 
     $language_code = get_post_meta($post_id, '_translate_to_lang_post_meta', true);
     if ($language_code == '') {
         return false;
     }
 
-    $language_code = explode('_', $language_code);
-    $language_code = $language_code[0];
+    $language_code = substr($language_code, 0, 2);
 
     $elements = array(
         (object) array(

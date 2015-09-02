@@ -283,13 +283,13 @@ class Workflow_Translation extends Workflow_Module {
             $available_languages = self::get_available_languages();
             
             $translate_from_lang_post_meta = get_post_meta($post_id, self::translate_from_lang_post_meta, true);
-            $translate_from_lang = $translate_from_lang_post_meta != '' ? $translate_from_lang_post_meta : 0;
+            $translate_from_lang = $translate_from_lang_post_meta != '' ? substr($translate_from_lang_post_meta, 0, 5) : $site_lang;
             if($translate_from_lang == 'en_EN') {
                 $translate_from_lang == 'en_US';
             }            
 
             $translate_to_lang_post_meta = get_post_meta($post_id, self::translate_to_lang_post_meta, true);
-            $translate_to_lang = $translate_to_lang_post_meta == '' ? $site_lang : $translate_to_lang_post_meta;
+            $translate_to_lang = $translate_to_lang_post_meta != '' ? substr($translate_to_lang_post_meta, 0, 5) : 0;
             if($translate_to_lang == 'en_EN') {
                 $translate_to_lang == 'en_US';
             }            
@@ -580,17 +580,17 @@ class Workflow_Translation extends Workflow_Module {
             'echo' => false,
             'redirect_page_id' => 0
         );
-        
+
         $r = wp_parse_args($args, $defaults);
-        
+
         $alternate_posts = self::$alternate_posts;
-        
+
         if (empty($alternate_posts)) {
             return '';
         }
-        
+                
         extract($r, EXTR_SKIP);
-        
+
         extract($alternate_posts, EXTR_SKIP);
         
         if ($show_current_blog) {
@@ -626,11 +626,9 @@ class Workflow_Translation extends Workflow_Module {
             $a_id = (get_current_blog_id() == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = (get_current_blog_id() == $site['blog_id']) ? ' class="lang-current current"' : '';
 
-            if (isset($remote_permalink[$site['blog_id']])) {
+            if ((is_single() || is_page()) && isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
-            } elseif (is_singular() && get_current_blog_id() == $site['blog_id']) {
-                $href = get_permalink($current_post_id);
-            } elseif ($redirect_page_id > 0) {
+            } elseif ($redirect_page_id) {
                 $href = get_permalink($redirect_page_id);
             } else {
                 $href = get_site_url($site['blog_id']);
@@ -671,10 +669,8 @@ class Workflow_Translation extends Workflow_Module {
             $language = self::get_language($site['sitelang']);
             $hreflang = $language['iso'][1];
 
-            if (isset($remote_permalink[$site['blog_id']])) {
+            if ((is_single() || is_page()) && isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
-            } elseif (is_singular() && get_current_blog_id() == $site['blog_id']) {
-                $href = get_permalink($current_post_id);
             } else {
                 $href = '';
             }
@@ -697,9 +693,9 @@ class Workflow_Translation extends Workflow_Module {
 
         $alternate_posts = array();
         
-        $related_sites = $cms_workflow->translation->module->options->related_sites;
+        $related_sites = $this->module->options->related_sites;
 
-        if (!( 0 < count($related_sites) )) {
+        if (!count($related_sites)) {
             return $alternate_posts;
         }
 

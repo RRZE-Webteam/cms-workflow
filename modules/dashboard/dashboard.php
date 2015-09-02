@@ -294,10 +294,14 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($posts && is_array($posts)) {
             $list = array();
             foreach ($posts as $post) {
+                if (!isset($this->allowed_post_types[$post->post_type])) {
+                    continue;
+                }
+                
                 if (!current_user_can('edit_post', $post->ID)) {
                     continue;
                 }
-
+                
                 $post_type = $this->allowed_post_types[$post->post_type];
 
                 $authors = array();
@@ -405,10 +409,14 @@ class Workflow_Dashboard extends Workflow_Module {
         if ($posts && is_array($posts)) {
             $list = array();
             foreach ($posts as $post) {
-                if (!current_user_can('edit_post', $post->ID)) {
+                if (!isset($this->allowed_post_types[$post->post_type])) {
                     continue;
                 }
                 
+                if (!current_user_can('edit_post', $post->ID)) {
+                    continue;
+                }
+                                
                 $post_type = $this->allowed_post_types[$post->post_type];
 
                 $authors = array();
