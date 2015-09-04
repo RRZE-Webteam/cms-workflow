@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-02 16:51+0100\n"
+"POT-Creation-Date: 2015-09-04 15:02+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -139,7 +139,7 @@ msgid ""
 msgstr ""
 
 #: ../modules/authors/authors.php:39 ../modules/authors/authors.php:209
-#: ../modules/authors/authors.php:594
+#: ../modules/authors/authors.php:597
 msgid "Autoren"
 msgstr ""
 
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Benutzergruppen"
 msgstr ""
 
-#: ../modules/authors/authors.php:727
+#: ../modules/authors/authors.php:730
 #, php-format
 msgctxt "authors"
 msgid "Mein %1$s <span class=\"count\">(%2$s)</span>"
@@ -238,12 +238,12 @@ msgid_plural "Meine %1$s <span class=\"count\">(%2$s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/authors/authors.php:731
+#: ../modules/authors/authors.php:734
 #, php-format
 msgid "%1$s von %3$s <span class=\"count\">(%2$s)</span>"
 msgstr ""
 
-#: ../modules/authors/authors.php:981
+#: ../modules/authors/authors.php:984
 #: ../modules/editorial-comments/editorial-comments.php:382
 #: ../modules/editors/editors.php:186
 #: ../modules/notifications/notifications.php:649
@@ -254,7 +254,7 @@ msgstr ""
 msgid "Freigabe"
 msgstr ""
 
-#: ../modules/authors/authors.php:982
+#: ../modules/authors/authors.php:985
 msgid "Autorenrechte"
 msgstr ""
 

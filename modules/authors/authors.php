@@ -526,11 +526,14 @@ class Workflow_Authors extends Workflow_Module {
         $cap = $args[0];
         $user_id = isset($args[1]) ? $args[1] : 0;
         $post_id = isset($args[2]) ? $args[2] : 0;
-
-        $post_type = get_post_type($post_id);
-        $revision_parent_id = wp_is_post_revision($post_id);
         
-        if (!$this->is_post_type_enabled($post_type) && !$revision_parent_id) {
+        if($revision_parent_id = wp_is_post_revision($post_id)) {
+            $post_id = $revision_parent_id;
+        }
+        
+        $post_type = get_post_type($post_id);
+        
+        if (!$this->is_post_type_enabled($post_type)) {
             return $allcaps;
         }
 
@@ -546,7 +549,7 @@ class Workflow_Authors extends Workflow_Module {
         
         $current_user = wp_get_current_user();
 
-        if (!$this->is_post_author($current_user->user_login, $post_id) && !$this->is_post_author($current_user->user_login, $revision_parent_id)) {
+        if (!$this->is_post_author($current_user->user_login, $post_id)) {
             return $allcaps;
         }
 
