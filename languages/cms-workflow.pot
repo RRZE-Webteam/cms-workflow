@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 15:02+0100\n"
+"POT-Creation-Date: 2015-09-08 12:47+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -59,40 +59,40 @@ msgstr ""
 msgid "Das Dokument existiert nicht."
 msgstr ""
 
-#: ../includes/workflow-module.php:69
+#: ../includes/workflow-module.php:75
 msgid "Veröffentlicht"
 msgstr ""
 
-#: ../includes/workflow-module.php:70
+#: ../includes/workflow-module.php:76
 msgid "Entwurf"
 msgstr ""
 
-#: ../includes/workflow-module.php:71
+#: ../includes/workflow-module.php:77
 msgid "Geplant"
 msgstr ""
 
-#: ../includes/workflow-module.php:72
+#: ../includes/workflow-module.php:78
 msgid "Privat"
 msgstr ""
 
-#: ../includes/workflow-module.php:73
+#: ../includes/workflow-module.php:79
 msgid "Ausstehender Review"
 msgstr ""
 
-#: ../includes/workflow-module.php:74
+#: ../includes/workflow-module.php:80
 msgid "Papierkorb"
 msgstr ""
 
-#: ../includes/workflow-module.php:211
+#: ../includes/workflow-module.php:217
 msgid "Kein Benutzer gefunden."
 msgstr ""
 
-#: ../includes/workflow-module.php:431
+#: ../includes/workflow-module.php:437
 msgctxt "User role"
 msgid "Editor"
 msgstr ""
 
-#: ../includes/workflow-module.php:477
+#: ../includes/workflow-module.php:483
 msgctxt "User role"
 msgid "Author"
 msgstr ""
@@ -1398,12 +1398,11 @@ msgid "Kopieren"
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:452
-#: ../modules/post-versioning/post-versioning.php:1297
+#: ../modules/post-versioning/post-versioning.php:1346
 msgid "Dieses Element als neue Version duplizieren"
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:453
-#: ../modules/post-versioning/post-versioning.php:1293
 msgid "Neue Version"
 msgstr ""
 
@@ -1464,42 +1463,43 @@ msgid ""
 "kehren Sie zurück und versuchen Sie es erneut."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:713
-#: ../modules/post-versioning/post-versioning.php:806
+#: ../modules/post-versioning/post-versioning.php:714
+#: ../modules/post-versioning/post-versioning.php:813
 msgid "Netzwerkweite Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:762
+#: ../modules/post-versioning/post-versioning.php:764
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:904
+#: ../modules/post-versioning/post-versioning.php:929
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:910
+#: ../modules/post-versioning/post-versioning.php:935
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:942
+#: ../modules/post-versioning/post-versioning.php:967
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
 "- %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1124
+#: ../modules/post-versioning/post-versioning.php:1170
 msgid "Nr."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1135
+#: ../modules/post-versioning/post-versioning.php:1181
+#: ../modules/post-versioning/post-versioning.php:1342
 msgid "Version"
 msgstr ""
 

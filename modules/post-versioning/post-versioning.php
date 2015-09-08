@@ -192,7 +192,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_action('save_post', array($this, 'network_connections_save_post'));
         }
         
-        add_action('admin_bar_menu', array($this, 'new_version_node'), 99);
+        add_action('wp_before_admin_bar_render', array($this, 'admin_bar_submenu'), 99);
     }
 
     public function deactivation() {
@@ -709,8 +709,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
             update_post_meta($post->ID, $meta_key, $meta_data);
         }
 
-        add_action('post_submitbox_start', array($this, 'network_connections_version_input'));
-        add_meta_box('network-connections', __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
+        if (current_user_can('manage_categories')) {
+            add_action('post_submitbox_start', array($this, 'network_connections_version_input'));
+            add_meta_box('network-connections', __('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'network_connections_inner_box'), $post_type, 'normal', 'high');
+        }
     }
 
     public function network_connections_inner_box($post) {
@@ -764,6 +766,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function network_connections_save_postmeta($post_id) {
+        
+        if(!current_user_can('manage_categories')) {
+            return;
+        }
+        
         if (!isset($_POST['post_type'])) {
             return;
         }
@@ -811,6 +818,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
     public function network_connections_save_post($post_id) {
 
+        if(!current_user_can('manage_categories')) {
+            return;
+        }
+        
         $post_status = get_post_status($post_id);
         if ($post_status != 'publish') {
             return;
@@ -818,9 +829,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         if (is_null($this->source_blog)) {
             $this->source_blog = get_current_blog_id();
-        }
-        
-        else {
+        } else {
             return;
         }
 
@@ -843,7 +852,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         $blogs = (array) $blogs;
 
-        if (!( count($blogs) > 0 )) {
+        if (!(count($blogs) > 0)) {
             return '';
         }
 
@@ -859,6 +868,23 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
 
+            $user_id = get_current_user_id();
+
+            if (!current_user_can('manage_categories') || !array_key_exists($blog_id, get_blogs_of_user($user_id))) {
+                $admins = get_users(array(
+                    'blog_id' => $blog_id,
+                    'role' => 'administrator',
+                    'orderby' => 'ID',
+                    'order' => 'ASC',
+                    'fields' => array('ID')
+                ));
+
+                foreach ($admins as $user) {
+                    $user_id = $user->ID;
+                    break;
+                }
+            }
+            
             if (isset($remote_parent_post_meta['post_id']) && isset($remote_parent_post_meta['blog_id']) && $blog_id == $remote_parent_post_meta['blog_id']) {
                 
                 $remote_post_id = $remote_parent_post_meta['post_id'];
@@ -868,12 +894,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     restore_current_blog();
                     delete_post_meta($post_id, self::version_remote_parent_post_meta);
                     switch_to_blog($blog_id);
-                } else {
-                    
+                } else {                    
                     if ($remote_post->post_status == 'publish') {
                         
                         $new_post = array(
-                            'post_author' => get_current_user_id(),
+                            'post_author' => $user_id,
                             'post_content' => $post->post_content,
                             'post_title' => $post->post_title,                                                        
                             'post_excerpt' => $post->post_excerpt,
@@ -918,7 +943,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 'post_title' => $post->post_title,
                 'post_content' => $post->post_content,
                 'post_status' => 'draft',
-                'post_author' => get_current_user_id(),
+                'post_author' => $user_id,
                 'post_excerpt' => $post->post_excerpt,
                 'post_date' => $post->post_date,
                 'post_type' => $post->post_type
@@ -952,16 +977,37 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     private function add_taxonomies($post_id, $post) {
         $taxonomies = get_object_taxonomies($post->post_type);
+        $filtered_taxonomies = apply_filters('workflow_post_versioning_filtered_taxonomies', array());
+
         foreach ($taxonomies as $taxonomy) {
-            $post_terms = wp_get_object_terms($post->ID, $taxonomy, array('orderby' => 'term_order'));
-            $terms = array();
-
-            for ($i = 0; $i < count($post_terms); $i++) {
-                $terms[] = $post_terms[$i]->slug;
+            if (in_array($taxonomy, $filtered_taxonomies)) {
+                continue;
             }
+            
+            $post_terms = wp_get_object_terms($post->ID, $taxonomy, array('orderby' => 'term_order'));
+            
+            if(!empty($post_terms) && !is_wp_error($post_terms)) {
+                $terms = array();
 
-            wp_set_object_terms($post_id, $terms, $taxonomy);
+                for ($i = 0; $i < count($post_terms); $i++) {
+                    $terms[] = $post_terms[$i]->slug;
+                }
+
+                wp_set_object_terms($post_id, $terms, $taxonomy);
+            }
         }      
+    }
+    
+    private function filtered_post_meta($keys) {
+        $filtered_post_meta = array();
+        
+        foreach ((array) $keys as $key) {
+            if (strpos($key, '_') === 0) {
+                $filtered_post_meta[] = $key;
+            }
+        }
+        
+        return apply_filters('workflow_post_versioning_filtered_post_meta', $filtered_post_meta);        
     }
     
     private function get_post_meta($post_id) {
@@ -969,7 +1015,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $keys = get_post_custom_keys($post_id);
 
         foreach ((array) $keys as $key) {
-            if (strpos($key, '_') === 0) {
+            if (in_array($key, $this->filtered_post_meta($keys))) {
                 continue;
             }
             
@@ -986,7 +1032,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
     private function add_post_meta($post_id, $post_meta) {
         foreach ($post_meta as $meta) {
             foreach ($meta as $key => $value) {
-                if (strpos($key, '_') !== 0) {
+                if (!in_array($key, $this->filtered_post_meta(array_keys($meta)))) {
                     add_post_meta($post_id, $key, $value);
                 }
             }
@@ -996,7 +1042,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
     private function update_post_meta($post_id, $post_meta) {
         foreach ($post_meta as $meta) {
             foreach ($meta as $key => $value) {
-                if (strpos($key, '_') !== 0) {
+                if (!in_array($key, $this->filtered_post_meta(array_keys($meta)))) {
                     update_post_meta($post_id, $key, $value);
                 }
             }
@@ -1273,31 +1319,34 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         return implode('<br>', $documents);
     }
+    
+    public function admin_bar_submenu() {
+        global $wp_admin_bar, $pagenow, $post;
 
-    public function new_version_node($wp_admin_bar) {
-        global $post;
-        
-        if(!is_singular()) {
+        if ((!is_single() && !is_page() && $pagenow != 'post.php') || !is_admin_bar_showing() || !is_object($wp_admin_bar) || !is_object($post)) {
             return;
         }
-
+        
         if (!is_object($this->get_available_post_types($post->post_type)) || !in_array($post->post_type, $this->get_post_types($this->module))) {
             return;
         }
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
+        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish') {
+            return;
+        }
+
+        $args = array(
+            'parent' => 'new-content',
+            'id'     => 'new-version',
+            'title' => __('Version', CMS_WORKFLOW_TEXTDOMAIN),
+            'href'  => admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID),
+            'meta'  => array(
+                'class' => 'new-version',
+                'title' => esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN)))
+        );
         
-        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish') {
-            $args = array(
-                'id'     => 'new_version',
-                'title' => __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN),
-                'href'  => admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID),
-                'meta'  => array(
-                    'class' => 'new-version',
-                    'title' => esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN)))
-            );
-            $wp_admin_bar->add_node( $args );            
-        }    
+        $wp_admin_bar->add_node($args);
     }
-    
+        
 }

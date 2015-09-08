@@ -253,7 +253,7 @@ class Workflow_Authors extends Workflow_Module {
     public function save_post($post_id, $post) {
         global $cms_workflow;
 
-        if ((!wp_is_post_revision($post) && !wp_is_post_autosave($post) ) && isset($_POST['workflow_save_authors']) && current_user_can('manage_categories')) {
+        if ((!wp_is_post_revision($post) && !wp_is_post_autosave($post) ) && !ms_is_switched() && isset($_POST['workflow_save_authors']) && current_user_can('manage_categories')) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 

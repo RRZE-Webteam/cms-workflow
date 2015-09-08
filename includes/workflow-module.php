@@ -2,10 +2,16 @@
 
 class Workflow_Module {
 
+    public function module_exist($name) {
+        global $cms_workflow;
+
+        return isset($cms_workflow->$name);
+    }
+    
     public function module_activated($name) {
         global $cms_workflow;
 
-        return isset($cms_workflow->$name) && $cms_workflow->$name->module->options->activated;
+        return $this->module_exist($name) && $cms_workflow->$name->module->options->activated;
     }
 
     public function clean_post_type_options($module_post_types = array(), $post_type_support = null) {
