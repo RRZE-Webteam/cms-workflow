@@ -265,6 +265,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             return;
         }
 
+        $has_connection = false;
         foreach ($connections as $blog_id => $data) {
             if ($current_blog_id == $blog_id) {
                 continue;
@@ -274,6 +275,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
 
+            if (!current_user_can('manage_options')) {
+                restore_current_blog();
+                continue;
+            }
+            
+            $has_connection = true;
+            
             $site_name = get_bloginfo('name');
             $site_url = get_bloginfo('url');
             restore_current_blog();
@@ -288,7 +296,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
             <?php
         }
         ?>
-        <p class="description"><?php _e('Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) dupliziert werden.'); ?></p>
+        <?php if (!$has_connection): ?>
+        <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+        <?php endif; ?>
+        <p class="description"><?php _e('Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) dupliziert werden.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php
     }
 
@@ -858,8 +869,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         $remote_parent_post_meta = get_post_meta($post_id, self::version_remote_parent_post_meta, true);
 
+        $user_blogs = get_blogs_of_user(get_current_user_id());
+        
         foreach ($blogs as $blog_id) {
-
+            
+            if (!in_array($blog_id, $user_blogs)) {
+                continue;
+            }
+            
             if ($blog_id == $this->source_blog) {
                 continue;
             }

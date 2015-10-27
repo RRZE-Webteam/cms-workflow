@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-08 12:47+0100\n"
+"POT-Creation-Date: 2015-10-27 14:58+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -786,14 +786,12 @@ msgid "Benachrichtigungen über wichtige Änderungen an einem Dokument."
 msgstr "Notifications on major changes in a document."
 
 #: ../modules/notifications/notifications.php:123
-#, fuzzy
 msgid "Revision"
-msgstr "Version"
+msgstr "Revision"
 
 #: ../modules/notifications/notifications.php:124
-#, fuzzy
 msgid "Aktuelles Dokument"
-msgstr "Recent Drafts"
+msgstr "Recent Document"
 
 #: ../modules/notifications/notifications.php:138
 #: ../modules/notifications/notifications.php:315
@@ -802,13 +800,13 @@ msgid "CMS-Workflow"
 msgstr "CMS-Workflow"
 
 #: ../modules/notifications/notifications.php:157
-#, fuzzy, php-format
+#, php-format
 msgid "%1$s - Das Dokument „%2$s“ hat sich geändert."
 msgstr "%1$s - The status of the document \"%2$s\" has changed."
 
 #: ../modules/notifications/notifications.php:162
 #: ../modules/notifications/notifications.php:211
-#, fuzzy, php-format
+#, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert."
 msgstr "The status the document #%1$s \"%2$s\" was changed by %3$s %4$s."
 
@@ -1398,7 +1396,11 @@ msgstr "Network-Wide allowance"
 msgid "Vorhandene Webseiten"
 msgstr "Existing Web sites"
 
-#: ../modules/post-versioning/post-versioning.php:291
+#: ../modules/post-versioning/post-versioning.php:300
+msgid "Nicht verfügbar"
+msgstr "N/A"
+
+#: ../modules/post-versioning/post-versioning.php:302
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "dupliziert werden."
@@ -1406,48 +1408,48 @@ msgstr ""
 "Local documents can be as a new version (draft) duplicated in these web "
 "sites."
 
-#: ../modules/post-versioning/post-versioning.php:446
+#: ../modules/post-versioning/post-versioning.php:457
 msgid "Dieses Element als neuen Entwurf kopieren"
 msgstr "Copy this item as a new draft"
 
-#: ../modules/post-versioning/post-versioning.php:447
+#: ../modules/post-versioning/post-versioning.php:458
 msgid "Kopieren"
 msgstr "Copy"
 
-#: ../modules/post-versioning/post-versioning.php:452
-#: ../modules/post-versioning/post-versioning.php:1346
+#: ../modules/post-versioning/post-versioning.php:463
+#: ../modules/post-versioning/post-versioning.php:1363
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
-#: ../modules/post-versioning/post-versioning.php:453
+#: ../modules/post-versioning/post-versioning.php:464
 msgid "Neue Version"
 msgstr "New version"
 
-#: ../modules/post-versioning/post-versioning.php:461
-#: ../modules/post-versioning/post-versioning.php:614
+#: ../modules/post-versioning/post-versioning.php:472
+#: ../modules/post-versioning/post-versioning.php:625
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
-#: ../modules/post-versioning/post-versioning.php:468
-#: ../modules/post-versioning/post-versioning.php:621
+#: ../modules/post-versioning/post-versioning.php:479
+#: ../modules/post-versioning/post-versioning.php:632
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
-#: ../modules/post-versioning/post-versioning.php:474
-#: ../modules/post-versioning/post-versioning.php:523
+#: ../modules/post-versioning/post-versioning.php:485
+#: ../modules/post-versioning/post-versioning.php:534
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr "You do not have the necessary rights to create a new version."
 
-#: ../modules/post-versioning/post-versioning.php:478
+#: ../modules/post-versioning/post-versioning.php:489
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr "This action is not allowed."
 
-#: ../modules/post-versioning/post-versioning.php:482
+#: ../modules/post-versioning/post-versioning.php:493
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:580
+#: ../modules/post-versioning/post-versioning.php:591
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1457,7 +1459,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:584
+#: ../modules/post-versioning/post-versioning.php:595
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1466,7 +1468,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:600
+#: ../modules/post-versioning/post-versioning.php:611
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1475,12 +1477,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:627
+#: ../modules/post-versioning/post-versioning.php:638
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:631
+#: ../modules/post-versioning/post-versioning.php:642
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1488,19 +1490,19 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:714
-#: ../modules/post-versioning/post-versioning.php:813
+#: ../modules/post-versioning/post-versioning.php:725
+#: ../modules/post-versioning/post-versioning.php:824
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:764
+#: ../modules/post-versioning/post-versioning.php:775
 msgid ""
 "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) dupliziert "
 "werden."
 msgstr ""
 "The document can be duplicated as a new version (draft) in this web sites."
 
-#: ../modules/post-versioning/post-versioning.php:929
+#: ../modules/post-versioning/post-versioning.php:946
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1509,13 +1511,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:935
+#: ../modules/post-versioning/post-versioning.php:952
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen."
 msgstr "Target document is not published. Network Versioning failed."
 
-#: ../modules/post-versioning/post-versioning.php:967
+#: ../modules/post-versioning/post-versioning.php:984
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1524,12 +1526,12 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1170
+#: ../modules/post-versioning/post-versioning.php:1187
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1181
-#: ../modules/post-versioning/post-versioning.php:1342
+#: ../modules/post-versioning/post-versioning.php:1198
+#: ../modules/post-versioning/post-versioning.php:1359
 msgid "Version"
 msgstr "Version"
 
