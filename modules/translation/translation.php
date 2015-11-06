@@ -204,6 +204,7 @@ class Workflow_Translation extends Workflow_Module {
             }
 
             if (isset($current_related_sites[$blog_id])) {
+                restore_current_blog();
                 continue;
             }
             

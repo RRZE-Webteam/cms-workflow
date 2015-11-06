@@ -296,8 +296,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
 
-            $current_related_sites[] = $blog_id;
-            
+            $current_related_sites[] = $blog_id;           
             restore_current_blog();
         }
         
@@ -307,11 +306,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
 
             if (in_array($blog_id, $current_related_sites)) {
+                restore_current_blog();
                 continue;
             }
             
-            $current_related_sites[] = $blog_id;
-            
+            $current_related_sites[] = $blog_id;           
             restore_current_blog();
         }
         
