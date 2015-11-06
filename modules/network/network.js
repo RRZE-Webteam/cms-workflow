@@ -1,20 +1,20 @@
 (function( $ ) {
 	$(document).ready( function() {
 		var position = { offset: '0, -1' };
-		if ( typeof suggest.isRtl !== 'undefined' && suggest.isRtl ) {
+		if ( typeof selectSite.isRtl !== 'undefined' && selectSite.isRtl ) {
 			position.my = 'right top';
 			position.at = 'right bottom';
 		}
-		$( '.workflow-suggest-site' ).autocomplete({
-			source:    suggest.ajaxurl + '?action=workflow_suggest_site',
+		$( '#workflow-network-select' ).autocomplete({
+			source:    selectSite.ajaxurl + '?action=workflow_network_select',
 			delay:     500,
 			minLength: 2,
 			position:  position,
 			open: function() {
-				$( this ).addClass( 'open' );
+				$( this ).addClass('open');
 			},
 			close: function() {
-				$( this ).removeClass( 'open' );
+				$( this ).removeClass('open');
 			}
 		});
 	});

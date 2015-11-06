@@ -11,7 +11,11 @@ class Workflow_Module {
     public function module_activated($name) {
         global $cms_workflow;
 
-        return $this->module_exist($name) && $cms_workflow->$name->module->options->activated;
+        if (!$this->module_exist($name)) {
+            return false;
+        }
+        
+        return isset($cms_workflow->$name->module->options->activated) && $cms_workflow->$name->module->options->activated;
     }
 
     public function clean_post_type_options($module_post_types = array(), $post_type_support = null) {
@@ -317,7 +321,9 @@ class Workflow_Module {
     }
 
     private static function get_languages() {
-        $languages = array(
+        require_once(ABSPATH . 'wp-admin/includes/translation-install.php');
+        $translations = wp_get_available_translations();
+        $english = array(
             'en_US' => array(
                 'language' => 'en_US',
                 'english_name' => 'English',
@@ -325,26 +331,10 @@ class Workflow_Module {
                 'iso' => array(
                     1 => 'en'
                 )
-            ),
-            'en_EN' => array(
-                'language' => 'en_EN',
-                'english_name' => 'English',
-                'native_name' => 'English',
-                'iso' => array(
-                    1 => 'en'
-                )
-            ),
-            'de_DE' => array(
-                'language' => 'de_DE',
-                'english_name' => 'German',
-                'native_name' => 'Deutsch',
-                'iso' => array(
-                    1 => 'de'
-                ),
-            )            
+            )
         );
-
-        return $languages;
+        
+        return array_merge($translations, $english);
     }
 
     public static function get_available_languages() {
@@ -354,32 +344,15 @@ class Workflow_Module {
                 unset($languages[$k]);
             }
         }
+        
         return array_merge($languages, array('en_US'));
     }
     
     public static function get_language($locale = 'en_US') {
-        $unknown_language = array(
-            'language' => 'xx_XX',
-            'english_name' => 'Unknown language',
-            'native_name' => 'Unknown language',
-            'iso' => array(
-                1 => 'xx'
-            )
-        );
-
         $languages = self::get_languages();
-        /**
-        if (!isset($languages[$locale])) {
-            require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
-            $wp_available_translations = wp_get_available_translations();
-            $languages = array_merge($languages, $wp_available_translations);
-            if (!isset($languages[$locale])) {
-                return $unknown_language;
-            }
+        if ($locale == 'en_EN') {
+            $locale = 'en_US';
         }
-         * 
-         */
-
         return $languages[$locale];
     }
 

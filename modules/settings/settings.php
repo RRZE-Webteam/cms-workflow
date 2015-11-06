@@ -328,6 +328,22 @@ class Workflow_Settings extends Workflow_Module {
         endif;
     }
 
+    public function has_custom_post_type_option($module, $option_name = 'post_types') {
+
+        $all_post_types = $this->get_available_post_types();
+        
+        foreach ($all_post_types as $post_type => $args) {
+            if($post_type == 'attachment' && !in_array($module->name, array('authors', 'user_groups', 'task_list', 'editorial_comments'))) {
+                continue;
+            }
+
+            if (!empty($module->options->{$option_name}[$post_type])) {
+                return true;
+            }            
+        }
+        return false;
+    }
+    
     public function custom_post_type_option($module, $option_name = 'post_types') {
 
         $all_post_types = $this->get_available_post_types();
@@ -339,7 +355,7 @@ class Workflow_Settings extends Workflow_Module {
             echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
             echo '<input id="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '" name="'
             . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
-            if (isset($module->options->{$option_name}[$post_type])) {
+            if (!empty($module->options->{$option_name}[$post_type])) {
                 checked($module->options->{$option_name}[$post_type], true);
             }
             
@@ -361,6 +377,9 @@ class Workflow_Settings extends Workflow_Module {
         }
 
         $module_name = sanitize_key($_POST['cms_workflow_module_name']);
+        if (!isset($cms_workflow->$module_name->module->workflow_options_name)) {
+            return false;
+        }
 
         if ($_POST['action'] != 'update' || $_POST['option_page'] != $cms_workflow->$module_name->module->workflow_options_name) {
             return false;
@@ -370,7 +389,11 @@ class Workflow_Settings extends Workflow_Module {
             wp_die(__('Schummeln, was?', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
-        $new_options = (array) isset($_POST[$cms_workflow->$module_name->module->workflow_options_name]) ? $_POST[$cms_workflow->$module_name->module->workflow_options_name] : '';
+        if (isset($_POST[$cms_workflow->$module_name->module->workflow_options_name])) {
+            $new_options = (array) $_POST[$cms_workflow->$module_name->module->workflow_options_name];
+        } else {
+            $new_options = array();
+        }
 
         if (method_exists($cms_workflow->$module_name, 'settings_validate')) {
             $new_options = (array) $cms_workflow->$module_name->settings_validate($new_options);
