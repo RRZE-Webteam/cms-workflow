@@ -219,11 +219,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function settings_network_connections_option() {
-        $current_related_sites = $this->current_related_sites();
+        $network_related_sites = $this->current_network_related_sites();
         $related_sites = (array) $this->module->options->related_sites;
         
-        if (!empty($current_related_sites)) :
-            foreach ($current_related_sites as $blog_id) {
+        if (!empty($network_related_sites)) :
+            foreach ($network_related_sites as $blog_id) {
                 if (!switch_to_blog($blog_id)) {
                     continue;
                 }
@@ -239,7 +239,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 $connected = in_array($blog_id, $related_sites) ? true : false;
                 ?>
                 <label for="related_sites_<?php echo $blog_id; ?>">
-                    <input id="related_sites_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>" /> <?php echo $label; ?>
+                    <input id="related_sites_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>"> <?php echo $label; ?>
                 </label><br>
                 <?php    
             }
@@ -262,10 +262,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $new_options['related_sites'] = !empty($new_options['related_sites']) ? (array) $new_options['related_sites'] : array();
         
         $current_blog_id = get_current_blog_id();
-        $current_related_sites = $this->current_related_sites();
+        $network_related_sites = $this->current_network_related_sites();
         $related_sites = array();
 
-        foreach ($current_related_sites as $blog_id) {
+        foreach ($network_related_sites as $blog_id) {
             if ($current_blog_id == $blog_id) {
                 continue;
             }
@@ -282,21 +282,21 @@ class Workflow_Post_Versioning extends Workflow_Module {
         return $new_options;
     }
     
-    private function current_related_sites() {
+    private function current_network_related_sites() {
         global $cms_workflow;
         
         $cms_workflow->network->update_site_connections();       
         $network_connections = (array) $cms_workflow->network->module->options->network_connections;
         $network_related_sites = (array) $cms_workflow->network->module->options->related_sites;
         
-        $current_related_sites = array();
+        $current_network_related_sites = array();
         
         foreach ($network_connections as $blog_id) {
             if (!switch_to_blog($blog_id)) {
                 continue;
             }
 
-            $current_related_sites[] = $blog_id;           
+            $current_network_related_sites[] = $blog_id;           
             restore_current_blog();
         }
         
@@ -305,22 +305,22 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
 
-            if (in_array($blog_id, $current_related_sites)) {
+            if (!in_array($blog_id, $current_network_related_sites)) {
                 restore_current_blog();
                 continue;
             }
             
-            $current_related_sites[] = $blog_id;           
+            $current_network_related_sites[] = $blog_id;           
             restore_current_blog();
         }
         
-        return $current_related_sites;
+        return $current_network_related_sites;
     }
     
     public function print_configure_view() {
         ?>
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
-        <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
+        <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '">'; ?>
         <?php settings_fields($this->module->workflow_options_name); ?>
         <?php do_settings_sections($this->module->workflow_options_name); ?>
             <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
@@ -508,6 +508,39 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $this->show_flash_admin_notices();
     }
 
+    private function has_version_remote_parent_post($blog_id, $post_id) {
+        if (empty($blog_id) || empty($post_id)) {
+            return false;
+        }
+        
+        $remote_post_meta = get_post_meta($post_id, self::version_remote_parent_post_meta);
+
+        foreach ($remote_post_meta as $post_meta) {
+            if (isset($post_meta['blog_id']) && isset($post_meta['post_id']) && $blog_id == $post_meta['blog_id']) {
+                return (int) $post_meta['post_id'];
+            }
+
+        }
+        
+        return false;
+    }
+    
+    private function has_version_remote_post($blog_id, $post_id) {
+        if (empty($blog_id) || empty($post_id)) {
+            return false;
+        }
+        
+        $remote_post_meta = get_post_meta($post_id, self::version_remote_post_meta);
+        foreach ($remote_post_meta as $post_meta) {
+            if (isset($post_meta['blog_id']) && isset($post_meta['post_id']) && $blog_id == $post_meta['blog_id']) {
+                return (int) $post_meta['post_id'];
+            }
+
+        }
+        
+        return false;
+    }
+    
     public function copy_as_new_post_draft() {
         if (!( isset($_GET['post']) || isset($_POST['post']) )) {
             wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
@@ -617,7 +650,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if (!empty($post->ID) && in_array($post->post_status, array('publish', 'future', 'private')) && !empty($network_connections)):
         ?>      
         <p>
-            <input type="checkbox" id="network_connections_version" name="network_connections_version" <?php checked(false, true); ?> />
+            <input type="checkbox" id="network_connections_version" name="network_connections_version" <?php checked(false, true); ?>>
             <label for="network_connections_version"><?php _e('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
         </p>
         <?php
@@ -638,7 +671,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $post_type = $post->post_type;
         
         $network_connections = get_post_meta($post_id, $this->module->workflow_options_name . '_network_connections');
-        if (!empty($network_connections)) {
+         if (!empty($network_connections)) {
             $network_connections = array_values($network_connections);
             $network_connections = (array) array_shift($network_connections);
         }
@@ -652,11 +685,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
             if ($current_blog_id == $blog_id) {
                 continue;
             }
-            
+                        
             if (!switch_to_blog($blog_id)) {
                 continue;
             }
-            
+                                  
             $blog_name = get_bloginfo('name');
             $blog_lang = self::get_language(self::get_locale());
 
