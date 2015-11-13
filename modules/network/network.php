@@ -87,7 +87,7 @@ class Workflow_Network extends Workflow_Module {
     public function settings_related_sites_option() {
         $related_sites = $this->module->options->related_sites;
         if (empty($related_sites)): ?>
-        <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+        <p><?php _e('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php
         else:
         foreach ($related_sites as $blog_id) {
@@ -168,9 +168,11 @@ class Workflow_Network extends Workflow_Module {
 
     public function settings_network_connections_option() {
         $this->update_site_connections();
+        $this->update_network_connections();
         
-        $connections = get_site_option(self::site_connections, array());
+        $connections = get_site_option(self::site_connections, array());       
         $network_connections = (array) $this->module->options->network_connections;
+        
         $current_blog_id = get_current_blog_id();
 
         $has_relation = false;
@@ -206,7 +208,7 @@ class Workflow_Network extends Workflow_Module {
         }
         
         if (!$has_relation): ?>
-        <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+        <p><?php _e('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php endif;
     }
 
@@ -304,65 +306,44 @@ class Workflow_Network extends Workflow_Module {
         <?php
     }
 
-    public function update_site_connections() {
+    public function update_site_connections() {        
         $current_blog_id = get_current_blog_id();
         $connections = (array) get_site_option(self::site_connections);
-        
-        foreach ($connections as $blog_id) {
-            if ($current_blog_id == $blog_id) {
-                continue;
-            }
 
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (empty($allowed_post_types)) {
+            if (($key = array_search($current_blog_id, $connections)) !== false) {
+                unset($connections[$key]);
+            }                    
+        }
+        
+        foreach ($connections as $blog_id) {            
             $blog_details = get_blog_details($blog_id);
             if (empty($blog_details->public)) {
                 if (($key = array_search($blog_id, $connections)) !== false) {
                     unset($connections[$key]);
                 }                    
             }
+                                    
         }
         
         update_site_option(self::site_connections, $connections);
-        
-        $this->update_network_connections($connections);
     }
             
-    private function update_network_connections($connections) {
+    public function update_network_connections() {
         global $cms_workflow;
 
-        $current_blog_id = get_current_blog_id();
-        $network_connections = array();
-                
-        if (!empty($connections)) {
-            $network_connections = (array) $this->module->options->network_connections;
-        }
+        $connections = (array) get_site_option(self::site_connections);
+        $network_connections = (array) $this->module->options->network_connections;
+        $new_network_connections = array();
         
-        foreach ($connections as $blog_id) {
-            if ($current_blog_id == $blog_id) {
-                continue;
+        foreach ($network_connections as $blog_id) {
+            if (in_array($blog_id, $connections)) {
+                $new_network_connections[] = $blog_id;
             }
-
-            if (!switch_to_blog($blog_id)) {
-                continue;
-            }
-
-            $blog_options = get_option($this->module->workflow_options_name);
-
-            $related_sites = $blog_options ? $blog_options->related_sites : array();
-            
-            if (!in_array($blog_id, $connections) && ($key = array_search($blog_id, $related_sites)) !== false) {
-                unset($related_sites[$key]);
-                $cms_workflow->update_module_option('network', 'related_sites', $related_sites);
-            }
-
-            restore_current_blog();
-
-            if (!in_array($current_blog_id, $related_sites) && ($key = array_search($blog_id, $network_connections)) !== false) {
-                unset($network_connections[$key]);
-            }
-
         }
 
-        $cms_workflow->update_module_option('network', 'network_connections', $network_connections);
+        $cms_workflow->update_module_option('network', 'network_connections', $new_network_connections);
     }
         
 }

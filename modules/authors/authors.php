@@ -253,11 +253,19 @@ class Workflow_Authors extends Workflow_Module {
     public function save_post($post_id, $post) {
         global $cms_workflow;
 
+        if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || (defined('DOING_AJAX') && DOING_AJAX) || isset($_REQUEST['bulk_edit'])) {
+            return;
+        }
+        
         if (is_multisite() && ms_is_switched()) {
             return;
         }
         
-        if ((!wp_is_post_revision($post) && !wp_is_post_autosave($post) ) && isset($_POST['workflow_save_authors']) && current_user_can('manage_categories')) {
+        if (!current_user_can('manage_categories')) {
+            return;
+        }
+        
+        if (!wp_is_post_revision($post) && !wp_is_post_autosave($post) && isset($_POST['workflow_save_authors'])) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 
@@ -268,18 +276,26 @@ class Workflow_Authors extends Workflow_Module {
         }
     }
 
-    public function edit_attachment($post_id) {
+    public function edit_attachment($attachment_id) {
         global $cms_workflow;
         
-        $post = get_post($post_id);
+        if ((defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || (defined('DOING_AJAX') && DOING_AJAX) || isset($_REQUEST['bulk_edit'])) {
+            return;
+        }
         
-        if (isset($_POST['workflow_save_authors']) && current_user_can('manage_categories')) {
+        if (!current_user_can('manage_categories')) {
+            return;
+        }
+        
+        $post = get_post($attachment_id);
+        
+        if (isset($_POST['workflow_save_authors'])) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
-            $this->save_post_authors($post, $users);
+            $this->edit_attachment_authors($post, $users);
 
             if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
-                $this->save_post_authors_usergroups($post, $usergroups);
+                $this->edit_attachment_authors_usergroups($post, $usergroups);
             }
         }
     }
@@ -289,13 +305,22 @@ class Workflow_Authors extends Workflow_Module {
             $users = array();
         }
 
+        $post_id = $post->ID;
         $current_user = wp_get_current_user();
+        $current_user_id = $current_user->ID;
+        $author_user_id = $post->post_author;
+        
         $users[] = $current_user->ID;
-        $users[] = $post->post_author;
 
         $users = array_unique(array_map('intval', $users));
-
-        $this->add_post_user($post, $users, false);
+        
+        if (!in_array($author_user_id, $users)) {
+            remove_action('save_post', array($this, 'save_post'), 10, 2);
+            wp_update_post(array('ID' => $post_id, 'post_author' => $current_user_id));
+            add_action('save_post', array($this, 'save_post'), 10, 2);
+        }
+        
+        $this->add_post_users($post, $users, false);
     }
 
     private function save_post_authors_usergroups($post, $usergroups = null) {
@@ -308,7 +333,34 @@ class Workflow_Authors extends Workflow_Module {
         $this->add_post_usergroups($post, $usergroups, false);
     }
 
-    private function add_post_user($post, $users, $append = true) {
+    private function edit_attachment_authors($post, $users = null) {
+        if (!is_array($users)) {
+            $users = array();
+        }
+
+        $attachment_id = $post->ID;
+        $current_user = wp_get_current_user();
+        $current_user_id = $current_user->ID;
+        $author_user_id = $post->post_author;
+        
+        $users[] = $current_user->ID;
+
+        $users = array_unique(array_map('intval', $users));
+        
+        if (!in_array($author_user_id, $users)) {
+            remove_action('edit_attachment', array($this, 'save_post'), 10, 2);
+            wp_update_post(array('ID' => $attachment_id, 'post_author' => $current_user_id));
+            add_action('edit_attachment', array($this, 'save_post'), 10, 2);
+        }
+        
+        $this->add_post_users($post, $users, false);
+    }
+    
+    private function edit_attachment_authors_usergroups($post, $usergroups = null) {
+        $this->save_post_authors_usergroups($post, $usergroups);
+    }
+    
+    private function add_post_users($post, $users, $append = true) {
 
         $post_id = is_int($post) ? $post : $post->ID;
         if (!is_array($users)) {
@@ -319,14 +371,12 @@ class Workflow_Authors extends Workflow_Module {
         foreach ($users as $user) {
             if (is_int($user)) {
                 $user_data = get_user_by('id', $user);
-            }
-
-            elseif (is_string($user)) {
+            } elseif (is_string($user)) {
                 $user_data = get_user_by('login', $user);
-            }
-            
-            else {
+            } elseif (is_object($user)) {
                 $user_data = $user;
+            } else {
+                $user_data = null;
             }
 
             if ($user_data) {
@@ -370,7 +420,7 @@ class Workflow_Authors extends Workflow_Module {
             $users = array_merge($users, $authors);
             $users = array_unique(array_map('intval', $users));
 
-            $this->add_post_user($post, $users, false);
+            $this->add_post_users($post, $users, false);
         }
 
         $usergroups_taxonomy = Workflow_User_Groups::taxonomy_key;

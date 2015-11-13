@@ -19,7 +19,7 @@ class Workflow_Settings extends Workflow_Module {
             '<p>' . __('<strong>Benachrichtigungen</strong> - Änderungen werden per E-Mail an die zuständigen Benutzer verschickt.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>' . __('<strong>Versionierung</strong> - Einfachere Aktualisierung von Inhalten durch die Verwendung verschiedener Dokumentenversionen, zur Unterstützung mehrsprachiger Webauftritte auch netzwerkweit möglich.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>' . __('<strong>Aufgabenliste</strong> - Erstellen von Aufgaben.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Übersetzung</strong> - Unterstützung von mehrsprachigen Webauftritten.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
+            '<p>' . __('<strong>Übersetzung</strong> - Unterstützung von mehrsprachigen Webseiten.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
             '<p>' . __('<strong>Benutzergruppen</strong> - Vereinfachte Verwaltung durch Gruppierung der Benutzer nach Abteilung oder Funktion. Kann nur bei aktiviertem Autorenmodul verwendet werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
         );
 
