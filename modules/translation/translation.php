@@ -159,15 +159,16 @@ class Workflow_Translation extends Workflow_Module {
             $related_sites = array();
 
             foreach ($current_network_related_sites as $blog) {
-                if ($current_blog_id == $blog['blog_id']) {
+                $blog_id = $blog['blog_id'];
+                if ($current_blog_id == $blog_id) {
                     continue;
                 }
 
-                if (!in_array($blog['blog_id'], $new_options['related_sites'])) {
+                if (!in_array($blog_id, $new_options['related_sites'])) {
                     continue;
                 }
 
-                $related_sites[$blog['blog_id']] = $blog;
+                $related_sites[$blog_id] = $blog;
             }
             
             $new_options['related_sites'] = $related_sites;
@@ -176,6 +177,28 @@ class Workflow_Translation extends Workflow_Module {
         return $new_options;
     }
 
+    private function update_related_sites() {
+        $current_blog_id = get_current_blog_id();
+        $current_network_related_sites = $this->current_network_related_sites();
+        $current_related_sites = (array) $this->module->options->related_sites;
+        $related_sites = array();
+
+        foreach ($current_network_related_sites as $blog) {
+            $blog_id = $blog['blog_id'];
+            if ($current_blog_id == $blog_id) {
+                continue;
+            }
+
+            if (!isset($current_related_sites[$blog_id])) {
+                continue;
+            }
+
+            $related_sites[$blog_id] = $blog;
+        }
+
+        return $related_sites;       
+    }
+    
     private function current_network_related_sites() {
         global $cms_workflow;
         
@@ -232,23 +255,7 @@ class Workflow_Translation extends Workflow_Module {
         
         return $current_network_related_sites;
     }
-    
-    private function update_related_sites() {
-        global $cms_workflow;
-
-        $network_related_sites = $this->current_network_related_sites();
-        $related_sites = (array) $this->module->options->related_sites;
-        $new_related_sites = array();
-        
-        foreach ($related_sites as $blog_id) {
-            if (in_array($blog_id, $network_related_sites)) {
-                $new_related_sites[] = $blog_id;
-            }
-        }
-
-        $cms_workflow->update_module_option('translation', 'related_sites', $new_related_sites);
-    }
-    
+            
     public function print_configure_view() {
         ?>
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
