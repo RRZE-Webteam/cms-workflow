@@ -121,15 +121,19 @@ class Workflow_Translation extends Workflow_Module {
     }
 
     public function settings_network_connections_option() {
-        $current_network_related_sites = $this->current_network_related_sites();
-        $this->update_related_sites();
-        $related_sites = (array) $this->module->options->related_sites;
+        $current_blog_id = get_current_blog_id();
+        $current_network_related_sites = $this->current_network_related_sites();        
+        $current_related_sites = $this->current_related_sites();
 
         if (!empty($current_network_related_sites)) :
             foreach ($current_network_related_sites as $blog) {
+                if ($current_blog_id == $blog['blog_id']) {
+                    continue;
+                }
+            
                 $language = self::get_language($blog['sitelang']);
                 $label = ($blog['blogname'] != '') ? sprintf('%1$s (%2$s) (%3$s)', $blog['blogname'], $blog['siteurl'], $language['native_name']) : $blog['site_url'];
-                $connected = isset($related_sites[$blog['blog_id']]) ? true : false;
+                $connected = isset($current_related_sites[$blog['blog_id']]) ? true : false;
                 ?>
                 <label for="related_sites_<?php echo $blog['blog_id']; ?>">
                     <input id="related_sites_<?php echo $blog['blog_id']; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog['blog_id'] ?>" /> <?php echo $label; ?>
@@ -177,7 +181,9 @@ class Workflow_Translation extends Workflow_Module {
         return $new_options;
     }
 
-    private function update_related_sites() {
+    private function current_related_sites() {
+        global $cms_workflow;
+        
         $current_blog_id = get_current_blog_id();
         $current_network_related_sites = $this->current_network_related_sites();
         $current_related_sites = (array) $this->module->options->related_sites;
@@ -196,64 +202,54 @@ class Workflow_Translation extends Workflow_Module {
             $related_sites[$blog_id] = $blog;
         }
 
-        return $related_sites;       
+        $cms_workflow->update_module_option($this->module->name, 'related_sites', $related_sites);
+        
+        return $related_sites;
     }
     
     private function current_network_related_sites() {
         global $cms_workflow;
-        
-        $current_blog_id = get_current_blog_id();
-        $network_site_connections = (array) get_site_option(Workflow_Network::site_connections);
-        $current_network_related_sites = array();
-        
-        foreach ($network_site_connections as $blog_id) {
-            if ($current_blog_id == $blog_id) {
-                continue;
-            }
-            
-            if (!switch_to_blog($blog_id)) {
-                continue;
-            }
-
-            $current_network_related_sites[] = array(
-                'blog_id' => $blog_id,
-                'blogname' => get_bloginfo('name'),
-                'siteurl' => get_bloginfo('url'),
-                'sitelang' => self::get_locale()
-            );
-            
-            $network_related_sites = (array) $cms_workflow->network->module->options->related_sites;
-            foreach ($network_related_sites as $related_blog_id) {
-                if ($current_blog_id == $related_blog_id) {
-                    continue;
-                }
                 
-                if (!switch_to_blog($related_blog_id)) {
-                    continue;
-                }
-
-                foreach ($current_network_related_sites as $blog) {
-                    if ($blog['blog_id'] == $related_blog_id) {
-                        restore_current_blog();
-                        continue;                    
-                    }
-                }
-
-                $current_network_related_sites[] = array(
-                    'blog_id' => $related_blog_id,
+        $current_blog_id = get_current_blog_id();
+        $current_network_connections = (array) $cms_workflow->network->module->options->network_connections;
+        $current_parent_site = $cms_workflow->network->module->options->parent_site;
+        
+        $network_connections = array();
+        $related_sites = array();
+        
+        if ($current_parent_site) {
+            if (switch_to_blog($current_parent_site)) {
+                $related_sites[$current_parent_site] = array(
+                    'blog_id' => $current_parent_site,
                     'blogname' => get_bloginfo('name'),
                     'siteurl' => get_bloginfo('url'),
                     'sitelang' => self::get_locale()
                 );
                 
+                $module_options = get_option($cms_workflow->network->module->workflow_options_name);
+                $network_connections = (array) $module_options->network_connections;
                 restore_current_blog();
+            }          
+        } elseif ($current_network_connections) {
+            $network_connections = $current_network_connections;
+        }
+                
+        foreach ($network_connections as $blog_id) {
+            if (!switch_to_blog($blog_id)) {
+                continue;
             }
-            
+
+            $related_sites[$blog_id] = array(
+                'blog_id' => $blog_id,
+                'blogname' => get_bloginfo('name'),
+                'siteurl' => get_bloginfo('url'),
+                'sitelang' => self::get_locale()
+            );
+
             restore_current_blog();
         }
-        
-        
-        return $current_network_related_sites;
+               
+        return $related_sites;
     }
             
     public function print_configure_view() {
@@ -679,8 +675,7 @@ class Workflow_Translation extends Workflow_Module {
             return false;
         }
         
-        $related_sites = $this->module->options->related_sites;
-
+        $related_sites = $this->current_related_sites();
         if (empty($related_sites)) {
             return false;
         }

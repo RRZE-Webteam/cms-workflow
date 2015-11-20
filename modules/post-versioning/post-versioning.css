@@ -1,3 +1,41 @@
+.network-connections-list {
+    height: 200px;
+    overflow: auto;    
+}
+
+.network-connections-list li {
+    padding: 10px 5px 5px 5px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.network-connections-list li:hover {
+    background: #EAF2FA;
+}
+
+.network-connections-list li input {
+    float: right;
+}
+
+.network-connections-list .related-blogdetail {
+    display: block;
+    font-size: 14px;
+}
+
+.network-connections-list .related-postdetail {
+    display: block;
+    color: #ccc;
+    font-size: 12px;
+}
+
+#network-connections-box {
+    margin: 10px 0;
+}
+
+#network-connections-inside {
+    width: 49%;
+}
+
 .status-draft .check-column, .cms-status-draft {
     background: #ffffe0 !important;
 }
@@ -44,4 +82,10 @@
 
 .version span.translation:before {
     content: "\f326";
+}
+
+@media screen and (max-width: 1080px) {
+    #network-connections-inside {
+        width: 100%;
+    }
 }

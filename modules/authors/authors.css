@@ -31,13 +31,13 @@ dl.workflow-authors dd {
 }
 
 .workflow-post-authors-list .workflow-user-displayname,
-	.workflow-post-authors-list .workflow-usergroup-name {
+.workflow-post-authors-list .workflow-usergroup-name {
     display: block;
     font-size: 14px;
 }
 
 .workflow-post-authors-list .workflow-user-useremail,
-	.workflow-post-authors-list .workflow-usergroup-description {
+.workflow-post-authors-list .workflow-usergroup-description {
     display: block;
     color: #ccc;
     font-size: 12px;
@@ -66,7 +66,7 @@ dl.workflow-authors dd {
 }
 
 #workflow-post-authors-inside,
-	#workflow-post-authors-usergroups-box {
+#workflow-post-authors-usergroups-box {
     width: 49%;
 }
 
@@ -82,4 +82,11 @@ dl.workflow-authors dd {
 #workflow-post-authors-inside .list-filterizer-tools,
 #workflow-post-authors-usergroups-box .list-filterizer-tools {
     margin-top: 5px;
+}
+
+@media screen and (max-width: 1080px) {
+    #workflow-post-authors-inside,
+    #workflow-post-authors-usergroups-box {
+        width: 100%;
+    }
 }

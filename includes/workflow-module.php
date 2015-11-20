@@ -60,10 +60,14 @@ class Workflow_Module {
     }
 
     public function get_post_types($module) {
-
+        if (is_multisite() && ms_is_switched()) {
+            $module_options = get_option($module->workflow_options_name);
+        } else {
+            $module_options = $module->options;
+        }
         $post_types = array();
-        if (isset($module->options->post_types) && is_array($module->options->post_types)) {
-            foreach ($module->options->post_types as $post_type => $value) {
+        if (isset($module_options->post_types) && is_array($module_options->post_types)) {
+            foreach ($module_options->post_types as $post_type => $value) {
                 if ($value) {
                     $post_types[] = $post_type;
                 }

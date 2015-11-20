@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-13 16:44+0100\n"
+"POT-Creation-Date: 2015-11-20 12:47+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -49,7 +49,7 @@ msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:214 ../modules/settings/settings.php:389
+#: ../cms-workflow.php:214 ../modules/settings/settings.php:373
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
@@ -63,42 +63,42 @@ msgstr "You do not have the required permissions to perform this action."
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
-#: ../includes/workflow-module.php:79
-#: ../modules/post-versioning/post-versioning.php:688
+#: ../includes/workflow-module.php:83
+#: ../modules/post-versioning/post-versioning.php:672
 msgid "Veröffentlicht"
 msgstr "Published"
 
-#: ../includes/workflow-module.php:80
-#: ../modules/post-versioning/post-versioning.php:688
+#: ../includes/workflow-module.php:84
+#: ../modules/post-versioning/post-versioning.php:672
 msgid "Entwurf"
 msgstr "Draft"
 
-#: ../includes/workflow-module.php:81
+#: ../includes/workflow-module.php:85
 msgid "Geplant"
 msgstr "Scheduled"
 
-#: ../includes/workflow-module.php:82
+#: ../includes/workflow-module.php:86
 msgid "Privat"
 msgstr "Private"
 
-#: ../includes/workflow-module.php:83
+#: ../includes/workflow-module.php:87
 msgid "Ausstehender Review"
 msgstr "Pending Review"
 
-#: ../includes/workflow-module.php:84
+#: ../includes/workflow-module.php:88
 msgid "Papierkorb"
 msgstr "Trash"
 
-#: ../includes/workflow-module.php:221
+#: ../includes/workflow-module.php:225
 msgid "Kein Benutzer gefunden."
 msgstr "No users found."
 
-#: ../includes/workflow-module.php:410
+#: ../includes/workflow-module.php:414
 msgctxt "User role"
 msgid "Editor"
 msgstr "Redakteur"
 
-#: ../includes/workflow-module.php:456
+#: ../includes/workflow-module.php:460
 msgctxt "User role"
 msgid "Author"
 msgstr "Autor"
@@ -257,7 +257,7 @@ msgstr "%1$s by %3$s <span class=\"count\">(%2$s)</span>"
 #: ../modules/editorial-comments/editorial-comments.php:382
 #: ../modules/editors/editors.php:186
 #: ../modules/notifications/notifications.php:649
-#: ../modules/post-versioning/post-versioning.php:202
+#: ../modules/post-versioning/post-versioning.php:198
 #: ../modules/task-list/task-list.php:549
 #: ../modules/translation/translation.php:111
 #: ../modules/user-groups/user-groups.php:343
@@ -751,7 +751,7 @@ msgstr "Editors Capabilities"
 
 #: ../modules/network/network.php:17
 msgid "Netzwerk"
-msgstr ""
+msgstr "Network"
 
 #: ../modules/network/network.php:18
 msgid "Netzwerkweite Verbindungen zwischen Webseiten."
@@ -761,29 +761,29 @@ msgstr "Network-Wide connections between websites."
 msgid "Netzwerkweite Freigabe"
 msgstr "Network-Wide allowance"
 
-#: ../modules/network/network.php:80
-msgid "Autorisierte Webseiten"
-msgstr "Authorized websites"
+#: ../modules/network/network.php:82
+msgid "Autorisierte Webseite"
+msgstr "Authorized website"
 
-#: ../modules/network/network.php:81
+#: ../modules/network/network.php:84
 msgid "Autorisierte Webseite hinzufügen"
 msgstr "Add trusted website"
 
-#: ../modules/network/network.php:84
-#: ../modules/post-versioning/post-versioning.php:602
-msgid "Netzwerkweite Webseiten"
-msgstr "Network-Wide Websites"
+#: ../modules/network/network.php:87
+msgid "Bestehende netzwerkweite Freigaben"
+msgstr "Existing Network-Wide allowance"
 
-#: ../modules/network/network.php:90 ../modules/network/network.php:211
+#: ../modules/network/network.php:94 ../modules/network/network.php:180
+#: ../modules/network/network.php:224
 msgid "Nicht verfügbar."
 msgstr "N/A"
 
-#: ../modules/network/network.php:105
+#: ../modules/network/network.php:108
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
 msgstr "%2$s (%3$s) (%4$s)"
 
-#: ../modules/network/network.php:154
+#: ../modules/network/network.php:159
 #, php-format
 msgid "%1$s. %2$s (%3$s) (%4$s)"
 msgstr "%1$s. %2$s (%3$s) (%4$s)"
@@ -1434,12 +1434,12 @@ msgstr "Create a new version or a copy of an existing document."
 msgid "Versionen verwalten"
 msgstr "Manage Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:205
+#: ../modules/post-versioning/post-versioning.php:201
 #: ../modules/translation/translation.php:114
 msgid "Bezogenen Webseiten"
 msgstr "Related Websites"
 
-#: ../modules/post-versioning/post-versioning.php:246
+#: ../modules/post-versioning/post-versioning.php:241
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "angelegt werden."
@@ -1447,53 +1447,53 @@ msgstr ""
 "Local documents can be as a new version (draft) duplicated in these web "
 "sites."
 
-#: ../modules/post-versioning/post-versioning.php:248
-#: ../modules/translation/translation.php:142
+#: ../modules/post-versioning/post-versioning.php:243
+#: ../modules/translation/translation.php:146
 msgid "Nicht verfügbar"
 msgstr "N/A"
 
-#: ../modules/post-versioning/post-versioning.php:356
+#: ../modules/post-versioning/post-versioning.php:336
 msgid "Dieses Element als neuen Entwurf kopieren"
 msgstr "Copy this item as a new draft"
 
-#: ../modules/post-versioning/post-versioning.php:357
+#: ../modules/post-versioning/post-versioning.php:337
 msgid "Kopieren"
 msgstr "Copy"
 
-#: ../modules/post-versioning/post-versioning.php:362
-#: ../modules/post-versioning/post-versioning.php:1417
+#: ../modules/post-versioning/post-versioning.php:342
+#: ../modules/post-versioning/post-versioning.php:1447
 msgid "Dieses Element als neue Version duplizieren"
 msgstr "Duplicate this item as a new version"
 
-#: ../modules/post-versioning/post-versioning.php:363
+#: ../modules/post-versioning/post-versioning.php:343
 msgid "Neue Version"
 msgstr "New version"
 
-#: ../modules/post-versioning/post-versioning.php:371
-#: ../modules/post-versioning/post-versioning.php:536
+#: ../modules/post-versioning/post-versioning.php:351
+#: ../modules/post-versioning/post-versioning.php:521
 msgid "Es wurde kein Element geliefert."
 msgstr "There was no item supplied."
 
-#: ../modules/post-versioning/post-versioning.php:378
-#: ../modules/post-versioning/post-versioning.php:543
+#: ../modules/post-versioning/post-versioning.php:358
+#: ../modules/post-versioning/post-versioning.php:528
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr "There was no item found with the given ID."
 
-#: ../modules/post-versioning/post-versioning.php:384
-#: ../modules/post-versioning/post-versioning.php:433
+#: ../modules/post-versioning/post-versioning.php:364
+#: ../modules/post-versioning/post-versioning.php:413
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr "You do not have the necessary rights to create a new version."
 
-#: ../modules/post-versioning/post-versioning.php:388
+#: ../modules/post-versioning/post-versioning.php:368
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr "This action is not allowed."
 
-#: ../modules/post-versioning/post-versioning.php:392
+#: ../modules/post-versioning/post-versioning.php:372
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr "Only published documents can be created as a new version."
 
-#: ../modules/post-versioning/post-versioning.php:497
+#: ../modules/post-versioning/post-versioning.php:477
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1503,7 +1503,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\". Click on \"Publish\" to overwrite the original document."
 
-#: ../modules/post-versioning/post-versioning.php:501
+#: ../modules/post-versioning/post-versioning.php:481
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1512,7 +1512,7 @@ msgstr ""
 "Local version of the document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>"
 "\"."
 
-#: ../modules/post-versioning/post-versioning.php:521
+#: ../modules/post-versioning/post-versioning.php:505
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
@@ -1521,12 +1521,12 @@ msgstr ""
 "Network-Wide Versioning of the document \"<a href=\"%1$s\" target=\"__blank"
 "\">%2$s</a>\" - %3$s - %4$s."
 
-#: ../modules/post-versioning/post-versioning.php:549
+#: ../modules/post-versioning/post-versioning.php:534
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr "You do not have the necessary rights to create a new copy."
 
-#: ../modules/post-versioning/post-versioning.php:553
+#: ../modules/post-versioning/post-versioning.php:538
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
@@ -1534,43 +1534,48 @@ msgstr ""
 "You have tried to edit an item that is not allowed. Please come back and try "
 "again."
 
-#: ../modules/post-versioning/post-versioning.php:614
+#: ../modules/post-versioning/post-versioning.php:618
+msgid "Netzwerkweite Webseiten"
+msgstr "Network-Wide Websites"
+
+#: ../modules/post-versioning/post-versioning.php:626
 msgid "Netzwerkweite Versionierung"
 msgstr "Network-Wide Versioning"
 
-#: ../modules/post-versioning/post-versioning.php:661
+#: ../modules/post-versioning/post-versioning.php:678
 msgid "Bezogenes Dokument"
 msgstr "Related Document"
 
-#: ../modules/post-versioning/post-versioning.php:665
-msgid "Kein Dokument zur Auswahl."
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:696
-#, php-format
-msgid "Nr. %1$d, Status: %2$s"
-msgstr "# %1$d, Status: %2$s"
-
-#: ../modules/post-versioning/post-versioning.php:699
-msgid "Entfernen"
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:703
+#: ../modules/post-versioning/post-versioning.php:680
 msgid "— Kein Dokument —"
-msgstr ""
+msgstr "— No document —"
 
-#: ../modules/post-versioning/post-versioning.php:705
+#: ../modules/post-versioning/post-versioning.php:704
+msgid "Keine Versionierungsfreigabe."
+msgstr "Versioning not allowed"
+
+#: ../modules/post-versioning/post-versioning.php:706
+msgid "Kein Dokument zur Auswahl."
+msgstr "No document available."
+
+#: ../modules/post-versioning/post-versioning.php:828
+#: ../modules/post-versioning/post-versioning.php:945
 #, php-format
-msgid "%1$s (Nr. %2$d, Status: %3$s)"
-msgstr "%1$s (# %2$d, Status: %3$s)"
-
-#: ../modules/post-versioning/post-versioning.php:820
 msgid ""
 "Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite "
-"Versionierung durchführen zu können."
+"Versionierung durchführen zu können. (%1$s - %2$s)"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:843
+#: ../modules/post-versioning/post-versioning.php:842
+#: ../modules/post-versioning/post-versioning.php:963
+#, php-format
+msgid ""
+"Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
+"fehlgeschlagen. (%1$s - %2$s)"
+msgstr ""
+"Target document is not published. Network Versioning failed. (%1$s - %2$s)"
+
+#: ../modules/post-versioning/post-versioning.php:852
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1579,26 +1584,11 @@ msgstr ""
 "A new version of the target document \"<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>\"  - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:851
+#: ../modules/post-versioning/post-versioning.php:858
 msgid "Netzwerkweite Beziehung des Dokumentes wurde entfernt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:921
-#, php-format
-msgid ""
-"Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite "
-"Versionierung durchführen zu können. (%1$s - %2$s)"
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:939
-#, php-format
-msgid ""
-"Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
-"fehlgeschlagen. (%1$s - %2$s)"
-msgstr ""
-"Target document is not published. Network Versioning failed. (%1$s - %2$s)"
-
-#: ../modules/post-versioning/post-versioning.php:969
+#: ../modules/post-versioning/post-versioning.php:993
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
@@ -1607,13 +1597,13 @@ msgstr ""
 "A new version of the target document \"<a href=\"%s\" target=\"__blank\">%s</"
 "a>\" - %3$s - %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:972
-#: ../modules/post-versioning/post-versioning.php:1007
+#: ../modules/post-versioning/post-versioning.php:996
+#: ../modules/post-versioning/post-versioning.php:1033
 #, php-format
 msgid "Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)"
 msgstr "Network-Wide Versioning failed. (%1$s - %2$s)"
 
-#: ../modules/post-versioning/post-versioning.php:1000
+#: ../modules/post-versioning/post-versioning.php:1026
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1622,12 +1612,12 @@ msgstr ""
 "The target document \"<a href=\"%1$s\" target=\"__blank\">%2$s</a>\"  - %3$s "
 "- %4$s has been added."
 
-#: ../modules/post-versioning/post-versioning.php:1240
+#: ../modules/post-versioning/post-versioning.php:1264
 msgid "Nr."
 msgstr "#"
 
-#: ../modules/post-versioning/post-versioning.php:1251
-#: ../modules/post-versioning/post-versioning.php:1413
+#: ../modules/post-versioning/post-versioning.php:1275
+#: ../modules/post-versioning/post-versioning.php:1443
 msgid "Version"
 msgstr "Version"
 
@@ -1681,8 +1671,7 @@ msgstr ""
 
 #: ../modules/settings/settings.php:22
 msgid ""
-"<strong>Übersetzung</strong> - Unterstützung von mehrsprachigen "
-"Webauftritten."
+"<strong>Übersetzung</strong> - Unterstützung von mehrsprachigen Webseiten."
 msgstr ""
 
 #: ../modules/settings/settings.php:23
@@ -1723,7 +1712,7 @@ msgstr "Workflow &rsaquo; %s"
 msgid "Es sind keine Module registriert"
 msgstr "There are no registered modules"
 
-#: ../modules/settings/settings.php:366
+#: ../modules/settings/settings.php:350
 #, php-format
 msgid ""
 "Deaktiviert, da die Funktion add_post_type_support( '%1$s', '%2$s' ) in "
@@ -2017,7 +2006,7 @@ msgstr ""
 
 #: ../modules/translation/translation.php:42
 #: ../modules/translation/translation.php:65
-#: ../modules/translation/translation.php:291
+#: ../modules/translation/translation.php:294
 msgid "Übersetzung"
 msgstr "Translation"
 
@@ -2025,55 +2014,55 @@ msgstr "Translation"
 msgid "Import und Export von XLIFF-Dateien."
 msgstr "Import and export of XLIFF files."
 
-#: ../modules/translation/translation.php:140
+#: ../modules/translation/translation.php:144
 msgid "Bezogenen Webseiten werden im Sprachwechsler angezeigt."
 msgstr ""
 
-#: ../modules/translation/translation.php:314
+#: ../modules/translation/translation.php:317
 msgid "Aus der Sprache:"
 msgstr "From the language:"
 
-#: ../modules/translation/translation.php:316
-#: ../modules/translation/translation.php:327
+#: ../modules/translation/translation.php:319
+#: ../modules/translation/translation.php:330
 msgid "Wählen"
 msgstr "Select"
 
-#: ../modules/translation/translation.php:325
+#: ../modules/translation/translation.php:328
 msgid "In die Sprache:"
 msgstr "To the language:"
 
-#: ../modules/translation/translation.php:340
+#: ../modules/translation/translation.php:343
 msgid "XLIFF-Datei herunterladen"
 msgstr "Download XLIFF file"
 
-#: ../modules/translation/translation.php:342
+#: ../modules/translation/translation.php:345
 msgid "XLIFF-Datei hochladen:"
 msgstr "Upload XLIFF file:"
 
-#: ../modules/translation/translation.php:346
+#: ../modules/translation/translation.php:349
 msgid "Bitte wählen Sie die Übersetzungssprachen aus"
 msgstr "Please select the translation of languages ​​from"
 
-#: ../modules/translation/translation.php:405
+#: ../modules/translation/translation.php:408
 msgid "Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF."
 msgstr "The type of file you have uploaded is not a XLIFF."
 
-#: ../modules/translation/translation.php:422
+#: ../modules/translation/translation.php:425
 msgid "Die \"Simple XML\"-Bibliothek fehlt."
 msgstr "The \"Simple XML\" library is missing."
 
-#: ../modules/translation/translation.php:428
-#: ../modules/translation/translation.php:433
+#: ../modules/translation/translation.php:431
+#: ../modules/translation/translation.php:436
 #, php-format
 msgid "Die XLIFF-Datei (%s) konnte nicht gelesen werden."
 msgstr "The XLIFF file (%s) could not be read."
 
-#: ../modules/translation/translation.php:439
+#: ../modules/translation/translation.php:442
 msgid ""
 "Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein."
 msgstr "The uploaded XLIFF file is not suitable for this document."
 
-#: ../modules/translation/translation.php:472
+#: ../modules/translation/translation.php:475
 msgid ""
 "Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht "
 "gespeichert werden."
@@ -2350,11 +2339,26 @@ msgstr "Delete"
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
 
+#~ msgid "Nr. %1$d, Status: %2$s"
+#~ msgstr "# %1$d, Status: %2$s"
+
+#~ msgid "Entfernen"
+#~ msgstr "Remove"
+
+#~ msgid "%1$s (Nr. %2$d, Status: %3$s)"
+#~ msgstr "%1$s (# %2$d, Status: %3$s)"
+
+#~ msgid "Verknüpfte Webseite"
+#~ msgstr "Related website"
+
+#~ msgid "Webseite verknüpfen"
+#~ msgstr "Add Website Link"
+
+#~ msgid "Bestehende Verknüpfungen"
+#~ msgstr "Existing links"
+
 #~ msgid "Lokale Freigabe"
 #~ msgstr "Local allowance"
-
-#~ msgid "Vorhandene Webseiten"
-#~ msgstr "Existing Web sites"
 
 #~ msgid ""
 #~ "Das Dokument kann in diesen Webseiten als neue Version (Entwurf) "
@@ -2445,9 +2449,6 @@ msgstr "Update user group"
 #~ msgid "<a class=\"export\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
 #~ msgstr ""
 #~ "<a class=\"export\" href=\"%1$s\" target=\"__blank\">%2$s - %3$s</a>"
-
-#~ msgid "Verknüpfen"
-#~ msgstr "Interlink"
 
 #~ msgid "Übersetzung aus der Sprache"
 #~ msgstr "Translation from"

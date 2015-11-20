@@ -327,22 +327,6 @@ class Workflow_Settings extends Workflow_Module {
         <?php
         endif;
     }
-
-    public function has_custom_post_type_option($module, $option_name = 'post_types') {
-
-        $all_post_types = $this->get_available_post_types();
-        
-        foreach ($all_post_types as $post_type => $args) {
-            if($post_type == 'attachment' && !in_array($module->name, array('authors', 'user_groups', 'task_list', 'editorial_comments'))) {
-                continue;
-            }
-
-            if (!empty($module->options->{$option_name}[$post_type])) {
-                return true;
-            }            
-        }
-        return false;
-    }
     
     public function custom_post_type_option($module, $option_name = 'post_types') {
 

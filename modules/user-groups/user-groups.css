@@ -87,3 +87,10 @@ table#workflow-user-usergroups td {
     font-size: 12px;
     padding: 2px;
 }
+
+@media screen and (max-width: 1080px) {
+    #workflow-groups-users-box,
+    #workflow-groups-usergroups-box {
+        width: 100%;
+    }
+}
