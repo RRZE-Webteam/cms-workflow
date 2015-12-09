@@ -41,9 +41,6 @@ class Workflow_Network extends Workflow_Module {
 
     public function init() {
         add_action('admin_init', array($this, 'register_settings'));
-        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-
-        add_action('wp_ajax_workflow_network_select', array($this, 'ajax_network_select'));
     }
 
     public function deactivation() {
@@ -59,14 +56,6 @@ class Workflow_Network extends Workflow_Module {
 
         $cms_workflow->update_module_option($this->module->name, 'network_connections', array());
         $cms_workflow->update_module_option($this->module->name, 'parent_site', array());
-    }
-
-    public function admin_enqueue_scripts() {
-        wp_enqueue_script('workflow-network', $this->module_url . 'network.js', array('jquery', 'jquery-ui-autocomplete'), CMS_WORKFLOW_VERSION, true);
-        wp_localize_script('workflow-network', 'selectSite', array(
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'isRtl' => (int) is_rtl(),
-        ));        
     }
 
     public function register_settings() {
@@ -115,19 +104,11 @@ class Workflow_Network extends Workflow_Module {
     }
     
     public function settings_add_parent_site_option() {
-        echo '<input type="text" id="workflow-network-select" class="regular-text" name="' . $this->module->workflow_options_name . '[add_parent_site]">';
-    }
-    
-    public function ajax_network_select() {
-        if (!is_multisite() || !current_user_can('manage_options') || wp_is_large_network()) {
-            wp_die(-1);
-        }
-
         $current_blog_id = get_current_blog_id();
         $current_user_id = get_current_user_id();
         $current_user_blogs = get_blogs_of_user($current_user_id);
         
-        $return = array();
+        $user_blogs = array();
         
         foreach ($current_user_blogs as $blog) {
             $blog_id = $blog->userblog_id;
@@ -156,17 +137,23 @@ class Workflow_Network extends Workflow_Module {
             $site_url = $blog->siteurl;            
             $language = self::get_language($sitelang);
 
-            $value = sprintf(__('%1$s. %2$s (%3$s) (%4$s)'), $blog_id, $site_name, $site_url, $language['native_name']);
-            
-            $return[] = array(
-                'label' => $value,
-                'value' => $value,
-            );
+            $user_blogs[$blog_id] = sprintf(__('%1$s (%2$s) (%3$s)', CMS_WORKFLOW_TEXTDOMAIN), $site_name, $site_url, $language['native_name']);
         }
         
-        wp_die(json_encode($return));
+        if (!empty($user_blogs)) {
+            $output = "<select name=\"" . $this->module->workflow_options_name . "[add_parent_site]\" id=\"workflow-network-select\">" . PHP_EOL;
+            $output .= "\t<option value=\"-1\">" . __('Website auswählen', CMS_WORKFLOW_TEXTDOMAIN) . "</option>" . PHP_EOL;
+            foreach ($user_blogs as $blog_id => $name) {
+                $output .= "\t<option value=\"$blog_id\">$name</option>" . PHP_EOL;
+            }
+            $output .= "</select>" . PHP_EOL;
+        } else {
+            $output = __('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN);
+        }
+        
+        echo $output;
     }
-    
+        
     public function settings_posts_types_option() {
         global $cms_workflow;
         
@@ -226,39 +213,46 @@ class Workflow_Network extends Workflow_Module {
     }
 
     public function settings_validate($new_options) {
-        $current_blog_id = get_current_blog_id();
-        $connections = $this->site_connections();
-                
+        // Allowed post types
         if (!isset($new_options['post_types'])) {
             $new_options['post_types'] = array();
         } else {
             $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
         }
 
-        // Allowed site
-        $add_parent_site = isset($new_options['add_parent_site']) ? explode('.', $new_options['add_parent_site']) : array();
-        $add_parent_site_id = isset($add_parent_site[0]) ? (int) $add_parent_site[0] : '';
+        // Allowed parent site
+        $parent_site = '';
+        
+        $connections = $this->site_connections();
+        
+        $current_blog_id = get_current_blog_id();
+        $current_user_id = get_current_user_id();
+        $current_user_blogs = get_blogs_of_user($current_user_id);                
+        
+        $add_parent_site = isset($new_options['add_parent_site']) && is_numeric($new_options['add_parent_site']) ? $new_options['add_parent_site'] : -1;
         
         if (empty($new_options['parent_site'])) {
-            $new_options['parent_site'] = '';
+            $new_options['parent_site'] = -1;
         }
 
-        $parent_site = '';
-        $sites = wp_get_sites(array('public' => 1));
-
-        foreach ($sites as $site) {
-            $blog_id = $site['blog_id'];
-
-            if ($blog_id == $current_blog_id) {
+        foreach ($current_user_blogs as $blog) {
+            $blog_id = $blog->userblog_id;
+            
+            if ($current_blog_id == $blog_id) {
                 continue;
             }
-
-            if ($blog_id == $add_parent_site_id || $blog_id == $new_options['parent_site']) {
+            
+            if ($blog->archived || $blog->deleted) {
+                continue;
+            }
+            
+            if ($blog_id == $add_parent_site || $blog_id == $new_options['parent_site']) {
                 $parent_site = $blog_id;
                 break;
             }
+            
         }
-
+        
         unset($new_options['add_parent_site']);
         $new_options['parent_site'] = $parent_site;
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-20 12:47+0100\n"
+"POT-Creation-Date: 2015-12-09 16:48+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -757,36 +757,40 @@ msgstr "Network"
 msgid "Netzwerkweite Verbindungen zwischen Webseiten."
 msgstr "Network-Wide connections between websites."
 
-#: ../modules/network/network.php:77
+#: ../modules/network/network.php:66
 msgid "Netzwerkweite Freigabe"
 msgstr "Network-Wide allowance"
 
-#: ../modules/network/network.php:82
+#: ../modules/network/network.php:71
 msgid "Autorisierte Webseite"
 msgstr "Authorized website"
 
-#: ../modules/network/network.php:84
+#: ../modules/network/network.php:73
 msgid "Autorisierte Webseite hinzufügen"
 msgstr "Add trusted website"
 
-#: ../modules/network/network.php:87
+#: ../modules/network/network.php:76
 msgid "Bestehende netzwerkweite Freigaben"
 msgstr "Existing Network-Wide allowance"
 
-#: ../modules/network/network.php:94 ../modules/network/network.php:180
-#: ../modules/network/network.php:224
+#: ../modules/network/network.php:83 ../modules/network/network.php:151
+#: ../modules/network/network.php:167 ../modules/network/network.php:211
 msgid "Nicht verfügbar."
 msgstr "N/A"
 
-#: ../modules/network/network.php:108
+#: ../modules/network/network.php:97
 #, php-format
 msgid "%2$s (%3$s) (%4$s)"
 msgstr "%2$s (%3$s) (%4$s)"
 
-#: ../modules/network/network.php:159
+#: ../modules/network/network.php:140
 #, php-format
-msgid "%1$s. %2$s (%3$s) (%4$s)"
-msgstr "%1$s. %2$s (%3$s) (%4$s)"
+msgid "%1$s (%2$s) (%3$s)"
+msgstr "%1$s (%2$s) (%3$s)"
+
+#: ../modules/network/network.php:145
+msgid "Website auswählen"
+msgstr "Select a website"
 
 #: ../modules/notifications/notifications.php:16
 msgid ""
@@ -2338,6 +2342,9 @@ msgstr "Delete"
 #: ../modules/user-groups/user-groups.php:874
 msgid "Benutzergruppe aktualisieren"
 msgstr "Update user group"
+
+#~ msgid "%1$s. %2$s (%3$s) (%4$s)"
+#~ msgstr "%1$s. %2$s (%3$s) (%4$s)"
 
 #~ msgid "Nr. %1$d, Status: %2$s"
 #~ msgstr "# %1$d, Status: %2$s"
