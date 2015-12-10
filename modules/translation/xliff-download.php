@@ -10,31 +10,7 @@ if (empty($post_id)) {
     exit;
 }
 
-define('SHORTINIT', true);
-
 require_once( dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php' );
-
-wp_not_installed();
-
-require(ABSPATH . WPINC . '/formatting.php');
-require(ABSPATH . WPINC . '/capabilities.php');
-require(ABSPATH . WPINC . '/user.php');
-require(ABSPATH . WPINC . '/session.php');
-require(ABSPATH . WPINC . '/meta.php');
-require(ABSPATH . WPINC . '/post.php');
-require(ABSPATH . WPINC . '/kses.php');
-require(ABSPATH . WPINC . '/ms-functions.php');
-require_once(ABSPATH . WPINC . '/general-template.php');
-
-wp_plugin_directory_constants();
-
-if (is_multisite()) {
-    ms_cookie_constants();
-}
-
-wp_cookie_constants();
-
-require( ABSPATH . WPINC . '/pluggable.php' );
 
 if (!is_user_logged_in()) {
     exit;

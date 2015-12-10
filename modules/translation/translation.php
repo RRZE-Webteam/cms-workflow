@@ -73,7 +73,7 @@ class Workflow_Translation extends Workflow_Module {
     }
 
     public function init() {
-        require_once( CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/widgets.php' );
+        require_once( CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/widgets.php' );
 
         add_action('widgets_init', array($this, 'register_widgets'));
         add_action('admin_init', array($this, 'register_settings'));

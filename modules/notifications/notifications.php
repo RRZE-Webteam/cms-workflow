@@ -84,8 +84,8 @@ class Workflow_Notifications extends Workflow_Module {
             require(ABSPATH . WPINC . '/wp-diff.php');
         }
         
-        require_once(CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/text-diff-render-table.php');
-        require_once(CMS_WORKFLOW_ROOT . '/modules/' . $this->module->name . '/text-diff-renderer-unified.php');
+        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/text-diff-render-table.php');
+        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/text-diff-renderer-unified.php');
         
         $html_diffs = array();
         $text_diffs = array();

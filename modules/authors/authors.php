@@ -232,7 +232,7 @@ class Workflow_Authors extends Workflow_Module {
 
             <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module)): ?>
             <div id="workflow-post-authors-usergroups-box">
-                <h4><?php _e('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN) ?></h4>
+                <h4><?php _e('Benutzergruppe', CMS_WORKFLOW_TEXTDOMAIN) ?></h4>
                 <?php
                 $authors_usergroups = $this->get_authors_usergroups($post->ID, 'ids');
                 $args = array(

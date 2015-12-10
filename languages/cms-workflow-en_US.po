@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-09 16:48+0100\n"
+"POT-Creation-Date: 2015-12-10 10:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -36,30 +36,35 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../cms-workflow.php:210
+#: ../cms-workflow.php:175 ../modules/settings/settings.php:27
+#: ../modules/user-groups/user-groups.php:427
+msgid "Einstellungen"
+msgstr "Settings"
+
+#: ../cms-workflow.php:222
 msgid "Konfigurieren"
 msgstr "Configure"
 
-#: ../cms-workflow.php:212
+#: ../cms-workflow.php:224
 msgid "Einstellungen gespeichert."
 msgstr "Settings saved."
 
-#: ../cms-workflow.php:213
+#: ../cms-workflow.php:225
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr "Please correct the errors below and try again."
 
-#: ../cms-workflow.php:214 ../modules/settings/settings.php:373
+#: ../cms-workflow.php:226 ../modules/settings/settings.php:373
 msgid "Schummeln, was?"
 msgstr "Cheatin&#8217; uh?"
 
-#: ../cms-workflow.php:215
+#: ../cms-workflow.php:227
 #: ../modules/editorial-comments/editorial-comments.php:321
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr "You do not have the required permissions to perform this action."
 
-#: ../cms-workflow.php:216
+#: ../cms-workflow.php:228
 msgid "Das Dokument existiert nicht."
 msgstr "The document does not exist."
 
@@ -234,11 +239,8 @@ msgid "Benutzer"
 msgstr "User"
 
 #: ../modules/authors/authors.php:235
-#: ../modules/user-groups/user-groups.php:41
-#: ../modules/user-groups/user-groups.php:70
-#: ../modules/user-groups/user-groups.php:473
-msgid "Benutzergruppen"
-msgstr "User Groups"
+msgid "Benutzergruppe"
+msgstr "User Group"
 
 #: ../modules/authors/authors.php:784
 #, php-format
@@ -1685,11 +1687,6 @@ msgid ""
 "Autorenmodul verwendet werden."
 msgstr ""
 
-#: ../modules/settings/settings.php:27
-#: ../modules/user-groups/user-groups.php:427
-msgid "Einstellungen"
-msgstr "Settings"
-
 #: ../modules/settings/settings.php:28
 msgid "Auf dieser Seite können Sie grundlegende Einstellungen vornehmen."
 msgstr "On this page you can make basic settings."
@@ -2187,6 +2184,12 @@ msgid ""
 "wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere "
 "Autoren können zusätzlich gewählt werden."
 msgstr ""
+
+#: ../modules/user-groups/user-groups.php:41
+#: ../modules/user-groups/user-groups.php:70
+#: ../modules/user-groups/user-groups.php:473
+msgid "Benutzergruppen"
+msgstr "User Groups"
 
 #: ../modules/user-groups/user-groups.php:42
 msgid "Benutzer nach Abteilung oder Funktion organisieren."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-09 16:48+0100\n"
+"POT-Creation-Date: 2015-12-10 10:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -32,30 +32,35 @@ msgid ""
 "auf die Wordpress-Version %s."
 msgstr ""
 
-#: ../cms-workflow.php:210
+#: ../cms-workflow.php:175 ../modules/settings/settings.php:27
+#: ../modules/user-groups/user-groups.php:427
+msgid "Einstellungen"
+msgstr ""
+
+#: ../cms-workflow.php:222
 msgid "Konfigurieren"
 msgstr ""
 
-#: ../cms-workflow.php:212
+#: ../cms-workflow.php:224
 msgid "Einstellungen gespeichert."
 msgstr ""
 
-#: ../cms-workflow.php:213
+#: ../cms-workflow.php:225
 msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr ""
 
-#: ../cms-workflow.php:214 ../modules/settings/settings.php:373
+#: ../cms-workflow.php:226 ../modules/settings/settings.php:373
 msgid "Schummeln, was?"
 msgstr ""
 
-#: ../cms-workflow.php:215
+#: ../cms-workflow.php:227
 #: ../modules/editorial-comments/editorial-comments.php:321
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen."
 msgstr ""
 
-#: ../cms-workflow.php:216
+#: ../cms-workflow.php:228
 msgid "Das Dokument existiert nicht."
 msgstr ""
 
@@ -226,10 +231,7 @@ msgid "Benutzer"
 msgstr ""
 
 #: ../modules/authors/authors.php:235
-#: ../modules/user-groups/user-groups.php:41
-#: ../modules/user-groups/user-groups.php:70
-#: ../modules/user-groups/user-groups.php:473
-msgid "Benutzergruppen"
+msgid "Benutzergruppe"
 msgstr ""
 
 #: ../modules/authors/authors.php:784
@@ -1655,11 +1657,6 @@ msgid ""
 "Autorenmodul verwendet werden."
 msgstr ""
 
-#: ../modules/settings/settings.php:27
-#: ../modules/user-groups/user-groups.php:427
-msgid "Einstellungen"
-msgstr ""
-
 #: ../modules/settings/settings.php:28
 msgid "Auf dieser Seite können Sie grundlegende Einstellungen vornehmen."
 msgstr ""
@@ -2148,6 +2145,12 @@ msgid ""
 "Dokumentes werden daher alle Mitglieder der Benutzergruppe automatisch "
 "wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere "
 "Autoren können zusätzlich gewählt werden."
+msgstr ""
+
+#: ../modules/user-groups/user-groups.php:41
+#: ../modules/user-groups/user-groups.php:70
+#: ../modules/user-groups/user-groups.php:473
+msgid "Benutzergruppen"
 msgstr ""
 
 #: ../modules/user-groups/user-groups.php:42
