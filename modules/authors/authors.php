@@ -661,7 +661,7 @@ class Workflow_Authors extends Workflow_Module {
 
     public function manage_authors_custom_column($column_name, $post_id) {
         if ($column_name == 'coauthors') {
-            global $post;
+            $post = get_post($post_id);
 
             $authors = $this->get_post_authors($post_id);
 
