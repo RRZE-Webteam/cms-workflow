@@ -310,13 +310,15 @@ class Workflow_Authors extends Workflow_Module {
         $current_user_id = $current_user->ID;
         $author_user_id = $post->post_author;
         
-        $users[] = $current_user->ID;
-
+        if (empty($users)) {
+            $users[] = $current_user_id;
+        }
+        
         $users = array_unique(array_map('intval', $users));
         
         if (!in_array($author_user_id, $users)) {
             remove_action('save_post', array($this, 'save_post'), 10, 2);
-            wp_update_post(array('ID' => $post_id, 'post_author' => $current_user_id));
+            wp_update_post(array('ID' => $post_id, 'post_author' => $users[0]));
             add_action('save_post', array($this, 'save_post'), 10, 2);
         }
         
