@@ -177,8 +177,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_filter("manage_edit-{$post_type}_columns", array($this, 'custom_columns'));
             add_action("manage_{$post_type}_posts_custom_column", array($this, 'posts_custom_column'), 10, 2);
             add_filter("manage_edit-{$post_type}_sortable_columns", array($this, 'posts_sortable_columns'));
-
-            add_filter('posts_where', array($this, 'posts_where'));
         }
 
         if (is_multisite() && $this->module_activated('network')) {
@@ -1290,25 +1288,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
     public function posts_sortable_columns($columns) {
         $columns['id'] = 'id';
         return $columns;
-    }
-
-    public function posts_where($where) {
-        if (is_admin() && is_search()) {
-            $s = isset($_GET['s']) ? $_GET['s'] : '';
-            if (!empty($s)) {
-                if (is_numeric($s)) {
-                    global $wpdb;
-                    $where .= ' OR ' . $wpdb->posts . '.ID = ' . $s;
-                } 
-                
-                elseif (preg_match("/^(\d+)(,\s*\d+)*\$/", $s)) {
-                    global $wpdb;
-                    $where .= ' OR ' . $wpdb->posts . '.ID in (' . $s . ')';
-                }
-            }
-        }
-
-        return $where;
     }
 
     private function get_versions($post_id) {

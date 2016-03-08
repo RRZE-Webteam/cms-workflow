@@ -772,7 +772,7 @@ class Workflow_Authors extends Workflow_Module {
             }
         );
         
-        if (!empty($_REQUEST['author']) || array_key_exists('mine', $match)) {
+        if (count($_REQUEST) == 1 || (isset($_REQUEST['author']) && array_key_exists('mine', $match))) {
             $class = ' class="current"';
         }
         
