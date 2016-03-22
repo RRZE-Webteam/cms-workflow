@@ -332,10 +332,23 @@ class Workflow_Settings extends Workflow_Module {
 
         $all_post_types = $this->get_available_post_types();
         
+        $builtin_capability_types = array();
+        
         foreach ($all_post_types as $post_type => $args) {
-            if($post_type == 'attachment' && !in_array($module->name, array('authors', 'user_groups', 'task_list', 'editorial_comments'))) {
+            if ($post_type != $args->capability_type) {
+                $builtin_capability_types[] = $post_type;
+            }
+        }
+                
+        foreach ($all_post_types as $post_type => $args) {
+            if ($post_type == 'attachment' && !in_array($module->name, array('authors', 'user_groups', 'task_list', 'editorial_comments'))) {
                 continue;
             }
+            
+            if (in_array($post_type, $builtin_capability_types)) {
+                continue;
+            }
+            
             echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
             echo '<input id="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '" name="'
             . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
