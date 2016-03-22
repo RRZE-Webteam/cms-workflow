@@ -54,6 +54,7 @@ class Workflow_Module {
         $args = array(
             '_builtin' => false,
             'public' => true,
+            'show_ui' => true,
         );
 
         return get_post_types($args, 'objects');
