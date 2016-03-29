@@ -772,7 +772,7 @@ class Workflow_Authors extends Workflow_Module {
             }
         );
         
-        if (count($_REQUEST) == 1 || (isset($_REQUEST['author']) && array_key_exists('mine', $match))) {
+        if (isset($_REQUEST['author']) && array_key_exists('mine', $match)) {
             $class = ' class="current"';
         }
         
@@ -790,10 +790,12 @@ class Workflow_Authors extends Workflow_Module {
             $mine = sprintf(__('%1$s von %3$s <span class="count">(%2$s)</span>', CMS_WORKFLOW_TEXTDOMAIN), $labels->name, number_format_i18n($post_count), $user->display_name);
         }
 
-        $mine_view['mine'] = '<a' . $class . ' href="' . add_query_arg($mine_args, admin_url('edit.php')) . '">' . $mine . '</a>';
-
+        $view['mine'] = '<a' . $class . ' href="' . add_query_arg($mine_args, admin_url('edit.php')) . '">' . $mine . '</a>';
+        
+        unset($views['mine']);
+        array_splice($views, array_search('all', array_keys($views)) + 1, 0, $view['mine']);
+        
         $views['all'] = str_replace($class, '', $views['all']);
-        $views = $mine_view + $views;
 
         return $views;
     }
