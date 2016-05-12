@@ -84,6 +84,12 @@
     content: "\f326";
 }
 
+/* Columns */
+.fixed .column-id {
+    width: 5.5em;
+    text-align: right;
+}
+
 @media screen and (max-width: 1080px) {
     #network-connections-inside {
         width: 100%;
