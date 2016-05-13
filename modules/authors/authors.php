@@ -665,9 +665,9 @@ class Workflow_Authors extends Workflow_Module {
         if ($column_name == 'coauthors') {
             $post = get_post($post_id);
 
+            $authors_array = array();
             $authors = $this->get_post_authors($post_id);
 
-            $count = 1;
             foreach ($authors as $author) {
                 $args = array();
 
@@ -685,12 +685,10 @@ class Workflow_Authors extends Workflow_Module {
                     $author_url = add_query_arg($args, admin_url('edit.php'));
                 }
 
-                $separator = $count < count($authors) ? ', ' : '';
-
-                printf('<a href="%1$s">%2$s</a>%3$s', esc_url($author_url), esc_html($author->display_name), $separator);
-
-                $count++;
+                $authors_array[] = sprintf('<a href="%1$s">%2$s</a>', esc_url($author_url), esc_html($author->display_name));
             }
+            
+            echo implode('<br>', $authors_array);
         }
     }
     

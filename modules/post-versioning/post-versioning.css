@@ -90,6 +90,10 @@
     text-align: right;
 }
 
+.fixed .column-version {
+    width: 15%;
+}
+
 @media screen and (max-width: 1080px) {
     #network-connections-inside {
         width: 100%;

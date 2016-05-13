@@ -1264,8 +1264,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $position = array_search('comments', array_keys($columns));
         if ($position === false) {
             $position = array_search('date', array_keys($columns));
+            if ($position === false) {
+                $position = array_search('last-modified', array_keys($columns));
+            }
         }
-
+        
         if ($position !== false) {
             $columns = array_slice($columns, 0, $position, true) + array('version' => '') + array_slice($columns, $position, count($columns) - $position, true);
         }

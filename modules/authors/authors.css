@@ -84,6 +84,11 @@ dl.workflow-authors dd {
     margin-top: 5px;
 }
 
+/* Columns */
+.fixed .column-coauthors {
+    width: 10%;
+}
+
 @media screen and (max-width: 1080px) {
     #workflow-post-authors-inside,
     #workflow-post-authors-usergroups-box {
