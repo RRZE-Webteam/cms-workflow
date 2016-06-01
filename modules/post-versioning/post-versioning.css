@@ -86,12 +86,18 @@
 
 /* Columns */
 .fixed .column-id {
-    width: 5.5em;
+    width: 7%;
     text-align: right;
 }
 
 .fixed .column-version {
-    width: 15%;
+    width: 10%;
+}
+
+@media only screen and (max-width: 1024px) {
+    .fixed .column-id, .fixed .column-version {
+        display: none !important;
+    }    
 }
 
 @media screen and (max-width: 1080px) {
