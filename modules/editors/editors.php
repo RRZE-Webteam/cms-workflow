@@ -262,63 +262,49 @@ class Workflow_Editors extends Workflow_Module {
         foreach ($all_post_types as $post_type => $args) {
             if (!empty($new_options['post_types'][$post_type]) && $post_type == $args->capability_type) {
                 
-                if(isset($args->cap->edit_posts) && !empty($new_options['role_caps'][$args->cap->edit_posts])) {
-                    $new_role_caps["edit_{$args->capability_type}"] = 1;
-                    $new_role_caps["edit_{$args->capability_type}s"] = 1;
-                    $new_role_caps["edit_others_{$args->capability_type}s"] = 1;
-                }
+                $edit_posts = isset($args->cap->edit_posts) && !empty($new_options['role_caps'][$args->cap->edit_posts]) ? 1 : 0;
+                $new_role_caps["edit_{$args->capability_type}"] = $edit_posts;
+                $new_role_caps["edit_{$args->capability_type}s"] = $edit_posts;
+                $new_role_caps["edit_others_{$args->capability_type}s"] = $edit_posts;
 
-                if(isset($args->cap->delete_posts) && !empty($new_options['role_caps'][$args->cap->delete_posts])) {
-                    $new_role_caps["delete_{$args->capability_type}"] = 1;
-                    $new_role_caps["delete_{$args->capability_type}s"] = 1;
-                    $new_role_caps["delete_others_{$args->capability_type}s"] = 1;
-                }
+                $delete_posts = isset($args->cap->delete_posts) && !empty($new_options['role_caps'][$args->cap->delete_posts]) ? 1: 0;
+                $new_role_caps["delete_{$args->capability_type}"] = $delete_posts;
+                $new_role_caps["delete_{$args->capability_type}s"] = $delete_posts;
+                $new_role_caps["delete_others_{$args->capability_type}s"] = $delete_posts;
                 
-                if(isset($args->cap->publish_posts) && !empty($new_options['role_caps'][$args->cap->publish_posts])) {
-                    $new_role_caps["publish_{$args->capability_type}s"] = 1;
-                }
+                $publish_posts = isset($args->cap->publish_posts) && !empty($new_options['role_caps'][$args->cap->publish_posts]) ? 1 : 0;
+                $new_role_caps["publish_{$args->capability_type}s"] = $publish_posts;
                 
-                if(isset($args->cap->edit_published_posts) && !empty($new_options['role_caps'][$args->cap->edit_published_posts])) {
-                    $new_role_caps["edit_published_{$args->capability_type}s"] = 1;
-                }
+                $edit_published_posts = isset($args->cap->edit_published_posts) && !empty($new_options['role_caps'][$args->cap->edit_published_posts]) ? 1 : 0;
+                $new_role_caps["edit_published_{$args->capability_type}s"] = $edit_published_posts;
                 
-                if(isset($args->cap->delete_published_posts) && !empty($new_options['role_caps'][$args->cap->delete_published_posts])) {
-                    $new_role_caps["delete_published_{$args->capability_type}s"] = 1;
-                }                
+                $delete_published_posts = isset($args->cap->delete_published_posts) && !empty($new_options['role_caps'][$args->cap->delete_published_posts]) ? 1 : 0;
+                $new_role_caps["delete_published_{$args->capability_type}s"] = $delete_published_posts;              
 
-                if(isset($args->cap->read_private_posts) && !empty($new_options['role_caps'][$args->cap->read_private_posts])) {
-                    $new_role_caps["read_private_{$args->capability_type}s"] = 1;
-                }
+                $read_private_posts = isset($args->cap->read_private_posts) && !empty($new_options['role_caps'][$args->cap->read_private_posts]) ? 1 : 0;
+                $new_role_caps["read_private_{$args->capability_type}s"] = $read_private_posts;
                 
-                if(isset($args->cap->edit_private_posts) && !empty($new_options['role_caps'][$args->cap->edit_private_posts])) {
-                    $new_role_caps["edit_private_{$args->capability_type}s"] = 1;
-                }
+                $edit_private_posts = isset($args->cap->edit_private_posts) && !empty($new_options['role_caps'][$args->cap->edit_private_posts]) ? 1 : 0;
+                $new_role_caps["edit_private_{$args->capability_type}s"] = $edit_private_posts;
                 
-                if(isset($args->cap->delete_private_posts) && !empty($new_options['role_caps'][$args->cap->delete_private_posts])) {
-                    $new_role_caps["delete_private_{$args->capability_type}s"] = 1;
-                }
-                
+                $delete_private_posts = isset($args->cap->delete_private_posts) && !empty($new_options['role_caps'][$args->cap->delete_private_posts]) ? 1 : 0;
+                $new_role_caps["delete_private_{$args->capability_type}s"] = $delete_private_posts;
             }
             
         }
             
-        $all_role_caps = array_keys($this->wp_post_caps);
-
         $role = get_role(self::role);
-        
-        foreach ($all_role_caps as $cap) {
-            if(!empty($new_options['role_caps'][$cap])) {
-                $new_role_caps[$cap] = true;
-            }
-            $role->remove_cap($cap);
-        }
-        
-        $new_options['role_caps'] = $new_role_caps;
-        $new_role_caps = array_keys($new_role_caps);
 
-        foreach ($new_role_caps as $cap) {
-            $role->add_cap($cap);
+        foreach ($new_role_caps as $cap => $val) {
+            if ($val) {
+                $role->add_cap($cap);
+            } else {
+                $role->remove_cap($cap);
+                unset($new_role_caps[$cap]);
+            }
         }
+
+        $new_options['role_caps'] = $new_role_caps;
 
         return $new_options;
     }
