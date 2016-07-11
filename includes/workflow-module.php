@@ -165,7 +165,14 @@ class Workflow_Module {
         if (!$post_type) {
             $post_type = get_post_type();
         }
-                
+             
+        $available_post_types = $this->get_available_post_types();      
+        foreach ($available_post_types as $pt => $args) {
+            if (in_array($args->capability_type, $allowed_post_types)) {
+                $allowed_post_types[] = $pt;
+            }
+        }
+        
         return (bool) in_array($post_type, $allowed_post_types);
     }
 
