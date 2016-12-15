@@ -695,7 +695,7 @@ class Workflow_Authors extends Workflow_Module {
     public function load_edit() {
         $screen = get_current_screen();
 
-        if ($this->is_post_type_enabled($screen->post_type)) {
+        if (!is_null($screen) && $this->is_post_type_enabled($screen->post_type)) {
             add_filter('views_' . $screen->id, array($this, 'filter_views'));
         }
     }
@@ -706,10 +706,12 @@ class Workflow_Authors extends Workflow_Module {
         if (empty($views)) {
             return $views;
         }
+        
+        $screen = get_current_screen();
 
-        $post_type = get_post_type();
+        $post_type = !is_null($screen) ? $screen->post_type : '';
 
-        if ($post_type === false) {
+        if (!$this->is_post_type_enabled($post_type)) {
             return $views;
         }
 
@@ -732,10 +734,11 @@ class Workflow_Authors extends Workflow_Module {
             $mine_args['post_type'] = $post_type;
         }
 
-        $mine_args['author'] = $user->ID;
+        $mine_args['post_type'] =$post_type;
+        $mine_args['author'] = $current_user_id;
 
         $terms = array();
-        $author = $this->get_author_by('id', $user->ID);
+        $author = $this->get_author_by('id', $current_user_id);
 
         $author_term = $this->get_author_term($author);
         if ($author_term) {
@@ -760,17 +763,11 @@ class Workflow_Authors extends Workflow_Module {
             FROM $wpdb->posts 
             $join
             WHERE 1=1 
-            AND ($wpdb->posts.post_author = $user->ID $terms_implode) 
+            AND ($wpdb->posts.post_author = $current_user_id $terms_implode) 
             AND $wpdb->posts.post_type = '$post_type' 
             AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
-
-        $match = array_filter($views, 
-            function($views) {
-                return(strpos($views, 'class="current"'));
-            }
-        );
         
-        if (isset($_REQUEST['author']) && array_key_exists('mine', $match)) {
+        if (isset($_REQUEST['author']) && $current_user_id == $user->ID) {
             $class = ' class="current"';
         }
         
@@ -778,15 +775,7 @@ class Workflow_Authors extends Workflow_Module {
             $class = '';
         }
 
-        $labels = $this->get_post_type_labels();
-
-        if ($current_user_id == $user->ID) {
-            $mine = sprintf(_nx('Mein %1$s <span class="count">(%2$s)</span>', 'Meine %1$s <span class="count">(%2$s)</span>', $post_count, 'authors', CMS_WORKFLOW_TEXTDOMAIN), ($post_count == 1 ? $labels->singular_name : $labels->name), number_format_i18n($post_count));
-        }
-        
-        else {
-            $mine = sprintf(__('%1$s von %3$s <span class="count">(%2$s)</span>', CMS_WORKFLOW_TEXTDOMAIN), $labels->name, number_format_i18n($post_count), $user->display_name);
-        }
+        $mine = sprintf(__('Meine <span class="count">(%s)</span>', CMS_WORKFLOW_TEXTDOMAIN), number_format_i18n($post_count));
 
         $view['mine'] = '<a' . $class . ' href="' . add_query_arg($mine_args, admin_url('edit.php')) . '">' . $mine . '</a>';
         
