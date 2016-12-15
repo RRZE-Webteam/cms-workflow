@@ -62,8 +62,8 @@ class Workflow_Notifications extends Workflow_Module {
             return;
         }
 
-		if ($post_before->post_status !== 'publish' || $post_after->post_status !== 'publish') {
-			return;
+        if ($post_before->post_status !== 'publish' || $post_after->post_status !== 'publish') {
+            return;
         }
 
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -147,9 +147,11 @@ class Workflow_Notifications extends Workflow_Module {
 
         $post_status = $this->get_post_status_name($post_before->post_status);
         
-        $post_author = get_userdata($post_before->post_author);
-        $authors[$post_before->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
-        $authors = array_unique($authors);
+        if (is_user_member_of_blog($post_before->post_author)) {
+            $post_author = get_userdata($post_before->post_author);
+            $authors[$post_before->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
+            $authors = array_unique($authors);
+        }
 
         $blogname = get_option('blogname');
         $admin_email = get_option('admin_email');
@@ -321,11 +323,13 @@ class Workflow_Notifications extends Workflow_Module {
             if ($this->module_activated('authors')) {
                 $authors = $this->get_authors_details($post_id);
             }
-
-            $post_author = get_userdata($post->post_author);
-            $authors[$post->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
-            $authors = array_unique($authors);
-
+            
+            if (is_user_member_of_blog($post->post_author)) {
+                $post_author = get_userdata($post->post_author);
+                $authors[$post->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
+                $authors = array_unique($authors);
+            }
+            
             $blogname = get_option('blogname');
 
             $body = '';
@@ -589,9 +593,12 @@ class Workflow_Notifications extends Workflow_Module {
             $authors = $this->get_authors_emails($post_id);
         }
 
-        $post_author = get_userdata($post->post_author);
-        $authors[$post->post_author] = $post_author->user_email;
-
+        if (is_user_member_of_blog($post->post_author)) {
+            $post_author = get_userdata($post->post_author);
+            $authors[$post->post_author] = $post_author->user_email;
+            $authors = array_unique($authors);
+        }
+        
         $only_this_user = apply_filters('workflow_notification_only_this_user', 0);
         if ($only_this_user) {
             $authors = array();
