@@ -94,8 +94,16 @@ class Workflow_User_Groups extends Workflow_Module {
 
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        
+        add_filter('workflow_post_versioning_filtered_taxonomies', array($this, 'filtered_taxonomies'));
+        add_filter('workflow_post_versioning_filtered_network_taxonomies', array($this, 'filtered_taxonomies'));        
     }
 
+    public function filtered_taxonomies($taxonomies) {
+        $taxonomies[] = self::taxonomy_key;
+        return array_unique($taxonomies);
+    }
+    
     public function register_taxonomies() {
 
         $allowed_post_types = $this->get_post_types($this->module);

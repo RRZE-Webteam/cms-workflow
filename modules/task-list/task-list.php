@@ -243,7 +243,7 @@ class Workflow_Task_List extends Workflow_Module {
         <div class="clear"></div>    
         <?php
     }
-
+    
     public function print_task_list($post_id) {
 
         $data = get_post_meta($post_id, self::postmeta_key);
@@ -267,7 +267,7 @@ class Workflow_Task_List extends Workflow_Module {
             }
 
             foreach ($data as $task) {
-                $this->task_list_print_task($task);
+                $this->task_list_print_task($task, $post_id);
             }
         }
         
@@ -301,31 +301,78 @@ class Workflow_Task_List extends Workflow_Module {
 
         return $return_array;
     }
-
-    private function task_list_print_task($task) {
+    
+    private function task_list_print_task($task, $post_id) {
         $current_user = wp_get_current_user();
+        
+        $post = get_post($post_id);
+        $post_type = $this->get_available_post_types($post->post_type);
+        
+        $authors = array();
+
+        if ($this->module_activated('authors')) {
+            $authors = Workflow_Authors::get_authors($post->ID, 'id');
+        }
+
+        $authors[$post->post_author] = $post->post_author;
+        $authors = array_unique($authors);
+        
+        if(!user_can($task->task_adder, $post_type->cap->edit_posts) && !in_array($task->task_adder, $authors)) {
+            $old_data = array($task);
+            
+            $users = $this->get_users_by_role('editor');
+            
+            if (!empty($users)) {
+                $task->task_adder = $users[0];
+            } else {
+                $users = $this->get_users_by_role('administrator');
+                $task->task_adder = $users[0];
+            }
+            
+            $data = array($task);
+            
+            update_post_meta($post_id, self::postmeta_key, $data, $old_data);
+        }
+                
+        $task_adder_data = get_userdata($task->task_adder);
+        $task_adder = empty($task_adder_data->display_name) ? $task_adder_data->user_nicename : $task_adder_data->display_name;
+              
+        if(!empty($task->task_author)) {
+            $task_author_data = get_userdata($task->task_author);
+            $task_author = empty($task_author_data->display_name) ? $task_author_data->user_nicename : $task_author_data->display_name;
+        } else {
+            $task_author = __('Alle Autoren', CMS_WORKFLOW_TEXTDOMAIN);
+        }
 
         $task_title = stripslashes($task->task_title);
         $task_title_display = stripslashes($task->task_title);
         $task_title_style = ' style="text-decoration: none;"';
         $task_date_added = date_i18n(get_option('date_format'), $task->task_timestamp);
-        $task_adder = get_userdata($task->task_adder)->display_name;
         $task_description = stripslashes($task->task_description);
-        $task_author = !empty($task->task_author) ? get_userdata($task->task_author)->display_name : __('Alle Autoren', CMS_WORKFLOW_TEXTDOMAIN);
         $task_priority = self::task_list_get_textual_priority($task->task_priority);
-        $task_done_details = @unserialize($task->task_done);
-
+        
         if ($current_user->ID == $task->task_author) {
-            $task_title_display = '* ' . $task_title;
+            $task_title_icon = 'dashicons-star-filled';
+        } else {
+            $task_title_icon = 'dashicons-star-empty';
         }
 
-        if (is_array($task_done_details)) {
+        $task_done_details = @unserialize($task->task_done);
+        
+        if (is_array($task_done_details) && !empty($task_done_details['marker']) && !empty($task_done_details['date'])) {
+            $task_done_marker_data = get_userdata($task_done_details['marker']);
+            if ($task_done_marker_data !== false) {
+                $task_done_marker = empty($task_done_marker_data->display_name) ? $task_done_marker_data->user_nicename : $task_done_marker_data->display_name;
+            } else {
+                $task_done_marker = __('Unbekannt', CMS_WORKFLOW_TEXTDOMAIN);
+            }
+            $task_done_date = !empty($task_done_details['date']) ? date_i18n(get_option('date_format'), $task_done_details['date']) : __('Unbekannt', CMS_WORKFLOW_TEXTDOMAIN);
             $done_checked = ' checked="checked"';
             $task_title_style = ' style="text-decoration: line-through;"';
         }
         ?>        
         <div class="task-item">
-            <a class="task-item-link" href="#" title="<?php echo $task_title; ?>"<?php echo @$task_title_style; ?>><?php echo $task_title_display; ?></a>
+            <a class="task-item-link" href="#" title="<?php echo $task_title; ?>"<?php echo @$task_title_style; ?>><span class="dashicons-before <?php echo $task_title_icon; ?>"> <?php echo $task_title; ?></span></a>
             <div class="task-item-content">
                 <div class="task-content-body">
                     <span class="task-added"><?php printf('Von %1$s am %2$s', $task_adder, $task_date_added); ?></span><br>
@@ -333,7 +380,7 @@ class Workflow_Task_List extends Workflow_Module {
                     <?php _e('Priorität', CMS_WORKFLOW_TEXTDOMAIN); ?>: <span class="task-priority"><?php echo $task_priority; ?></span><br>
                     <p class="task-description"><?php echo $task_description; ?></p>
                     <?php if (is_array($task_done_details)): ?>
-                    <p class="marked-as-done"><?php printf(__('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN), get_userdata($task_done_details['marker'])->display_name, date_i18n(get_option('date_format'), $task_done_details['date'])); ?></p>
+                    <p class="marked-as-done"><?php printf(__('Diese Aufgabe wurde von %1$s am %2$s als erledigt markiert.', CMS_WORKFLOW_TEXTDOMAIN), $task_done_marker, $task_done_date); ?></p>
                     <?php endif; ?>
                 </div>
                 <div class="task-actions">
@@ -395,7 +442,7 @@ class Workflow_Task_List extends Workflow_Module {
             $data->$key = $value;
         }
 
-        echo $this->task_list_print_task($data);
+        echo $this->task_list_print_task($data, $post_id);
         exit;
     }
 

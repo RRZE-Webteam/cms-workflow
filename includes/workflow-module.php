@@ -189,6 +189,30 @@ class Workflow_Module {
         return trailingslashit($module_url);
     }
 
+    public function get_users_by_role($role = null) {
+        global $wpdb;
+
+        $blog_prefix = $wpdb->get_blog_prefix(get_current_blog_id());
+        $users = $wpdb->get_results(
+             "SELECT ID, meta_value
+             FROM $wpdb->users, $wpdb->usermeta
+             WHERE {$wpdb->users}.ID = {$wpdb->usermeta}.user_id AND meta_key = '{$blog_prefix}capabilities'
+             ORDER BY {$wpdb->usermeta}.user_id");
+
+        if (empty($users)) {
+            return null;
+        }
+
+        foreach ($users as $user => $key) {
+            $user_meta = unserialize($user->meta_value);
+            if (!isset($user_meta[$role])) {
+                unset($users[$key]);
+            }
+        }
+
+        return empty($users) ? null : $users;
+    }
+    
     public function users_select_form($selected = null, $args = null) {
 
         $defaults = array(

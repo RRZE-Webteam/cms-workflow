@@ -15,9 +15,7 @@
 #workflow-pending-drafts abbr,
 #workflow-task-list abbr {
     color: #777;
-    font-family: sans-serif;
-    font-weight: normal;
-    margin-left: 3px;
+    margin-left: 6px;
 }
 
 .priority-1,

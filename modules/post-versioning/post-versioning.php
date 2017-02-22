@@ -322,11 +322,21 @@ class Workflow_Post_Versioning extends Workflow_Module {
         <?php
     }
 
+    private function is_author($user_id, $post_id) {
+        global $cms_workflow;
+        
+        if ($this->module_activated('authors') && $cms_workflow->authors->is_post_author($user_id, $post_id)) {
+            return true;
+        }
+        
+        return false;
+    }
+    
     public function filter_post_row_actions($actions, $post) {
         if (!is_object($this->get_available_post_types($post->post_type)) || !in_array($post->post_type, $this->get_post_types($this->module))) {
             return $actions;
         }
-
+        
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (current_user_can($cap->edit_posts) && !get_post_meta($post->ID, self::version_post_id, true) && $post->post_status != 'trash') {
@@ -335,7 +345,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     . '">' . __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
         }
         
-        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish') {
+        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
             $actions['edit_as_version'] = '<a href="' . admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID) . '" title="'
                     . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
                     . '">' . __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
@@ -358,7 +368,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
-        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish') {
+        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish' || (!$this->is_author(get_current_user_id(), $post->ID) && !current_user_can('manage_options'))) {
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         }
 

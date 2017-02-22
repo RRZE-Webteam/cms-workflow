@@ -549,14 +549,19 @@ class Workflow_Dashboard extends Workflow_Module {
                     $authors[$post->post_author] = $post->post_author;
                     $authors = array_unique($authors);
 
-                    if (!current_user_can($post_type->cap->publish_posts) && !in_array($current_user->ID, $authors)) {
+                    if (!current_user_can($post_type->cap->edit_posts) && !in_array($current_user->ID, $authors)) {
                         continue;
                     }
 
+                    if(!user_can($task->task_adder, $post_type->cap->edit_posts) && !in_array($task->task_adder, $authors)) {
+                        continue;
+                    }
+                    
+                    $task_adder_data = get_userdata($task->task_adder);
+                    $task_adder = empty($task_adder_data->display_name) ? $task_adder_data->user_nicename : $task_adder_data->display_name;
+                    
                     $url = get_edit_post_link($post->ID);
                     $title = _draft_or_post_title($post->ID);
-
-                    $task_adder = get_userdata($task->task_adder)->display_name;
 
                     $item = sprintf('<div class="priority-%s">', $task->task_priority);
                     $item .= sprintf('<a href="%1$s">%2$s</a><abbr> &mdash;%3$s&mdash;</abbr>', $url, esc_html($task->task_title), Workflow_Task_List::task_list_get_textual_priority($task->task_priority));

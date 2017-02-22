@@ -52,7 +52,8 @@ class Workflow_Authors extends Workflow_Module {
                     'delete_published_posts' => true,
                     'edit_posts' => true,
                     'delete_posts' => true
-                )
+                ),
+                'author_can_assign_others' => false,
             ),
             'configure_callback' => 'print_configure_view',
             'settings_help_tab' => array(
@@ -96,7 +97,10 @@ class Workflow_Authors extends Workflow_Module {
         add_filter('posts_join', array($this, 'posts_join_filter'));
         add_filter('posts_groupby', array($this, 'posts_groupby_filter'));
 
-        add_action('load-edit.php', array($this, 'load_edit'));       
+        add_action('load-edit.php', array($this, 'load_edit'));
+        
+        add_filter('workflow_post_versioning_filtered_taxonomies', array($this, 'filtered_taxonomies'));
+        add_filter('workflow_post_versioning_filtered_network_taxonomies', array($this, 'filtered_taxonomies'));
     }
 
     public function deactivation($network_wide = false) {
@@ -200,7 +204,11 @@ class Workflow_Authors extends Workflow_Module {
     public function add_post_meta_box() {
         $post_type = $this->get_current_post_type();
 
-        if (!$this->is_post_type_enabled($post_type) || !current_user_can('manage_categories')) {
+        if (!$this->is_post_type_enabled($post_type)) {
+            return;
+        }
+        
+        if(!$this->module->options->author_can_assign_others && !current_user_can('manage_categories')) {
             return;
         }
         
@@ -261,7 +269,7 @@ class Workflow_Authors extends Workflow_Module {
             return;
         }
         
-        if (!current_user_can('manage_categories')) {
+        if(!$this->module->options->author_can_assign_others && !current_user_can('manage_categories')) {
             return;
         }
         
@@ -310,15 +318,13 @@ class Workflow_Authors extends Workflow_Module {
         $current_user_id = $current_user->ID;
         $author_user_id = $post->post_author;
         
-        if (empty($users)) {
-            $users[] = $current_user_id;
-        }
+        $users[] = $current_user_id;
         
         $users = array_unique(array_map('intval', $users));
         
         if (!in_array($author_user_id, $users)) {
             remove_action('save_post', array($this, 'save_post'), 10, 2);
-            wp_update_post(array('ID' => $post_id, 'post_author' => $users[0]));
+            wp_update_post(array('ID' => $post_id, 'post_author' => $current_user_id));
             add_action('save_post', array($this, 'save_post'), 10, 2);
         }
         
@@ -620,6 +626,11 @@ class Workflow_Authors extends Workflow_Module {
         return $allcaps;
     }
 
+    public function filtered_taxonomies($taxonomies) {
+        $taxonomies[] = self::taxonomy_key;
+        return array_unique($taxonomies);
+    }
+        
     public function remove_quick_edit_authors_box() {
         global $pagenow;
 
@@ -719,9 +730,7 @@ class Workflow_Authors extends Workflow_Module {
 
         if (empty($_REQUEST['author'])) {
             $user = wp_get_current_user();
-        }
-        
-        else {
+        } else {
             $user = get_userdata((int) $_REQUEST['author']);
         }
         
@@ -767,11 +776,10 @@ class Workflow_Authors extends Workflow_Module {
             AND $wpdb->posts.post_type = '$post_type' 
             AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
         
-        if (isset($_REQUEST['author']) && $current_user_id == $user->ID) {
+        if ((isset($_REQUEST['author']) && $current_user_id == $user->ID) ||
+            !isset($_REQUEST['all_posts']) && !isset($_REQUEST['post_status']) && !isset($_REQUEST['author'])) {
             $class = ' class="current"';
-        }
-        
-        else {
+        } else {
             $class = '';
         }
 
@@ -853,7 +861,7 @@ class Workflow_Authors extends Workflow_Module {
                 $where = preg_replace('/(\b(?:' . $wpdb->posts . '\.)?post_author\s*IN\s*(\(\d+\)))/', '(' . $maybe_both_query . ' ' . $terms_implode . ')', $where, 1);
             }
         }
-
+        
         return $where;
     }
 
@@ -901,11 +909,15 @@ class Workflow_Authors extends Workflow_Module {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'])) {
                 return $groupby;
             }
-
+            
+            $groupby = "{$wpdb->posts}.ID";
+            /**
             if ($this->having_terms) {
                 $having = 'MAX( IF( ' . $wpdb->term_taxonomy . '.taxonomy = \'' . self::taxonomy_key . '\', IF( ' . $this->having_terms . ',2,1 ),0 ) ) <> 1 ';
                 $groupby = $wpdb->posts . '.ID HAVING ' . $having;
             }
+             * 
+             */
         }
 
         return $groupby;
@@ -988,7 +1000,7 @@ class Workflow_Authors extends Workflow_Module {
         return $usergroups;
     }
 
-    private function is_post_author($user, $post_id) {
+    public function is_post_author($user, $post_id) {
         global $post;
 
         if (!$post_id && $post) {
@@ -1028,6 +1040,7 @@ class Workflow_Authors extends Workflow_Module {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
         add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
         add_settings_field('role_caps', __('Autorenrechte', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_role_caps_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('author_can_assign_others', __('Mitautoren', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_author_can_assign_others_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');        
     }
 
     public function settings_post_types_option() {
@@ -1087,6 +1100,15 @@ class Workflow_Authors extends Workflow_Module {
         echo '</dl>';
     }
 
+    public function settings_author_can_assign_others_option() {
+        ?>
+        <label for="author_can_assign_others">
+        <input id="author_can_assign_others" name="_cms_workflow_authors_options[author_can_assign_others]" <?php checked($this->module->options->author_can_assign_others, 1); ?> type="checkbox">
+           <?php _e('Mitautoren können dem Dokument weitere Autoren zuordnen.', CMS_WORKFLOW_TEXTDOMAIN); ?>
+        </label>
+        <?php
+    }
+    
     public function settings_validate($new_options) {
         if (empty($new_options['post_types'])) {
             $new_options['post_types'] = array();
@@ -1096,6 +1118,12 @@ class Workflow_Authors extends Workflow_Module {
             $new_options['role_caps'] = array();
         }
 
+        if (empty($new_options['author_can_assign_others'])) {
+            $new_options['author_can_assign_others'] = false;
+        } else {
+            $new_options['author_can_assign_others'] = true;
+        }
+        
         $new_options['post_types'] = $this->clean_post_type_options($new_options['post_types'], $this->module->post_type_support);
         
         $new_role_caps = array();
