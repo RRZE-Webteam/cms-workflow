@@ -743,7 +743,7 @@ class Workflow_Authors extends Workflow_Module {
             $mine_args['post_type'] = $post_type;
         }
 
-        $mine_args['post_type'] =$post_type;
+        $mine_args['post_type'] = $post_type;
         $mine_args['author'] = $current_user_id;
 
         $terms = array();
@@ -776,8 +776,7 @@ class Workflow_Authors extends Workflow_Module {
             AND $wpdb->posts.post_type = '$post_type' 
             AND ($wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'future' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending' OR $wpdb->posts.post_status = 'private')");
         
-        if ((isset($_REQUEST['author']) && $current_user_id == $user->ID) ||
-            !isset($_REQUEST['all_posts']) && !isset($_REQUEST['post_status']) && !isset($_REQUEST['author'])) {
+        if ((isset($_REQUEST['author']) && $current_user_id == $user->ID)) {
             $class = ' class="current"';
         } else {
             $class = '';
