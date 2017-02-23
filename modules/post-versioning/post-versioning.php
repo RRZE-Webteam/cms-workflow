@@ -7,6 +7,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
     const version_remote_parent_post_meta = '_version_remote_parent_post_meta';
     const version_remote_post_meta = '_version_remote_post_meta';
 
+    protected $not_filtered_post_meta = array();
+    
     public $module;
 
     public function __construct() {
@@ -183,6 +185,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_action('add_meta_boxes', array($this, 'network_connections_meta_box'), 10, 2);
             add_action('save_post', array($this, 'network_connections_save_post'));
         }
+        
+        add_action('trash_' . $post_type, array($this, 'normalize_on_trash'), 10, 2);
         
         add_action('wp_before_admin_bar_render', array($this, 'admin_bar_submenu'), 99);
     }
@@ -363,7 +367,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
                 AND $wpdb->postmeta.meta_key = %s 
                 AND $wpdb->postmeta.meta_value = %d 
-                AND $wpdb->posts.post_status = 'draft' 
+                AND ($wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending')
                 AND $wpdb->posts.post_type = %s", self::version_post_id, $post_id, $post_type);
         
         $results = $wpdb->get_results($query);
@@ -413,6 +417,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
             
         } else {
         
+            $this->not_filtered_post_meta = array(self::version_remote_parent_post_meta, $this->module->workflow_options_name . '_network_connections');
+            
             $new_post = array(
                 'post_author' => get_current_user_id(),
                 'post_content' => $post->post_content,
@@ -447,13 +453,15 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function version_post_replace_on_publish($post_id, $post) {
-
+        
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (!current_user_can($cap->edit_posts)) {
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
+        $this->not_filtered_post_meta = array(self::version_remote_parent_post_meta, $this->module->workflow_options_name . '_network_connections');
+        
         $post_meta = $this->get_post_meta($post_id);
         
         $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
@@ -503,6 +511,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
     }
 
+    public function normalize_on_trash($post_id, $post) {
+        delete_post_meta($post_id, self::source_post_id);
+        delete_post_meta($post_id, self::version_post_id);
+        delete_post_meta($post_id, self::version_remote_parent_post_meta);
+        delete_post_meta($post_id, self::version_remote_post_meta);
+        delete_post_meta($post_id, $this->module->workflow_options_name . '_network_connections');
+    }
+    
     public function admin_notices() {
         global $post;
         
@@ -1136,21 +1152,27 @@ class Workflow_Post_Versioning extends Workflow_Module {
     private function filtered_post_meta($keys) {
         $filtered_post_meta = array();
         
+        if (empty($this->not_filtered_post_meta) || !is_array($this->not_filtered_post_meta)) {
+            $this->not_filtered_post_meta = array();
+        }
+
         foreach ((array) $keys as $key) {
-            if (strpos($key, '_') === 0) {
+            if (strpos($key, '_') === 0 && !in_array($key, $this->not_filtered_post_meta)) {
                 $filtered_post_meta[] = $key;
             }
         }
         
-        return apply_filters('workflow_post_versioning_filtered_post_meta', $filtered_post_meta);        
+        return $filtered_post_meta;        
     }
     
     private function get_post_meta($post_id) {
         $post_meta = array();
         $keys = get_post_custom_keys($post_id);
 
+        $filtered_post_meta = $this->filtered_post_meta($keys);
+
         foreach ((array) $keys as $key) {
-            if (in_array($key, $this->filtered_post_meta($keys))) {
+            if (in_array($key, $filtered_post_meta)) {
                 continue;
             }
             
@@ -1166,8 +1188,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     private function add_post_meta($post_id, $post_meta) {
         foreach ($post_meta as $meta) {
+            $filtered_post_meta = $this->filtered_post_meta(array_keys($meta));
+            
             foreach ($meta as $key => $value) {
-                if (!in_array($key, $this->filtered_post_meta(array_keys($meta)))) {
+                if (!in_array($key, $filtered_post_meta)) {
                     add_post_meta($post_id, $key, $value);
                 }
             }
@@ -1176,8 +1200,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
     
     private function update_post_meta($post_id, $post_meta) {
         foreach ($post_meta as $meta) {
+            $filtered_post_meta = $this->filtered_post_meta(array_keys($meta));
+            
             foreach ($meta as $key => $value) {
-                if (!in_array($key, $this->filtered_post_meta(array_keys($meta)))) {
+                if (!in_array($key, $filtered_post_meta)) {
                     update_post_meta($post_id, $key, $value);
                 }
             }
