@@ -354,6 +354,23 @@ class Workflow_Post_Versioning extends Workflow_Module {
         return $actions;
     }
 
+    private function has_version($post_id, $post_type) {
+        global $wpdb;
+        
+        $query = $wpdb->prepare("
+            SELECT $wpdb->posts.ID 
+            FROM $wpdb->posts, $wpdb->postmeta
+            WHERE $wpdb->posts.ID = $wpdb->postmeta.post_id 
+                AND $wpdb->postmeta.meta_key = %s 
+                AND $wpdb->postmeta.meta_value = %d 
+                AND $wpdb->posts.post_status = 'draft' 
+                AND $wpdb->posts.post_type = %s", self::version_post_id, $post_id, $post_type);
+        
+        $results = $wpdb->get_results($query);
+        
+        return $results;
+    }
+    
     public function version_as_new_post_draft() {
         if (!( isset($_GET['post']) || isset($_POST['post']) )) {
             wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
@@ -380,37 +397,53 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_die(__('Nur veröffentlichte Dokumente können als neue Version erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN));
         }
         
-        $new_post = array(
-            'post_author' => get_current_user_id(),
-            'post_content' => $post->post_content,
-            'post_title' => $post->post_title,
-            'post_excerpt' => $post->post_excerpt,
-            'post_status' => 'draft',
-            'post_parent' => $post->post_parent,
-            'menu_order' => $post->menu_order,
-            'post_type' => $post->post_type
-        );
-        
-        $draft_id = wp_insert_post($new_post);
+        if ($results = $this->has_version($post->ID, $post->post_type)) {
+            foreach ($results as $version) {
+                $src_permalink = get_permalink($post->ID);
+                $src_post_title = get_the_title($post->ID);
+                
+                $permalink = get_permalink($version->ID);
+                $post_title = get_the_title($version->ID);
 
-        if($draft_id) {
-            add_post_meta($draft_id, self::version_post_id, $post_id);
-            
-            $post_meta = $this->get_post_meta($post_id);
-            
-            $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
-            if($thumbnail_id) {
-                add_post_meta($draft_id, '_thumbnail_id', $thumbnail_id);
+                $this->flash_admin_notice(sprintf(__('Lokale Version &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; vom Dokument &bdquo;<a href="%3$s" target="__blank">%4$s</a>&ldquo; existiert bereits.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $src_permalink, $src_post_title), 'error');
             }
             
-            $this->add_taxonomies($draft_id, $post);
+            wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
+            exit;            
             
-            $this->add_post_meta($draft_id, $post_meta);
-                 
-            wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
-            exit;
-        }
+        } else {
         
+            $new_post = array(
+                'post_author' => get_current_user_id(),
+                'post_content' => $post->post_content,
+                'post_title' => $post->post_title,
+                'post_excerpt' => $post->post_excerpt,
+                'post_status' => 'draft',
+                'post_parent' => $post->post_parent,
+                'menu_order' => $post->menu_order,
+                'post_type' => $post->post_type
+            );
+
+            $draft_id = wp_insert_post($new_post);
+
+            if($draft_id) {
+                add_post_meta($draft_id, self::version_post_id, $post_id);
+
+                $post_meta = $this->get_post_meta($post_id);
+
+                $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
+                if($thumbnail_id) {
+                    add_post_meta($draft_id, '_thumbnail_id', $thumbnail_id);
+                }
+
+                $this->add_taxonomies($draft_id, $post);
+
+                $this->add_post_meta($draft_id, $post_meta);
+
+                wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
+                exit;
+            }
+        }
     }
 
     public function version_post_replace_on_publish($post_id, $post) {
@@ -1149,60 +1182,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 }
             }
         }
-    }    
-            
-    private function add_attachments($post_id, $source_post_id) {
-        $args = array(
-            'post_type' => 'attachment',
-            'numberposts' => -1,
-            'post_status' => null,
-            'post_parent' => $source_post_id,
-            'exclude' => get_post_thumbnail_id($source_post_id),
-        );
-        
-        $attachments = get_posts($args);
-        
-        if ($attachments) {
-            foreach ($attachments as $attachment) {
-                $new = array(
-                    'post_author' => $attachment->post_author,
-                    'post_date' => $attachment->post_date,
-                    'post_date_gmt' => $attachment->post_date_gmt,
-                    'post_content' => $attachment->post_content,
-                    'post_title' => $attachment->post_title,
-                    'post_excerpt' => $attachment->post_excerpt,
-                    'post_status' => $attachment->post_status,
-                    'comment_status' => $attachment->comment_status,
-                    'ping_status' => $attachment->ping_status,
-                    'post_password' => $attachment->post_password,
-                    'post_name' => $attachment->post_name,
-                    'to_ping' => $attachment->to_ping,
-                    'pinged' => $attachment->pinged,
-                    'post_modified' => $attachment->post_modified,
-                    'post_modified_gmt' => $attachment->post_modified_gmt,
-                    'post_content_filtered' => $attachment->post_content_filtered,
-                    'post_parent' => $post_id,
-                    'guid' => $attachment->guid,
-                    'menu_order' => $attachment->menu_order,
-                    'post_type' => $attachment->post_type,
-                    'post_mime_type' => $attachment->post_mime_type,
-                    'comment_count' => $attachment->comment_count
-                );
-
-                $attachment_newid = wp_insert_post($new);
-                if(!$attachment_newid) {
-                    continue;
-                }
-                
-                $keys = get_post_custom_keys($attachment->ID);
-
-                foreach ((array) $keys as $key) {
-                    $value = get_post_meta($attachment->ID, $key, true);
-                    add_post_meta($attachment_newid, $key, $value);
-                }
-            }
-        }
-        
     }
     
     private function get_post_attached_file($post_id) {
