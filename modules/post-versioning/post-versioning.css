@@ -28,6 +28,10 @@
     font-size: 12px;
 }
 
+.network-connections-list label {
+    font-weight: normal !important;
+}
+
 #network-connections-box {
     margin: 10px 0;
 }
