@@ -281,7 +281,7 @@ class Workflow_Translation extends Workflow_Module {
             return;
         }
 
-        if (in_array($post->post_status, array('publish', 'future', 'private'))) {
+        if (!in_array($post->post_status, array('draft', 'pending'))) {
             return;
         }
 
@@ -372,7 +372,7 @@ class Workflow_Translation extends Workflow_Module {
             return;
         }
         
-        if (in_array($post->post_status, array('publish', 'future', 'private'))) {
+        if (!in_array($post->post_status, array('draft', 'pending'))) {
             return;
         }
         
