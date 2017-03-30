@@ -1419,9 +1419,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
     
     public function admin_bar_submenu() {
-        global $wp_admin_bar, $pagenow, $post;
+        global $wp_admin_bar, $post;
 
-        if ((!is_single() && !is_page() && $pagenow != 'post.php') || !is_admin_bar_showing() || !is_object($wp_admin_bar) || !is_object($post)) {
+        if (!is_admin_bar_showing() || !is_object($wp_admin_bar) || !is_object($post)) {
             return;
         }
         
@@ -1430,7 +1430,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
         }
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
-        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish') {
+        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
+            
+        } else {
             return;
         }
 
