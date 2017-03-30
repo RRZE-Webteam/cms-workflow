@@ -821,7 +821,7 @@ class Workflow_Authors extends Workflow_Module {
         return $authors;
     }
 
-    public function posts_where_filter($where, &$wp_query) {
+    public function posts_where_filter($where, $wp_query) {
         global $wpdb;
 
         if ($wp_query->is_author()) {
