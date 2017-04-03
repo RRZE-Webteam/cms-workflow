@@ -569,7 +569,7 @@ class Workflow_Translation extends Workflow_Module {
         extract($r, EXTR_SKIP);
 
         extract($alternate_posts, EXTR_SKIP);
-        
+
         $current_blog_id = get_current_blog_id();
         
         if ($show_current_blog) {
@@ -605,7 +605,7 @@ class Workflow_Translation extends Workflow_Module {
             $a_id = ($current_blog_id == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = ($current_blog_id == $site['blog_id']) ? ' class="lang-current current"' : '';
 
-            if ((is_single() || is_page()) && isset($remote_permalink[$site['blog_id']])) {
+            if (isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
             } elseif ($redirect_page_id) {
                 $href = get_permalink($redirect_page_id);
@@ -649,7 +649,7 @@ class Workflow_Translation extends Workflow_Module {
             $language = self::get_language($site['sitelang']);
             $hreflang = $language['iso'][1];
 
-            if ((is_single() || is_page()) && isset($remote_permalink[$site['blog_id']])) {
+            if (isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
             } else {
                 $href = '';
@@ -679,8 +679,13 @@ class Workflow_Translation extends Workflow_Module {
         if (empty($related_sites)) {
             return false;
         }
-
-        $default_post = get_post();
+        
+        if (is_home()) {
+            $post_id = get_option('page_for_posts');
+            $default_post = get_post($post_id);
+        } else {
+            $default_post = get_post();
+        }
 
         if ($default_post) {
             $current_post_id = $default_post->ID;
@@ -689,7 +694,7 @@ class Workflow_Translation extends Workflow_Module {
         } else {
             return false;
         }
-
+        
         $current_blog_id = get_current_blog_id();
         
         $translate_from_lang = array();
