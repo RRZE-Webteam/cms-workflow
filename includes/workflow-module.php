@@ -165,15 +165,16 @@ class Workflow_Module {
         if (!$post_type) {
             $post_type = get_post_type();
         }
-             
+        
+        $enabled_post_types = array();
         $available_post_types = $this->get_available_post_types();      
         foreach ($available_post_types as $pt => $args) {
             if (in_array($args->capability_type, $allowed_post_types)) {
-                $allowed_post_types[] = $pt;
+                $enabled_post_types[] = $pt;
             }
         }
         
-        return (bool) in_array($post_type, $allowed_post_types);
+        return (bool) in_array($post_type, $enabled_post_types);
     }
 
     public function get_encoded_description($args = array()) {
