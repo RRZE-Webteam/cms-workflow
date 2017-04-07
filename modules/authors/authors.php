@@ -1043,8 +1043,56 @@ class Workflow_Authors extends Workflow_Module {
     }
 
     public function settings_post_types_option() {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module);
+        $all_post_types = $this->get_available_post_types();
+
+        $sorted_cap_types = array();
+
+        foreach ($all_post_types as $post_type => $args) {
+            $sorted_cap_types[$args->capability_type][$post_type] = $args;
+        }
+
+        foreach ($sorted_cap_types as $cap_type) {
+            $labels = array();
+            foreach ($cap_type as $post_type => $args) {
+                if ($post_type == 'attachment') {
+                    continue;
+                }
+                if ($post_type != $args->capability_type) {
+                    $labels[] = $args->label;
+                }
+            }
+
+            foreach ($cap_type as $post_type => $args) {
+                if ($post_type == 'attachment') {
+                    continue;
+                }
+                if ($post_type == $args->capability_type) {
+
+                    if (!empty($labels)) {
+                        sort($labels);
+                        $labels = $args->label . ', ' . implode(', ', $labels);
+                    } else {
+                        $labels = $args->label;
+                    }
+
+                    echo '<label for="post_types' . '_' . esc_attr($post_type) . '">';
+                    echo '<input id="post_types' . '_' . esc_attr($post_type) . '" name="'
+                    . $this->module->workflow_options_name . '[post_types][' . esc_attr($post_type) . ']"';
+                    if (!empty($this->module->options->post_types[$post_type])) {
+                        checked($this->module->options->post_types[$post_type], true);
+                    }
+
+                    disabled(post_type_supports($post_type, $this->module->post_type_support), true);
+                    echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($labels) . '</label>';
+
+                    if (post_type_supports($post_type, $this->module->post_type_support)) {
+                        echo '&nbsp;<span class="description">' . sprintf(__('Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN), $post_type, $this->module->post_type_support) . '</span>';
+                    }
+                    echo '<br>';
+                }
+            }
+        }
+
     }
 
     public function settings_role_caps_option() {
@@ -1060,12 +1108,18 @@ class Workflow_Authors extends Workflow_Module {
         foreach ($sorted_cap_types as $cap_type) {
             $labels = array();
             foreach ($cap_type as $post_type => $args) {
+                if ($post_type == 'attachment') {
+                    continue;
+                }
                 if ($post_type != $args->capability_type) {
                     $labels[] = $args->label;
                 }
             }
         
             foreach ($cap_type as $post_type => $args) {
+                if ($post_type == 'attachment') {
+                    continue;
+                }
                 if ($post_type == $args->capability_type && !empty($this->module->options->post_types[$post_type])) {
                     
                     if (!empty($labels)) {
