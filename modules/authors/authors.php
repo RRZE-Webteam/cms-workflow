@@ -204,7 +204,7 @@ class Workflow_Authors extends Workflow_Module {
     public function add_post_meta_box() {
         $post_type = $this->get_current_post_type();
 
-        if (!$this->is_post_type_enabled($post_type)) {
+        if (!$this->is_post_type_enabled($post_type, $this->module, false)) {
             return;
         }
         
@@ -238,7 +238,7 @@ class Workflow_Authors extends Workflow_Module {
                 ?>
             </div>
 
-            <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module)): ?>
+            <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)): ?>
             <div id="workflow-post-authors-usergroups-box">
                 <h4><?php _e('Benutzergruppe', CMS_WORKFLOW_TEXTDOMAIN) ?></h4>
                 <?php
@@ -277,7 +277,7 @@ class Workflow_Authors extends Workflow_Module {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module)) {
+            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->save_post_authors_usergroups($post, $usergroups);
             }
@@ -301,7 +301,7 @@ class Workflow_Authors extends Workflow_Module {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->edit_attachment_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module)) {
+            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->edit_attachment_authors_usergroups($post, $usergroups);
             }
@@ -595,7 +595,7 @@ class Workflow_Authors extends Workflow_Module {
         
         $post_type = get_post_type($post_id);
         
-        if (!$this->is_post_type_enabled($post_type)) {
+        if (!$this->is_post_type_enabled($post_type, $this->module, false)) {
             return $allcaps;
         }
 
@@ -633,15 +633,17 @@ class Workflow_Authors extends Workflow_Module {
         
     public function remove_quick_edit_authors_box() {
         global $pagenow;
-
-        if ('edit.php' == $pagenow && $this->is_post_type_enabled()) {
-            remove_post_type_support(get_post_type(), 'author');
+        
+        $post_type = get_post_type();
+        
+        if ('edit.php' == $pagenow && $this->is_post_type_enabled($post_type, $this->module, false)) {
+            remove_post_type_support($post_type, 'author');
         }
     }
 
     public function custom_columns() {
         foreach (get_post_types() as $post_type) {
-            if ($this->is_post_type_enabled($post_type)) {
+            if ($this->is_post_type_enabled($post_type, $this->module, false)) {
                 add_action("manage_edit-{$post_type}_columns", array($this, 'manage_authors_column'));
                 add_filter("manage_{$post_type}_posts_custom_column", array($this, 'manage_authors_custom_column'), 10, 2);
             }
@@ -706,7 +708,7 @@ class Workflow_Authors extends Workflow_Module {
     public function load_edit() {
         $screen = get_current_screen();
 
-        if (!is_null($screen) && $this->is_post_type_enabled($screen->post_type)) {
+        if (!is_null($screen) && $this->is_post_type_enabled($screen->post_type, $this->module, false)) {
             add_filter('views_' . $screen->id, array($this, 'filter_views'));
         }
     }
@@ -722,7 +724,7 @@ class Workflow_Authors extends Workflow_Module {
 
         $post_type = !is_null($screen) ? $screen->post_type : '';
 
-        if (!$this->is_post_type_enabled($post_type)) {
+        if (!$this->is_post_type_enabled($post_type, $this->module, false)) {
             return $views;
         }
 
@@ -830,7 +832,7 @@ class Workflow_Authors extends Workflow_Module {
                 return $where;
             }
 
-            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'])) {
+            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $where;
             }
 
@@ -873,7 +875,7 @@ class Workflow_Authors extends Workflow_Module {
                 return $join;
             }
 
-            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'])) {
+            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $join;
             }
 
@@ -905,7 +907,7 @@ class Workflow_Authors extends Workflow_Module {
                 return $groupby;
             }
 
-            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'])) {
+            if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $groupby;
             }
             
