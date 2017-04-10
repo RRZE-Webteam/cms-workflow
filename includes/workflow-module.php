@@ -154,7 +154,7 @@ class Workflow_Module {
         return $post_type;
     }
 
-    public function is_post_type_enabled($post_type = null, $module = null) {
+    public function is_post_type_enabled($post_type = null, $module = null, $distinct = true) {
 
         if(!$module) {
             $module = $this->module;
@@ -169,7 +169,9 @@ class Workflow_Module {
         $enabled_post_types = array();
         $available_post_types = $this->get_available_post_types();      
         foreach ($available_post_types as $pt => $args) {
-            if (in_array($args->capability_type, $allowed_post_types)) {
+            if($distinct) {
+                $enabled_post_types[] = $pt;
+            } elseif (in_array($args->capability_type, $allowed_post_types)) {
                 $enabled_post_types[] = $pt;
             }
         }
