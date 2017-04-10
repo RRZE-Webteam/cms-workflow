@@ -328,41 +328,40 @@ class Workflow_Settings extends Workflow_Module {
         endif;
     }
     
-    public function custom_post_type_option($module, $option_name = 'post_types') {
-
+    public function custom_post_type_option($module, $option_name = 'post_types', $attachment = false) {
         $all_post_types = $this->get_available_post_types();
-        
-        $builtin_capability_types = array();
-        
-        foreach ($all_post_types as $post_type => $args) {
-            if ($post_type != $args->capability_type) {
-                $builtin_capability_types[] = $post_type;
-            }
-        }
-                
-        foreach ($all_post_types as $post_type => $args) {
-            if ($post_type == 'attachment' && !in_array($module->name, array('authors', 'user_groups', 'task_list', 'editorial_comments'))) {
-                continue;
-            }
-            
-            if (in_array($post_type, $builtin_capability_types)) {
-                continue;
-            }
-            
-            echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
-            echo '<input id="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '" name="'
-            . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
-            if (!empty($module->options->{$option_name}[$post_type])) {
-                checked($module->options->{$option_name}[$post_type], true);
-            }
-            
-            disabled(post_type_supports($post_type, $module->post_type_support), true);
-            echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($args->label) . '</label>';
 
-            if (post_type_supports($post_type, $module->post_type_support)) {
-                echo '&nbsp;<span class="description">' . sprintf(__('Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN), $post_type, $module->post_type_support) . '</span>';
+        $sorted_cap_types = array();
+
+        foreach ($all_post_types as $post_type => $args) {
+            $sorted_cap_types[$args->capability_type][$post_type] = $args;
+        }
+
+        foreach ($sorted_cap_types as $cap_type) {
+            
+            foreach ($cap_type as $post_type => $args) {
+                
+                if ($post_type == 'attachment' && !$attachment) {
+                    continue;
+                }
+                
+                $label = $args->label;
+
+                echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
+                echo '<input id="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '" name="'
+                . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
+                if (!empty($module->options->{$option_name}[$post_type])) {
+                    checked($module->options->{$option_name}[$post_type], true);
+                }
+
+                disabled(post_type_supports($post_type, $module->post_type_support), true);
+                echo ' type="checkbox">&nbsp;&nbsp;&nbsp;' . esc_html($label) . '</label>';
+
+                if (post_type_supports($post_type, $module->post_type_support)) {
+                    echo '&nbsp;<span class="description">' . sprintf(__('Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN), $post_type, $module->post_type_support) . '</span>';
+                }
+                echo '<br>';
             }
-            echo '<br />';
         }
     }
 
