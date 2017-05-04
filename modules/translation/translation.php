@@ -605,7 +605,7 @@ class Workflow_Translation extends Workflow_Module {
             $a_id = ($current_blog_id == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = ($current_blog_id == $site['blog_id']) ? ' class="lang-current current"' : '';
 
-            if (isset($remote_permalink[$site['blog_id']])) {
+            if (isset($remote_permalink[$site['blog_id']]) && !is_home()) {
                 $href = $remote_permalink[$site['blog_id']];
             } elseif ($redirect_page_id) {
                 $href = get_permalink($redirect_page_id);
