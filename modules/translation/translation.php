@@ -605,7 +605,9 @@ class Workflow_Translation extends Workflow_Module {
             $a_id = ($current_blog_id == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = ($current_blog_id == $site['blog_id']) ? ' class="lang-current current"' : '';
 
-            if (isset($remote_permalink[$site['blog_id']]) && !is_home()) {
+            if (is_home() && !get_option('page_for_posts')) {
+                $href = get_site_url($site['blog_id']);
+            } elseif (isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
             } elseif ($redirect_page_id) {
                 $href = get_permalink($redirect_page_id);
@@ -623,9 +625,7 @@ class Workflow_Translation extends Workflow_Module {
 
         if ($echo === true) {
             echo $output;
-        }
-
-        else {
+        } else {
             return $output;
         }
     }
