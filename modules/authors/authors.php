@@ -741,9 +741,6 @@ class Workflow_Authors extends Workflow_Module {
         }
 
         $mine_args = array();
-        if ($post_type != 'post') {
-            $mine_args['post_type'] = $post_type;
-        }
 
         $mine_args['post_type'] = $post_type;
         $mine_args['author'] = $current_user_id;
@@ -827,11 +824,7 @@ class Workflow_Authors extends Workflow_Module {
         global $wpdb;
 
         if ($wp_query->is_author()) {
-
-            if (!empty($wp_query->query_vars['post_type']) && !is_object_in_taxonomy($wp_query->query_vars['post_type'], self::taxonomy_key)) {
-                return $where;
-            }
-
+            
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $where;
             }
@@ -871,10 +864,6 @@ class Workflow_Authors extends Workflow_Module {
 
         if ($wp_query->is_author()) {
 
-            if (!empty($wp_query->query_vars['post_type']) && !is_object_in_taxonomy($wp_query->query_vars['post_type'], self::taxonomy_key)) {
-                return $join;
-            }
-
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $join;
             }
@@ -902,10 +891,6 @@ class Workflow_Authors extends Workflow_Module {
         global $wp_query, $wpdb;
 
         if ($wp_query->is_author()) {
-
-            if (!empty($wp_query->query_vars['post_type']) && !is_object_in_taxonomy($wp_query->query_vars['post_type'], self::taxonomy_key)) {
-                return $groupby;
-            }
 
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module, false)) {
                 return $groupby;
