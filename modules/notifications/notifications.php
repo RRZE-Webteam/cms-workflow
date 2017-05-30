@@ -166,6 +166,10 @@ class Workflow_Notifications extends Workflow_Module {
         
         $body .= "\r\n";
         
+        $date_format = sprintf('%1$s %2$s', get_option('date_format'), get_option('time_format'));
+        $date_before = date_i18n($date_format, strtotime($post_before->post_modified));
+        $date_after = date_i18n($date_format, strtotime($post_after->post_modified));
+        
         $length = max( strlen($left_title), strlen( $right_title));
         $left_title = str_pad($left_title, $length + 2);
         $right_title = str_pad($right_title, $length + 2);
@@ -173,11 +177,11 @@ class Workflow_Notifications extends Workflow_Module {
         $text_diff = '';
         
         foreach ($text_diffs as $field_title => $diff) {
-            $text_diff .= "$field_title\n";
-            $text_diff .= "===================================================================\n";
-            $text_diff .= "--- $left_title	({$post_before->post_date_gmt})\n";
-            $text_diff .= "+++ $right_title	({$post_after->post_modified_gmt})\n";
-            $text_diff .= "$diff\n\n";
+            $text_diff .= $field_title . PHP_EOL;
+            $text_diff .= "===================================================================" . PHP_EOL;
+            $text_diff .= "--- $left_title	($date_before)" . PHP_EOL;
+            $text_diff .= "+++ $right_title	($date_after)" . PHP_EOL;
+            $text_diff .= $diff . PHP_EOL . PHP_EOL;
         }      
         
         $text_diff = rtrim($text_diff);
@@ -219,8 +223,8 @@ class Workflow_Notifications extends Workflow_Module {
         
         $html_diff_head = '';
         $html_diff_head .= "<table style='width: 100%; border-collapse: collapse; border: none;'><tr>\n";
-        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($left_title) . ' @ ' . esc_html($post_before->post_date_gmt) . "</td>\n";
-        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($right_title) . ' @ ' . esc_html($post_after->post_modified_gmt) . "</td>\n";
+        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($left_title) . ' @ ' . esc_html($date_before) . "</td>\n";
+        $html_diff_head .= "<td style='width: 50%; padding: 0; margin: 0;'>" . esc_html($right_title) . ' @ ' . esc_html($date_after) . "</td>\n";
         $html_diff_head .= "</tr></table>\n\n";
 
         $html_diff = '';
