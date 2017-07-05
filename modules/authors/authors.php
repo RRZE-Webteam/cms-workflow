@@ -847,8 +847,8 @@ class Workflow_Authors extends Workflow_Module {
                 $terms_implode = '';
                 $this->having_terms = '';
                 foreach ($terms as $term) {
-                    $terms_implode .= '(' . $wpdb->term_taxonomy . '.taxonomy = \'' . self::taxonomy_key . '\' AND ' . $wpdb->term_taxonomy . '.term_id = \'' . $term->term_id . '\') OR ';
-                    $this->having_terms .= ' ' . $wpdb->term_taxonomy . '.term_id = \'' . $term->term_id . '\' OR ';
+                    $terms_implode .= '(tt.taxonomy = \'' . self::taxonomy_key . '\' AND tt.term_id = \'' . $term->term_id . '\') OR ';
+                    $this->having_terms .= ' tt.term_id = \'' . $term->term_id . '\' OR ';
                 }
                 $terms_implode = rtrim($terms_implode, ' OR');
                 $this->having_terms = rtrim($this->having_terms, ' OR');
