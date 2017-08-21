@@ -130,27 +130,31 @@ class Workflow_Module {
     public function get_current_post_type() {
         global $post, $typenow, $pagenow, $current_screen;
 
-        $post_int;
         if (isset($_REQUEST['post'])) {
-            $post_int = (int) $_REQUEST['post'];
+            $r_post = $_REQUEST['post'];
+            $post_id = absint($r_post);
         }
-
+        
+        if (isset($_REQUEST['post_type'])) {
+            $r_post_type = $_REQUEST['post_type'];
+        }
+        
         if ($post && $post->post_type) {
             $post_type = $post->post_type;
         } elseif ($typenow) {
             $post_type = $typenow;
         } elseif ($current_screen && isset($current_screen->post_type)) {
             $post_type = $current_screen->post_type;
-        } elseif (isset($_REQUEST['post_type'])) {
-            $post_type = sanitize_key($_REQUEST['post_type']);
-        } elseif ('post.php' == $pagenow && isset($_REQUEST['post']) && isset($post_int) && !empty(get_post($post_int)->post_type)) {
-            $post_type = get_post($post_int)->post_type;
-        } elseif ('edit.php' == $pagenow && empty($_REQUEST['post_type'])) {
+        } elseif (!empty($r_post_type) && is_string($r_post_type)) {
+            $post_type = sanitize_key($r_post_type);
+        } elseif ('post.php' == $pagenow && !empty($post_id) && !empty(get_post($post_id)->post_type)) {
+            $post_type = get_post($post_id)->post_type;
+        } elseif ('edit.php' == $pagenow && empty($r_post_type)) {
             $post_type = 'post';
         } else {
             $post_type = null;
         }
-
+        
         return $post_type;
     }
 
