@@ -559,13 +559,29 @@ class Workflow_Dashboard extends Workflow_Module {
                     
                     $task_adder_data = get_userdata($task->task_adder);
                     $task_adder = empty($task_adder_data->display_name) ? $task_adder_data->user_nicename : $task_adder_data->display_name;
+                    $task_adder_item = sprintf('<abbr>' . __('Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN) . '</abbr>', $task_adder, date_i18n(get_option('date_format'), $task->task_timestamp), date_i18n(get_option('time_format'), $task->task_timestamp));
                     
+                    $task_author_data = get_userdata($task->task_author);
+                    if ($task_author_data) {
+                        $task_author = empty($task_author_data->display_name) ? $task_author_data->user_nicename : $task_author_data->display_name;
+                        $task_author_item = sprintf('<abbr>' . __('Besitzer', CMS_WORKFLOW_TEXTDOMAIN) . ': %s</abbr>', $task_author);
+                    } else {
+                        $task_author_item =  sprintf('<abbr>' . __('Besitzer', CMS_WORKFLOW_TEXTDOMAIN) . ': %s</abbr>', __('Alle Autoren', CMS_WORKFLOW_TEXTDOMAIN));
+                    }
+                    
+                    if ($task->task_author == 0 || $current_user->ID == $task->task_author) {
+                        $task_title_icon = 'star-filled';
+                    } else {
+                        $task_title_icon = 'star-empty';
+                    }
+        
                     $url = get_edit_post_link($post->ID);
                     $title = _draft_or_post_title($post->ID);
 
-                    $item = sprintf('<div class="priority-%s">', $task->task_priority);
+                    $item = sprintf('<div class="%1$s priority-%2$s">', $task_title_icon, $task->task_priority);
                     $item .= sprintf('<a href="%1$s">%2$s</a><abbr> &mdash;%3$s&mdash;</abbr>', $url, esc_html($task->task_title), Workflow_Task_List::task_list_get_textual_priority($task->task_priority));
-                    $item .= sprintf('<abbr>' . __('Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr', CMS_WORKFLOW_TEXTDOMAIN) . '</abbr>', $task_adder, date_i18n(get_option('date_format'), $task->task_timestamp), date_i18n(get_option('time_format'), $task->task_timestamp));
+                    $item .= $task_adder_item;
+                    $item .= $task_author_item;
                     $item .= sprintf('<div>%s</div>', esc_html($title));
                     $item .= '</div>';
 

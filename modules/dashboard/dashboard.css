@@ -89,7 +89,8 @@
 
 #dashboard-right-now li a:before,
 #workflow-recent-drafts li a:before,
-#workflow-pending-drafts li a:before {
+#workflow-pending-drafts li a:before,
+#workflow-task-list div a:before {
 	color: #888;
 }
 
@@ -103,7 +104,8 @@
 #workflow-recent-drafts li a:before,
 #workflow-pending-drafts li a:before,
 #published-posts li a:before,
-#future-posts li a:before {
+#future-posts li a:before,
+#workflow-task-list div a:before {
 	content: '\f159';
 	font: normal 20px/1 'dashicons';
 	speak: none;
@@ -132,6 +134,14 @@
 #published-posts .page-activity a:before,
 #future-posts .page-activity a:before {
 	content: '\f105';
+}
+
+#workflow-task-list div.star-filled a:before {
+	content: '\f155';
+}
+
+#workflow-task-list div.star-empty a:before {
+	content: '\f154';
 }
 
 #dashboard-right-now .comment-count a:before {
