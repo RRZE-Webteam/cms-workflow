@@ -47,6 +47,11 @@
     padding: 0;
 }
 
+#workflow-task-list .dashboard-widget-control-form {
+    margin: 11px 0;
+    padding: 0 12px 12px;
+}
+
 #dashboard-right-now .main {
     overflow: hidden;
     padding: 0 12px 11px;

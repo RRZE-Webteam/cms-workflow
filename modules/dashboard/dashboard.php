@@ -48,6 +48,10 @@ class Workflow_Dashboard extends Workflow_Module {
                     'posts_per_page' => 10
                 ),
                 'task_list_widget' => true,
+                'control_task_list' => array(
+                    'list_type' => 'all',
+                    'tasks_per_page' => 10
+                ),                
             ),
             'configure_callback' => 'print_configure_view',
             'settings_help_tab' => array(
@@ -135,7 +139,7 @@ class Workflow_Dashboard extends Workflow_Module {
         }
 
         if ($this->module_activated('task_list') && $this->module->options->task_list_widget) {
-            wp_add_dashboard_widget('workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'task_list_widget'));
+            wp_add_dashboard_widget('workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'task_list_widget'), array($this, 'control_task_list_widget'));
         }
     }
 
@@ -377,7 +381,7 @@ class Workflow_Dashboard extends Workflow_Module {
             <tr>
                 <td>
                     <select name="recent_drafts_widget[posts_per_page]" id="recent-drafts-widget-posts-per-page">
-                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
+                        <?php foreach (array(10, 20, 30, 50) as $num) : ?>
                             <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -493,7 +497,7 @@ class Workflow_Dashboard extends Workflow_Module {
             <tr>
                 <td>
                     <select name="recent_pending_widget[posts_per_page]" id="recent-pending-widget-posts-per-page">
-                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
+                        <?php foreach (array(10, 20, 30, 50) as $num) : ?>
                             <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -503,15 +507,18 @@ class Workflow_Dashboard extends Workflow_Module {
         </table>
         <?php
     }
-        
+    
     public function task_list_widget($posts = false) {
+        
+        $options = $this->module->options->control_task_list;
+
         if (!$posts) {
             $posts_query = new WP_Query(
                 array(
                     'post_type' => array_keys($this->allowed_post_types),
                     'post_status' => 'any',
                     'meta_key' => Workflow_Task_List::postmeta_key,
-                    'posts_per_page' => 50
+                    'posts_per_page' => 100
                 )
             );
 
@@ -524,7 +531,8 @@ class Workflow_Dashboard extends Workflow_Module {
         
         if ($posts && is_array($posts)) {
             $tasks = $this->task_list_order($posts);
-
+            $tasks = array_slice($tasks, 0, $options['tasks_per_page']);
+            
             foreach ($tasks as $value) {
 
                 $task = (object) $value['task'];
@@ -554,6 +562,10 @@ class Workflow_Dashboard extends Workflow_Module {
                     }
 
                     if(!user_can($task->task_adder, $post_type->cap->edit_posts) && !in_array($task->task_adder, $authors)) {
+                        continue;
+                    }
+                    
+                    if ($options['list_type'] == 'mine' && $task->task_author != 0 && $current_user->ID != $task->task_author) {
                         continue;
                     }
                     
@@ -631,6 +643,54 @@ class Workflow_Dashboard extends Workflow_Module {
         return $tasks;
     }
 
+    public function control_task_list_widget() {
+        global $cms_workflow;
+        
+        if (!empty($_POST['task_list_widget'])) {
+            check_admin_referer('_task_list_widget');
+            $control_task_list = array(
+                'list_type' => @$_POST['task_list_widget']['list_type'],
+                'tasks_per_page' => (int) @$_POST['task_list_widget']['tasks_per_page'],
+            );
+            
+            $cms_workflow->update_module_option($this->module->name, 'control_task_list', $control_task_list);
+        }
+
+        $list_types = array(
+            'all' => __('Alle Aufgaben', CMS_WORKFLOW_TEXTDOMAIN),
+            'mine' => __('Meine Aufgaben', CMS_WORKFLOW_TEXTDOMAIN)
+        );
+        $options = $this->module->options->control_task_list;
+        if(empty($options['list_type'])) {
+            $options['list_type'] = array_keys($list_types);
+        }
+        wp_nonce_field('_task_list_widget');
+        ?>
+        <table class="form-table">
+            <tr>
+                <td>
+                    <label for="task_list_widget_list_type"><?php _e('Liste:', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                    <select name="task_list_widget[list_type]" id="task-list-widget-list-type-select">
+                        <?php foreach ($list_types as $key => $label) : ?>
+                            <option value="<?php echo $key; ?>" <?php selected(in_array($key, (array) $options['list_type']) ? $key : null, $key); ?>><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="task_list_widget[tasks_per_page]" id="task-list-widget-tasks-per-page">
+                        <?php foreach (array(10, 20, 30, 50) as $num) : ?>
+                            <option value="<?php echo $num; ?>" <?php selected($options['tasks_per_page'], $num); ?>><?php echo $num; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <label for="task-list-widget-tasks-per-page"><?php _e('Anzahl der Einträge in Listen', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+    
     public function register_settings() {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
         add_settings_field('recent_drafts_widget', __('Aktuelle Entwürfe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_recent_drafts_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
@@ -784,7 +844,7 @@ class Workflow_Dashboard extends Workflow_Module {
             <tr>
                 <td>
                     <select name="site_activity[posts_per_page]" id="site-activity-posts-per-page">
-                        <?php foreach (array(5, 10, 15, 20) as $num) : ?>
+                        <?php foreach (array(10, 20, 30, 50) as $num) : ?>
                             <option value="<?php echo $num; ?>" <?php selected($options['posts_per_page'], $num); ?>><?php echo $num; ?></option>
                         <?php endforeach; ?>
                     </select>
