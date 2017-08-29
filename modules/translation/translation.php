@@ -708,13 +708,15 @@ class Workflow_Translation extends Workflow_Module {
         if ($remote_parent_post_meta = get_post_meta($current_post_id, Workflow_Post_Versioning::version_remote_parent_post_meta)) {
 
             foreach ($remote_parent_post_meta as $parent_post_meta) {
-                if (isset($parent_post_meta['blog_id']) && isset($parent_post_meta['post_id'])) {
+                if (isset($parent_post_meta['blog_id']) && isset($parent_post_meta['post_id']) && $parent_post_meta['blog_id'] != $current_blog_id) {
                     $related_posts[$parent_post_meta['blog_id']] = (int) $parent_post_meta['post_id'];
                 }
 
             }
 
-        } elseif ($remote_post_meta = get_post_meta($current_post_id, Workflow_Post_Versioning::version_remote_post_meta)) {
+        } 
+        
+        if ($remote_post_meta = get_post_meta($current_post_id, Workflow_Post_Versioning::version_remote_post_meta)) {
 
             foreach ($remote_post_meta as $post_meta) {
                if (isset($post_meta['blog_id']) && isset($post_meta['post_id'])) {
