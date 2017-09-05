@@ -10,7 +10,13 @@ if (empty($post_id)) {
     exit;
 }
 
-require_once( dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/wp-load.php' );
+$abspath = dirname(dirname(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"]))))));
+if (!file_exists($abspath . '/wp-load.php')) {
+    exit;
+}
+
+/** Sets up the WordPress Environment. */
+require_once($abspath . '/wp-load.php');
 
 if (!is_user_logged_in()) {
     exit;
