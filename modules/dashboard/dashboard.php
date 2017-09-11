@@ -942,11 +942,11 @@ class Workflow_Dashboard extends Workflow_Module {
             echo '<div id="latest-comments" class="activity-block">';
             echo '<h4>' . __('Kommentare', CMS_WORKFLOW_TEXTDOMAIN) . '</h4>';
 
-            echo '<div id="the-comment-list" data-wp-lists="list:comment">';
+            echo '<ul id="the-comment-list" data-wp-lists="list:comment">';
             foreach ($comments as $comment) {
                 _wp_dashboard_recent_comments_row($comment);
             }
-            echo '</div>';
+            echo '</ul>';
 
             if (current_user_can('edit_posts')) {
                 _get_list_table('WP_Comments_List_Table')->views();
