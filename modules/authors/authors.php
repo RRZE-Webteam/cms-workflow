@@ -273,7 +273,9 @@ class Workflow_Authors extends Workflow_Module {
             return;
         }
         
-        if (!wp_is_post_revision($post) && !wp_is_post_autosave($post) && isset($_POST['workflow_save_authors'])) {
+        $version_post_replace_on_publish = apply_filters('workflow_version_post_replace_on_publish', FALSE);
+
+        if (!wp_is_post_revision($post) && !wp_is_post_autosave($post) && isset($_POST['workflow_save_authors']) && !$version_post_replace_on_publish) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 

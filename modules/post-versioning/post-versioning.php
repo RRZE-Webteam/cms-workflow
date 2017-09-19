@@ -469,6 +469,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $version_post_id = get_post_meta($post_id, self::version_post_id, true);
 
         if ($version_post_id) {
+
+            add_filter('workflow_version_post_replace_on_publish', '__return_true');
+
             $post_status = 'publish';
             
             $new_post = array(
