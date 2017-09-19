@@ -446,7 +446,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
                 $this->add_post_meta($draft_id, $post_meta);
 
-                // generate first revision
+                // Generate first revision
                 wp_update_post(array(
                     'ID' => $draft_id,
                     'post_content' => $post->post_content,                    
@@ -479,12 +479,11 @@ class Workflow_Post_Versioning extends Workflow_Module {
         if ($version_post_id) {
 
             add_filter('workflow_version_post_replace_on_publish', '__return_true');
-
+            
             $post_status = 'publish';
             
             $new_post = array(
                 'ID' => $version_post_id,
-                'post_author' => $post->post_author,
                 'post_content' => $post->post_content,
                 'post_title' => $post->post_title,
                 'post_excerpt' => $post->post_excerpt,
@@ -492,7 +491,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
             );
 
             wp_update_post($new_post);
-            
+
+            // Update revision
+            $latest_revision = array_shift(wp_get_post_revisions($version_post_id));
+            wp_update_post(array(
+                'ID' => $latest_revision->ID,
+                'post_author' => $post->post_author
+            ));
+
             $this->add_taxonomies($version_post_id, $post);
                         
             if($thumbnail_id) {
@@ -508,8 +514,6 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             if (defined('DOING_AJAX') && DOING_AJAX) {
                 if (isset($_POST['post_ID'])) {
-                    //array_merge($_POST, $new_post);
-                    
                     $_POST['post_ID'] = $version_post_id;
                     $_POST['ID'] = $version_post_id;
                     $_POST['post_type'] = $post->post_type;
