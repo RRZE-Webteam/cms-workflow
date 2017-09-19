@@ -416,14 +416,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
             exit;            
             
         } else {
-        
+
             $this->not_filtered_post_meta = array(self::version_remote_parent_post_meta, $this->module->workflow_options_name . '_network_connections');
             
             $new_post = array(
                 'post_author' => get_current_user_id(),
-                'post_content' => $post->post_content,
-                'post_title' => $post->post_title,
-                'post_excerpt' => $post->post_excerpt,
+                'post_content' => '',
+                'post_title' => '',
+                'post_excerpt' => '',
                 'post_status' => 'draft',
                 'post_parent' => $post->post_parent,
                 'menu_order' => $post->menu_order,
@@ -445,6 +445,14 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 $this->add_taxonomies($draft_id, $post);
 
                 $this->add_post_meta($draft_id, $post_meta);
+
+                // generate first revision
+                wp_update_post(array(
+                    'ID' => $draft_id,
+                    'post_content' => $post->post_content,                    
+                    'post_title' => $post->post_title,
+                    'post_excerpt' => $post->post_excerpt
+                ));
 
                 wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
                 exit;
