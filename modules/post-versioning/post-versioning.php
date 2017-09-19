@@ -178,7 +178,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
 
             add_filter("manage_edit-{$post_type}_columns", array($this, 'custom_columns'));
             add_action("manage_{$post_type}_posts_custom_column", array($this, 'posts_custom_column'), 10, 2);
-            add_filter("manage_edit-{$post_type}_sortable_columns", array($this, 'posts_sortable_columns'));
+            //add_filter("manage_edit-{$post_type}_sortable_columns", array($this, 'posts_sortable_columns'));
         }
 
         if (is_multisite() && $this->module_activated('network')) {
@@ -1286,10 +1286,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
     public function custom_columns($columns) {
         $position = array_search('cb', array_keys($columns));
         if ($position !== false) {
-            $columns = array_slice($columns, 0, $position + 1, true) + array('id' => '') + array_slice($columns, $position, count($columns) - $position, true);
+            $columns = array_slice($columns, 0, $position + 1, true) + array('post-id' => '') + array_slice($columns, $position, count($columns) - $position, true);
         }
 
-        $columns['id'] = __('Nr.', CMS_WORKFLOW_TEXTDOMAIN);
+        $columns['post-id'] = __('Nr.', CMS_WORKFLOW_TEXTDOMAIN);
 
         $position = array_search('comments', array_keys($columns));
         if ($position === false) {
@@ -1309,17 +1309,15 @@ class Workflow_Post_Versioning extends Workflow_Module {
     }
 
     public function posts_custom_column($column, $post_id) {
-        if ($column == 'id') {
+        if ($column == 'post-id') {
             echo $post_id;
-        } 
-        
-        elseif ($column == 'version') {
+        } elseif ($column == 'version') {
             echo $this->get_versions($post_id);
         }
     }
 
     public function posts_sortable_columns($columns) {
-        $columns['id'] = 'id';
+        $columns['post-id'] = 'post-id';
         return $columns;
     }
 
