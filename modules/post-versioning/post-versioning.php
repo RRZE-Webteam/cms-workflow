@@ -344,13 +344,13 @@ class Workflow_Post_Versioning extends Workflow_Module {
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (current_user_can($cap->edit_posts) && !get_post_meta($post->ID, self::version_post_id, true) && $post->post_status != 'trash') {
-            $actions['edit_as_new_draft'] = '<a href="' . admin_url('admin.php?action=copy_as_new_post_draft&amp;post=' . $post->ID) . '" title="'
+            $actions['edit_as_new_draft'] = '<a href="' . admin_url('admin.php?action=copy_as_new_post_draft&post=' . $post->ID) . '" title="'
                     . esc_attr(__('Dieses Element als neuen Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
                     . '">' . __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
         }
         
         if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
-            $actions['edit_as_version'] = '<a href="' . admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID) . '" title="'
+            $actions['edit_as_version'] = '<a href="' . admin_url('admin.php?action=version_as_new_post_draft&post=' . $post->ID) . '" title="'
                     . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
                     . '">' . __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
         }
@@ -422,7 +422,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             $new_post = array(
                 'post_author' => get_current_user_id(),
                 'post_content' => '',
-                'post_title' => '',
+                'post_title' => $post->post_title,
                 'post_excerpt' => '',
                 'post_status' => 'draft',
                 'post_parent' => $post->post_parent,
