@@ -458,9 +458,18 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 exit;
             }
         }
+
+        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+        wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
+        exit;    
     }
 
     public function version_post_replace_on_publish($post_id, $post) {
+        $version_post_id = get_post_meta($post_id, self::version_post_id, true);
+
+        if (!$version_post_id) {
+            return;
+        }
         
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
@@ -468,62 +477,61 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
+        add_filter('workflow_version_post_replace_on_publish', '__return_true');
+
         $this->not_filtered_post_meta = array(self::version_remote_parent_post_meta, $this->module->workflow_options_name . '_network_connections');
         
         $post_meta = $this->get_post_meta($post_id);
         
-        $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
+        $thumbnail_id = get_post_meta($post_id, '_thumbnail_id', TRUE);
         
-        $version_post_id = get_post_meta($post_id, self::version_post_id, true);
+        $new_post = array(
+            'ID' => $version_post_id,
+            'post_content' => $post->post_content,
+            'post_title' => $post->post_title,
+            'post_excerpt' => $post->post_excerpt,
+            'post_status' => 'publish'
+        );
 
-        if ($version_post_id) {
-
-            add_filter('workflow_version_post_replace_on_publish', '__return_true');
-            
-            $post_status = 'publish';
-            
-            $new_post = array(
-                'ID' => $version_post_id,
-                'post_content' => $post->post_content,
-                'post_title' => $post->post_title,
-                'post_excerpt' => $post->post_excerpt,
-                'post_status' => $post_status
-            );
-
-            wp_update_post($new_post);
-
-            // Update revision
-            $latest_revision = array_shift(wp_get_post_revisions($version_post_id));
+        wp_update_post($new_post, TRUE);
+        if (is_wp_error($version_post_id)) {
+            $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
             wp_update_post(array(
-                'ID' => $latest_revision->ID,
-                'post_author' => $post->post_author
-            ));
-
-            $this->add_taxonomies($version_post_id, $post);
-                        
-            if($thumbnail_id) {
-                update_post_meta($version_post_id, '_thumbnail_id', $thumbnail_id);
-            }
-            
-            $this->update_post_meta($version_post_id, $post_meta);
-            
-            $post->post_status = 'draft';
-            wp_update_post($post);
-
-            wp_delete_post($post_id);
-
-            if (defined('DOING_AJAX') && DOING_AJAX) {
-                if (isset($_POST['post_ID'])) {
-                    $_POST['post_ID'] = $version_post_id;
-                    $_POST['ID'] = $version_post_id;
-                    $_POST['post_type'] = $post->post_type;
-                }
-                return;
-            }
-
-            wp_safe_redirect(admin_url('post.php?post=' . $version_post_id . '&action=edit&message=1'));
+                'ID' => $post_id,
+                'post_status' => 'pending'
+            ));                    
+            wp_safe_redirect(admin_url('post.php?post=' . $post_id . '&action=edit'));
             exit;
         }
+
+        // Update revision
+        $latest_revision = array_shift(wp_get_post_revisions($version_post_id));
+        wp_update_post(array(
+            'ID' => $latest_revision->ID,
+            'post_author' => $post->post_author
+        ));
+
+        $this->add_taxonomies($version_post_id, $post);
+                    
+        if($thumbnail_id) {
+            update_post_meta($version_post_id, '_thumbnail_id', $thumbnail_id);
+        }
+        
+        $this->update_post_meta($version_post_id, $post_meta);
+
+        wp_delete_post($post_id, TRUE);
+
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            if (isset($_POST['post_ID'])) {
+                $_POST['post_ID'] = $version_post_id;
+                $_POST['ID'] = $version_post_id;
+                $_POST['post_type'] = $post->post_type;
+            }
+            return;
+        }
+
+        wp_safe_redirect(admin_url('post.php?post=' . $version_post_id . '&action=edit&message=1'));
+        exit;
     }
 
     public function normalize_on_trash($post_id, $post) {
@@ -639,6 +647,10 @@ class Workflow_Post_Versioning extends Workflow_Module {
             wp_safe_redirect(admin_url('post.php?post=' . $draft_id . '&action=edit'));
             exit;
         }
+
+        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+        wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
+        exit;        
     }
 
     public function network_connections_meta_box($post_type, $post) {
