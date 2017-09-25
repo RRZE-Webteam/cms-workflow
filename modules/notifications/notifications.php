@@ -33,6 +33,7 @@ class Workflow_Notifications extends Workflow_Module {
                     'page' => true,
                 ),
                 'always_notify_admin' => false,
+                'subject_prefix' => __('[Workflow]', CMS_WORKFLOW_TEXTDOMAIN),
             ),
             'configure_callback' => 'print_configure_view',
             'settings_help_tab' => array(
@@ -542,7 +543,7 @@ class Workflow_Notifications extends Workflow_Module {
     
     public function send_email($action, $post, $subject, $message, $headers = '') {
         if (empty($headers)) {
-            $headers = sprintf('From: %1$s <%2$s>', get_option('blogname'), get_option('admin_email'));
+            $headers = sprintf('From: %1$s %2$s <%3$s>', $this->module->options->subject_prefix, get_option('blogname'), get_option('admin_email'));
         }
         
         $recipients = $this->get_notification_recipients($post, true);
@@ -659,6 +660,7 @@ class Workflow_Notifications extends Workflow_Module {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
         add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
         add_settings_field('always_notify_admin', __('Administrator benachrichtigen?', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_always_notify_admin_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('subject_prefix', __('Betreff-Präfix', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_subject_prefix_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
     }
 
     public function settings_post_types_option() {
@@ -680,6 +682,13 @@ class Workflow_Notifications extends Workflow_Module {
         echo '</select>';
     }
 
+    public function settings_subject_prefix_option() {
+        ?>
+        <input type="text" class="medium-text" value="<?php echo $this->module->options->subject_prefix; ?>" id="subject_prefix" name="<?php echo $this->module->workflow_options_name . '[subject_prefix]'; ?>">
+        <p class="description"><?php _e('Dieser Text wird dem Betreff der Nachricht vorangestellt.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+        <?php
+    }
+    
     public function settings_validate($new_options) {
 
         if (!isset($new_options['post_types'])) {
@@ -691,7 +700,9 @@ class Workflow_Notifications extends Workflow_Module {
         if (!isset($new_options['always_notify_admin']) || !$new_options['always_notify_admin']) {
             $new_options['always_notify_admin'] = false;
         }
-
+        
+        $new_options['subject_prefix'] = !empty($new_options['subject_prefix']) ? mb_strimwidth($new_options['subject_prefix'], 0, 30) : $this->module->options->subject_prefix;
+        
         return $new_options;
     }
 

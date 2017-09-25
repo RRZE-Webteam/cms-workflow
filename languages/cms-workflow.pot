@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS-Workflow\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 12:16+0100\n"
+"POT-Creation-Date: 2017-09-25 17:13+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0.3\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../cms-workflow.php:70
@@ -51,7 +51,7 @@ msgid ""
 "Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut."
 msgstr ""
 
-#: ../cms-workflow.php:226 ../modules/settings/settings.php:386
+#: ../cms-workflow.php:226 ../modules/settings/settings.php:385
 msgid "Schummeln, was?"
 msgstr ""
 
@@ -66,12 +66,12 @@ msgid "Das Dokument existiert nicht."
 msgstr ""
 
 #: ../includes/workflow-module.php:84
-#: ../modules/post-versioning/post-versioning.php:713
+#: ../modules/post-versioning/post-versioning.php:756
 msgid "Veröffentlicht"
 msgstr ""
 
 #: ../includes/workflow-module.php:85
-#: ../modules/post-versioning/post-versioning.php:713
+#: ../modules/post-versioning/post-versioning.php:756
 msgid "Entwurf"
 msgstr ""
 
@@ -91,16 +91,16 @@ msgstr ""
 msgid "Papierkorb"
 msgstr ""
 
-#: ../includes/workflow-module.php:257
+#: ../includes/workflow-module.php:264
 msgid "Kein Benutzer gefunden."
 msgstr ""
 
-#: ../includes/workflow-module.php:446
+#: ../includes/workflow-module.php:453
 msgctxt "User role"
 msgid "Editor"
 msgstr ""
 
-#: ../includes/workflow-module.php:492
+#: ../includes/workflow-module.php:499
 msgctxt "User role"
 msgid "Author"
 msgstr ""
@@ -147,7 +147,7 @@ msgid ""
 msgstr ""
 
 #: ../modules/authors/authors.php:39 ../modules/authors/authors.php:217
-#: ../modules/authors/authors.php:664
+#: ../modules/authors/authors.php:668
 msgid "Autoren"
 msgstr ""
 
@@ -155,22 +155,22 @@ msgstr ""
 msgid "Verwaltung der Autoren."
 msgstr ""
 
-#: ../modules/authors/authors.php:61 ../modules/dashboard/dashboard.php:55
+#: ../modules/authors/authors.php:61 ../modules/dashboard/dashboard.php:59
 #: ../modules/editorial-comments/editorial-comments.php:56
 #: ../modules/editors/editors.php:87 ../modules/network/network.php:33
-#: ../modules/notifications/notifications.php:40
-#: ../modules/post-versioning/post-versioning.php:126
+#: ../modules/notifications/notifications.php:41
+#: ../modules/post-versioning/post-versioning.php:128
 #: ../modules/settings/settings.php:36 ../modules/task-list/task-list.php:68
 #: ../modules/translation/translation.php:56
 #: ../modules/user-groups/user-groups.php:61
 msgid "Übersicht"
 msgstr ""
 
-#: ../modules/authors/authors.php:64 ../modules/dashboard/dashboard.php:58
+#: ../modules/authors/authors.php:64 ../modules/dashboard/dashboard.php:62
 #: ../modules/editorial-comments/editorial-comments.php:59
 #: ../modules/editors/editors.php:90 ../modules/network/network.php:36
-#: ../modules/notifications/notifications.php:43
-#: ../modules/post-versioning/post-versioning.php:129
+#: ../modules/notifications/notifications.php:44
+#: ../modules/post-versioning/post-versioning.php:131
 #: ../modules/settings/settings.php:39 ../modules/task-list/task-list.php:71
 #: ../modules/translation/translation.php:59
 #: ../modules/user-groups/user-groups.php:64
@@ -235,31 +235,39 @@ msgstr ""
 msgid "Benutzergruppe"
 msgstr ""
 
-#: ../modules/authors/authors.php:785
+#: ../modules/authors/authors.php:786
 #, php-format
 msgid "Meine <span class=\"count\">(%s)</span>"
 msgstr ""
 
-#: ../modules/authors/authors.php:1040
+#: ../modules/authors/authors.php:1029
 #: ../modules/editorial-comments/editorial-comments.php:382
 #: ../modules/editors/editors.php:186
-#: ../modules/notifications/notifications.php:656
-#: ../modules/post-versioning/post-versioning.php:196
+#: ../modules/notifications/notifications.php:661
+#: ../modules/post-versioning/post-versioning.php:200
 #: ../modules/task-list/task-list.php:596
 #: ../modules/translation/translation.php:111
 #: ../modules/user-groups/user-groups.php:351
 msgid "Freigabe"
 msgstr ""
 
-#: ../modules/authors/authors.php:1041
+#: ../modules/authors/authors.php:1030
 msgid "Autorenrechte"
 msgstr ""
 
-#: ../modules/authors/authors.php:1042
+#: ../modules/authors/authors.php:1031
 msgid "Mitautoren"
 msgstr ""
 
-#: ../modules/authors/authors.php:1106
+#: ../modules/authors/authors.php:1078 ../modules/editors/editors.php:234
+#: ../modules/settings/settings.php:361
+#, php-format
+msgid ""
+"Deaktiviert, da die Funktion add_post_type_support( '%1$s', '%2$s' ) in "
+"einer geladenen Datei enthalten ist."
+msgstr ""
+
+#: ../modules/authors/authors.php:1149
 msgid "Mitautoren können dem Dokument weitere Autoren zuordnen."
 msgstr ""
 
@@ -318,171 +326,196 @@ msgstr ""
 msgid "Inhalte im Dashboard verfolgen."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:64 ../modules/settings/settings.php:62
+#: ../modules/dashboard/dashboard.php:68 ../modules/settings/settings.php:62
 msgid "Workflow"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:84
+#: ../modules/dashboard/dashboard.php:88
 msgid "Wählen Sie beliebige Post-Types aus"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:85
+#: ../modules/dashboard/dashboard.php:89
 msgid "Alle auswählen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:86
+#: ../modules/dashboard/dashboard.php:90
 msgid "Alle ausgewählt"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:87
+#: ../modules/dashboard/dashboard.php:91
 msgid "# von % ausgewählt"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:106
+#: ../modules/dashboard/dashboard.php:110
 msgid "Auf einen Blick"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:113
+#: ../modules/dashboard/dashboard.php:117
 msgid "Aktivität"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:130
-#: ../modules/dashboard/dashboard.php:620
+#: ../modules/dashboard/dashboard.php:134
+#: ../modules/dashboard/dashboard.php:696
 msgid "Aktuelle Entwürfe"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:134
-#: ../modules/dashboard/dashboard.php:621
+#: ../modules/dashboard/dashboard.php:138
+#: ../modules/dashboard/dashboard.php:697
 msgid "Aktuelle ausstehende Reviews"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:138
-#: ../modules/dashboard/dashboard.php:624 ../modules/task-list/task-list.php:54
+#: ../modules/dashboard/dashboard.php:142
+#: ../modules/dashboard/dashboard.php:700 ../modules/task-list/task-list.php:54
 #: ../modules/task-list/task-list.php:77 ../modules/task-list/task-list.php:85
 #: ../modules/task-list/task-list.php:162
 msgid "Aufgabenliste"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:173
+#: ../modules/dashboard/dashboard.php:177
 msgid "Kommentar"
 msgid_plural "Kommentare"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/dashboard/dashboard.php:176
+#: ../modules/dashboard/dashboard.php:180
 msgid "Offen"
 msgid_plural "Offen"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/dashboard/dashboard.php:183
+#: ../modules/dashboard/dashboard.php:187
 #, php-format
 msgid "<b>WordPress Version</b> %1$s"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:184
+#: ../modules/dashboard/dashboard.php:188
 #, php-format
 msgid "<b>Theme</b> %1$s</b>"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:187
+#: ../modules/dashboard/dashboard.php:191
 msgid ""
 "Suchmaschinen werden angehalten, den Inhalt der Website nicht zu indexieren"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:188
+#: ../modules/dashboard/dashboard.php:192
 msgid "Suchmaschinen blockiert"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:226
+#: ../modules/dashboard/dashboard.php:230
 msgid "Speicherplatz"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:230
-#: ../modules/dashboard/dashboard.php:233
+#: ../modules/dashboard/dashboard.php:234
+#: ../modules/dashboard/dashboard.php:237
 msgid "Uploads verwalten"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:230
+#: ../modules/dashboard/dashboard.php:234
 msgid "Speicherplatz erlaubt"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:233
+#: ../modules/dashboard/dashboard.php:237
 msgid "Speicherplatz verbraucht"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:330
-#: ../modules/dashboard/dashboard.php:446
+#: ../modules/dashboard/dashboard.php:334
+#: ../modules/dashboard/dashboard.php:450
 #, php-format
 msgid "Zuletzt geändert von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:342
+#: ../modules/dashboard/dashboard.php:346
 msgid "Zurzeit gibt es keine Entwürfe."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:368
-#: ../modules/dashboard/dashboard.php:484
-#: ../modules/dashboard/dashboard.php:760
+#: ../modules/dashboard/dashboard.php:372
+#: ../modules/dashboard/dashboard.php:488
+#: ../modules/dashboard/dashboard.php:836
 msgid "Post-Types:"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:384
-#: ../modules/dashboard/dashboard.php:500
-#: ../modules/dashboard/dashboard.php:775
+#: ../modules/dashboard/dashboard.php:388
+#: ../modules/dashboard/dashboard.php:504
+#: ../modules/dashboard/dashboard.php:687
+#: ../modules/dashboard/dashboard.php:851
 msgid "Anzahl der Einträge in Listen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:458
+#: ../modules/dashboard/dashboard.php:462
 msgid "Zurzeit gibt es keine ausstehenden Reviews."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:568
+#: ../modules/dashboard/dashboard.php:574
 #, php-format
 msgid "Aufgabe hinzugefügt von <i>%1$s</i> am %2$s um %3$s Uhr"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:580
+#: ../modules/dashboard/dashboard.php:579
+#: ../modules/dashboard/dashboard.php:581
+#: ../modules/task-list/task-list.php:379
+msgid "Besitzer"
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:581
+#: ../modules/task-list/task-list.php:202
+#: ../modules/task-list/task-list.php:344
+msgid "Alle Autoren"
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:608
 msgid "Zurzeit gibt es keine Aufgaben."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:630
-#: ../modules/dashboard/dashboard.php:644
-#: ../modules/dashboard/dashboard.php:658 ../modules/settings/settings.php:263
+#: ../modules/dashboard/dashboard.php:660
+msgid "Alle Aufgaben"
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:661
+msgid "Meine Aufgaben"
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:672
+msgid "Liste:"
+msgstr ""
+
+#: ../modules/dashboard/dashboard.php:706
+#: ../modules/dashboard/dashboard.php:720
+#: ../modules/dashboard/dashboard.php:734 ../modules/settings/settings.php:263
 msgid "Deaktiviert"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:631
-#: ../modules/dashboard/dashboard.php:645
-#: ../modules/dashboard/dashboard.php:659 ../modules/settings/settings.php:264
+#: ../modules/dashboard/dashboard.php:707
+#: ../modules/dashboard/dashboard.php:721
+#: ../modules/dashboard/dashboard.php:735 ../modules/settings/settings.php:264
 msgid "Aktiviert"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:712
+#: ../modules/dashboard/dashboard.php:788
 msgid "in Kürze veröffentlichen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:722
+#: ../modules/dashboard/dashboard.php:798
 msgid "Kürzlich veröffentlicht"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:731
+#: ../modules/dashboard/dashboard.php:807
 msgid "Bisher keine Aktivitäten!"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:811
+#: ../modules/dashboard/dashboard.php:887
 msgid "Heute"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:813
+#: ../modules/dashboard/dashboard.php:889
 msgid "Morgen"
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:815
+#: ../modules/dashboard/dashboard.php:891
 msgid "d.m."
 msgstr ""
 
-#: ../modules/dashboard/dashboard.php:867
+#: ../modules/dashboard/dashboard.php:943
 msgid "Kommentare"
 msgstr ""
 
@@ -526,7 +559,7 @@ msgid ""
 msgstr ""
 
 #: ../modules/editorial-comments/editorial-comments.php:19
-#: ../modules/post-versioning/post-versioning.php:105
+#: ../modules/post-versioning/post-versioning.php:107
 #: ../modules/task-list/task-list.php:20 ../modules/task-list/task-list.php:34
 #: ../modules/user-groups/user-groups.php:23
 #: ../modules/user-groups/user-groups.php:33
@@ -632,6 +665,9 @@ msgid "Bitte geben Sie einen Kommentar ein."
 msgstr ""
 
 #: ../modules/editorial-comments/editorial-comments.php:376
+#: ../modules/post-versioning/post-versioning.php:462
+#: ../modules/post-versioning/post-versioning.php:498
+#: ../modules/post-versioning/post-versioning.php:651
 #: ../modules/task-list/task-list.php:425
 #: ../modules/task-list/task-list.php:576
 msgid "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
@@ -821,54 +857,58 @@ msgstr ""
 msgid "Benachrichtigungen über wichtige Änderungen an einem Dokument."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:123
-msgid "Revision"
+#: ../modules/notifications/notifications.php:36
+msgid "[Workflow]"
 msgstr ""
 
 #: ../modules/notifications/notifications.php:124
+msgid "Revision"
+msgstr ""
+
+#: ../modules/notifications/notifications.php:125
 msgid "Aktuelles Dokument"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:138
-#: ../modules/notifications/notifications.php:317
-#: ../modules/notifications/notifications.php:495
+#: ../modules/notifications/notifications.php:139
+#: ../modules/notifications/notifications.php:322
+#: ../modules/notifications/notifications.php:500
 msgid "CMS-Workflow"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:159
+#: ../modules/notifications/notifications.php:160
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ hat sich geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:164
-#: ../modules/notifications/notifications.php:213
+#: ../modules/notifications/notifications.php:165
+#: ../modules/notifications/notifications.php:218
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:165
-#: ../modules/notifications/notifications.php:215
-#: ../modules/notifications/notifications.php:372
+#: ../modules/notifications/notifications.php:166
+#: ../modules/notifications/notifications.php:220
+#: ../modules/notifications/notifications.php:377
 #, php-format
 msgid "Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:189
-#: ../modules/notifications/notifications.php:250
-#: ../modules/notifications/notifications.php:382
+#: ../modules/notifications/notifications.php:194
+#: ../modules/notifications/notifications.php:255
+#: ../modules/notifications/notifications.php:387
 msgid "Dokumenteinzelheiten"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:190
-#: ../modules/notifications/notifications.php:252
-#: ../modules/notifications/notifications.php:383
+#: ../modules/notifications/notifications.php:195
+#: ../modules/notifications/notifications.php:257
+#: ../modules/notifications/notifications.php:388
 #, php-format
 msgid "Titel: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:192
-#: ../modules/notifications/notifications.php:254
-#: ../modules/notifications/notifications.php:385
+#: ../modules/notifications/notifications.php:197
+#: ../modules/notifications/notifications.php:259
+#: ../modules/notifications/notifications.php:390
 #, php-format
 msgctxt "notifications"
 msgid "Autor: %1$s"
@@ -876,240 +916,248 @@ msgid_plural "Autoren: %1$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../modules/notifications/notifications.php:193
-#: ../modules/notifications/notifications.php:256
-#: ../modules/notifications/notifications.php:386
+#: ../modules/notifications/notifications.php:198
+#: ../modules/notifications/notifications.php:261
+#: ../modules/notifications/notifications.php:391
 #, php-format
 msgid "Art: %1$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:194
-#: ../modules/notifications/notifications.php:258
-#: ../modules/notifications/notifications.php:387
+#: ../modules/notifications/notifications.php:199
+#: ../modules/notifications/notifications.php:263
+#: ../modules/notifications/notifications.php:392
 #, php-format
 msgid "Status: %1$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:198
-#: ../modules/notifications/notifications.php:264
-#: ../modules/notifications/notifications.php:401
-#: ../modules/notifications/notifications.php:447
-#: ../modules/notifications/notifications.php:515
+#: ../modules/notifications/notifications.php:203
+#: ../modules/notifications/notifications.php:269
+#: ../modules/notifications/notifications.php:406
+#: ../modules/notifications/notifications.php:452
+#: ../modules/notifications/notifications.php:520
 msgid "Weitere Aktionen"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:199
-#: ../modules/notifications/notifications.php:266
-#: ../modules/notifications/notifications.php:402
-#: ../modules/notifications/notifications.php:449
-#: ../modules/notifications/notifications.php:516
+#: ../modules/notifications/notifications.php:204
+#: ../modules/notifications/notifications.php:271
+#: ../modules/notifications/notifications.php:407
+#: ../modules/notifications/notifications.php:454
+#: ../modules/notifications/notifications.php:521
 #, php-format
 msgid "Redaktionellen Kommentar hinzufügen: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:200
-#: ../modules/notifications/notifications.php:268
-#: ../modules/notifications/notifications.php:403
-#: ../modules/notifications/notifications.php:450
-#: ../modules/notifications/notifications.php:517
+#: ../modules/notifications/notifications.php:205
+#: ../modules/notifications/notifications.php:273
+#: ../modules/notifications/notifications.php:408
+#: ../modules/notifications/notifications.php:455
+#: ../modules/notifications/notifications.php:522
 #, php-format
 msgid "Dokument bearbeiten: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:201
-#: ../modules/notifications/notifications.php:270
-#: ../modules/notifications/notifications.php:404
-#: ../modules/notifications/notifications.php:451
-#: ../modules/notifications/notifications.php:518
+#: ../modules/notifications/notifications.php:206
+#: ../modules/notifications/notifications.php:275
+#: ../modules/notifications/notifications.php:409
+#: ../modules/notifications/notifications.php:456
+#: ../modules/notifications/notifications.php:523
 #, php-format
 msgid "Dokument ansehen: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:276
-#: ../modules/notifications/notifications.php:529
+#: ../modules/notifications/notifications.php:281
+#: ../modules/notifications/notifications.php:534
 #, php-format
 msgid "Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:338
+#: ../modules/notifications/notifications.php:343
 #, php-format
 msgid "%1$s - Neues Dokument wurde erstellt: \"%2$s\""
 msgstr ""
 
-#: ../modules/notifications/notifications.php:339
+#: ../modules/notifications/notifications.php:344
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:343
+#: ../modules/notifications/notifications.php:348
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:344
+#: ../modules/notifications/notifications.php:349
 #, php-format
 msgid ""
 "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:348
+#: ../modules/notifications/notifications.php:353
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:349
+#: ../modules/notifications/notifications.php:354
 #, php-format
 msgid ""
 "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb "
 "wiederhergestellt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:353
+#: ../modules/notifications/notifications.php:358
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde zeitlich geplant."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:354
+#: ../modules/notifications/notifications.php:359
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s zeitlich geplant."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:358
+#: ../modules/notifications/notifications.php:363
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde veröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:359
+#: ../modules/notifications/notifications.php:364
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:363
+#: ../modules/notifications/notifications.php:368
 #, php-format
 msgid "%1$s - Das Dokument „%2$s“ wurde unveröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:364
+#: ../modules/notifications/notifications.php:369
 #, php-format
 msgid "Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:368
+#: ../modules/notifications/notifications.php:373
 #, php-format
 msgid "%1$s - Der Status des Dokuments „%2$s“ hat sich geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:369
+#: ../modules/notifications/notifications.php:374
 #, php-format
 msgid "Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:379
+#: ../modules/notifications/notifications.php:384
 #, php-format
 msgid "%1$s  >>>  %2$s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:435
+#: ../modules/notifications/notifications.php:440
 #, php-format
 msgid "%1$s - Neuer redaktioneller Kommentar zum \"%2$s\""
 msgstr ""
 
-#: ../modules/notifications/notifications.php:437
+#: ../modules/notifications/notifications.php:442
 #, php-format
 msgid ""
 "Ein neuer redaktioneller Kommentar wurde zum Dokument %1$s „%2$s“ "
 "hinzugefügt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:438
+#: ../modules/notifications/notifications.php:443
 #, php-format
 msgid "%1$s (%2$s) kommentiert am %3$s um %4$s:"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:448
+#: ../modules/notifications/notifications.php:453
 #, php-format
 msgid "Antworten: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:453
+#: ../modules/notifications/notifications.php:458
 msgid ""
 "Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: "
 msgstr ""
 
-#: ../modules/notifications/notifications.php:474
-#: ../modules/notifications/notifications.php:708
+#: ../modules/notifications/notifications.php:479
+#: ../modules/notifications/notifications.php:723
 msgid "(Kein Titel)"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:499
+#: ../modules/notifications/notifications.php:504
 #, php-format
 msgid "%1$s - Neue Aufgabe für „%2$s“ wurde hinzugefügt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:500
+#: ../modules/notifications/notifications.php:505
 #, php-format
 msgid "Eine neue Aufgabe wurde zum Dokument %1$s „%2$s“ hinzugefügt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:502
+#: ../modules/notifications/notifications.php:507
 #, php-format
 msgid "Diese Aktion wurde von %1$s %2$s am %3$s um %4$s %5$s ausgeführt."
 msgstr ""
 
-#: ../modules/notifications/notifications.php:506
+#: ../modules/notifications/notifications.php:511
 #, php-format
 msgid "Aufgabe: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:507
+#: ../modules/notifications/notifications.php:512
 #, php-format
 msgid "Priorität: %s"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:657
+#: ../modules/notifications/notifications.php:662
 msgid "Administrator benachrichtigen?"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:667
+#: ../modules/notifications/notifications.php:663
+msgid "Betreff-Präfix"
+msgstr ""
+
+#: ../modules/notifications/notifications.php:673
 msgid "Nein"
 msgstr ""
 
-#: ../modules/notifications/notifications.php:668
+#: ../modules/notifications/notifications.php:674
 msgid "Ja"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:18
-#: ../modules/post-versioning/post-versioning.php:29
-#: ../modules/post-versioning/post-versioning.php:41
+#: ../modules/notifications/notifications.php:688
+msgid "Dieser Text wird dem Betreff der Nachricht vorangestellt."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:20
+#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:43
 msgid ""
 "Über die Versionierung können Sie einfach neue Versionen oder Kopien Ihrer "
 "Dokumente erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:19
-#: ../modules/post-versioning/post-versioning.php:42
+#: ../modules/post-versioning/post-versioning.php:21
+#: ../modules/post-versioning/post-versioning.php:44
 msgid ""
 "Eine <strong>Kopie</strong> hat keinen Bezug mehr zum ursprünglichen "
 "Dokument:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:19
-#: ../modules/post-versioning/post-versioning.php:42
+#: ../modules/post-versioning/post-versioning.php:21
+#: ../modules/post-versioning/post-versioning.php:44
 msgid ""
 "es wird ein neues Dokument mit gleichem Inhalt erstellt, das unabhängig vom "
 "ursprünglichen Dokument bearbeitet werden kann und unter einer neuen Adresse "
 "veröffentlicht wird."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Eine <strong>neue Version</strong> hingegen steht mit dem Ursprungsdokument "
 "in Zusammenhang:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "es wird wie bei der Kopie ein neues Dokument mit gleichem Inhalt erstellt, "
 "das unabhängig vom ursprünglichen Dokument bearbeitet und als Entwurf "
@@ -1118,29 +1166,29 @@ msgid ""
 "Adresse des alten Dokumentes erreichbar."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Neue Versionen können nur von veröffentlichten Dokumenten erstellt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:20
-#: ../modules/post-versioning/post-versioning.php:43
+#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:45
 msgid ""
 "Eine neue Version sollte erstellt werden, wenn ein bereits veröffentlichtes "
 "Dokument überarbeitet werden muss. Dadurch werden Änderungen an dem Dokument "
 "erst öffentlich sichtbar, wenn sie vollständig erledigt sind."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "Zudem kann für jedes veröffentlichte Dokument eine <strong>netzwerkweite "
 "Version</strong> erstellt werden:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "es wird wie bei der Kopie oder der neuen Version ein neues Dokument mit "
 "gleichem Inhalt erstellt, allerdings nicht innerhalb der eigene Webseite, "
@@ -1151,52 +1199,52 @@ msgid ""
 "<i>Version</i> miteinander verbunden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:21
+#: ../modules/post-versioning/post-versioning.php:23
 msgid ""
 "Wird ein bereits netzwerkweit versioniertes Dokument nochmals netzwerkweit "
 "gespeichert, wird in der andere Webseite eine neue Version als Entwurf "
 "erstellt, die dann übersetzt werden kann."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:22
+#: ../modules/post-versioning/post-versioning.php:24
 msgid ""
 "Sie können auf dieser Seite angeben, für welche Bereiche die Erstellung von "
 "Kopien oder neuer Versionen freigegeben werden soll:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:23
+#: ../modules/post-versioning/post-versioning.php:25
 msgid ""
 "<strong>Lokale Freigabe</strong> - Kopien und neue Versionen innerhalb der "
 "gleiche Webseite erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:24
+#: ../modules/post-versioning/post-versioning.php:26
 msgid ""
 "<strong>Netzwerkweite Freigabe</strong> - Neue Versionen in einer andere, "
 "anderssprachige Webseite erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:25
+#: ../modules/post-versioning/post-versioning.php:27
 msgid ""
 "<strong>Vorhandene Webseiten</strong> - hier erscheinen alle Webseiten, die "
 "netzwerkweite Freigaben enthalten. In diese können lokale Dokumente kopiert "
 "werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:30
+#: ../modules/post-versioning/post-versioning.php:32
 msgid ""
 "Wenn Sie eine neue lokale Version eines Dokumentes bearbeiten, erhalten Sie "
 "den Hinweis, dass beim Veröffentlichen die Ursprungsversion überschrieben "
 "wird."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "Für jedes veröffentlichte Dokument kann auch eine <strong>netzwerkweite "
 "Version</strong> erstellt werden:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "es wird wie ein neues Dokument mit gleichem Inhalt erstellt, allerdings "
 "nicht innerhalb der eigene Webseite, sondern als Entwurf in einem anderen, "
@@ -1204,287 +1252,287 @@ msgid ""
 "und das Dokument veröffentlicht werden. "
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:31
+#: ../modules/post-versioning/post-versioning.php:33
 msgid ""
 "Wird ein bereits netzwerkweit versioniertes Dokument nochmals netzwerkweit "
 "gespeichert, wird im andere Webseite eine neue Version als Entwurf erstellt, "
 "die dann übersetzt werden kann."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:32
-#: ../modules/post-versioning/post-versioning.php:102
+#: ../modules/post-versioning/post-versioning.php:34
+#: ../modules/post-versioning/post-versioning.php:104
 msgid "So erstellen Sie eine netzwerkweite Version eines Dokumentes:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:34
+#: ../modules/post-versioning/post-versioning.php:36
 msgid ""
 "Überprüfen Sie, ob im Kästchen <i>Netzwerkweite Webseiten</i> die Webseite "
 "ausgewählt ist, in dem eine neue Version erstellt werden soll"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:34
+#: ../modules/post-versioning/post-versioning.php:36
 msgid ""
 "wenn diese Box nicht erscheint, stellen Sie sicher, dass das Dokument "
 "bereits veröffentlicht ist bzw. lassen Sie sich diese über die Lasche "
 "<i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:35
-#: ../modules/post-versioning/post-versioning.php:106
+#: ../modules/post-versioning/post-versioning.php:37
+#: ../modules/post-versioning/post-versioning.php:108
 msgid ""
 "Aktivieren Sie im Kästchen <i>Veröffentlichen</i> die Schaltfläche "
 "<i>Netzwerkweite Versionierung</i>."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:36
-#: ../modules/post-versioning/post-versioning.php:107
+#: ../modules/post-versioning/post-versioning.php:38
+#: ../modules/post-versioning/post-versioning.php:109
 msgid ""
 "Speichern Sie das Dokument durch <i>Aktualisieren</i>. Eine neue Version "
 "dieses Dokumentes wird in der ausgewählte Webseite als Entwurf erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:44
+#: ../modules/post-versioning/post-versioning.php:46
 msgid ""
 "Wird ein bereits netzwerkweit versioniertes Dokument nochmals netzwerkweit "
 "gespeichert, wird auch in der andere Webseite eine neue Version als Entwurf "
 "erstellt, die dann übersetzt werden kann."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:46
+#: ../modules/post-versioning/post-versioning.php:48
 msgid "In der Spalte <i>Version</i> sehen Sie folgende Informationen:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:47
-#: ../modules/post-versioning/post-versioning.php:76
+#: ../modules/post-versioning/post-versioning.php:49
+#: ../modules/post-versioning/post-versioning.php:78
 msgid ""
 "<strong>Lokale Kopie</strong> (innerhalb der eigene Webseite) - kein Eintrag."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:48
-#: ../modules/post-versioning/post-versioning.php:77
+#: ../modules/post-versioning/post-versioning.php:50
+#: ../modules/post-versioning/post-versioning.php:79
 msgid ""
 "<strong>Neue Version</strong> (innerhalb der eigene Webseite) - verlinkter "
 "Name des Quelldokumentes, Sprache der Webseite."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:49
-#: ../modules/post-versioning/post-versioning.php:78
+#: ../modules/post-versioning/post-versioning.php:51
+#: ../modules/post-versioning/post-versioning.php:80
 msgid ""
 "<strong>Netzwerkweite Versionierung</strong> (zu einer andere Webseite) - "
 "Pfeil (nach rechts in der Quell-Webseite oder nach links in der Ziel-"
 "Webseite), verlinkter Name des Zieldokumentes, Sprache der Ziel-Webseite."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:50
-#: ../modules/post-versioning/post-versioning.php:79
+#: ../modules/post-versioning/post-versioning.php:52
+#: ../modules/post-versioning/post-versioning.php:81
 msgid ""
 "Außerdem werden die Dokumente am Anfang der Zeile je nach Veröffentlichungs- "
 "und Sichtbarkeitsstatus in unterschiedlichen Farben angezeigt:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:51
-#: ../modules/post-versioning/post-versioning.php:80
-msgid ""
-"<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet."
-msgstr ""
-
-#: ../modules/post-versioning/post-versioning.php:52
-#: ../modules/post-versioning/post-versioning.php:81
-msgid ""
-"<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig "
-"bearbeitet und liegt zur Revision beim Redakteur vor."
-msgstr ""
-
 #: ../modules/post-versioning/post-versioning.php:53
 #: ../modules/post-versioning/post-versioning.php:82
 msgid ""
-"<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur "
-"veröffentlicht, wird nicht farblich hervorgehoben."
+"<strong>Entwurf</strong> - Dokument ist noch nicht vollständig bearbeitet."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:54
 #: ../modules/post-versioning/post-versioning.php:83
 msgid ""
-"<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem "
-"Datum veröffentlicht."
+"<strong>Ausstehender Review</strong> - Dokument wurde vom Autor fertig "
+"bearbeitet und liegt zur Revision beim Redakteur vor."
 msgstr ""
 
 #: ../modules/post-versioning/post-versioning.php:55
 #: ../modules/post-versioning/post-versioning.php:84
+msgid ""
+"<strong>Veröffentlicht</strong> - Dokument wurde vom Redakteur "
+"veröffentlicht, wird nicht farblich hervorgehoben."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:56
+#: ../modules/post-versioning/post-versioning.php:85
+msgid ""
+"<strong>Geplant</strong> - Dokument wurde vom Redakteur mit zukünftigem "
+"Datum veröffentlicht."
+msgstr ""
+
+#: ../modules/post-versioning/post-versioning.php:57
+#: ../modules/post-versioning/post-versioning.php:86
 msgid ""
 "<strong>Privat</strong> - private Dokumente können nicht im Entwurf "
 "vorliegen, sondern werden gleich veröffentlicht, sind aber nicht öffentlich "
 "sichtbar."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:56
-#: ../modules/post-versioning/post-versioning.php:85
+#: ../modules/post-versioning/post-versioning.php:58
+#: ../modules/post-versioning/post-versioning.php:87
 msgid ""
 "<strong>Passwortgeschützt</strong> - passwortgeschützte Dokumente können "
 "auch Entwürfe sein, farblich überschreibt der Passwortschutz den "
 "Entwurfsstatus."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:57
-#: ../modules/post-versioning/post-versioning.php:86
+#: ../modules/post-versioning/post-versioning.php:59
+#: ../modules/post-versioning/post-versioning.php:88
 msgid ""
 "<strong>Papierkorb</strong> - gelöschte Dokumente befinden sich im "
 "Papierkorb."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:59
-#: ../modules/post-versioning/post-versioning.php:87
+#: ../modules/post-versioning/post-versioning.php:61
+#: ../modules/post-versioning/post-versioning.php:89
 msgid "So erstellen Sie eine Kopie eines Dokumentes:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:61
-#: ../modules/post-versioning/post-versioning.php:90
+#: ../modules/post-versioning/post-versioning.php:63
+#: ../modules/post-versioning/post-versioning.php:92
 msgid ""
 "Fahren Sie mit der Maus in der Liste über das Dokument, das Sie kopieren "
 "wollen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:62
-#: ../modules/post-versioning/post-versioning.php:91
+#: ../modules/post-versioning/post-versioning.php:64
+#: ../modules/post-versioning/post-versioning.php:93
 msgid ""
 "Wählen Sie <i>Kopieren</i>. Eine Kopie des Dokumentes wird als Entwurf "
 "geöffnet."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:63
-#: ../modules/post-versioning/post-versioning.php:92
+#: ../modules/post-versioning/post-versioning.php:65
+#: ../modules/post-versioning/post-versioning.php:94
 msgid "Ändern Sie das Dokument und speichern oder veröffentlichen Sie dieses."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:65
-#: ../modules/post-versioning/post-versioning.php:94
+#: ../modules/post-versioning/post-versioning.php:67
+#: ../modules/post-versioning/post-versioning.php:96
 msgid "So erstellen Sie eine neue Version eines Dokumentes:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:67
-#: ../modules/post-versioning/post-versioning.php:97
+#: ../modules/post-versioning/post-versioning.php:69
+#: ../modules/post-versioning/post-versioning.php:99
 msgid ""
 "Fahren Sie in der Liste mit der Maus über das Dokument, von dem Sie eine "
 "neue Version erstellen wollen. Das Dokument muss bereits veröffentlicht sein."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:68
-#: ../modules/post-versioning/post-versioning.php:98
+#: ../modules/post-versioning/post-versioning.php:70
+#: ../modules/post-versioning/post-versioning.php:100
 msgid ""
 "Wählen Sie <i>Neue Version</i>. Eine neue Version des Dokumentes wird als "
 "Entwurf geöffnet."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:69
-#: ../modules/post-versioning/post-versioning.php:99
+#: ../modules/post-versioning/post-versioning.php:71
+#: ../modules/post-versioning/post-versioning.php:101
 msgid "Ändern Sie das Dokument und speichern Sie dieses."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:70
-#: ../modules/post-versioning/post-versioning.php:100
+#: ../modules/post-versioning/post-versioning.php:72
+#: ../modules/post-versioning/post-versioning.php:102
 msgid ""
 "Beim Veröffentlichen wird das ursprüngliche Dokument durch die neue Version "
 "ersetzt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:75
+#: ../modules/post-versioning/post-versioning.php:77
 msgid ""
 "Mit der Freigabe der Versionierung sehen Sie auf den entsprechenden "
 "Übersichtsseiten aller Dokumente die zusätzliche Spalte <i>Version</i> mit "
 "folgenden Informationen:"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:89
-#: ../modules/post-versioning/post-versioning.php:96
+#: ../modules/post-versioning/post-versioning.php:91
+#: ../modules/post-versioning/post-versioning.php:98
 msgid ""
 "Gehen Sie in einem freigegebenen Bereich auf die Übersichtsseite über alle "
 "Dokumente."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:104
+#: ../modules/post-versioning/post-versioning.php:106
 msgid ""
 "Gehen Sie auf ein bereits veröffentlichtes Dokument in einem freigegebenen "
 "Bereich."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:105
+#: ../modules/post-versioning/post-versioning.php:107
 msgid ""
 "Überprüfen Sie, ob im Kästchen <i>Netzwerkweite Versionierung</i> die "
 "Webseite ausgewählt ist, in dem eine neue Version erstellt werden soll"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:112
-#: ../modules/post-versioning/post-versioning.php:135
-#: ../modules/post-versioning/post-versioning.php:143
+#: ../modules/post-versioning/post-versioning.php:114
+#: ../modules/post-versioning/post-versioning.php:137
+#: ../modules/post-versioning/post-versioning.php:145
 msgid "Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:113
+#: ../modules/post-versioning/post-versioning.php:115
 msgid "Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:151
+#: ../modules/post-versioning/post-versioning.php:153
 msgid "Versionen verwalten"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:199
+#: ../modules/post-versioning/post-versioning.php:203
 #: ../modules/translation/translation.php:114
 msgid "Bezogenen Webseiten"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:239
+#: ../modules/post-versioning/post-versioning.php:243
 msgid ""
 "Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) "
 "angelegt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:241
+#: ../modules/post-versioning/post-versioning.php:245
 #: ../modules/translation/translation.php:146
 msgid "Nicht verfügbar"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:344
+#: ../modules/post-versioning/post-versioning.php:348
 msgid "Dieses Element als neuen Entwurf kopieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:345
+#: ../modules/post-versioning/post-versioning.php:349
 msgid "Kopieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:350
-#: ../modules/post-versioning/post-versioning.php:1418
+#: ../modules/post-versioning/post-versioning.php:354
+#: ../modules/post-versioning/post-versioning.php:1471
 msgid "Dieses Element als neue Version duplizieren"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:351
+#: ../modules/post-versioning/post-versioning.php:355
 msgid "Neue Version"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:376
-#: ../modules/post-versioning/post-versioning.php:562
+#: ../modules/post-versioning/post-versioning.php:380
+#: ../modules/post-versioning/post-versioning.php:601
 msgid "Es wurde kein Element geliefert."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:383
-#: ../modules/post-versioning/post-versioning.php:569
+#: ../modules/post-versioning/post-versioning.php:387
+#: ../modules/post-versioning/post-versioning.php:608
 msgid "Es wurde kein Element mit der angegebenen ID gefunden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:389
-#: ../modules/post-versioning/post-versioning.php:454
+#: ../modules/post-versioning/post-versioning.php:393
+#: ../modules/post-versioning/post-versioning.php:477
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:393
+#: ../modules/post-versioning/post-versioning.php:397
 msgid "Diese Aktion ist nicht erlaubt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:397
+#: ../modules/post-versioning/post-versioning.php:401
 msgid "Nur veröffentlichte Dokumente können als neue Version erstellt werden."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:408
+#: ../modules/post-versioning/post-versioning.php:412
 #, php-format
 msgid ""
 "Lokale Version &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
@@ -1492,7 +1540,7 @@ msgid ""
 "existiert bereits."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:518
+#: ../modules/post-versioning/post-versioning.php:557
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
@@ -1500,108 +1548,108 @@ msgid ""
 "&bdquo;Veröffentlichen&rdquo; klicken."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:522
+#: ../modules/post-versioning/post-versioning.php:561
 #, php-format
 msgid ""
 "Lokale Version vom Dokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</"
 "a>&ldquo;."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:546
+#: ../modules/post-versioning/post-versioning.php:585
 #, php-format
 msgid ""
 "Netzwerkweite Versionierung vom Dokument &bdquo;<a href=\"%1$s\" target="
 "\"__blank\">%2$s</a>&ldquo; - %3$s - %4$s."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:575
+#: ../modules/post-versioning/post-versioning.php:614
 msgid ""
 "Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:579
+#: ../modules/post-versioning/post-versioning.php:618
 msgid ""
 "Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte "
 "kehren Sie zurück und versuchen Sie es erneut."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:659
+#: ../modules/post-versioning/post-versioning.php:702
 msgid "Netzwerkweite Webseiten"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:667
+#: ../modules/post-versioning/post-versioning.php:710
 msgid "Netzwerkweite Versionierung"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:719
+#: ../modules/post-versioning/post-versioning.php:762
 msgid "Bezogenes Dokument"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:721
+#: ../modules/post-versioning/post-versioning.php:764
 msgid "— Kein Dokument —"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:745
+#: ../modules/post-versioning/post-versioning.php:788
 msgid "Keine Versionierungsfreigabe."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:747
+#: ../modules/post-versioning/post-versioning.php:790
 msgid "Kein Dokument zur Auswahl."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:869
-#: ../modules/post-versioning/post-versioning.php:986
+#: ../modules/post-versioning/post-versioning.php:912
+#: ../modules/post-versioning/post-versioning.php:1029
 #, php-format
 msgid ""
 "Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite "
 "Versionierung durchführen zu können. (%1$s - %2$s)"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:883
-#: ../modules/post-versioning/post-versioning.php:1004
+#: ../modules/post-versioning/post-versioning.php:926
+#: ../modules/post-versioning/post-versioning.php:1047
 #, php-format
 msgid ""
 "Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung "
 "fehlgeschlagen. (%1$s - %2$s)"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:893
+#: ../modules/post-versioning/post-versioning.php:936
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
 "- %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:899
+#: ../modules/post-versioning/post-versioning.php:942
 msgid "Netzwerkweite Beziehung des Dokumentes wurde entfernt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1034
+#: ../modules/post-versioning/post-versioning.php:1077
 #, php-format
 msgid ""
 "Neue Version vom Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">"
 "%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1037
-#: ../modules/post-versioning/post-versioning.php:1074
+#: ../modules/post-versioning/post-versioning.php:1080
+#: ../modules/post-versioning/post-versioning.php:1117
 #, php-format
 msgid "Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)"
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1067
+#: ../modules/post-versioning/post-versioning.php:1110
 #, php-format
 msgid ""
 "Das Zieldokument &bdquo;<a href=\"%1$s\" target=\"__blank\">%2$s</a>&ldquo; "
 "(%3$s - %4$s) wurde erfolgreich erstellt."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1251
+#: ../modules/post-versioning/post-versioning.php:1304
 msgid "Nr."
 msgstr ""
 
-#: ../modules/post-versioning/post-versioning.php:1265
-#: ../modules/post-versioning/post-versioning.php:1414
+#: ../modules/post-versioning/post-versioning.php:1318
+#: ../modules/post-versioning/post-versioning.php:1467
 msgid "Version"
 msgstr ""
 
@@ -1687,13 +1735,6 @@ msgstr ""
 
 #: ../modules/settings/settings.php:241
 msgid "Es sind keine Module registriert"
-msgstr ""
-
-#: ../modules/settings/settings.php:363
-#, php-format
-msgid ""
-"Deaktiviert, da die Funktion add_post_type_support( '%1$s', '%2$s' ) in "
-"einer geladenen Datei enthalten ist."
 msgstr ""
 
 #: ../modules/task-list/task-list.php:16 ../modules/task-list/task-list.php:31
@@ -1865,11 +1906,6 @@ msgstr ""
 msgid "Aufgabe zuweisen an"
 msgstr ""
 
-#: ../modules/task-list/task-list.php:202
-#: ../modules/task-list/task-list.php:344
-msgid "Alle Autoren"
-msgstr ""
-
 #: ../modules/task-list/task-list.php:211
 #: ../modules/task-list/task-list.php:380
 msgid "Priorität"
@@ -1890,10 +1926,6 @@ msgstr ""
 #: ../modules/task-list/task-list.php:367
 #: ../modules/task-list/task-list.php:369
 msgid "Unbekannt"
-msgstr ""
-
-#: ../modules/task-list/task-list.php:379
-msgid "Besitzer"
 msgstr ""
 
 #: ../modules/task-list/task-list.php:390
