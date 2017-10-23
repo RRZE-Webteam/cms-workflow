@@ -187,7 +187,7 @@ class Workflow_Network extends Workflow_Module {
 
             $site_name = get_bloginfo('name');
             $site_url = get_bloginfo('url');
-            $sitelang = self::get_locale();
+            $site_lang = self::get_locale();
             
             $module_options = get_option($this->module->workflow_options_name);
             $parent_site = $module_options->parent_site;
@@ -196,8 +196,8 @@ class Workflow_Network extends Workflow_Module {
 
             if ($current_blog_id == $parent_site) {
                 $has_connection = true;
-                $language = self::get_language($sitelang);
-                $label = ($site_name != '') ? sprintf('%1$s (%2$s) (%3$s)', $site_name, $site_url, $language['native_name']) : $site_url;
+                $language = self::get_language($site_lang);
+                $label = !empty($site_name) ? sprintf('%1$s (%2$s) (%3$s)', $site_name, $site_url, $language['native_name']) : sprintf('%1$s (%2$s)', $site_url, $language['native_name']);
                 $connected = in_array($blog_id, $network_connections) ? true : false;
                 ?>
                 <label for="network_connections_<?php echo $blog_id; ?>">

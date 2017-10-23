@@ -130,13 +130,18 @@ class Workflow_Translation extends Workflow_Module {
                 if ($current_blog_id == $blog['blog_id']) {
                     continue;
                 }
+                
+                $blog_id = $blog['blog_id'];
+                $site_name = $blog['blogname'];
+                $site_url = $blog['siteurl'];
+                $site_lang = $blog['sitelang'];
             
-                $language = self::get_language($blog['sitelang']);
-                $label = ($blog['blogname'] != '') ? sprintf('%1$s (%2$s) (%3$s)', $blog['blogname'], $blog['siteurl'], $language['native_name']) : $blog['site_url'];
-                $connected = isset($current_related_sites[$blog['blog_id']]) ? true : false;
+                $language = self::get_language($site_lang);
+                $label = !empty($site_name) ? sprintf('%1$s (%2$s) (%3$s)', $site_name, $site_url, $language['native_name']) : sprintf('%1$s (%2$s)', $site_url, $language['native_name']);
+                $connected = isset($current_related_sites[$blog_id]) ? true : false;
                 ?>
-                <label for="related_sites_<?php echo $blog['blog_id']; ?>">
-                    <input id="related_sites_<?php echo $blog['blog_id']; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog['blog_id'] ?>" /> <?php echo $label; ?>
+                <label for="related_sites_<?php echo $blog_id; ?>">
+                    <input id="related_sites_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>" /> <?php echo $label; ?>
                 </label><br>
                 <?php    
             }
