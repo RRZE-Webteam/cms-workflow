@@ -1131,7 +1131,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
             
-            $post_terms = wp_get_object_terms($post->ID, $taxonomy, array('orderby' => 'term_order'));
+            $post_terms = wp_get_object_terms($post->ID, $taxonomy);
             if(empty($post_terms) || is_wp_error($post_terms)) {
                 continue;
             }
@@ -1156,7 +1156,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                 continue;
             }
             
-            $post_terms = wp_get_object_terms($post->ID, $taxonomy, array('orderby' => 'term_order'));
+            $post_terms = wp_get_object_terms($post->ID, $taxonomy);
             if(empty($post_terms) || is_wp_error($post_terms)) {
                 continue;
             }
