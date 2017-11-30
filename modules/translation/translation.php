@@ -602,7 +602,7 @@ class Workflow_Translation extends Workflow_Module {
             $hreflang = $language['iso'][1];
 
             if ('text' == $linktext) {
-                $display = $language['native_name'];
+                $display = trim(preg_replace("/\([^)]+\)/", "", $language['native_name']));
             } else {
                 $display = $hreflang;
             }
