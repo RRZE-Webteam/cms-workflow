@@ -269,10 +269,6 @@ class Workflow_Editorial_Comments extends Workflow_Module {
     }
 
     public function the_comment($comment, $args, $depth) {
-        global $current_user, $userdata;
-
-        get_currentuserinfo();
-
         $GLOBALS['comment'] = $comment;
 
         $actions = array();
@@ -311,8 +307,6 @@ class Workflow_Editorial_Comments extends Workflow_Module {
         if (!wp_verify_nonce($_POST['_nonce'], 'comment')) {
             die(__("Bitte stellen Sie sicher, dass Sie Kommentare hinzufügen dürfen.", CMS_WORKFLOW_TEXTDOMAIN));
         }
-
-        get_currentuserinfo();
 
         $post_id = absint($_POST['post_id']);
         $parent = absint($_POST['parent']);
