@@ -238,7 +238,7 @@ class Workflow_Authors extends Workflow_Module {
                 ?>
             </div>
 
-            <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)): ?>
+            <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $cms_workflow->user_groups->module, false)): ?>
             <div id="workflow-post-authors-usergroups-box">
                 <h4><?php _e('Benutzergruppe', CMS_WORKFLOW_TEXTDOMAIN) ?></h4>
                 <?php
@@ -279,7 +279,7 @@ class Workflow_Authors extends Workflow_Module {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)) {
+            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $cms_workflow->user_groups->module, false)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->save_post_authors_usergroups($post, $usergroups);
             }
@@ -303,7 +303,7 @@ class Workflow_Authors extends Workflow_Module {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->edit_attachment_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($this->get_current_post_type(), $cms_workflow->user_groups->module, false)) {
+            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $cms_workflow->user_groups->module, false)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->edit_attachment_authors_usergroups($post, $usergroups);
             }
