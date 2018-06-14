@@ -117,13 +117,13 @@ class Workflow_Notifications extends Workflow_Module {
         }
 
         $left_title = __('Revision', CMS_WORKFLOW_TEXTDOMAIN);
-        $right_title = __('Aktuelles Dokument', CMS_WORKFLOW_TEXTDOMAIN);
+        $right_title = __('Aktuelles Dokument', CMS_WORKFLOW_TEXTDOMAIN);        
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
-        $view_link = htmlspecialchars_decode(get_permalink($post_id));
+        $view_link = $post_after->post_status == 'publish' ? htmlspecialchars_decode(get_permalink($post_id)) : '';
 
-        $post_title = $this->draft_or_post_title($post_before->post_title);
-        $post_type = get_post_type_object($post_before->post_type)->labels->singular_name;
+        $post_title = $this->draft_or_post_title($post_after->post_title);
+        $post_type_name = get_post_type_object($post_after->post_type)->labels->singular_name;
 
         $current_user = wp_get_current_user();
 
@@ -141,11 +141,11 @@ class Workflow_Notifications extends Workflow_Module {
             $authors = $this->get_authors_details($post_id);
         }
 
-        $post_status = $this->get_post_status_name($post_before->post_status);
+        $post_status_name = $this->get_post_status_name($post_after->post_status);
 
-        if (is_user_member_of_blog($post_before->post_author)) {
-            $post_author = get_userdata($post_before->post_author);
-            $authors[$post_before->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
+        if (is_user_member_of_blog($post_after->post_author)) {
+            $post_author = get_userdata($post_after->post_author);
+            $authors[$post_after->post_author] = sprintf('%1$s (%2$s)', $post_author->display_name, $post_author->user_email);
             $authors = array_unique($authors);
         }
 
@@ -190,15 +190,14 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
 
         $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type_name) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status_name) . "\r\n";
 
         $body .= "\r\n";
 
         $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
         $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
 
         $body .= "\r\n";
 
@@ -253,9 +252,9 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= "</div><div>\r\n";
         $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type_name) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status_name) . "\r\n";
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
@@ -263,11 +262,9 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= "<div>\r\n";
         $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
-        $body .= "</div><div>\r\n";
         $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        $body .= $view_link ? "</div><div>\r\n" : '';
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
@@ -373,19 +370,14 @@ class Workflow_Notifications extends Workflow_Module {
             $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $new_status_name) . "\r\n";
 
             $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
-            if ($new_status != 'publish') {
-                $preview_nonce = wp_create_nonce('post_preview_' . $post_id);
-                $view_link = add_query_arg(array('preview' => true, 'preview_id' => $post_id, 'preview_nonce' => $preview_nonce), get_permalink($post_id));
-            } else {
-                $view_link = htmlspecialchars_decode(get_permalink($post_id));
-            }
+            
+            $view_link = $new_status == 'publish' ? htmlspecialchars_decode(get_permalink($post_id)) : '';
 
             $body .= "\r\n";
 
             $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-            $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
             $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-            $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+            $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
 
             $body .= "\r\n";
 
@@ -425,14 +417,13 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= "\r\n \r\n";
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
-        $view_link = htmlspecialchars_decode(get_permalink($post_id));
+        $view_link = $post->post_status == 'publish' ? htmlspecialchars_decode(get_permalink($post_id)) : '';
 
         $body .= "\r\n";
         $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
         $body .= sprintf(__('Antworten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/reply/' . $comment->comment_ID) . "\r\n";
-        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
         $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
 
         $body .= "\r\n" . __('Sie können alle redaktionellen Kommentare zu diesem Dokument hier finden: ', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
         $body .= $edit_link . "#editorial-comments" . "\r\n\r\n";
@@ -490,14 +481,13 @@ class Workflow_Notifications extends Workflow_Module {
         $body .= $task['task_description'] . "\r\n";
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
-        $view_link = htmlspecialchars_decode(get_permalink($post_id));
+        $view_link = $post->post_status == 'publish' ? htmlspecialchars_decode(get_permalink($post_id)) : '';
 
         $body .= "\r\n";
 
         $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Redaktionellen Kommentar hinzufügen: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link . '#editorial-comments/add') . "\r\n";
         $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
 
         $body .= "\r\n";
 
