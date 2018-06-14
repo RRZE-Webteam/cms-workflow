@@ -519,8 +519,10 @@ class Workflow_Notifications extends Workflow_Module {
     }
 
     public function send_email($action, $post, $subject, $message, $headers = '') {
+        $subject = sprintf('%1$s %2$s', $this->module->options->subject_prefix, $subject);
+        
         if (empty($headers)) {
-            $headers = sprintf('From: %1$s %2$s <%3$s>', $this->module->options->subject_prefix, get_option('blogname'), get_option('admin_email'));
+            $headers = sprintf('From: %1$s <%2$s>', get_option('blogname'), get_option('admin_email'));
         }
 
         $recipients = $this->get_notification_recipients($post, true);
