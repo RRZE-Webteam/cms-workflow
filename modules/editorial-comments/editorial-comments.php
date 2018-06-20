@@ -171,11 +171,7 @@ class Workflow_Editorial_Comments extends Workflow_Module {
         return $types;
     }
 
-    public function add_post_meta_box() {
-        global $post;
-
-        $post_type = $this->get_current_post_type();
-
+    public function add_post_meta_box($post_type) {
         if (!$this->is_post_type_enabled($post_type)) {
             return;
         }
