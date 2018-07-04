@@ -416,7 +416,9 @@ class Workflow_Post_Versioning extends Workflow_Module {
             exit;            
             
         } else {
-
+            add_filter('workflow_notification_post_updated', '__return_false');
+            add_filter('workflow_notification_status_change', '__return_false');
+            
             $this->not_filtered_post_meta = array(self::version_remote_parent_post_meta, $this->module->workflow_options_name . '_network_connections');
             
             $new_post = array(
@@ -433,6 +435,8 @@ class Workflow_Post_Versioning extends Workflow_Module {
             $draft_id = wp_insert_post($new_post);
 
             if($draft_id) {
+                do_action('workflow_version_as_new_post_draft', $draft_id, $post_id);
+
                 add_post_meta($draft_id, self::version_post_id, $post_id);
 
                 $post_meta = $this->get_post_meta($post_id);
@@ -529,7 +533,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
             return;
         }
-
+        
         wp_safe_redirect(admin_url('post.php?post=' . $version_post_id . '&action=edit&message=1'));
         exit;
     }
