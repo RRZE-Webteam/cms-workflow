@@ -33,7 +33,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.13.17'; // Plugin-Version
+    const version = '1.14.0'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.5'; // Minimal erforderliche PHP-Version
     const wp_version = '4.9'; // Minimal erforderliche WordPress-Version
