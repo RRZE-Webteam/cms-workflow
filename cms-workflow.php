@@ -3,7 +3,7 @@
 /*
   Plugin Name: CMS-Workflow
   Plugin URI: https://github.com/RRZE-Webteam/cms-workflow
-  Version: 1.14.0
+  Version: 1.14.1
   Description: Redaktioneller Workflow.
   Author: RRZE-Webteam
   Author URI: https://blogs.fau.de/webworking
@@ -33,7 +33,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.14.0'; // Plugin-Version
+    const version = '1.14.1'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '5.5'; // Minimal erforderliche PHP-Version
     const wp_version = '4.9'; // Minimal erforderliche WordPress-Version
@@ -116,18 +116,18 @@ class CMS_Workflow {
     private function init() {
         define('CMS_WORKFLOW_VERSION', self::version);
         define('CMS_WORKFLOW_TEXTDOMAIN', self::textdomain);
-        
+
         define('CMS_WORKFLOW_PLUGIN', __FILE__);
         define('CMS_WORKFLOW_PLUGIN_BASENAME', plugin_basename(CMS_WORKFLOW_PLUGIN));
         define('CMS_WORKFLOW_PLUGIN_NAME', trim(dirname(CMS_WORKFLOW_PLUGIN_BASENAME), '/'));
-        
+
         define('CMS_WORKFLOW_PLUGIN_PATH', dirname(CMS_WORKFLOW_PLUGIN));
         define('CMS_WORKFLOW_PLUGIN_URL', plugins_url('/', CMS_WORKFLOW_PLUGIN));
 
         load_plugin_textdomain(CMS_WORKFLOW_TEXTDOMAIN, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
 
         $this->modules = new stdClass();
-        
+
         $this->set_modules();
         $this->set_post_types();
 
@@ -177,7 +177,7 @@ class CMS_Workflow {
 
         return $links;
     }
-    
+
     public function admin_init() {
 
         $version = get_option($this->workflow_options . 'version');
@@ -190,19 +190,19 @@ class CMS_Workflow {
             }
 
             update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
-        } 
-        
+        }
+
         elseif (!$version) {
             update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
         }
 
         wp_register_style('jquery-multiselect', CMS_WORKFLOW_PLUGIN_URL . 'css/jquery.multiple.select.css', false, '1.1.0', 'all');
-        wp_register_script('jquery-multiselect', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.multiple.select.js', array('jquery'), '1.13', true);        
+        wp_register_script('jquery-multiselect', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.multiple.select.js', array('jquery'), '1.13', true);
         wp_register_style('jquery-listfilterizer', CMS_WORKFLOW_PLUGIN_URL . 'css/jquery.listfilterizer.css', false, CMS_WORKFLOW_VERSION, 'all');
-        wp_register_script('jquery-listfilterizer', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.listfilterizer.js', array('jquery'), CMS_WORKFLOW_VERSION, true);        
+        wp_register_script('jquery-listfilterizer', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.listfilterizer.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
         wp_register_script('sprintf', CMS_WORKFLOW_PLUGIN_URL . 'js/sprintf.js', false, CMS_WORKFLOW_VERSION, true);
-        
-        wp_enqueue_style('workflow-common', CMS_WORKFLOW_PLUGIN_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');        
+
+        wp_enqueue_style('workflow-common', CMS_WORKFLOW_PLUGIN_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');
     }
 
     public function register_module($name, $args = array()) {
@@ -233,7 +233,7 @@ class CMS_Workflow {
         if (isset($args['multisite']) && !is_multisite()) {
             return false;
         }
-        
+
         if (isset($args['messages'])) {
             $args['messages'] = array_merge((array) $args['messages'], $defaults['messages']);
         }
@@ -322,8 +322,8 @@ class CMS_Workflow {
 
             if ($key == 'name' && $value == $mod_name) {
                 $module = $this->modules->$mod_name;
-            } 
-            
+            }
+
             else {
                 foreach ($mod_data as $mod_data_key => $mod_data_value) {
                     if ($mod_data_key == $key && $mod_data_value == $value) {
