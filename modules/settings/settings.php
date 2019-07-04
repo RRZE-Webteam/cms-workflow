@@ -176,7 +176,7 @@ class Workflow_Settings extends Workflow_Module {
 
     public function print_default_view($current_module) {
         global $cms_workflow;
-        
+
         if (isset($_GET['message'])) {
             $message = $_GET['message'];
         }
@@ -188,7 +188,7 @@ class Workflow_Settings extends Workflow_Module {
         elseif (isset($_POST['message'])) {
             $message = $_POST['message'];
         }
-        
+
         else {
             $message = false;
         }
@@ -208,7 +208,7 @@ class Workflow_Settings extends Workflow_Module {
         elseif (isset($_POST['error'])) {
             $error = $_POST['error'];
         }
-        
+
         else {
             $error = false;
         }
@@ -232,13 +232,26 @@ class Workflow_Settings extends Workflow_Module {
         <?php
     }
 
+    public function countValid($array_or_countable, $mode = \COUNT_NORMAL)
+    {
+        if (
+            (\PHP_VERSION_ID >= 70300 && \is_countable($array_or_countable)) ||
+            \is_array($array_or_countable) ||
+            $array_or_countable instanceof \Countable
+        ) {
+            return \count($array_or_countable, $mode);
+        }
+
+        return null === $array_or_countable ? false : true;
+    }
+
     public function register_settings() {
         global $cms_workflow;
 
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
 
-        if (!count($cms_workflow->modules)) {
-            echo '<div class="error">' . __('Es sind keine Module registriert', CMS_WORKFLOW_TEXTDOMAIN) . '</div>';
+        if (! $this->countValid($cms_workflow->modules)) {
+            echo '<div class="error"><p>' . __('Es sind keine Module registriert', CMS_WORKFLOW_TEXTDOMAIN) . '</p></div>';
         } else {
             foreach ($cms_workflow->modules as $mod_name => $mod_data) {
                 if ($mod_data->autoload) {
@@ -320,14 +333,14 @@ class Workflow_Settings extends Workflow_Module {
     public function print_error_or_description($field, $description) {
         if (isset($_REQUEST['form-errors'][$field])): ?>
         <div class="form-error">
-            <p><?php echo esc_html($_REQUEST['form-errors'][$field]); ?></p>	
+            <p><?php echo esc_html($_REQUEST['form-errors'][$field]); ?></p>
         </div>
         <?php else: ?>
         <p class="description"><?php echo esc_html($description); ?></p>
         <?php
         endif;
     }
-    
+
     public function custom_post_type_option($module, $option_name = 'post_types', $attachment = false) {
         $all_post_types = $this->get_available_post_types();
 
@@ -338,13 +351,13 @@ class Workflow_Settings extends Workflow_Module {
         }
 
         foreach ($sorted_cap_types as $cap_type) {
-            
+
             foreach ($cap_type as $post_type => $args) {
-                
+
                 if ($post_type == 'attachment' && !$attachment) {
                     continue;
                 }
-                
+
                 $label = $args->label;
 
                 echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
