@@ -768,7 +768,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $output .= "<option value=\"0\">" . __('— Kein Dokument —', CMS_WORKFLOW_TEXTDOMAIN) . "</option>" . PHP_EOL;
                     foreach($posts as $p) {
                         $remote_post_meta = (array) get_post_meta($p->ID, self::version_remote_post_meta);
-                        if (!$this->in_remote_post_meta($post_id, $current_blog_id, $remote_post_meta)) {
+                        if (!$this->in_remote_post_meta($current_blog_id, $remote_post_meta)) {
                             $output .= sprintf('<option value="%1$d">%1$d. %2$s (%3$s)</option>', $p->ID, esc_html($p->post_title), $post_status[$p->post_status]) . PHP_EOL;
                         } else {
                             $output .= sprintf('<option value="" disabled="disbaled">%1$d. %2$s (%3$s)</option>', $p->ID, esc_html($p->post_title), $post_status[$p->post_status]) . PHP_EOL;
@@ -824,14 +824,20 @@ class Workflow_Post_Versioning extends Workflow_Module {
         return false;
     }
 
-    private function in_remote_post_meta($post_id, $blog_id, $remote_post_meta) {
+    private function in_remote_post_meta($blog_id, $remote_post_meta) {
         foreach ($remote_post_meta as $post_meta) {
 
-            if (!isset($post_meta['blog_id']) || !isset($post_meta['post_id']) || !get_post_status($post_meta['post_id'])) {
+            if (!isset($post_meta['blog_id']) || !isset($post_meta['post_id'])) {
                 continue;
             }
 
-            if ($post_meta['blog_id'] == $blog_id) {
+            if ($post_meta['blog_id'] != $blog_id) {
+                continue;
+            }
+            switch_to_blog($blog_id);
+            $post_exist = get_post_status($post_meta['post_id']);
+            restore_current_blog();
+            if($post_exist) {
                 return true;
             }
         }
