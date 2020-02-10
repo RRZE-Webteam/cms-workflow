@@ -593,8 +593,7 @@ class Workflow_Translation extends Workflow_Module
         extract($r, EXTR_SKIP);
         
         extract($alternate_posts, EXTR_SKIP);
-        \RRZE\Dev\dLog($r);
-        \RRZE\Dev\dLog($alternate_posts);
+
         $current_blog_id = get_current_blog_id();
 
         if ($show_current_blog) {
