@@ -591,9 +591,10 @@ class Workflow_Translation extends Workflow_Module
         }
 
         extract($r, EXTR_SKIP);
-
+        
         extract($alternate_posts, EXTR_SKIP);
-
+        \RRZE\Dev\dLog($r);
+        \RRZE\Dev\dLog($alternate_posts);
         $current_blog_id = get_current_blog_id();
 
         if ($show_current_blog) {
@@ -628,17 +629,22 @@ class Workflow_Translation extends Workflow_Module
 
             $a_id = ($current_blog_id == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = ($current_blog_id == $site['blog_id']) ? ' class="lang-current current"' : '';
-
+            
+            $remoteSiteUrl = get_site_url($site['blog_id']);
+            
             if (is_home() && !get_option('page_for_posts')) {
-                $href = get_site_url($site['blog_id']);
-            } elseif (self::$rrzeTosEndpoints && isset(self::$rrzeTosEndpoints[$hreflang])) {
-                $href = get_site_url($site['blog_id'], '/' . self::$rrzeTosEndpoints[$hreflang]);
+                $href = $remoteSiteUrl;
+            } elseif (! empty(self::$rrzeTosEndpoints) && isset(self::$rrzeTosEndpoints[$hreflang])) {
+                $href = $remoteSiteUrl . '/' . self::$rrzeTosEndpoints[$hreflang];
             } elseif (isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
-            } elseif ($redirect_page_id) {
-                $href = get_permalink($redirect_page_id);
             } else {
-                $href = get_site_url($site['blog_id']);
+                switch_to_blog($site['blog_id']);
+                $widget = get_option('widget_workflow_translation_lang_switcher');
+                $widgetValues = array_values($widget);
+                $widgetShift = array_shift($widgetValues);
+                $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);
+                restore_current_blog();
             }
 
             $related_posts[$href] = $hreflang;
