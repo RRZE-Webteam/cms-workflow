@@ -52,8 +52,6 @@ class Workflow_Settings extends Workflow_Module {
         add_action('admin_menu', array($this, 'action_admin_menu'));
 
         add_action('admin_init', array($this, 'register_settings'));
-
-        add_action('contextual_help', array($this, 'action_contextual_help_menu'), 10, 3);
     }
 
     public function action_admin_menu() {
@@ -94,54 +92,6 @@ class Workflow_Settings extends Workflow_Module {
                 $screen->set_help_sidebar($this->module->settings_help_sidebar);
             }
         }
-    }
-
-    public function action_contextual_help_menu($contextual_help, $screen_id, $screen) {
-        if (!method_exists($screen, 'add_help_tab')) {
-            return $contextual_help;
-        }
-
-        $post_type = $screen->post_type;
-        $contextual_help_menu = $this->contextual_help_menu($post_type);
-
-        foreach ($contextual_help_menu as $context_help) {
-            foreach ($context_help as $context_page => $context_help_tab) {
-                if ($screen_id == $context_page) {
-                    $screen->add_help_tab(array(
-                        'id' => $context_help_tab['id'],
-                        'title' => $context_help_tab['title'],
-                        'content' => $context_help_tab['content'],
-                    ));
-                }
-            }
-        }
-
-        return $contextual_help;
-    }
-
-    private function contextual_help_menu($post_type) {
-        global $cms_workflow;
-
-        $contextual_help = array();
-
-        foreach ($cms_workflow->modules as $mod_name => $mod_data) {
-
-            $allowed_post_types = $this->get_post_types($mod_data);
-
-            if ($mod_data->options->activated && (empty($post_type) || in_array($post_type, $allowed_post_types)) && !empty($mod_data->contextual_help)) {
-
-                foreach ($mod_data->contextual_help as $data) {
-                    $data = (object) $data;
-                    if (!empty($data->screen_id) && is_array($data->screen_id) && isset($data->help_tab['id'], $data->help_tab['title'], $data->help_tab['content'])) {
-                        foreach ($data->screen_id as $screen_id) {
-                            $contextual_help[] = array($screen_id => $data->help_tab);
-                        }
-                    }
-                }
-            }
-        }
-
-        return $contextual_help;
     }
 
     public function action_admin_print_styles() {
