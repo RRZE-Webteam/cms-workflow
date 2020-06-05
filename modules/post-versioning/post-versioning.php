@@ -751,7 +751,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     'post_status' => array('draft', 'publish'),
                     'orderby' => 'title',
                     'order' => 'ASC',
-                    'posts_per_page' => -1
+                    'nopaging' => true
                 )
             );
 
