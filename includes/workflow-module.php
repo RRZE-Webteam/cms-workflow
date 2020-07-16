@@ -208,14 +208,15 @@ class Workflow_Module {
             return null;
         }
 
-        foreach ($users as $user => $key) {
+        $results = [];
+        foreach ($users as $user) {
             $user_meta = unserialize($user->meta_value);
-            if (!isset($user_meta[$role])) {
-                unset($users[$key]);
+            if (isset($user_meta[$role])) {
+                $results[] = $user;
             }
         }
 
-        return empty($users) ? null : $users;
+        return empty($results) ? null : $results;
     }
     
     public function users_select_form($selected = null, $args = null) {
