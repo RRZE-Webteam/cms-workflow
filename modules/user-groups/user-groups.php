@@ -759,8 +759,8 @@ class Workflow_Usergroups_List_Table extends WP_List_Table {
         $this->items = $cms_workflow->user_groups->get_usergroups();
 
         $this->set_pagination_args(array(
-            'total_items' => count($this->items),
-            'per_page' => count($this->items),
+            'total_items' => !empty($this->items) ? count($this->items) : 0,
+            'per_page' => !empty($this->items) ? count($this->items) : 0,
         ));
     }
 
