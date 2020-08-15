@@ -27,15 +27,6 @@ class Workflow_Authors extends Workflow_Module
 
         $this->wp_role_caps = array_keys($this->wp_post_caps);
         
-        $content_help_tab = array(
-            '<p>' . __('Verwenden Sie die Autorenverwaltung, um die Rechte für Autoren detaillierter vergeben zu können. Sie können angeben', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<ol>',
-            '<li>' . __('für welche Bereiche die Autorenverwaltung freigegeben werden soll und', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('welche Rechte ein Autor erhalten darf.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '</ol>',
-            '<p>' . __('Ist die Autorenverwaltung nicht aktiviert, erhalten Autoren die standardmäßig von WordPress vorgegebenen Rechte (Beiträge und Seiten ansehen, erstellen, bearbeiten und löschen, Dateien hochladen).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
-        );
-
         $args = array(
             'title' => __('Autoren', CMS_WORKFLOW_TEXTDOMAIN),
             'description' => __('Verwaltung der Autoren.', CMS_WORKFLOW_TEXTDOMAIN),
@@ -56,13 +47,7 @@ class Workflow_Authors extends Workflow_Module
                 ),
                 'author_can_assign_others' => false,
             ),
-            'configure_callback' => 'print_configure_view',
-            'settings_help_tab' => array(
-                'id' => 'workflow-authors-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
+            'configure_callback' => 'print_configure_view'
         );
 
         $this->module = $cms_workflow->register_module('authors', $args);

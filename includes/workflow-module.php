@@ -265,26 +265,6 @@ class Workflow_Module {
         <?php
     }
 
-    public function action_settings_help_menu() {
-        $screen = get_current_screen();
-
-        if (!method_exists($screen, 'add_help_tab')) {
-            return;
-        }
-
-        if ($screen->id != 'workflow_page_' . $this->module->settings_slug) {
-            return;
-        }
-
-        if (isset($this->module->settings_help_tab['id'], $this->module->settings_help_tab['title'], $this->module->settings_help_tab['content'])) {
-            $screen->add_help_tab($this->module->settings_help_tab);
-
-            if (isset($this->module->settings_help_sidebar)) {
-                $screen->set_help_sidebar($this->module->settings_help_sidebar);
-            }
-        }
-    }
-
     public function is_settings_view($module_name = null) {
         global $pagenow, $cms_workflow;
 

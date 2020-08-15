@@ -38,11 +38,6 @@ class Workflow_Editors extends Workflow_Module {
         );
 
         $this->wp_role_caps = array_keys($this->wp_post_caps);
-        
-        $content_help_tab = array(
-            '<p>' . __('Verwenden Sie die Redakteureverwaltung, um die Rechte für Redakteure detaillierter vergeben zu könnnen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('Ist die Redakteureverwaltung nicht aktiviert, erhalten Redakteure die standardmäßig von WordPress vorgegebenen Rechte.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
-        );
 
         $args = array(
             'title' => __('Redakteure', CMS_WORKFLOW_TEXTDOMAIN),
@@ -81,13 +76,7 @@ class Workflow_Editors extends Workflow_Module {
                     'delete_posts' => true
                 )
             ),
-            'configure_callback' => 'print_configure_view',
-            'settings_help_tab' => array(
-                'id' => 'workflow-editors-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
+            'configure_callback' => 'print_configure_view'
         );
 
         $this->module = $cms_workflow->register_module('editors', $args);

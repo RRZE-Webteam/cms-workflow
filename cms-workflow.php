@@ -250,10 +250,6 @@ class CMS_Workflow {
             $args['post_type_support'] = sprintf('workflow_%s', $name);
         }
 
-        if (!empty($args['settings_help_tab'])) {
-            add_action(sprintf('load-workflow_page_%s', $args['settings_slug']), array(&$this->$name, 'action_settings_help_menu'));
-        }
-
         $this->modules->$name = (object) $args;
 
         return $this->modules->$name;

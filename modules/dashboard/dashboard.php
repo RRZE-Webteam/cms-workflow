@@ -10,21 +10,6 @@ class Workflow_Dashboard extends Workflow_Module {
 
         $this->module_url = $this->get_module_url(__FILE__);
 
-        $content_help_tab = array(
-            '<p>' . __('Je nachdem, was Sie auf dieser Seite aktivieren, können Sie im Dashboard unterschiedliche Inhalte verfolgen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Aktuelle Entwürfe</strong> - Übersicht über alle Dokumente mit Status <i>Entwurf</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - Übersicht über alle Dokumente mit Status <i>Ausstehender Review</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Aufgabenliste</strong> - Liste aller anstehenden Aufgaben zu Dokumenten, bei denen Sie als Autor eingetragen sind (sofern das Modul <i>Aufgabenliste</i> aktiviert ist).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('Auf der Dashboard-Seite hat dann jeder Nutzer die Möglichkeit, über die Registerkarte <i>Optionen einblenden</i> in der rechten oberen Ecke die gewünschten Inhalte ein- oder auszublenden.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-        );
-
-        $context_help_tab = array(
-            '<p>' . __('Um anstehende Arbeiten schneller überblicken zu können, haben Sie die Möglichkeit, im Dashboard unterschiedliche Inhalte zu verfolgen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Aktuelle Entwürfe</strong> - Übersicht über alle Dokumente mit Status <i>Entwurf</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Aktuell ausstehende Reviews</strong> - Übersicht über alle Dokumente mit Status <i>Ausstehender Review</i>, bei denen Sie als Autor eingetragen sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('Sollten bei Ihnen die Boxen <i>Aktuelle Entwürfe</i> und <i>Aktuell ausstehende Reviews</i> nicht erscheinen, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen (sofern der Administrator diese freigegeben hat).', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-        );
-
         $args = array(
             'title' => __('Dashboard', CMS_WORKFLOW_TEXTDOMAIN),
             'description' => __('Inhalte im Dashboard verfolgen.', CMS_WORKFLOW_TEXTDOMAIN),
@@ -53,23 +38,7 @@ class Workflow_Dashboard extends Workflow_Module {
                     'tasks_per_page' => 10
                 ),
             ),
-            'configure_callback' => 'print_configure_view',
-            'settings_help_tab' => array(
-                'id' => 'workflow-dashboard-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
-            'contextual_help' => array(
-                '1' => array(
-                    'screen_id' => array('dashboard'),
-                    'help_tab' => array(
-                        'id' => 'workflow-dashboard-context',
-                        'title' => __('Workflow', CMS_WORKFLOW_TEXTDOMAIN),
-                        'content' => implode(PHP_EOL, $context_help_tab),
-                    )
-                )
-            ),
+            'configure_callback' => 'print_configure_view'
         );
 
         $this->module = $cms_workflow->register_module('dashboard', $args);

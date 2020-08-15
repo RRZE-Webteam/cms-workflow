@@ -12,31 +12,6 @@ class Workflow_User_Groups extends Workflow_Module {
 
         $this->module_url = $this->get_module_url(__FILE__);
 
-        $content_help_tab = array(
-            '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Neue Benutzergruppe hinzufügen</strong> - vergeben Sie einen Namen (maximal 40 Zeichen) und optional eine Beschreibung für die Benutzergruppe. Nach Erstellen der Gruppe durch <i>Neue Benutzergruppe hinzufügen</i> können Sie die zugehörigen Benutzer auswählen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('<strong>Einstellungen</strong> - geben Sie an, für welche Bereiche Benutzergruppen freigegeben werden sollen. Nur auf den freigegebenen Seiten können Sie eine Benutzergruppe als Autor auswählen. Die Freigaben gelten für alle Benutzergruppen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('Um nachträglich die Benutzer der Webseite auszuwählen, die zu einer Benutzergruppe gehören, klicken Sie auf den Namen der Gruppe und bearbeiten diese. Hier können Sie auch den Namen und die Beschreibung ändern.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<ol>',
-            '<li>' . __('Gehen Sie auf ein Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie im Kästchen <i>Autor</i> die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
-            '<li>' . __('Mit dem Speichern bzw. Veröffentlichen des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Die Markierung der Benutzergruppe bleibt bestehen, beim Speichern des Dokumentes werden daher alle Mitglieder der Benutzergruppe automatisch wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere Autoren können zusätzlich gewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '</ol>'
-        );
-
-        $context_help_tab = array(
-            '<p>' . __('Um komfortabler mehrere Personen z.B. einer Abteilung oder mit gleicher Funktion als Autoren zu einem Dokument hinzuzufügen, können Sie diese in Benutzergruppen zusammenfassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('So verwenden Sie Benutzergruppen:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<ol>',
-            '<li>' . __('Wählen Sie im Kästchen <i>Autor</i> die Benutzergruppe aus, deren Mitglieder als Autor dem Dokument zugewiesen werden sollen', CMS_WORKFLOW_TEXTDOMAIN) . ' (' . __('wenn diese Box nicht erscheint, können Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen lassen', CMS_WORKFLOW_TEXTDOMAIN) . ').</li>',
-            '<li>' . __('Mit dem Speichern bzw. Veröffentlichen des Dokumentes werden automatisch alle Mitglieder der ausgewählten Gruppe <strong>zusätzlich zu den bereits eingetragenen Autoren</strong> als Autoren markiert.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Die Markierung der Benutzergruppe bleibt bestehen, beim Speichern des Dokumentes werden daher alle Mitglieder der Benutzergruppe automatisch wieder als Autoren festgelegt, auch wenn sie vorher abgewählt wurden. Andere Autoren können zusätzlich gewählt werden.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '</ol>'
-        );
-
-
         $args = array(
             'title' => __('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN),
             'description' => __('Benutzer nach Abteilung oder Funktion organisieren.', CMS_WORKFLOW_TEXTDOMAIN),
@@ -55,23 +30,7 @@ class Workflow_User_Groups extends Workflow_Module {
                 'usergroup-deleted' => __('Die Benutzergruppe wurde gelöscht.', CMS_WORKFLOW_TEXTDOMAIN),
             ),
             'configure_callback' => 'print_configure_view',
-            'configure_link_text' => __('Gruppen verwalten', CMS_WORKFLOW_TEXTDOMAIN),
-            'settings_help_tab' => array(
-                'id' => 'workflow-user-groups-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
-            'contextual_help' => array(
-                '1' => array(
-                    'screen_id' => array('post', 'page'),
-                    'help_tab' => array(
-                        'id' => 'workflow-user-groups-context',
-                        'title' => __('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN),
-                        'content' => implode(PHP_EOL, $context_help_tab),
-                    )
-                )
-            ),
+            'configure_link_text' => __('Gruppen verwalten', CMS_WORKFLOW_TEXTDOMAIN)
         );
 
         $this->module = $cms_workflow->register_module('user_groups', $args);
