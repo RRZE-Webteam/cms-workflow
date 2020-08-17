@@ -17,30 +17,6 @@ class Workflow_Translation extends Workflow_Module
 
         $this->module_url = $this->get_module_url(__FILE__);
 
-        $content_help_tab = array(
-            '<p>' . __('Mit dem Übersetzungsmodul haben Sie die Möglichkeit, mehrsprachige Versionen Ihrer Seiten zu erstellen, indem Sie XLIFF-Dateien im- und exportieren.', CMS_WORKFLOW_TEXTDOMAIN) . '<br>' . __('Sie können auf dieser Seite auswählen, für welche Bereiche die Verwendung von XLIFF-Dateien freigegeben werden soll.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('So erstellen Sie eine anderssprachige Version eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<ol>',
-            '<li>' . __('Erstellen Sie ein neues Dokument oder gehen Sie auf ein bereits erstelltes Dokument in einem freigegebenen Bereich.', CMS_WORKFLOW_TEXTDOMAIN) . ' ' . __('Das Dokument muss gespeichert, darf aber nicht veröffentlicht sein (Status <i>Entwurf</i> oder <i>Ausstehender Review</i>).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie im Kästchen <i>Übersetzung</i> aus, von welcher Sprache Sie in welche Sprache übersetzen wollen (wenn diese Box nicht erscheint, überprüfen Sie den Status des Dokumentes oder lassen Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Nach dem Speichern des Dokumentes können Sie über <i>XLIFF-Datei herunterladen</i> die XLIFF-Datei des Dokumentes auf Ihrem Rechner speichern und mit einem externen Übersetzungsprogramm übersetzen lassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Die übersetzte XLIFF-Datei können Sie über die Schaltfläche <i>Durchsuchen...</i> hochladen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '</ol>',
-            '<p>' . __('Wenn Sie die Versionierung aktiviert haben, können Sie auch ein bestehendes Dokument kopieren oder eine neue Version erstellen und hieraus ein anderssprachiges Dokument erstellen. Desweiteren ist es möglich, Kopien von Dokumenten in parallelen, anderssprachigen Webseiten zu erstellen und dort zu übersetzen, sofern netzwerkweite Freigaben im Versionierungs-Modul angegeben sind.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>'
-        );
-
-        $context_help_tab = array(
-            '<p>' . __('Mit dem Übersetzungsmodul haben Sie die Möglichkeit, mehrsprachige Versionen Ihrer Seiten zu erstellen, indem Sie XLIFF-Dateien im- und exportieren.', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<p>' . __('So erstellen Sie eine anderssprachige Version eines Dokumentes:', CMS_WORKFLOW_TEXTDOMAIN) . '</p>',
-            '<ol>',
-            '<li>' . __('Das Dokument muss gespeichert, darf aber nicht veröffentlicht sein (Status <i>Entwurf</i> oder <i>Ausstehender Review</i>).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Wählen Sie im Kästchen <i>Übersetzung</i> aus, von welcher Sprache Sie in welche Sprache übersetzen wollen (wenn diese Box nicht erscheint, überprüfen Sie den Status des Dokumentes oder lassen Sie sie über die Lasche <i>Optionen einblenden</i> in der rechten oberen Ecke anzeigen).', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Nach dem Speichern des Dokumentes können Sie über <i>XLIFF-Datei herunterladen</i> die XLIFF-Datei des Dokumentes auf Ihrem Rechner speichern und mit einem externen Übersetzungsprogramm übersetzen lassen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '<li>' . __('Die übersetzte XLIFF-Datei können Sie über die Schaltfläche <i>Durchsuchen...</i> hochladen.', CMS_WORKFLOW_TEXTDOMAIN) . '</li>',
-            '</ol>'
-        );
-
-
         $args = array(
             'title' => __('Übersetzung', CMS_WORKFLOW_TEXTDOMAIN),
             'description' => __('Import und Export von XLIFF-Dateien.', CMS_WORKFLOW_TEXTDOMAIN),
@@ -53,23 +29,7 @@ class Workflow_Translation extends Workflow_Module
                 ),
                 'related_sites' => array(),
             ),
-            'configure_callback' => 'print_configure_view',
-            'settings_help_tab' => array(
-                'id' => 'workflow-translation-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
-            'contextual_help' => array(
-                '1' => array(
-                    'screen_id' => array('post', 'page'),
-                    'help_tab' => array(
-                        'id' => 'workflow-translation-context',
-                        'title' => __('Übersetzung', CMS_WORKFLOW_TEXTDOMAIN),
-                        'content' => implode(PHP_EOL, $context_help_tab),
-                    )
-                )
-            ),
+            'configure_callback' => 'print_configure_view'
         );
 
         $this->module = $cms_workflow->register_module('translation', $args);

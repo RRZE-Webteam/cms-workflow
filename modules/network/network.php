@@ -10,8 +10,6 @@ class Workflow_Network extends Workflow_Module {
         global $cms_workflow;
 
         $this->module_url = $this->get_module_url(__FILE__);
-
-        $content_help_tab = array();
         
         $args = array(
             'title' => __('Netzwerk', CMS_WORKFLOW_TEXTDOMAIN),
@@ -27,13 +25,7 @@ class Workflow_Network extends Workflow_Module {
                 'network_connections' => array(),
                 'parent_site' => false
             ),
-            'configure_callback' => 'print_configure_view',
-            'settings_help_tab' => array(
-                'id' => 'workflow-network-overview',
-                'title' => __('Übersicht', CMS_WORKFLOW_TEXTDOMAIN),
-                'content' => implode(PHP_EOL, $content_help_tab),
-            ),
-            'settings_help_sidebar' => __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/cms">Dokumentation</a></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', CMS_WORKFLOW_TEXTDOMAIN),
+            'configure_callback' => 'print_configure_view'
         );
 
         $this->module = $cms_workflow->register_module('network', $args);
