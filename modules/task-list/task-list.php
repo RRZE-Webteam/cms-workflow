@@ -296,7 +296,8 @@ class Workflow_Task_List extends Workflow_Module {
         }
 
         $task_done_details = @unserialize($task->task_done);
-        
+        $done_checked = '';
+
         if (is_array($task_done_details) && !empty($task_done_details['marker']) && !empty($task_done_details['date'])) {
             $task_done_marker_data = get_userdata($task_done_details['marker']);
             if ($task_done_marker_data !== false) {
@@ -340,7 +341,7 @@ class Workflow_Task_List extends Workflow_Module {
                     </div>
                     <div class="task-actions-right">
                         <p>
-                            <input type="checkbox" name="mark-as-done" class="mark-as-done" value="<?php echo $task->task_id; ?>"<?php echo @$done_checked; ?> /> <?php _e('Aufgabe erledigt', CMS_WORKFLOW_TEXTDOMAIN); ?>
+                            <input type="checkbox" name="mark-as-done" class="mark-as-done" value="<?php echo $task->task_id; ?>"<?php echo $done_checked; ?> /> <?php _e('Aufgabe erledigt', CMS_WORKFLOW_TEXTDOMAIN); ?>
                         </p>                        
                     </div>
                     <div style="clear: both;"></div>

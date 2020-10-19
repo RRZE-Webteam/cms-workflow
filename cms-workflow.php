@@ -1,29 +1,17 @@
 <?php
 
 /*
-  Plugin Name: CMS-Workflow
-  Plugin URI: https://github.com/RRZE-Webteam/cms-workflow
-  Version: 1.15.0
-  Description: Redaktioneller Workflow.
-  Author: RRZE-Webteam
-  Author URI: https://blogs.fau.de/webworking
- */
-
-/*
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+Plugin Name:     CMS-Workflow
+Plugin URI:      https://github.com/RRZE-Webteam/cms-workflow
+Description:     Redaktioneller Workflow.
+Version:         1.16.0
+Author:          RRZE Webteam
+Author URI:      https://blogs.fau.de/webworking/
+License:         GNU General Public License v2
+License URI:     http://www.gnu.org/licenses/gpl-2.0.html
+Domain Path:     /languages
+Text Domain:     cms-workflow
+*/
 
 add_action('plugins_loaded', array('CMS_Workflow', 'instance'));
 
@@ -33,10 +21,10 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.15.0'; // Plugin-Version
+    const version = '1.16.0'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '7.4'; // Minimal erforderliche PHP-Version
-    const wp_version = '5.4'; // Minimal erforderliche WordPress-Version
+    const wp_version = '5.5'; // Minimal erforderliche WordPress-Version
 
     public $workflow_options = '_cms_workflow_';
     public $workflow_options_name = '_cms_workflow_options';
