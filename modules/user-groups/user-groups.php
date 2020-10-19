@@ -80,7 +80,7 @@ class Workflow_User_Groups extends Workflow_Module {
         wp_enqueue_script('workflow-user-groups', $this->module_url . 'user-groups.js', array('jquery', 'jquery-listfilterizer'), CMS_WORKFLOW_VERSION, true);
 
         if ($this->is_settings_view()) {
-            wp_enqueue_script('workflow-user-groups-inline-edit', $this->module_url . 'inline-edit.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
+            wp_enqueue_script('workflow-user-groups-inline-edit', $this->module_url . 'inline-edit-min.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
         }
 
         wp_localize_script('workflow-user-groups', 'user_groups_vars', array(
