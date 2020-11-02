@@ -318,7 +318,7 @@ class Workflow_Network extends Workflow_Module {
         
         foreach ($connections as $blog_id) {            
             $blog = get_blog_details($blog_id);
-            if ($blog->archived || $blog->deleted) {
+            if ($blog === false || $blog->archived || $blog->deleted) {
                 if (($key = array_search($blog_id, $connections)) !== false) {
                     unset($connections[$key]);
                 }                    
