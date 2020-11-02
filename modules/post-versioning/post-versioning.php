@@ -60,7 +60,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             add_action('save_post', array($this, 'network_connections_save_post'));
         }
 
-        add_action('trash_' . $post_type, array($this, 'normalize_on_trash'), 10, 2);
+        //add_action('trash_' . $post_type, array($this, 'normalize_on_trash'), 10, 2);
 
         add_action('wp_before_admin_bar_render', array($this, 'admin_bar_submenu'), 99);
     }
@@ -439,7 +439,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
                     $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title));
                 }
 
-            } elseif (is_multisite()) {
+            } elseif (is_multisite() && $this->module_activated('network')) {
                 $current_related_sites = $this->current_related_sites();
 
                 if (!$current_related_sites) {
@@ -1239,7 +1239,7 @@ class Workflow_Post_Versioning extends Workflow_Module {
             }
         }
 
-        if (is_multisite()) {
+        if (is_multisite() && $this->module_activated('network')) {
             $documents = array_merge($documents, $this->get_network_versions($post_id));
         }
 
