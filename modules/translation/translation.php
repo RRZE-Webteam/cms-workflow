@@ -530,7 +530,7 @@ class Workflow_Translation extends Workflow_Module
         return $output;
     }
 
-    public static function get_related_posts($args = '')
+    public static function get_related_posts($args = '', $arialabel = '')
     {
         global $cms_workflow;
 
@@ -574,7 +574,12 @@ class Workflow_Translation extends Workflow_Module
         }
 
         $related_posts = array();
-        $related_posts_output = '<div class="workflow-language mlp_language_box"><ul>';
+	$related_posts_output = '<div class="workflow-language mlp_language_box"';
+	if (!empty($arialabel)) {
+	    $related_posts_output .= ' aria-label="'.$arialabel.'" role="navigation"';
+	}
+	$related_posts_output .= '><ul>';
+       
 
         foreach ($related_sites as $site) {
             $language = self::get_language($site['sitelang']);
@@ -607,7 +612,7 @@ class Workflow_Translation extends Workflow_Module
             }
 
             $related_posts[$href] = $hreflang;
-            $related_posts_output .= sprintf('<li%1$s><a rel="alternate" hreflang="%2$s" href="%3$s"%4$s>%5$s</a></li>', $li_class, $hreflang, $href, $a_id, $display, PHP_EOL);
+            $related_posts_output .= sprintf('<li%1$s><a rel="alternate" lang="%2$s" hreflang="%2$s" href="%3$s"%4$s>%5$s</a></li>', $li_class, $hreflang, $href, $a_id, $display, PHP_EOL);
         }
 
         $related_posts_output .= '</ul></div>';
