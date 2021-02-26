@@ -4,7 +4,7 @@
 Plugin Name:     CMS-Workflow
 Plugin URI:      https://github.com/RRZE-Webteam/cms-workflow
 Description:     Redaktioneller Workflow.
-Version:         1.16.2
+Version:         1.16.4
 Author:          RRZE Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -21,7 +21,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 
 class CMS_Workflow {
 
-    const version = '1.16.2'; // Plugin-Version
+    const version = '1.16.4'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '7.4'; // Minimal erforderliche PHP-Version
     const wp_version = '5.5'; // Minimal erforderliche WordPress-Version
@@ -113,6 +113,15 @@ class CMS_Workflow {
         define('CMS_WORKFLOW_PLUGIN_URL', plugins_url('/', CMS_WORKFLOW_PLUGIN));
 
         load_plugin_textdomain(CMS_WORKFLOW_TEXTDOMAIN, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
+
+        if (
+            is_plugin_active('rrze-multilang/rrze-multilang.php') 
+            || is_plugin_active_for_network('rrze-multilang/rrze-multilang.php')
+            ) {
+                add_filter('cms_workflow_unregister_modules', function($modules) {
+                    return array_merge(['network', 'translation'], $modules);
+                });
+        }
 
         $this->modules = new stdClass();
 
