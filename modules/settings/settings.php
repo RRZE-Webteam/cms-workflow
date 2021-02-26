@@ -158,6 +158,16 @@ class Workflow_Settings extends Workflow_Module {
             echo '<div class="error"><p>' . __('Es sind keine Module registriert', CMS_WORKFLOW_TEXTDOMAIN) . '</p></div>';
         } else {
             foreach ($cms_workflow->modules as $mod_name => $mod_data) {
+                if (
+                    in_array($mod_name, apply_filters('cms_workflow_unregister_modules', []))
+                    && !$cms_workflow->$mod_name->module->options->activated
+                ) {
+                    if (method_exists($cms_workflow->$mod_name, 'deactivation')) {
+                        $cms_workflow->$mod_name->deactivation();
+                    }
+                    $cms_workflow->update_module_option($mod_name, 'activated', false);
+                    continue;
+                }                
                 if ($mod_data->autoload) {
                     continue;
                 }
