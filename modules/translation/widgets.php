@@ -24,24 +24,28 @@ class Workflow_Translation_Lang_Switcher extends WP_Widget {
             'redirect_page_id' => !empty($instance['widget_redirect_page_id']) ? $instance['widget_redirect_page_id'] : 0
         );
 
-        $output = Workflow_Translation::get_related_posts($data);        
+	$titlecontent = $titleastag = '';
+	
+	if (!empty($instance['widget_title'])) {
+	    $titlecontent = apply_filters('widget_title', $instance['widget_title']);
+        } else {
+	    $titlecontent = __('Sprachwechsler', CMS_WORKFLOW_TEXTDOMAIN);
+	}
+	
+	
+        $output = Workflow_Translation::get_related_posts($data,$titlecontent);        
         
         if ('' == $output) {
             return;
         }
 
         echo $before_widget;
-
-        if (!empty($instance['widget_title'])) {
-            echo $before_title . apply_filters('widget_title', $instance['widget_title']) . $after_title;
-        }
-
         echo $output . $after_widget;
     }
 
     public function update($new_instance, $old_instance) {
         $instance = $old_instance;
-        $instance['widget_title'] = sanitize_text_field($new_instance['workflow_translation_widget_title']);
+   //     $instance['widget_title'] = sanitize_text_field($new_instance['workflow_translation_widget_title']);
         $instance['widget_link_type'] = esc_attr($new_instance['workflow_translation_widget_link_type']);
         $instance['widget_sort_order'] = esc_attr($new_instance['workflow_translation_widget_sort_order']);
         $instance['widget_show_current_blog'] = !empty($new_instance['workflow_translation_widget_show_current_blog']) ? true : false;
@@ -51,16 +55,20 @@ class Workflow_Translation_Lang_Switcher extends WP_Widget {
     }
 
     public function form($instance) {
-        $title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
+  //      $title = isset($instance['widget_title']) ? esc_html($instance['widget_title']) : '';
         $sort_order = isset($instance['widget_sort_order']) ? esc_attr($instance['widget_sort_order']) : '';
         $link_type = isset($instance['widget_title']) ? esc_attr($instance['widget_link_type']) : '';
         $show_current_blog = !empty($instance['widget_show_current_blog']) ? true : false;
         $redirect_page_id = !empty($instance['widget_redirect_page_id']) ? intval($instance['widget_redirect_page_id']) : 0;
-        ?>
+       
+	/*
         <p>
-            <label for="<?php echo $this->get_field_id('workflow_translation_widget_title'); ?>"><?php _e('Titel:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
+           <label for="<?php echo $this->get_field_id('workflow_translation_widget_title'); ?>"><?php _e('Titel:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
             <input class="widefat" type ='text' id='<?php echo $this->get_field_id('workflow_translation_widget_title'); ?>' name='<?php echo $this->get_field_name('workflow_translation_widget_title'); ?>' value='<?php echo $title; ?>'>
-        </p>
+       </p>
+	 * removed from default. cause we use aria-label instead and dont show the title to desktop anymore 
+	 */
+	 ?>
         <p>
             <label for="<?php echo $this->get_field_id('workflow_translation_widget_sort_order'); ?>"><?php _e('Sortierung:', CMS_WORKFLOW_TEXTDOMAIN); ?></label><br>
             <select class="widefat" id='<?php echo $this->get_field_id('workflow_translation_widget_sort_order'); ?>' name='<?php echo $this->get_field_name('workflow_translation_widget_sort_order'); ?>' >
