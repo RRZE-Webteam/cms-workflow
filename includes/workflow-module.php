@@ -50,14 +50,19 @@ class Workflow_Module {
     }
 
     public function get_custom_post_types() {
-
         $args = array(
             '_builtin' => false,
             'public' => true,
             'show_ui' => true,
         );
-
-        return get_post_types($args, 'objects');
+        $available_post_types = get_post_types($args, 'objects');
+        $not_allowed_post_types = apply_filters('cms_workflow_not_allowed_post_types', []);
+        foreach ($available_post_types as $key => $post_type) {
+            if (in_array($post_type->name, $not_allowed_post_types)) {
+                unset($available_post_types[$key]);
+            }
+        }
+        return $available_post_types;
     }
 
     public function get_post_types($module) {
