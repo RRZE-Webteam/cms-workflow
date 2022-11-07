@@ -590,11 +590,9 @@ class Workflow_Dashboard extends Workflow_Module {
 
             $data = get_post_meta($post->ID, Workflow_Task_List::postmeta_key);
             $data = json_decode(json_encode($data), false);
-            if (is_null($data)) {
-                continue;
-            }
+
             foreach ($data as $value) {
-                if (empty($value->task_done)) {
+                if (empty($value->task_done) && !empty($value->task_id)) {
                     $priority[] = $value->task_priority;
                     $timestamp[] = $value->task_timestamp;
                     $task_id[] = $value->task_id;
