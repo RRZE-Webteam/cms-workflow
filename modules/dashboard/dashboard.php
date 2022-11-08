@@ -107,6 +107,7 @@ class Workflow_Dashboard extends Workflow_Module {
             wp_add_dashboard_widget('workflow-pending-drafts', __('Aktuelle ausstehende Reviews', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'recent_pending_widget'), array($this, 'control_recent_pending_widget'));
         }
 
+        // Task List Modul (deprecated)
         if ($this->module_activated('task_list') && $this->module->options->task_list_widget) {
             wp_add_dashboard_widget('workflow-task-list', __('Aufgabenliste', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'task_list_widget'), array($this, 'control_task_list_widget'));
         }
