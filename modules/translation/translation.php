@@ -8,6 +8,7 @@ class Workflow_Translation extends Workflow_Module
     public static $alternate_posts;
 
     public $module;
+    public $module_url;
 
     protected static $rrzeTosEndpoints = null;
 
@@ -122,11 +123,11 @@ class Workflow_Translation extends Workflow_Module
                 <label for="related_sites_<?php echo $blog_id; ?>">
                     <input id="related_sites_<?php echo $blog_id; ?>" type="checkbox" <?php checked($connected, true); ?> name="<?php printf('%s[related_sites][]', $this->module->workflow_options_name); ?>" value="<?php echo $blog_id ?>" /> <?php echo $label; ?>
                 </label><br>
-                <?php
+            <?php
             } ?>
-        <p class="description"><?php _e('Bezogenen Webseiten werden im Sprachwechsler angezeigt.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p class="description"><?php _e('Bezogenen Webseiten werden im Sprachwechsler angezeigt.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php else : ?>
-        <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php endif;
     }
 
@@ -247,7 +248,7 @@ class Workflow_Translation extends Workflow_Module
             echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
             <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
         </form>
-        <?php
+<?php
     }
 
     public function update_edit_form()
@@ -400,28 +401,34 @@ class Workflow_Translation extends Workflow_Module
 
     public function import_xliff($post_id, $file)
     {
-        $post = get_post($post_id);
-
-        $fh = fopen($file['tmp_name'], 'r');
-
-        $data = fread($fh, $file['size']);
-
-        fclose($fh);
-        clearstatcache();
-
         if (!function_exists('simplexml_load_string')) {
             return new WP_Error('xml_missing', __('Die "Simple XML"-Bibliothek fehlt.', CMS_WORKFLOW_TEXTDOMAIN));
         }
 
+        $post = get_post($post_id);
+        $filename = $file['tmp_name'] ?? '';
+
+        if (!$filename) {
+            return new WP_Error('xml_file_does_not_exists', __('Die XLIFF-Datei existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN));
+        }
+
+        $filesize = $file['size'] ?? 0;
+        $fh = fopen($filename, 'r');
+
+        $data = fread($fh, $filesize);
+
+        fclose($fh);
+        clearstatcache();
+
         $xml = simplexml_load_string($data);
 
         if (!$xml) {
-            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $filename));
         }
 
         $file_attributes = $xml->file->attributes();
         if (!$file_attributes || !isset($file_attributes['original'])) {
-            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $filename));
         }
 
         $original = (string) $file_attributes['original'];
@@ -551,7 +558,7 @@ class Workflow_Translation extends Workflow_Module
         }
 
         extract($r, EXTR_SKIP);
-        
+
         extract($alternate_posts, EXTR_SKIP);
 
         $current_blog_id = get_current_blog_id();
@@ -574,12 +581,12 @@ class Workflow_Translation extends Workflow_Module
         }
 
         $related_posts = array();
-	$related_posts_output = '<div class="workflow-language mlp_language_box"';
-	if (!empty($arialabel)) {
-	    $related_posts_output .= ' aria-label="'.$arialabel.'" role="navigation"';
-	}
-	$related_posts_output .= '><ul>';
-       
+        $related_posts_output = '<div class="workflow-language mlp_language_box"';
+        if (!empty($arialabel)) {
+            $related_posts_output .= ' aria-label="' . $arialabel . '" role="navigation"';
+        }
+        $related_posts_output .= '><ul>';
+
 
         foreach ($related_sites as $site) {
             $language = self::get_language($site['sitelang']);
@@ -593,12 +600,12 @@ class Workflow_Translation extends Workflow_Module
 
             $a_id = ($current_blog_id == $site['blog_id']) ? ' id="lang-current-locale"' : '';
             $li_class = ($current_blog_id == $site['blog_id']) ? ' class="lang-current current"' : '';
-            
+
             $remoteSiteUrl = get_site_url($site['blog_id']);
-            
+
             if (is_home() && !get_option('page_for_posts')) {
                 $href = $remoteSiteUrl;
-            } elseif (! empty(self::$rrzeTosEndpoints) && isset(self::$rrzeTosEndpoints[$hreflang])) {
+            } elseif (!empty(self::$rrzeTosEndpoints) && isset(self::$rrzeTosEndpoints[$hreflang])) {
                 $href = $remoteSiteUrl . '/' . self::$rrzeTosEndpoints[$hreflang];
             } elseif (isset($remote_permalink[$site['blog_id']])) {
                 $href = $remote_permalink[$site['blog_id']];
