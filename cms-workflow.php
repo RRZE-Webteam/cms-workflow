@@ -4,7 +4,7 @@
 Plugin Name:     CMS-Workflow
 Plugin URI:      https://github.com/RRZE-Webteam/cms-workflow
 Description:     Redaktioneller Workflow.
-Version:         1.18.0
+Version:         1.18.1
 Author:          RRZE Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -19,7 +19,8 @@ register_activation_hook(__FILE__, array('CMS_Workflow', 'activation_hook'));
 
 register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'));
 
-class CMS_Workflow {
+class CMS_Workflow
+{
 
     const version = '1.17.2'; // Plugin-Version
     const textdomain = 'cms-workflow';
@@ -28,9 +29,14 @@ class CMS_Workflow {
 
     public $workflow_options = '_cms_workflow_';
     public $workflow_options_name = '_cms_workflow_options';
+
     private static $instance;
 
-    public static function instance() {
+    public $modules;
+    public $workflow_module;
+
+    public static function instance()
+    {
         if (!isset(self::$instance)) {
             self::$instance = new CMS_Workflow;
 
@@ -43,15 +49,18 @@ class CMS_Workflow {
         return self::$instance;
     }
 
-    public static function activation_hook() {
+    public static function activation_hook()
+    {
         self::verify_requirements();
     }
 
-    public static function deactivation_hook($network_wide) {
+    public static function deactivation_hook($network_wide)
+    {
         self::register_hook('deactivation', $network_wide);
     }
 
-    public static function verify_requirements() {
+    public static function verify_requirements()
+    {
         $error = '';
 
         if (version_compare(PHP_VERSION, self::php_version, '<')) {
@@ -68,7 +77,8 @@ class CMS_Workflow {
         }
     }
 
-    private static function register_hook($register, $network_wide) {
+    private static function register_hook($register, $network_wide)
+    {
         global $wpdb, $cms_workflow;
 
         if (is_multisite() && $network_wide) {
@@ -89,7 +99,8 @@ class CMS_Workflow {
         $cms_workflow->$register(false);
     }
 
-    private function deactivation($network_wide) {
+    private function deactivation($network_wide)
+    {
         foreach ($this->modules as $mod_name => $mod_data) {
             if ($mod_data->options->activated) {
                 foreach ($this->modules as $mod_name => $mod_data) {
@@ -101,7 +112,8 @@ class CMS_Workflow {
         }
     }
 
-    private function init() {
+    private function init()
+    {
         define('CMS_WORKFLOW_VERSION', self::version);
         define('CMS_WORKFLOW_TEXTDOMAIN', self::textdomain);
 
@@ -116,14 +128,14 @@ class CMS_Workflow {
         include_once ABSPATH . 'wp-admin/includes/plugin.php';
         // If rrze-multilang plugin is active unregister network & translation modules.
         if (
-            is_plugin_active('rrze-multilang/rrze-multilang.php') 
+            is_plugin_active('rrze-multilang/rrze-multilang.php')
             || is_plugin_active_for_network('rrze-multilang/rrze-multilang.php')
-            ) {
-                add_filter('cms_workflow_unregister_modules', function($modules) {
-                    return array_merge(['network', 'translation'], $modules);
-                });
+        ) {
+            add_filter('cms_workflow_unregister_modules', function ($modules) {
+                return array_merge(['network', 'translation'], $modules);
+            });
         }
-        
+
         $this->modules = new stdClass();
 
         $this->set_modules();
@@ -133,7 +145,8 @@ class CMS_Workflow {
         add_filter('plugin_action_links', array($this, 'plugin_action_links'), 10, 2);
     }
 
-    public function set_modules() {
+    public function set_modules()
+    {
 
         $this->load_modules();
 
@@ -155,7 +168,8 @@ class CMS_Workflow {
         }
     }
 
-    public function set_post_types() {
+    public function set_post_types()
+    {
         foreach ($this->modules as $mod_name => $mod_data) {
             if (isset($this->modules->$mod_name->options->post_types)) {
                 $this->modules->$mod_name->options->post_types = $this->workflow_module->clean_post_type_options($this->modules->$mod_name->options->post_types, $mod_data->post_type_support);
@@ -165,7 +179,8 @@ class CMS_Workflow {
         }
     }
 
-    public function plugin_action_links($links, $file) {
+    public function plugin_action_links($links, $file)
+    {
         if ($file != CMS_WORKFLOW_PLUGIN_BASENAME) {
             return $links;
         }
@@ -176,7 +191,8 @@ class CMS_Workflow {
         return $links;
     }
 
-    public function admin_init() {
+    public function admin_init()
+    {
 
         $version = get_option($this->workflow_options . 'version');
 
@@ -188,9 +204,7 @@ class CMS_Workflow {
             }
 
             update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
-        }
-
-        elseif (!$version) {
+        } elseif (!$version) {
             update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
         }
 
@@ -203,7 +217,8 @@ class CMS_Workflow {
         wp_enqueue_style('workflow-common', CMS_WORKFLOW_PLUGIN_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');
     }
 
-    public function register_module($name, $args = array()) {
+    public function register_module($name, $args = array())
+    {
 
         if (!isset($args['title'], $name)) {
             return false;
@@ -253,20 +268,21 @@ class CMS_Workflow {
         return $this->modules->$name;
     }
 
-    private function load_modules() {
+    private function load_modules()
+    {
 
         if (!class_exists('WP_List_Table')) {
-            require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+            require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
         }
 
-        require_once( CMS_WORKFLOW_PLUGIN_PATH . '/includes/workflow-module.php' );
+        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/includes/workflow-module.php');
 
         $module_dirs = scandir(CMS_WORKFLOW_PLUGIN_PATH . '/modules/');
         $class_names = array();
         foreach ($module_dirs as $module_dir) {
             $filename = CMS_WORKFLOW_PLUGIN_PATH . "/modules/{$module_dir}/$module_dir.php";
             if (file_exists($filename)) {
-                include_once( $filename );
+                include_once($filename);
 
                 $tmp = explode('-', $module_dir);
                 $class_name = '';
@@ -291,7 +307,8 @@ class CMS_Workflow {
         }
     }
 
-    private function load_module_options() {
+    private function load_module_options()
+    {
 
         foreach ($this->modules as $mod_name => $mod_data) {
 
@@ -310,15 +327,14 @@ class CMS_Workflow {
         }
     }
 
-    public function get_module_by($key, $value) {
+    public function get_module_by($key, $value)
+    {
         $module = false;
         foreach ($this->modules as $mod_name => $mod_data) {
 
             if ($key == 'name' && $value == $mod_name) {
                 $module = $this->modules->$mod_name;
-            }
-
-            else {
+            } else {
                 foreach ($mod_data as $mod_data_key => $mod_data_value) {
                     if ($mod_data_key == $key && $mod_data_value == $value) {
                         $module = $this->modules->$mod_name;
@@ -329,14 +345,16 @@ class CMS_Workflow {
         return $module;
     }
 
-    public function update_module_option($mod_name, $key, $value) {
+    public function update_module_option($mod_name, $key, $value)
+    {
         $this->modules->$mod_name->options->$key = $value;
         $this->$mod_name->module = $this->modules->$mod_name;
 
         return update_option($this->workflow_options . $mod_name . '_options', $this->modules->$mod_name->options);
     }
 
-    public function update_all_module_options($mod_name, $new_options) {
+    public function update_all_module_options($mod_name, $new_options)
+    {
         if (is_array($new_options)) {
             $new_options = (object) $new_options;
         }
@@ -346,5 +364,4 @@ class CMS_Workflow {
 
         return update_option($this->workflow_options . $mod_name . '_options', $this->modules->$mod_name->options);
     }
-
 }
