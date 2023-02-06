@@ -1,10 +1,13 @@
 <?php
 
-class Workflow_Settings extends Workflow_Module {
+class Workflow_Settings extends Workflow_Module
+{
 
     public $module;
+    public $module_url;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $cms_workflow;
 
         $this->module_url = $this->get_module_url(__FILE__);
@@ -22,7 +25,8 @@ class Workflow_Settings extends Workflow_Module {
         $this->module = $cms_workflow->register_module('settings', $args);
     }
 
-    public function init() {
+    public function init()
+    {
 
         add_action('admin_init', array($this, 'module_settings_save'), 100);
 
@@ -34,7 +38,8 @@ class Workflow_Settings extends Workflow_Module {
         add_action('admin_init', array($this, 'register_settings'));
     }
 
-    public function action_admin_menu() {
+    public function action_admin_menu()
+    {
         global $cms_workflow, $settings_page;
 
         $settings_page = add_menu_page(__('Workflow', CMS_WORKFLOW_TEXTDOMAIN), __('Workflow', CMS_WORKFLOW_TEXTDOMAIN), 'manage_options', $this->module->settings_slug, array($this, 'settings_page_controller'), 'dashicons-share-alt');
@@ -48,19 +53,22 @@ class Workflow_Settings extends Workflow_Module {
         }
     }
 
-    public function action_admin_print_styles() {
+    public function action_admin_print_styles()
+    {
         wp_enqueue_style('workflow-settings', $this->module_url . 'settings.css', false, CMS_WORKFLOW_VERSION);
     }
 
-    public function action_admin_print_scripts() {
-        ?>
+    public function action_admin_print_scripts()
+    {
+?>
         <script type="text/javascript">
             var workflow_admin_url = '<?php echo get_admin_url(); ?>';
         </script>
-        <?php
+    <?php
     }
 
-    public function settings_page_controller() {
+    public function settings_page_controller()
+    {
         global $cms_workflow;
 
         $requested_module = $cms_workflow->get_module_by('settings_slug', $_GET['page']);
@@ -78,22 +86,17 @@ class Workflow_Settings extends Workflow_Module {
         $this->print_default_view($requested_module);
     }
 
-    public function print_default_view($current_module) {
+    public function print_default_view($current_module)
+    {
         global $cms_workflow;
 
         if (isset($_GET['message'])) {
             $message = $_GET['message'];
-        }
-
-        elseif (isset($_REQUEST['message'])) {
+        } elseif (isset($_REQUEST['message'])) {
             $message = $_REQUEST['message'];
-        }
-
-        elseif (isset($_POST['message'])) {
+        } elseif (isset($_POST['message'])) {
             $message = $_POST['message'];
-        }
-
-        else {
+        } else {
             $message = false;
         }
 
@@ -103,24 +106,18 @@ class Workflow_Settings extends Workflow_Module {
 
         if (isset($_GET['error'])) {
             $error = $_GET['error'];
-        }
-
-        elseif (isset($_REQUEST['error'])) {
+        } elseif (isset($_REQUEST['error'])) {
             $error = $_REQUEST['error'];
-        }
-
-        elseif (isset($_POST['error'])) {
+        } elseif (isset($_POST['error'])) {
             $error = $_POST['error'];
-        }
-
-        else {
+        } else {
             $error = false;
         }
 
         if ($error && isset($current_module->messages[$error])) {
             $display_text = '<div class="error"><p><strong>' . esc_html($current_module->messages[$error]) . '</strong></p></div>';
         }
-        ?>
+    ?>
         <div class="wrap">
             <h2><?php echo esc_html(sprintf(__('Workflow &rsaquo; %s', CMS_WORKFLOW_TEXTDOMAIN), $current_module->title)); ?></h2>
             <?php if (isset($display_text)) :
@@ -133,7 +130,7 @@ class Workflow_Settings extends Workflow_Module {
             $cms_workflow->$module_name->$configure();
             ?>
         </div>
-        <?php
+    <?php
     }
 
     public function countValid($array_or_countable, $mode = \COUNT_NORMAL)
@@ -149,12 +146,13 @@ class Workflow_Settings extends Workflow_Module {
         return null === $array_or_countable ? false : true;
     }
 
-    public function register_settings() {
+    public function register_settings()
+    {
         global $cms_workflow;
 
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
 
-        if (! $this->countValid($cms_workflow->modules)) {
+        if (!$this->countValid($cms_workflow->modules)) {
             echo '<div class="error"><p>' . __('Es sind keine Module registriert', CMS_WORKFLOW_TEXTDOMAIN) . '</p></div>';
         } else {
             foreach ($cms_workflow->modules as $mod_name => $mod_data) {
@@ -167,7 +165,7 @@ class Workflow_Settings extends Workflow_Module {
                     }
                     $cms_workflow->update_module_option($mod_name, 'activated', false);
                     continue;
-                }                
+                }
                 if ($mod_data->autoload) {
                     continue;
                 }
@@ -185,7 +183,8 @@ class Workflow_Settings extends Workflow_Module {
         }
     }
 
-    public function settings_fields($args) {
+    public function settings_fields($args)
+    {
         $options = array(
             false => __('Deaktiviert', CMS_WORKFLOW_TEXTDOMAIN),
             true => __('Aktiviert', CMS_WORKFLOW_TEXTDOMAIN),
@@ -200,7 +199,8 @@ class Workflow_Settings extends Workflow_Module {
         echo '<p class="description">' . $args['description'];
     }
 
-    public function settings_validate($new_options) {
+    public function settings_validate($new_options)
+    {
         global $cms_workflow;
 
         foreach ($new_options as $key => $value) {
@@ -219,9 +219,7 @@ class Workflow_Settings extends Workflow_Module {
                 }
 
                 $cms_workflow->update_module_option($mod_name, 'activated', true);
-            }
-
-            elseif (!$value) {
+            } elseif (!$value) {
                 if (method_exists($cms_workflow->$mod_name, 'deactivation')) {
                     $cms_workflow->$mod_name->deactivation();
                 }
@@ -233,29 +231,32 @@ class Workflow_Settings extends Workflow_Module {
         return $this->module->options;
     }
 
-    public function print_settings() {
-        ?>
+    public function print_settings()
+    {
+    ?>
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
-        <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
-        <?php settings_fields($this->module->workflow_options_name); ?>
-        <?php do_settings_sections($this->module->workflow_options_name); ?>
+            <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
+            <?php settings_fields($this->module->workflow_options_name); ?>
+            <?php do_settings_sections($this->module->workflow_options_name); ?>
             <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
         </form>
         <?php
     }
 
-    public function print_error_or_description($field, $description) {
-        if (isset($_REQUEST['form-errors'][$field])): ?>
-        <div class="form-error">
-            <p><?php echo esc_html($_REQUEST['form-errors'][$field]); ?></p>
-        </div>
-        <?php else: ?>
-        <p class="description"><?php echo esc_html($description); ?></p>
-        <?php
+    public function print_error_or_description($field, $description)
+    {
+        if (isset($_REQUEST['form-errors'][$field])) : ?>
+            <div class="form-error">
+                <p><?php echo esc_html($_REQUEST['form-errors'][$field]); ?></p>
+            </div>
+        <?php else : ?>
+            <p class="description"><?php echo esc_html($description); ?></p>
+<?php
         endif;
     }
 
-    public function custom_post_type_option($module, $option_name = 'post_types', $attachment = false) {
+    public function custom_post_type_option($module, $option_name = 'post_types', $attachment = false)
+    {
         $all_post_types = $this->get_available_post_types();
 
         $sorted_cap_types = array();
@@ -276,7 +277,7 @@ class Workflow_Settings extends Workflow_Module {
 
                 echo '<label for="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '">';
                 echo '<input id="' . esc_attr($option_name) . '_' . esc_attr($post_type) . '" name="'
-                . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
+                    . $module->workflow_options_name . '[' . $option_name . '][' . esc_attr($post_type) . ']"';
                 if (!empty($module->options->{$option_name}[$post_type])) {
                     checked($module->options->{$option_name}[$post_type], true);
                 }
@@ -292,7 +293,8 @@ class Workflow_Settings extends Workflow_Module {
         }
     }
 
-    public function module_settings_save() {
+    public function module_settings_save()
+    {
         global $cms_workflow;
 
         if (!isset($_POST['action'], $_POST['_wpnonce'], $_POST['option_page'], $_POST['_wp_http_referer'], $_POST['cms_workflow_module_name'], $_POST['submit']) || !is_admin()) {
@@ -329,5 +331,4 @@ class Workflow_Settings extends Workflow_Module {
         wp_redirect($referer);
         exit;
     }
-
 }
