@@ -1,24 +1,29 @@
 <?php
 
-class Workflow_Module {
+class Workflow_Module
+{
+    public $module;
 
-    public function module_exist($name) {
+    public function module_exist($name)
+    {
         global $cms_workflow;
 
         return isset($cms_workflow->$name);
     }
-    
-    public function module_activated($name) {
+
+    public function module_activated($name)
+    {
         global $cms_workflow;
 
         if (!$this->module_exist($name)) {
             return false;
         }
-        
+
         return isset($cms_workflow->$name->module->options->activated) && $cms_workflow->$name->module->options->activated;
     }
 
-    public function clean_post_type_options($module_post_types = array(), $post_type_support = null) {
+    public function clean_post_type_options($module_post_types = array(), $post_type_support = null)
+    {
         $normalized_post_type_options = array();
         $custom_post_types = wp_list_pluck($this->get_custom_post_types(), 'name');
 
@@ -30,16 +35,17 @@ class Workflow_Module {
 
         foreach ($all_post_types as $post_type) {
             if ((isset($module_post_types[$post_type]) && $module_post_types[$post_type]) || post_type_supports($post_type, $post_type_support)) {
-                $normalized_post_type_options[$post_type] = true;            
+                $normalized_post_type_options[$post_type] = true;
             } else {
                 $normalized_post_type_options[$post_type] = false;
             }
         }
-        
+
         return $normalized_post_type_options;
     }
 
-    public function get_buildin_post_types() {
+    public function get_buildin_post_types()
+    {
 
         $args = array(
             '_builtin' => true,
@@ -49,7 +55,8 @@ class Workflow_Module {
         return get_post_types($args, 'objects');
     }
 
-    public function get_custom_post_types() {
+    public function get_custom_post_types()
+    {
         $args = array(
             '_builtin' => false,
             'public' => true,
@@ -65,7 +72,8 @@ class Workflow_Module {
         return $available_post_types;
     }
 
-    public function get_post_types($module) {
+    public function get_post_types($module)
+    {
         if (is_multisite() && ms_is_switched()) {
             $module_options = get_option($module->workflow_options_name);
         } else {
@@ -82,7 +90,8 @@ class Workflow_Module {
         return $post_types;
     }
 
-    public function get_post_status_name($status) {
+    public function get_post_status_name($status)
+    {
         $status_friendly_name = '';
 
         $builtin_status = array(
@@ -101,7 +110,8 @@ class Workflow_Module {
         return $status_friendly_name;
     }
 
-    public function get_available_post_types($post_type = null) {
+    public function get_available_post_types($post_type = null)
+    {
         $all_post_types = array();
 
         $buildin_post_types = $this->get_buildin_post_types();
@@ -123,7 +133,8 @@ class Workflow_Module {
         }
     }
 
-    public function get_post_type_labels() {
+    public function get_post_type_labels()
+    {
         global $wp_post_types;
 
         $post_type_name = get_current_screen()->post_type;
@@ -132,18 +143,19 @@ class Workflow_Module {
         return $labels;
     }
 
-    public function get_current_post_type() {
+    public function get_current_post_type()
+    {
         global $post, $typenow, $pagenow, $current_screen;
 
         if (isset($_REQUEST['post'])) {
             $r_post = $_REQUEST['post'];
             $post_id = absint($r_post);
         }
-        
+
         if (isset($_REQUEST['post_type'])) {
             $r_post_type = $_REQUEST['post_type'];
         }
-        
+
         if ($post && $post->post_type) {
             $post_type = $post->post_type;
         } elseif ($typenow) {
@@ -159,55 +171,61 @@ class Workflow_Module {
         } else {
             $post_type = null;
         }
-        
+
         return $post_type;
     }
 
-    public function is_post_type_enabled($post_type = null, $module = null) {
+    public function is_post_type_enabled($post_type = null, $module = null)
+    {
 
-        if(!$module) {
+        if (!$module) {
             $module = $this->module;
         }
-        
+
         $allowed_post_types = $this->get_post_types($module);
 
         if (!$post_type) {
             $post_type = get_post_type();
         }
-        
+
         $enabled_post_types = array();
-        $available_post_types = $this->get_available_post_types();      
+        $available_post_types = $this->get_available_post_types();
         foreach ($available_post_types as $pt => $args) {
             if (in_array($args->capability_type, $allowed_post_types)) {
                 $enabled_post_types[] = $pt;
             }
         }
-        
+
         return (bool) in_array($post_type, $enabled_post_types);
     }
 
-    public function get_encoded_description($args = array()) {
+    public function get_encoded_description($args = array())
+    {
         return base64_encode(maybe_serialize($args));
     }
 
-    public function get_unencoded_description($string_to_unencode) {
+    public function get_unencoded_description($string_to_unencode)
+    {
         return maybe_unserialize(base64_decode($string_to_unencode));
     }
 
-    public function get_module_url($file) {
+    public function get_module_url($file)
+    {
         $module_url = plugins_url('/', $file);
         return trailingslashit($module_url);
     }
 
-    public function get_users_by_role($role = null) {
+    public function get_users_by_role($role = null)
+    {
         global $wpdb;
 
         $blog_prefix = $wpdb->get_blog_prefix(get_current_blog_id());
         $users = $wpdb->get_results(
-             "SELECT ID, meta_value
+            "SELECT ID, meta_value
              FROM $wpdb->users, $wpdb->usermeta
              WHERE {$wpdb->users}.ID = {$wpdb->usermeta}.user_id AND meta_key = '{$blog_prefix}capabilities'
-             ORDER BY {$wpdb->usermeta}.user_id");
+             ORDER BY {$wpdb->usermeta}.user_id"
+        );
 
         if (empty($users)) {
             return null;
@@ -223,8 +241,9 @@ class Workflow_Module {
 
         return empty($results) ? null : $results;
     }
-    
-    public function users_select_form($selected = null, $args = null) {
+
+    public function users_select_form($selected = null, $args = null)
+    {
 
         $defaults = array(
             'list_class' => 'workflow-users-select',
@@ -250,11 +269,11 @@ class Workflow_Module {
         if (!is_array($selected)) {
             $selected = array();
         }
-        ?>
+?>
         <?php if (count($users)) : ?>
             <ul class="<?php echo esc_attr($list_class) ?>">
-            <?php foreach ($users as $user) : ?>
-                <?php $checked = ( in_array($user->ID, $selected) ) ? 'checked="checked"' : ''; ?>
+                <?php foreach ($users as $user) : ?>
+                    <?php $checked = (in_array($user->ID, $selected)) ? 'checked="checked"' : ''; ?>
                     <li>
                         <label for="<?php echo esc_attr($input_id . '-' . $user->ID) ?>">
                             <input type="checkbox" id="<?php echo esc_attr($input_id . '-' . $user->ID) ?>" name="<?php echo esc_attr($input_name) ?>[]" value="<?php echo esc_attr($user->ID); ?>" <?php echo $checked; ?> />
@@ -262,15 +281,16 @@ class Workflow_Module {
                             <span class="workflow-user-useremail"><?php echo esc_html($user->user_email); ?></span>
                         </label>
                     </li>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </ul>
-        <?php else: ?>
+        <?php else : ?>
             <p><?php _e('Kein Benutzer gefunden.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
         <?php endif; ?>
-        <?php
+    <?php
     }
 
-    public function is_settings_view($module_name = null) {
+    public function is_settings_view($module_name = null)
+    {
         global $pagenow, $cms_workflow;
 
         if ($pagenow != 'admin.php' || !isset($_GET['page'])) {
@@ -294,7 +314,8 @@ class Workflow_Module {
         return true;
     }
 
-    public function show_admin_notice($message, $class = '') {
+    public function show_admin_notice($message, $class = '')
+    {
 
         $default_allowed_classes = array('error', 'updated');
         $allowed_classes = apply_filters('admin_notices_allowed_classes', $default_allowed_classes);
@@ -303,14 +324,15 @@ class Workflow_Module {
         if (!in_array($class, $allowed_classes)) {
             $class = $default_class;
         }
-        ?>
+    ?>
         <div class="<?php echo $class; ?>">
             <p><?php echo $message; ?></p>
         </div>
         <?php
     }
 
-    public function flash_admin_notice($message, $class = '') {
+    public function flash_admin_notice($message, $class = '')
+    {
         $default_allowed_classes = array('error', 'updated');
         $allowed_classes = apply_filters('admin_notices_allowed_classes', $default_allowed_classes);
         $default_class = apply_filters('admin_notices_default_class', 'updated');
@@ -327,7 +349,8 @@ class Workflow_Module {
         set_transient($transient, $flash_notices, 60);
     }
 
-    public function show_flash_admin_notices() {
+    public function show_flash_admin_notices()
+    {
         $transient = 'flash_admin_notices_' . get_current_user_id();
         $transient_value = get_transient($transient);
         $flash_notices = maybe_unserialize($transient_value ? $transient_value : '');
@@ -335,11 +358,11 @@ class Workflow_Module {
         if (is_array($flash_notices)) {
             foreach ($flash_notices as $class => $messages) {
                 foreach ($messages as $message) :
-                    ?>
+        ?>
                     <div class="<?php echo $class; ?>">
                         <p><?php echo $message; ?></p>
                     </div>
-                    <?php
+<?php
                 endforeach;
             }
         }
@@ -347,7 +370,8 @@ class Workflow_Module {
         delete_transient($transient);
     }
 
-    private static function get_languages() {
+    private static function get_languages()
+    {
         require_once(ABSPATH . 'wp-admin/includes/translation-install.php');
         $translations = wp_get_available_translations();
         $english = array(
@@ -360,22 +384,24 @@ class Workflow_Module {
                 )
             )
         );
-        
+
         return array_merge($translations, $english);
     }
 
-    public static function get_available_languages() {
+    public static function get_available_languages()
+    {
         $languages = get_available_languages();
         foreach ($languages as $k => $lang) {
             if (strlen($lang) > 5) {
                 unset($languages[$k]);
             }
         }
-        
+
         return array_merge($languages, array('en_US'));
     }
-    
-    public static function get_language($locale = 'en_US') {
+
+    public static function get_language($locale = 'en_US')
+    {
         $languages = self::get_languages();
         if ($locale == 'en_EN') {
             $locale = 'en_US';
@@ -383,7 +409,8 @@ class Workflow_Module {
         return $languages[$locale];
     }
 
-    public static function get_locale() {
+    public static function get_locale()
+    {
         global $wp_local_package;
 
         if (isset($wp_local_package)) {
@@ -417,8 +444,9 @@ class Workflow_Module {
 
         return substr($locale, 0, 5);
     }
-    
-    public function repopulate_role($role = '') {
+
+    public function repopulate_role($role = '')
+    {
         $allowed_roles = array('editor', 'author');
 
         if (!in_array($role, $allowed_roles)) {
@@ -431,7 +459,8 @@ class Workflow_Module {
         $this->$populate_role();
     }
 
-    private function populate_editor_role() {
+    private function populate_editor_role()
+    {
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
         _x('Editor', 'User role');
@@ -477,7 +506,8 @@ class Workflow_Module {
         $role->add_cap('read_private_pages');
     }
 
-    private function populate_author_role() {
+    private function populate_author_role()
+    {
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
         _x('Author', 'User role');
@@ -498,5 +528,4 @@ class Workflow_Module {
         $role->add_cap('delete_posts');
         $role->add_cap('delete_published_posts');
     }
-
 }
