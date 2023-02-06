@@ -24,15 +24,16 @@ if (!is_user_logged_in()) {
 
 xliff_attachment($post_id);
 
-function xliff_attachment($post_id) {
+function xliff_attachment($post_id)
+{
     $post = get_post($post_id);
-    
+
     if (is_null($post)) {
         exit;
     }
-    
+
     $xliff_file = get_xliff_file($post_id, $post);
-    
+
     $filename = sanitize_file_name(sprintf('%1$s-%2$s.xliff', $post->post_title, $post->ID));
 
     header('Content-Description: File Transfer');
@@ -43,7 +44,8 @@ function xliff_attachment($post_id) {
     exit;
 }
 
-function get_xliff_file($post_id, $post) {
+function get_xliff_file($post_id, $post)
+{
 
     $source_language_code = get_post_meta($post_id, '_translate_from_lang_post_meta', true);
     if ($source_language_code == '') {
@@ -74,7 +76,8 @@ function get_xliff_file($post_id, $post) {
             'field_type' => 'excerpt',
             'field_data' => $post->post_excerpt,
             'field_data_translated' => $post->post_excerpt,
-    ));
+        )
+    );
 
     $post_meta = get_post_meta($post_id);
 
@@ -82,22 +85,22 @@ function get_xliff_file($post_id, $post) {
         if (strpos($meta_key, '_') === 0) {
             continue;
         }
-        
+
         if (empty($meta_value)) {
             continue;
-        }        
-        
+        }
+
         $meta_value = array_map('maybe_unserialize', $meta_value);
         $meta_value = $meta_value[0];
-        
+
         if (empty($meta_value) || is_array($meta_value) || is_numeric($meta_value)) {
             continue;
         }
-                
+
         $elements[] = (object) array(
             'field_type' => '_meta_' . $meta_key,
             'field_data' => $meta_value,
-            'field_data_translated' => $meta_value,            
+            'field_data_translated' => $meta_value,
         );
     }
 
