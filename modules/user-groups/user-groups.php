@@ -76,6 +76,7 @@ class Workflow_User_Groups extends Workflow_Module
         $args = array(
             'public' => false,
             'rewrite' => false,
+            'show_in_rest' => true
         );
 
         register_taxonomy(self::taxonomy_key, $allowed_post_types, $args);
