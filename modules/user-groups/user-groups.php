@@ -41,7 +41,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function init()
     {
-
         add_action('init', array($this, 'register_taxonomies'));
 
         add_action('admin_init', array($this, 'register_settings'));
@@ -50,6 +49,8 @@ class Workflow_User_Groups extends Workflow_Module
         add_action('admin_init', array($this, 'handle_edit_usergroup'));
         add_action('admin_init', array($this, 'handle_delete_usergroup'));
         add_action('wp_ajax_inline_save_usergroup', array($this, 'handle_ajax_inline_save_usergroup'));
+
+        add_action('wp_insert_post', [$this, 'insert_post']);
 
         add_action('show_user_profile', array($this, 'user_profile_page'));
         add_action('edit_user_profile', array($this, 'user_profile_page'));
@@ -256,6 +257,28 @@ class Workflow_User_Groups extends Workflow_Module
         $redirect_url = $this->get_link(array('message' => 'usergroup-deleted'));
         wp_redirect($redirect_url);
         exit;
+    }
+
+    public function insert_post($post_id)
+    {
+        $post_type = get_post_type($post_id);
+        if (in_array($post_type, $this->get_post_types($this->module))) {
+            add_action("rest_insert_{$post_type}", [$this, 'rest_insert_post']);
+        }
+    }
+
+    public function rest_insert_post($post)
+    {
+        global $cms_workflow;
+
+        $usergroups = get_terms(self::taxonomy_key);
+        if (!empty($usergroups)) {
+            $usergroup_ids = [];
+            foreach ($usergroups as $group) {
+                $usergroup_ids[] = $group->term_id;
+            }
+            $cms_workflow->authors->add_post_usergroups($post, $usergroup_ids);
+        }
     }
 
     public function handle_ajax_inline_save_usergroup()
