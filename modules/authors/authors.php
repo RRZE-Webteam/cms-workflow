@@ -397,7 +397,7 @@ class Workflow_Authors extends Workflow_Module
         return;
     }
 
-    private function add_post_usergroups($post, $usergroups, $append = true)
+    public function add_post_usergroups($post, $usergroups, $append = true)
     {
         global $cms_workflow;
 
