@@ -4,7 +4,7 @@
 Plugin Name:     CMS-Workflow
 Plugin URI:      https://github.com/RRZE-Webteam/cms-workflow
 Description:     Redaktioneller Workflow.
-Version:         1.18.2
+Version:         1.18.3
 Author:          RRZE Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -22,7 +22,7 @@ register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'))
 class CMS_Workflow
 {
 
-    const version = '1.18.2'; // Plugin-Version
+    const version = '1.18.3'; // Plugin-Version
     const textdomain = 'cms-workflow';
     const php_version = '8.0'; // Minimal erforderliche PHP-Version
     const wp_version = '6.1'; // Minimal erforderliche WordPress-Version
@@ -363,5 +363,54 @@ class CMS_Workflow
         $this->$mod_name->module = $this->modules->$mod_name;
 
         return update_option($this->workflow_options . $mod_name . '_options', $this->modules->$mod_name->options);
+    }
+
+    /**
+     * Debug
+     *
+     * @param $input
+     * @param string $level
+     * @return void
+     */
+    public function debug($input, string $level = 'i')
+    {
+        if (!WP_DEBUG) {
+            return;
+        }
+        if (in_array(strtolower((string) WP_DEBUG_LOG), ['true', '1'], true)) {
+            $logPath = WP_CONTENT_DIR . '/debug.log';
+        } elseif (is_string(WP_DEBUG_LOG)) {
+            $logPath = WP_DEBUG_LOG;
+        } else {
+            return;
+        }
+        if (is_array($input) || is_object($input)) {
+            $input = print_r($input, true);
+        }
+        switch (strtolower($level)) {
+            case 'e':
+            case 'error':
+                $level = 'Error';
+                break;
+            case 'i':
+            case 'info':
+                $level = 'Info';
+                break;
+            case 'd':
+            case 'debug':
+                $level = 'Debug';
+                break;
+            default:
+                $level = 'Info';
+        }
+        error_log(
+            date("[d-M-Y H:i:s \U\T\C]")
+                . " WP $level: "
+                . basename(__FILE__) . ' '
+                . $input
+                . PHP_EOL,
+            3,
+            $logPath
+        );
     }
 }
