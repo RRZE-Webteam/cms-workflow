@@ -827,7 +827,7 @@ class Workflow_Authors extends Workflow_Module
     {
         global $wpdb;
 
-        if ($wp_query->is_author()) {
+        if (method_exists($wp_query, 'is_author') && $wp_query->is_author()) {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module)) {
                 return $where;
             }
@@ -866,7 +866,7 @@ class Workflow_Authors extends Workflow_Module
     {
         global $wp_query, $wpdb;
 
-        if ($wp_query->is_author()) {
+        if (method_exists($wp_query, 'is_author') && $wp_query->is_author()) {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module)) {
                 return $join;
             }
@@ -894,7 +894,7 @@ class Workflow_Authors extends Workflow_Module
     {
         global $wp_query, $wpdb;
 
-        if ($wp_query->is_author()) {
+        if (method_exists($wp_query, 'is_author') && $wp_query->is_author()) {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module)) {
                 return $groupby;
             }
