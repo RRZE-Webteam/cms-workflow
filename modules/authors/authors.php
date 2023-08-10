@@ -81,8 +81,8 @@ class Workflow_Authors extends Workflow_Module
         add_action('admin_head', array($this, 'remove_quick_edit_authors_box'));
 
         add_filter('posts_where', array($this, 'posts_where_filter'), 10, 2);
-        add_filter('posts_join', array($this, 'posts_join_filter'));
-        add_filter('posts_groupby', array($this, 'posts_groupby_filter'));
+        add_filter('posts_join', array($this, 'posts_join_filter'), 10, 2);
+        add_filter('posts_groupby', array($this, 'posts_groupby_filter'), 10, 2);
 
         add_action('load-edit.php', array($this, 'load_edit'));
 
@@ -862,9 +862,9 @@ class Workflow_Authors extends Workflow_Module
         return $where;
     }
 
-    public function posts_join_filter($join)
+    public function posts_join_filter($join, $wp_query)
     {
-        global $wp_query, $wpdb;
+        global $wpdb;
 
         if (method_exists($wp_query, 'is_author') && $wp_query->is_author()) {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module)) {
@@ -890,9 +890,9 @@ class Workflow_Authors extends Workflow_Module
         return $join;
     }
 
-    public function posts_groupby_filter($groupby)
+    public function posts_groupby_filter($groupby, $wp_query)
     {
-        global $wp_query, $wpdb;
+        global $wpdb;
 
         if (method_exists($wp_query, 'is_author') && $wp_query->is_author()) {
             if (!$this->is_post_type_enabled($wp_query->query_vars['post_type'], $this->module)) {
