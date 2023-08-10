@@ -87,8 +87,8 @@ class Workflow_Notifications extends Workflow_Module
         $identical = true;
 
         foreach (_wp_post_revision_fields() as $field => $field_title) {
-            $left = apply_filters("_wp_post_revision_field_$field", $post_before->$field, $field);
-            $right = apply_filters("_wp_post_revision_field_$field", $post_after->$field, $field);
+            $left = $post_before->$field;
+            $right = $post_after->$field;
 
             if (!$diff = $this->text_diff($left, $right)) {
                 continue;
