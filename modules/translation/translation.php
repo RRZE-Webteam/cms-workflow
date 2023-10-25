@@ -611,10 +611,12 @@ class Workflow_Translation extends Workflow_Module
                 $href = $remote_permalink[$site['blog_id']];
             } else {
                 switch_to_blog($site['blog_id']);
-                $widget = get_option('widget_workflow_translation_lang_switcher');
-                $widgetValues = array_values($widget);
-                $widgetShift = array_shift($widgetValues);
-                $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);
+                $href = $remoteSiteUrl;
+                if ($widget = get_option('widget_workflow_translation_lang_switcher')) {
+                    $widgetValues = array_values($widget);
+                    $widgetShift = array_shift($widgetValues);
+                    $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);    
+                }
                 restore_current_blog();
             }
 
