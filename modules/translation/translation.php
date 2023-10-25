@@ -785,4 +785,36 @@ class Workflow_Translation extends Workflow_Module
         call_user_func_array('array_multisort', $args);
         return array_pop($args);
     }
+
+    public static function get_locale_info()
+    {
+        $alternate_posts = self::$alternate_posts;
+
+        if (empty($alternate_posts)) {
+            return '';
+        }
+
+        extract($alternate_posts, EXTR_SKIP);
+
+        $current_blog_id = get_current_blog_id();
+        $locale = get_locale();
+        $locale_info[$locale] = [
+            'locale' => $locale,
+            'href' => $remote_permalink[$current_blog_id],
+        ];
+
+        foreach ($related_sites as $site) {
+            $remote_blog_id = $site['blog_id'];
+            $remoteLocale = $site['sitelang'];
+            $href = $remote_permalink[$remote_blog_id] ?? '';
+
+            $locale_info[$remoteLocale] = [
+                'locale' => $remoteLocale,
+                'href' => $href,
+            ];
+        }
+
+        ksort($locale_info);
+        return $locale_info;
+    }
 }
