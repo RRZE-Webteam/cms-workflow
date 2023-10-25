@@ -611,10 +611,12 @@ class Workflow_Translation extends Workflow_Module
                 $href = $remote_permalink[$site['blog_id']];
             } else {
                 switch_to_blog($site['blog_id']);
-                $widget = get_option('widget_workflow_translation_lang_switcher');
-                $widgetValues = array_values($widget);
-                $widgetShift = array_shift($widgetValues);
-                $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);
+                $href = $remoteSiteUrl;
+                if ($widget = get_option('widget_workflow_translation_lang_switcher')) {
+                    $widgetValues = array_values($widget);
+                    $widgetShift = array_shift($widgetValues);
+                    $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);    
+                }
                 restore_current_blog();
             }
 
@@ -784,5 +786,37 @@ class Workflow_Translation extends Workflow_Module
         $args[] = &$data;
         call_user_func_array('array_multisort', $args);
         return array_pop($args);
+    }
+
+    public static function get_locale_info()
+    {
+        $alternate_posts = self::$alternate_posts;
+
+        if (empty($alternate_posts)) {
+            return '';
+        }
+
+        extract($alternate_posts, EXTR_SKIP);
+
+        $current_blog_id = get_current_blog_id();
+        $locale = get_locale();
+        $locale_info[$locale] = [
+            'locale' => $locale,
+            'href' => $remote_permalink[$current_blog_id],
+        ];
+
+        foreach ($related_sites as $site) {
+            $remote_blog_id = $site['blog_id'];
+            $remoteLocale = $site['sitelang'];
+            $href = $remote_permalink[$remote_blog_id] ?? '';
+
+            $locale_info[$remoteLocale] = [
+                'locale' => $remoteLocale,
+                'href' => $href,
+            ];
+        }
+
+        ksort($locale_info);
+        return $locale_info;
     }
 }
