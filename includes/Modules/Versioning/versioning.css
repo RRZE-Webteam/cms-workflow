@@ -1,0 +1,110 @@
+.network-connections-list {
+    height: 200px;
+    overflow: auto;    
+}
+
+.network-connections-list li {
+    padding: 10px 5px 5px 5px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.network-connections-list li:hover {
+    background: #EAF2FA;
+}
+
+.network-connections-list li input {
+    float: right;
+}
+
+.network-connections-list .related-blogdetail {
+    display: block;
+    font-size: 14px;
+}
+
+.network-connections-list .related-postdetail {
+    display: block;
+    color: #ccc;
+    font-size: 12px;
+}
+
+.network-connections-list label {
+    font-weight: normal !important;
+}
+
+#network-connections-box {
+    margin: 10px 0;
+}
+
+#network-connections-inside {
+    width: 49%;
+}
+
+.status-draft .check-column, .cms-status-draft {
+    background: #ffffe0 !important;
+}
+
+.status-future .check-column, .cms-status-future {
+    background-color: #E9F2D3 !important;
+}
+
+.status-publish .check-column, .cms-status-publish {}
+
+.status-pending .check-column, .cms-status-pending {
+    background-color: #D3E4ED !important;
+}
+
+.status-private .check-column, .cms-status-private {
+    background-color: #FFECE6 !important;
+}
+
+.post-password-required .check-column, .cms-post-password-required {
+    background-color: #ff9894 !important;
+}
+
+.status-trash .check-column, .cms-status-trash {
+    background-color: #FFEBE8 !important;
+}
+
+.version a:before,
+.version span:before {
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    font: normal 16px/1 'dashicons';
+    vertical-align: top;
+    margin: 3px 5px 0 0;
+}
+
+.version a.import:before {
+    content: "\f340";
+}
+
+.version a.export:before {
+    content: "\f344";
+}
+
+.version span.translation:before {
+    content: "\f326";
+}
+
+/* Columns */
+.column-post-id {
+    width: 5.5em;
+    text-align: right;
+}
+
+.column-version {
+    width: 10%;
+}
+
+@media only screen and (max-width: 1024px) {
+    .column-post-id, .fixed .column-version {
+        display: none !important;
+    }    
+}
+
+@media screen and (max-width: 1080px) {
+    #network-connections-inside {
+        width: 100%;
+    }
+}
