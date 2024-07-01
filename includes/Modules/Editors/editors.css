@@ -1,0 +1,12 @@
+dl.workflow-editors {
+    margin: 0;
+    padding: 0;
+}
+
+dl.workflow-editors dt {
+    padding: 5px 0 6px 0;
+}
+
+dl.workflow-editors dd {
+    margin: 0 0 2px;
+}
