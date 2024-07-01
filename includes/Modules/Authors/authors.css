@@ -1,0 +1,97 @@
+dl.workflow-authors {
+    margin: 0;
+    padding: 0;
+}
+
+dl.workflow-authors dt {
+    padding: 5px 0 6px 0;
+}
+
+dl.workflow-authors dd {
+    margin: 0 0 2px;
+}
+
+.workflow-post-authors-list {
+    height: 300px;
+    overflow: auto;    
+}
+
+.workflow-post-authors-list li {
+    padding: 10px 5px 5px 5px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.workflow-post-authors-list li:hover {
+    background: #EAF2FA;
+}
+
+.workflow-post-authors-list li input {
+    float: right;
+}
+
+.workflow-post-authors-list .workflow-user-displayname,
+.workflow-post-authors-list .workflow-usergroup-name {
+    display: block;
+    font-size: 14px;
+}
+
+.workflow-post-authors-list .workflow-user-useremail,
+.workflow-post-authors-list .workflow-usergroup-description {
+    display: block;
+    color: #ccc;
+    font-size: 12px;
+}
+
+#workflow-post-authors-box {
+    margin: 10px 0;
+}
+
+#workflow-post-authors-box h4 {
+    background: #F1F1F1;
+    font-weight: bold;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid #DFDFDF;
+    -moz-border-radius: 3px;
+}
+
+#workflow-post-authors-box label.workflow-select-all-box {
+    float: right;
+    margin: -20px 10px;
+}
+
+#workflow-post-authors-box label.workflow-select-all-box input {
+    margin-bottom: 5px;
+}
+
+#workflow-post-authors-inside,
+#workflow-post-authors-usergroups-box {
+    width: 49%;
+}
+
+#workflow-post-authors-inside {
+    float: left;
+    margin-right: 10px;
+}
+
+#workflow-post-authors-usergroups-box {
+    float: right;
+}
+
+#workflow-post-authors-inside .list-filterizer-tools,
+#workflow-post-authors-usergroups-box .list-filterizer-tools {
+    margin-top: 5px;
+}
+
+/* Columns */
+.fixed .column-coauthors {
+    width: 10%;
+}
+
+@media screen and (max-width: 1080px) {
+    #workflow-post-authors-inside,
+    #workflow-post-authors-usergroups-box {
+        width: 100%;
+    }
+}
