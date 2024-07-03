@@ -397,7 +397,7 @@ class Notifications extends Module
 
         $body .= $this->get_notification_footer($post);
 
-        $this->send_email('status-change', $post, $subject, $body);
+        $this->send_email('post-status-change', $post, $subject, $body);
     }
 
     public function notification_post_versioning_new($post_id, $original_post_id)
@@ -484,7 +484,7 @@ class Notifications extends Module
 
         $body .= $this->get_notification_footer($post);
 
-        $this->send_email('versioning-new', $post, $subject, $body);
+        $this->send_email('post-versioning-new', $post, $subject, $body);
     }
 
     public function get_notification_footer($post)
