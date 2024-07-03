@@ -30,7 +30,7 @@ class Versioning extends Module
             'title' => __('Versionierung', 'cms-workflow'),
             'description' => __('Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen.', 'cms-workflow'),
             'module_url' => $this->module_url,
-            'slug' => 'post-versioning',
+            'slug' => 'versioning',
             'default_options' => array(
                 'post_types' => array(
                     'post' => true,
@@ -79,8 +79,8 @@ class Versioning extends Module
     public function admin_enqueue_scripts()
     {
         wp_enqueue_style(
-            'workflow-post-versioning',
-            $this->module_url . 'post-versioning.css',
+            'workflow-versioning',
+            $this->module_url . 'versioning.css',
             false,
             plugin()->getVersion(),
             'all'
