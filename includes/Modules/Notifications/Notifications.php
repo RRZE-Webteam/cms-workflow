@@ -484,7 +484,7 @@ class Notifications extends Module
 
         $body .= $this->get_notification_footer($post);
 
-        $this->send_email('post-versioning-new', $post, $subject, $body);
+        $this->send_email('versioning-new', $post, $subject, $body);
     }
 
     public function get_notification_footer($post)
