@@ -174,8 +174,6 @@ class Translation extends Module
 
     private function current_related_sites()
     {
-
-
         $current_blog_id = get_current_blog_id();
         $current_network_related_sites = $this->current_network_related_sites();
         $current_related_sites = (array) $this->module->options->related_sites;
@@ -201,9 +199,6 @@ class Translation extends Module
 
     private function current_network_related_sites()
     {
-
-
-        $current_blog_id = get_current_blog_id();
         $current_network_connections = (array) $this->main->network->module->options->network_connections;
         $current_parent_site = $this->main->network->module->options->parent_site;
 
@@ -546,8 +541,6 @@ class Translation extends Module
 
     public static function get_related_posts($args = '', $arialabel = '')
     {
-
-
         $defaults = array(
             'linktext' => 'text',
             'order' => 'blogid',
@@ -593,7 +586,6 @@ class Translation extends Module
             $related_posts_output .= ' aria-label="' . $arialabel . '" role="navigation"';
         }
         $related_posts_output .= '><ul>';
-
 
         foreach ($related_sites as $site) {
             $language = self::get_language($site['sitelang']);
