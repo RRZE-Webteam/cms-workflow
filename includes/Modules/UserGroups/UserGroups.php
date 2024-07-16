@@ -6,7 +6,6 @@ defined('ABSPATH') || exit;
 
 use RRZE\Workflow\Main;
 use RRZE\Workflow\Module;
-use WP_List_Table;
 use WP_Error;
 use function RRZE\Workflow\plugin;
 
@@ -79,7 +78,6 @@ class UserGroups extends Module
 
     public function register_taxonomies()
     {
-
         $allowed_post_types = $this->get_post_types($this->module);
 
         $args = array(
@@ -132,7 +130,6 @@ class UserGroups extends Module
 
     public function handle_add_usergroup()
     {
-
         if (!isset($_POST['submit'], $_POST['form_action'], $_GET['page']) || $_GET['page'] != $this->module->settings_slug || $_POST['form_action'] != 'add-usergroup') {
             return;
         }
@@ -193,7 +190,6 @@ class UserGroups extends Module
 
     public function handle_edit_usergroup()
     {
-
         if (!isset($_POST['submit'], $_POST['form_action'], $_GET['page']) || $_GET['page'] != $this->module->settings_slug || $_POST['form_action'] != 'edit-usergroup') {
             return;
         }
@@ -294,8 +290,6 @@ class UserGroups extends Module
 
     public function rest_insert_post($post)
     {
-
-
         $usergroups = get_terms(self::taxonomy_key);
         if (!empty($usergroups)) {
             $usergroup_ids = [];
@@ -308,7 +302,6 @@ class UserGroups extends Module
 
     public function handle_ajax_inline_save_usergroup()
     {
-
         if (!wp_verify_nonce($_POST['inline_edit'], 'usergroups-inline-edit-nonce')) {
             die($this->module->messages['nonce-failed']);
         }
@@ -354,7 +347,7 @@ class UserGroups extends Module
 
         $return = $this->update_usergroup($existing_term->term_id, $args);
         if (!is_wp_error($return)) {
-            $wp_list_table = new Workflow_Usergroups_List_Table();
+            $wp_list_table = new UsergroupsListTable($this->main);
             $wp_list_table->prepare_items();
             echo $wp_list_table->single_row($return);
             die();
@@ -389,8 +382,6 @@ class UserGroups extends Module
 
     public function print_configure_view()
     {
-
-
         if (isset($_GET['action'], $_GET['usergroup-id']) && $_GET['action'] == 'edit-usergroup') :
             $usergroup_id = (int) $_GET['usergroup-id'];
             $usergroup = $this->get_usergroup_by('id', $usergroup_id);
@@ -447,7 +438,7 @@ class UserGroups extends Module
             </form>
         <?php
         else :
-            $wp_list_table = new Workflow_Usergroups_List_Table();
+            $wp_list_table = new UsergroupsListTable($this->main);
             $wp_list_table->prepare_items();
         ?>
             <div id="col-right">
@@ -497,13 +488,12 @@ class UserGroups extends Module
 
     public function user_profile_page()
     {
-        global $user_id, $profileuser;
+        global $user_id;
 
         if (!$user_id || !current_user_can('manage_categories')) {
             return;
         }
 
-        $usergroups = $this->get_usergroups();
         $selected_usergroups = $this->get_usergroups_for_user($user_id);
         $usergroups_form_args = array('input_id' => 'workflow-usergroups');
         ?>
@@ -530,7 +520,6 @@ class UserGroups extends Module
 
     public function user_profile_update($errors, $update, $user)
     {
-
         if (!$update) {
             return array(&$errors, $update, &$user);
         }
@@ -603,7 +592,6 @@ class UserGroups extends Module
 
     public function get_usergroups($args = array())
     {
-
         if (!isset($args['hide_empty'])) {
             $args['hide_empty'] = 0;
         }
@@ -623,7 +611,6 @@ class UserGroups extends Module
 
     public function get_usergroup_by($field, $value)
     {
-
         $usergroup = get_term_by($field, $value, self::taxonomy_key);
 
         if (!$usergroup || is_wp_error($usergroup)) {
@@ -643,7 +630,6 @@ class UserGroups extends Module
 
     public function add_usergroup($args = array(), $user_ids = array())
     {
-
         if (!isset($args['name'])) {
             return new WP_Error('invalid', __('Eine neue Benutzergruppe muss einen Namen haben.', 'cms-workflow'));
         }
@@ -672,7 +658,6 @@ class UserGroups extends Module
 
     public function update_usergroup($id, $args = array(), $users = null)
     {
-
         $existing_usergroup = $this->get_usergroup_by('id', $id);
         if (is_wp_error($existing_usergroup)) {
             return new WP_Error('invalid', __('Die Benutzergruppe existiert nicht.', 'cms-workflow'));
@@ -803,141 +788,5 @@ class UserGroups extends Module
         } else {
             return false;
         }
-    }
-}
-
-class Workflow_Usergroups_List_Table extends WP_List_Table
-{
-
-    public $callback_args;
-
-    public function __construct()
-    {
-
-        parent::__construct(array(
-            'screen' => 'edit-usergroup',
-            'plural' => 'user groups',
-            'singular' => 'user group',
-            'ajax' => true
-        ));
-    }
-
-    public function prepare_items()
-    {
-
-
-        $columns = $this->get_columns();
-        $hidden = array();
-        $sortable = array();
-
-        $this->_column_headers = array($columns, $hidden, $sortable);
-
-        $this->items = $this->main->user_groups->get_usergroups();
-
-        $this->set_pagination_args(array(
-            'total_items' => !empty($this->items) ? count($this->items) : 0,
-            'per_page' => !empty($this->items) ? count($this->items) : 0,
-        ));
-    }
-
-    public function no_items()
-    {
-        _e('Keine Benutzergruppen gefunden.', 'cms-workflow');
-    }
-
-    public function get_columns()
-    {
-
-        $columns = array(
-            'name' => __('Name', 'cms-workflow'),
-            'description' => __('Beschreibung', 'cms-workflow'),
-            'users' => __('Benutzer', 'cms-workflow'),
-        );
-
-        return $columns;
-    }
-
-    public function column_default($usergroup, $column_name)
-    {
-    }
-
-    public function column_name($usergroup)
-    {
-
-
-        $output = '<strong><a href="' . esc_url($this->main->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id))) . '">' . esc_html($usergroup->name) . '</a></strong>';
-
-        $actions = array();
-        $actions['edit edit-usergroup'] = sprintf('<a href="%1$s">' . __('Bearbeiten', 'cms-workflow') . '</a>', $this->main->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id)));
-        $actions['inline hide-if-no-js'] = '<a href="#" class="editinline">' . __('QuickEdit') . '</a>';
-        $actions['delete delete-usergroup'] = sprintf('<a href="%1$s">' . __('Löschen', 'cms-workflow') . '</a>', $this->main->user_groups->get_link(array('action' => 'delete-usergroup', 'usergroup-id' => $usergroup->term_id)));
-
-        $output .= $this->row_actions($actions, false);
-        $output .= '<div class="hidden" id="inline_' . $usergroup->term_id . '">';
-        $output .= '<div class="name">' . esc_html($usergroup->name) . '</div>';
-        $output .= '<div class="description">' . esc_html($usergroup->description) . '</div>';
-        $output .= '</div>';
-
-        return $output;
-    }
-
-    public function column_description($usergroup)
-    {
-        return esc_html($usergroup->description);
-    }
-
-    public function column_users($usergroup)
-    {
-
-        return '<a href="' . esc_url($this->main->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id))) . '">' . count($usergroup->user_ids) . '</a>';
-    }
-
-    public function single_row($usergroup)
-    {
-        static $row_class = '';
-        $row_class = ($row_class == '' ? ' class="alternate"' : '');
-
-        echo '<tr id="usergroup-' . $usergroup->term_id . '"' . $row_class . '>';
-        echo $this->single_row_columns($usergroup);
-        echo '</tr>';
-    }
-
-    public function inline_edit()
-    {
-
-        ?>
-        <form method="get" action="">
-            <table style="display: none">
-                <tbody id="inlineedit">
-                    <tr id="inline-edit" class="inline-edit-row" style="display: none">
-                        <td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
-                            <fieldset>
-                                <div class="inline-edit-col">
-                                    <h4><?php _e('QuickEdit', 'cms-workflow'); ?></h4>
-                                    <label>
-                                        <span class="title"><?php _e('Name', 'cms-workflow'); ?></span>
-                                        <span class="input-text-wrap"><input type="text" name="name" class="ptitle" value="" maxlength="40" /></span>
-                                    </label>
-                                    <label>
-                                        <span class="title"><?php _e('Beschreibung', 'cms-workflow'); ?></span>
-                                        <span class="input-text-wrap"><input type="text" name="description" class="pdescription" value="" /></span>
-                                    </label>
-                                </div>
-                            </fieldset>
-                            <p class="inline-edit-save submit">
-                                <a accesskey="c" href="#inline-edit" title="<?php _e('Abbrechen', 'cms-workflow'); ?>" class="cancel button-secondary alignleft"><?php _e('Abbrechen', 'cms-workflow'); ?></a>
-                                <?php $update_text = __('Benutzergruppe aktualisieren', 'cms-workflow'); ?>
-                                <a accesskey="s" href="#inline-edit" title="<?php echo esc_attr($update_text); ?>" class="save button-primary alignright"><?php echo $update_text; ?></a>
-                                <img class="waiting" style="display:none;" src="<?php echo esc_url(admin_url('images/wpspin_light.gif')); ?>" alt="" />
-                                <span class="error" style="display:none;"></span>
-                                <?php wp_nonce_field('usergroups-inline-edit-nonce', 'inline_edit', false); ?>
-                                <br class="clear" />
-                            </p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-<?php
     }
 }
