@@ -205,8 +205,12 @@ class Main
         $this->user_groups = new UserGroups($this);
         $this->notifications = new Notifications($this);
         $this->versioning = new Versioning($this);
-        $this->network = new Network($this);
-        $this->translation = new Translation($this);
+        if (Helper::isModuleActivated('network')) {
+            $this->network = new Network($this);
+        }
+        if (Helper::isModuleActivated('translation')) {
+            $this->translation = new Translation($this);
+        }
     }
 
     private function load_module_options()
