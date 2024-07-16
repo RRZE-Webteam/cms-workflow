@@ -177,8 +177,6 @@ class Versioning extends Module
 
     private function current_related_sites()
     {
-
-
         $network_related_sites = $this->current_network_related_sites();
         $current_related_sites = (array) $this->module->options->related_sites;
         $related_sites = array();
