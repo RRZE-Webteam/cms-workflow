@@ -347,7 +347,7 @@ class UserGroups extends Module
 
         $return = $this->update_usergroup($existing_term->term_id, $args);
         if (!is_wp_error($return)) {
-            $wp_list_table = new UsergroupsListTable($this->main);
+            $wp_list_table = new UserGroupsListTable($this->main);
             $wp_list_table->prepare_items();
             echo $wp_list_table->single_row($return);
             die();
@@ -438,7 +438,7 @@ class UserGroups extends Module
             </form>
         <?php
         else :
-            $wp_list_table = new UsergroupsListTable($this->main);
+            $wp_list_table = new UserGroupsListTable($this->main);
             $wp_list_table->prepare_items();
         ?>
             <div id="col-right">
