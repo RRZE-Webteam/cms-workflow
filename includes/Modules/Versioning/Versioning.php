@@ -99,13 +99,11 @@ class Versioning extends Module
 
     public function settings_post_types_option()
     {
-
         $this->main->settings->custom_post_type_option($this->module);
     }
 
     public function settings_network_posts_types_option()
     {
-
         $this->main->settings->custom_post_type_option($this->module, 'network_posts_types');
     }
 
@@ -144,7 +142,6 @@ class Versioning extends Module
 
     public function settings_validate($new_options)
     {
-
         if (!isset($new_options['post_types'])) {
             $new_options['post_types'] = array();
         }
@@ -194,8 +191,6 @@ class Versioning extends Module
 
     private function current_network_related_sites()
     {
-
-
         $connections = $this->main->network->site_connections();
         $network_connections = $this->main->network->network_connections($connections);
         $current_network_related_sites = array();
@@ -226,8 +221,6 @@ class Versioning extends Module
 
     private function is_author($user_id, $post_id)
     {
-
-
         if ($this->module_activated('authors') && $this->main->authors->is_post_author($user_id, $post_id)) {
             return true;
         }
@@ -559,7 +552,6 @@ class Versioning extends Module
 
     public function network_connections_meta_box($post_type, $post)
     {
-
         if (!current_user_can('manage_categories')) {
             return;
         }
@@ -1060,7 +1052,6 @@ class Versioning extends Module
 
     private function add_network_taxonomies($blog_id, $post_id, $post)
     {
-
         $taxonomies = get_object_taxonomies($post->post_type);
         $filtered_taxonomies = apply_filters('workflow_post_versioning_filtered_network_taxonomies', array());
 
@@ -1263,17 +1254,8 @@ class Versioning extends Module
         if ($version_post_id) {
             $permalink = get_permalink($version_post_id);
             if ($permalink) {
-
-                $translate_to_lang = get_post_meta($version_post_id, '_translate_to_lang_post_meta', true);
-                if (empty($translate_to_lang)) {
-                    $translate_to_lang = self::get_locale();
-                }
-
-                $language = self::get_language($translate_to_lang);
-                $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $language['native_name']) : '';
-
                 $post_title = get_the_title($version_post_id);
-                $documents[] = sprintf('<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);
+                $documents[] = sprintf('<a href="%1$s" target="__blank">%2$s</a>', $permalink, $post_title);
             }
         }
 
