@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 use RRZE\Workflow\Main;
 use WP_List_Table;
 
-class UsergroupsListTable extends WP_List_Table
+class UserGroupsListTable extends WP_List_Table
 {
     public $main;
 
