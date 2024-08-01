@@ -191,17 +191,20 @@ class Versioning extends Module
 
     private function current_network_related_sites()
     {
-        $connections = $this->main->network->site_connections();
-        $network_connections = $this->main->network->network_connections($connections);
         $current_network_related_sites = array();
 
-        foreach ($network_connections as $blog_id) {
-            if (!switch_to_blog($blog_id)) {
-                continue;
-            }
+        if (isset($this->main->network)) {
+            $connections = $this->main->network->site_connections();
+            $network_connections = $this->main->network->network_connections($connections);
 
-            $current_network_related_sites[] = $blog_id;
-            restore_current_blog();
+            foreach ($network_connections as $blog_id) {
+                if (!switch_to_blog($blog_id)) {
+                    continue;
+                }
+
+                $current_network_related_sites[] = $blog_id;
+                restore_current_blog();
+            }
         }
 
         return $current_network_related_sites;
