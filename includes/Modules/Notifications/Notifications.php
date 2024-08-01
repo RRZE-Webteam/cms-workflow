@@ -1,22 +1,29 @@
 <?php
 
-class Workflow_Notifications extends Workflow_Module
-{
+namespace RRZE\Workflow\Modules\Notifications;
 
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+use RRZE\Workflow\Modules\Authors\Authors;
+use Text_Diff;
+
+class Notifications extends Module
+{
     public $schedule_notifications = false;
     public $module;
     public $module_url;
     private $alt_body;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Benachrichtigungen', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Benachrichtigungen über wichtige Änderungen an einem Dokument.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Benachrichtigungen', 'cms-workflow'),
+            'description' => __('Benachrichtigungen über wichtige Änderungen an einem Dokument.', 'cms-workflow'),
             'module_url' => $this->module_url,
             'slug' => 'notifications',
             'default_options' => array(
@@ -25,7 +32,7 @@ class Workflow_Notifications extends Workflow_Module
                     'page' => true,
                 ),
                 'always_notify_admin' => false,
-                'subject_prefix' => __('[Workflow]', CMS_WORKFLOW_TEXTDOMAIN),
+                'subject_prefix' => __('[Workflow]', 'cms-workflow'),
                 'post_status_notify' => true,
                 'post_diff_notify' => true,
                 'post_versioning_new_notify' => true,
@@ -33,7 +40,11 @@ class Workflow_Notifications extends Workflow_Module
             'configure_callback' => 'print_configure_view'
         );
 
-        $this->module = $cms_workflow->register_module('notifications', $args);
+        $this->module = $this->main->register_module('notifications', $args);
+
+        if (!class_exists('WP_Text_Diff_Renderer_Table')) {
+            require(ABSPATH . WPINC . '/wp-diff.php');
+        }
     }
 
     public function init()
@@ -75,13 +86,6 @@ class Workflow_Notifications extends Workflow_Module
             return;
         }
 
-        if (!class_exists('WP_Text_Diff_Renderer_Table')) {
-            require(ABSPATH . WPINC . '/wp-diff.php');
-        }
-
-        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/text-diff-render-table.php');
-        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/text-diff-renderer-unified.php');
-
         $html_diffs = array();
         $text_diffs = array();
         $identical = true;
@@ -103,7 +107,7 @@ class Workflow_Notifications extends Workflow_Module
             $right_lines = explode(PHP_EOL, $right);
 
             $text_diff = new Text_Diff($left_lines, $right_lines);
-            $renderer = new Text_Diff_Renderer_Unified();
+            $renderer = new TextDiffRendererUnified();
             $text_diffs[$field_title] = $renderer->render($text_diff);
 
             $identical = false;
@@ -115,8 +119,8 @@ class Workflow_Notifications extends Workflow_Module
             return;
         }
 
-        $left_title = __('Revision', CMS_WORKFLOW_TEXTDOMAIN);
-        $right_title = __('Aktuelles Dokument', CMS_WORKFLOW_TEXTDOMAIN);
+        $left_title = __('Revision', 'cms-workflow');
+        $right_title = __('Aktuelles Dokument', 'cms-workflow');
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
         $view_link = $post_after->post_status == 'publish' ? htmlspecialchars_decode(get_permalink($post_id)) : '';
@@ -130,7 +134,7 @@ class Workflow_Notifications extends Workflow_Module
             $current_user_display_name = $current_user->display_name ? $current_user->display_name : $current_user->user_login;
             $current_user_email = sprintf('(%s)', $current_user->user_email);
         } else {
-            $current_user_display_name = __('CMS-Workflow', CMS_WORKFLOW_TEXTDOMAIN);
+            $current_user_display_name = __('CMS-Workflow', 'cms-workflow');
             $current_user_email = '';
         }
 
@@ -151,13 +155,13 @@ class Workflow_Notifications extends Workflow_Module
         $blogname = get_option('blogname');
         $admin_email = get_option('admin_email');
 
-        $subject = sprintf(__('%1$s - Das Dokument „%2$s“ hat sich geändert.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
+        $subject = sprintf(__('%1$s - Das Dokument „%2$s“ hat sich geändert.', 'cms-workflow'), $blogname, $post_title);
 
         // PLAIN TEXT Body
         $body = '';
 
-        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
-        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', 'cms-workflow'), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
 
         $body .= "\r\n";
 
@@ -185,18 +189,18 @@ class Workflow_Notifications extends Workflow_Module
 
         $body .= "\r\n \r\n";
 
-        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+        $body .= __('Dokumenteinzelheiten', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Titel: %s', 'cms-workflow'), $post_title) . "\r\n";
 
-        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type_name) . "\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status_name) . "\r\n";
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', 'cms-workflow'), implode(', ', $authors)) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', 'cms-workflow'), $post_type_name) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', 'cms-workflow'), $post_status_name) . "\r\n";
 
         $body .= "\r\n";
 
-        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
+        $body .= __('Weitere Aktionen', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', 'cms-workflow'), $edit_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', 'cms-workflow'), $view_link) . "\r\n" : '';
 
         $body .= "\r\n";
 
@@ -208,9 +212,9 @@ class Workflow_Notifications extends Workflow_Module
         $body = '';
 
         $body .= "<div>\r\n";
-        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+        $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s geändert.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', 'cms-workflow'), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
@@ -245,31 +249,31 @@ class Workflow_Notifications extends Workflow_Module
         $body .= "<br>\r\n";
 
         $body .= "<div>\r\n";
-        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= __('Dokumenteinzelheiten', 'cms-workflow') . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+        $body .= sprintf(__('Titel: %s', 'cms-workflow'), $post_title) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', 'cms-workflow'), implode(', ', $authors)) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type_name) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', 'cms-workflow'), $post_type_name) . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_status_name) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', 'cms-workflow'), $post_status_name) . "\r\n";
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
 
         $body .= "<div>\r\n";
-        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
+        $body .= __('Weitere Aktionen', 'cms-workflow') . "\r\n";
         $body .= "</div><div>\r\n";
-        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', 'cms-workflow'), $edit_link) . "\r\n";
         $body .= $view_link ? "</div><div>\r\n" : '';
-        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', 'cms-workflow'), $view_link) . "\r\n" : '';
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
 
         $body .= "<div>\r\n";
-        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN), $this->draft_or_post_title($post_before->post_title)) . "\r\n";
+        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', 'cms-workflow'), $this->draft_or_post_title($post_before->post_title)) . "\r\n";
         $body .= "</div>\r\n";
 
         $body .= "<br>\r\n";
@@ -285,7 +289,7 @@ class Workflow_Notifications extends Workflow_Module
 
     public function notification_status_change($new_status, $old_status, $post)
     {
-        global $cms_workflow;
+
 
         if (!$this->module->options->post_status_notify) {
             return;
@@ -319,7 +323,7 @@ class Workflow_Notifications extends Workflow_Module
             $current_user_display_name = $current_user->display_name ? $current_user->display_name : $current_user->user_login;
             $current_user_email = sprintf('(%s)', $current_user->user_email);
         } else {
-            $current_user_display_name = __('CMS-Workflow', CMS_WORKFLOW_TEXTDOMAIN);
+            $current_user_display_name = __('CMS-Workflow', 'cms-workflow');
             $current_user_email = '';
         }
 
@@ -340,44 +344,44 @@ class Workflow_Notifications extends Workflow_Module
         $body = '';
 
         if ($old_status == 'new' || $old_status == 'auto-draft') {
-            $subject = sprintf(__('%1$s - Neues Dokument wurde erstellt: "%2$s"', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user->display_name, $current_user->user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Neues Dokument wurde erstellt: "%2$s"', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt.', 'cms-workflow'), $post_id, $post_title, $current_user->display_name, $current_user->user_email) . "\r\n";
         } elseif ($new_status == 'trash') {
-            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde in den Papierkorb verschoben.', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s in den Papierkorb verschoben.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         } elseif ($old_status == 'trash') {
-            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb wiederhergestellt.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde aus dem Papierkorb wiederhergestellt.', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s aus dem Papierkorb wiederhergestellt.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         } elseif ($new_status == 'future') {
             $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde zeitlich geplant.'), $blogname, $post_title);
             $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s zeitlich geplant.'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         } elseif ($new_status == 'publish') {
-            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde veröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde veröffentlicht.', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s veröffentlich.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         } elseif ($old_status == 'publish') {
-            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde unveröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Das Dokument „%2$s“ wurde unveröffentlicht.', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s unveröffentlicht.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         } else {
-            $subject = sprintf(__('%1$s - Der Status des Dokuments „%2$s“ hat sich geändert.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $post_title);
-            $body .= sprintf(__('Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+            $subject = sprintf(__('%1$s - Der Status des Dokuments „%2$s“ hat sich geändert.', 'cms-workflow'), $blogname, $post_title);
+            $body .= sprintf(__('Der Status des Dokuments %1$s „%2$s“ wurde von %3$s %4$s geändert.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
         }
 
-        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', 'cms-workflow'), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
 
         $old_status_name = $this->get_post_status_name($old_status);
         $new_status_name = $this->get_post_status_name($new_status);
 
         $body .= "\r\n";
 
-        $body .= sprintf(__('%1$s  >>>  %2$s', CMS_WORKFLOW_TEXTDOMAIN), $old_status_name, $new_status_name);
+        $body .= sprintf(__('%1$s  >>>  %2$s', 'cms-workflow'), $old_status_name, $new_status_name);
         $body .= "\r\n \r\n";
 
-        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+        $body .= __('Dokumenteinzelheiten', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Titel: %s', 'cms-workflow'), $post_title) . "\r\n";
 
-        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $new_status_name) . "\r\n";
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', 'cms-workflow'), implode(', ', $authors)) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', 'cms-workflow'), $post_type) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', 'cms-workflow'), $new_status_name) . "\r\n";
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
 
@@ -385,15 +389,15 @@ class Workflow_Notifications extends Workflow_Module
 
         $body .= "\r\n";
 
-        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
+        $body .= __('Weitere Aktionen', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', 'cms-workflow'), $edit_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', 'cms-workflow'), $view_link) . "\r\n" : '';
 
         $body .= "\r\n";
 
         $body .= $this->get_notification_footer($post);
 
-        $this->send_email('status-change', $post, $subject, $body);
+        $this->send_email('post-status-change', $post, $subject, $body);
     }
 
     public function notification_post_versioning_new($post_id, $original_post_id)
@@ -428,7 +432,7 @@ class Workflow_Notifications extends Workflow_Module
             $current_user_display_name = $current_user->display_name ? $current_user->display_name : $current_user->user_login;
             $current_user_email = sprintf('(%s)', $current_user->user_email);
         } else {
-            $current_user_display_name = __('CMS-Workflow', CMS_WORKFLOW_TEXTDOMAIN);
+            $current_user_display_name = __('CMS-Workflow', 'cms-workflow');
             $current_user_email = '';
         }
 
@@ -446,23 +450,23 @@ class Workflow_Notifications extends Workflow_Module
 
         $blogname = get_option('blogname');
 
-        $subject = sprintf(__('%1$s - Neue Version des Dokumentes %2$s wurde erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $blogname, $original_post_title);
+        $subject = sprintf(__('%1$s - Neue Version des Dokumentes %2$s wurde erstellt.', 'cms-workflow'), $blogname, $original_post_title);
         $body = '';
 
-        $body = sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
+        $body = sprintf(__('Das Dokument %1$s „%2$s“ wurde von %3$s %4$s erstellt.', 'cms-workflow'), $post_id, $post_title, $current_user_display_name, $current_user_email) . "\r\n";
 
-        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', CMS_WORKFLOW_TEXTDOMAIN), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
+        $body .= sprintf(__('Diese Aktion wurde am %1$s um %2$s %3$s ausgeführt.', 'cms-workflow'), date_i18n(get_option('date_format')), date_i18n(get_option('time_format')), get_option('timezone_string')) . "\r\n";
 
         $status_name = $this->get_post_status_name($post_status);
 
         $body .= "\r\n";
 
-        $body .= __('Dokumenteinzelheiten', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Titel: %s', CMS_WORKFLOW_TEXTDOMAIN), $post_title) . "\r\n";
+        $body .= __('Dokumenteinzelheiten', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Titel: %s', 'cms-workflow'), $post_title) . "\r\n";
 
-        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', CMS_WORKFLOW_TEXTDOMAIN), implode(', ', $authors)) . "\r\n";
-        $body .= sprintf(__('Art: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $post_type) . "\r\n";
-        $body .= sprintf(__('Status: %1$s', CMS_WORKFLOW_TEXTDOMAIN), $status_name) . "\r\n";
+        $body .= sprintf(_nx('Autor: %1$s', 'Autoren: %1$s', count($authors), 'notifications', 'cms-workflow'), implode(', ', $authors)) . "\r\n";
+        $body .= sprintf(__('Art: %1$s', 'cms-workflow'), $post_type) . "\r\n";
+        $body .= sprintf(__('Status: %1$s', 'cms-workflow'), $status_name) . "\r\n";
 
         $edit_link = htmlspecialchars_decode(get_edit_post_link($post_id));
 
@@ -471,10 +475,10 @@ class Workflow_Notifications extends Workflow_Module
 
         $body .= "\r\n";
 
-        $body .= __('Weitere Aktionen', CMS_WORKFLOW_TEXTDOMAIN) . "\r\n";
-        $body .= sprintf(__('Dokument bearbeiten: %s', CMS_WORKFLOW_TEXTDOMAIN), $edit_link) . "\r\n";
-        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $view_link) . "\r\n" : '';
-        $body .= $original_view_link ? sprintf(__('Originaldokument ansehen: %s', CMS_WORKFLOW_TEXTDOMAIN), $original_view_link) . "\r\n" : '';
+        $body .= __('Weitere Aktionen', 'cms-workflow') . "\r\n";
+        $body .= sprintf(__('Dokument bearbeiten: %s', 'cms-workflow'), $edit_link) . "\r\n";
+        $body .= $view_link ? sprintf(__('Dokument ansehen: %s', 'cms-workflow'), $view_link) . "\r\n" : '';
+        $body .= $original_view_link ? sprintf(__('Originaldokument ansehen: %s', 'cms-workflow'), $original_view_link) . "\r\n" : '';
 
         $body .= "\r\n";
 
@@ -486,7 +490,7 @@ class Workflow_Notifications extends Workflow_Module
     public function get_notification_footer($post)
     {
         $body = "";
-        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', CMS_WORKFLOW_TEXTDOMAIN), $this->draft_or_post_title($post->post_title));
+        $body .= sprintf(__('Sie erhalten diese E-Mail, weil Sie Mitautor zum Dokument „%s“ sind.', 'cms-workflow'), $this->draft_or_post_title($post->post_title));
         $body .= "\r\n \r\n";
         $body .= get_option('blogname') . "\r\n" . get_bloginfo('url') . "\r\n" . admin_url() . "\r\n";
         return $body;
@@ -594,7 +598,7 @@ class Workflow_Notifications extends Workflow_Module
 
     private function get_authors_emails($post_id)
     {
-        $users = Workflow_Authors::get_authors($post_id, 'user_email');
+        $users = Authors::get_authors($post_id, 'user_email');
         if (!$users) {
             return array();
         }
@@ -604,7 +608,7 @@ class Workflow_Notifications extends Workflow_Module
 
     private function get_authors_details($post_id)
     {
-        $users = Workflow_Authors::get_authors($post_id);
+        $users = Authors::get_authors($post_id);
         if (!$users) {
             return array();
         }
@@ -618,34 +622,34 @@ class Workflow_Notifications extends Workflow_Module
 
     public function register_settings()
     {
-        add_settings_section($this->module->workflow_options_name . '_general', __('Allgemein', CMS_WORKFLOW_TEXTDOMAIN), '__return_false', $this->module->workflow_options_name);
-        add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
-        add_settings_field('always_notify_admin', __('Administrator benachrichtigen?', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_always_notify_admin_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
-        add_settings_field('subject_prefix', __('Betreff-Präfix', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_subject_prefix_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_section($this->module->workflow_options_name . '_general', __('Allgemein', 'cms-workflow'), '__return_false', $this->module->workflow_options_name);
+        add_settings_field('post_types', __('Freigabe', 'cms-workflow'), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('always_notify_admin', __('Administrator benachrichtigen?', 'cms-workflow'), array($this, 'settings_always_notify_admin_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('subject_prefix', __('Betreff-Präfix', 'cms-workflow'), array($this, 'settings_subject_prefix_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
 
         if ($this->module_activated('authors')) {
-            add_settings_section($this->module->workflow_options_name . '_authors', __('Autoren', CMS_WORKFLOW_TEXTDOMAIN), '__return_false', $this->module->workflow_options_name);
-            add_settings_field('post_status_notify', __('Änderungen des Dokumentstatus benachrichtigen?', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_status_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_authors');
-            add_settings_field('post_diff_notify', __('Änderungen des Dokumentinhaltes benachrichtigen?', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_diff_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_authors');
+            add_settings_section($this->module->workflow_options_name . '_authors', __('Autoren', 'cms-workflow'), '__return_false', $this->module->workflow_options_name);
+            add_settings_field('post_status_notify', __('Änderungen des Dokumentstatus benachrichtigen?', 'cms-workflow'), array($this, 'settings_post_status_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_authors');
+            add_settings_field('post_diff_notify', __('Änderungen des Dokumentinhaltes benachrichtigen?', 'cms-workflow'), array($this, 'settings_post_diff_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_authors');
         }
 
         if ($this->module_activated('post_versioning')) {
-            add_settings_section($this->module->workflow_options_name . '_versioning', __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN), '__return_false', $this->module->workflow_options_name);
-            add_settings_field('post_versioning_new_notify', __('Neue Version eines Dokuments benachrichtigen?', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_versioning_new_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_versioning');
+            add_settings_section($this->module->workflow_options_name . '_versioning', __('Versionierung', 'cms-workflow'), '__return_false', $this->module->workflow_options_name);
+            add_settings_field('post_versioning_new_notify', __('Neue Version eines Dokuments benachrichtigen?', 'cms-workflow'), array($this, 'settings_post_versioning_new_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_versioning');
         }
     }
 
     public function settings_post_types_option()
     {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module);
+
+        $this->main->settings->custom_post_type_option($this->module);
     }
 
     public function settings_always_notify_admin_option()
     {
         $options = array(
-            false => __('Nein', CMS_WORKFLOW_TEXTDOMAIN),
-            true => __('Ja', CMS_WORKFLOW_TEXTDOMAIN),
+            false => __('Nein', 'cms-workflow'),
+            true => __('Ja', 'cms-workflow'),
         );
         echo '<select id="always_notify_admin" name="' . $this->module->workflow_options_name . '[always_notify_admin]">';
         foreach ($options as $value => $label) {
@@ -660,7 +664,7 @@ class Workflow_Notifications extends Workflow_Module
     {
 ?>
         <input type="text" class="medium-text" value="<?php echo $this->module->options->subject_prefix; ?>" id="subject_prefix" name="<?php echo $this->module->workflow_options_name . '[subject_prefix]'; ?>">
-        <p class="description"><?php _e('Dieser Text wird dem Betreff der Nachricht vorangestellt.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+        <p class="description"><?php _e('Dieser Text wird dem Betreff der Nachricht vorangestellt.', 'cms-workflow'); ?></p>
     <?php
     }
 
@@ -685,8 +689,8 @@ class Workflow_Notifications extends Workflow_Module
     public function settings_post_status_notify_option()
     {
         $options = array(
-            false => __('Nein', CMS_WORKFLOW_TEXTDOMAIN),
-            true => __('Ja', CMS_WORKFLOW_TEXTDOMAIN),
+            false => __('Nein', 'cms-workflow'),
+            true => __('Ja', 'cms-workflow'),
         );
         echo '<select id="post_status_notify" name="' . $this->module->workflow_options_name . '[post_status_notify]">';
         foreach ($options as $value => $label) {
@@ -700,8 +704,8 @@ class Workflow_Notifications extends Workflow_Module
     public function settings_post_diff_notify_option()
     {
         $options = array(
-            false => __('Nein', CMS_WORKFLOW_TEXTDOMAIN),
-            true => __('Ja', CMS_WORKFLOW_TEXTDOMAIN),
+            false => __('Nein', 'cms-workflow'),
+            true => __('Ja', 'cms-workflow'),
         );
         echo '<select id="post_diff_notify" name="' . $this->module->workflow_options_name . '[post_diff_notify]">';
         foreach ($options as $value => $label) {
@@ -715,8 +719,8 @@ class Workflow_Notifications extends Workflow_Module
     public function settings_post_versioning_new_notify_option()
     {
         $options = array(
-            false => __('Nein', CMS_WORKFLOW_TEXTDOMAIN),
-            true => __('Ja', CMS_WORKFLOW_TEXTDOMAIN),
+            false => __('Nein', 'cms-workflow'),
+            true => __('Ja', 'cms-workflow'),
         );
         echo '<select id="post_versioning_new_notify" name="' . $this->module->workflow_options_name . '[post_versioning_new_notify]">';
         foreach ($options as $value => $label) {
@@ -743,7 +747,7 @@ class Workflow_Notifications extends Workflow_Module
 
     private function draft_or_post_title($post_title)
     {
-        return !empty($post_title) ? $post_title : __('(Kein Titel)', CMS_WORKFLOW_TEXTDOMAIN);
+        return !empty($post_title) ? $post_title : __('(Kein Titel)', 'cms-workflow');
     }
 
     private function text_diff($left_string, $right_string, $args = null)
@@ -762,7 +766,7 @@ class Workflow_Notifications extends Workflow_Module
         $right_lines = explode("\n", $right_string);
 
         $text_diff = new Text_Diff($left_lines, $right_lines);
-        $renderer = new Workflow_Text_Diff_Renderer_Table();
+        $renderer = new TextDiffRendererTable();
         $diff = $renderer->render($text_diff);
 
         if (!$diff) {

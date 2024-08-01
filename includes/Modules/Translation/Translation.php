@@ -1,6 +1,15 @@
 <?php
 
-class Workflow_Translation extends Workflow_Module
+namespace RRZE\Workflow\Modules\Translation;
+
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+use RRZE\Workflow\Modules\Versioning\Versioning;
+use WP_Error;
+
+class Translation extends Module
 {
     const translate_from_lang_post_meta = '_translate_from_lang_post_meta';
     const translate_to_lang_post_meta = '_translate_to_lang_post_meta';
@@ -12,15 +21,14 @@ class Workflow_Translation extends Workflow_Module
 
     protected static $rrzeTosEndpoints = null;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Übersetzung', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Import und Export von XLIFF-Dateien.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Übersetzung', 'cms-workflow'),
+            'description' => __('Import und Export von XLIFF-Dateien.', 'cms-workflow'),
             'module_url' => $this->module_url,
             'slug' => 'translation',
             'default_options' => array(
@@ -33,12 +41,11 @@ class Workflow_Translation extends Workflow_Module
             'configure_callback' => 'print_configure_view'
         );
 
-        $this->module = $cms_workflow->register_module('translation', $args);
+        $this->module = $this->main->register_module('translation', $args);
     }
 
     public function init()
     {
-        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/modules/' . $this->module->name . '/widgets.php');
         add_filter('rrze_tos_endpoints', [$this, 'rrzeTosEndpoints'], 10, 2);
 
         add_action('widgets_init', array($this, 'register_widgets'));
@@ -87,17 +94,17 @@ class Workflow_Translation extends Workflow_Module
     public function register_settings()
     {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
-        add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('post_types', __('Freigabe', 'cms-workflow'), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
 
         if ($this->module_activated('network')) {
-            add_settings_field('related_sites', __('Bezogenen Webseiten', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+            add_settings_field('related_sites', __('Bezogenen Webseiten', 'cms-workflow'), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
         }
     }
 
     public function settings_post_types_option()
     {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module);
+
+        $this->main->settings->custom_post_type_option($this->module);
     }
 
     public function settings_network_connections_option()
@@ -125,9 +132,9 @@ class Workflow_Translation extends Workflow_Module
                 </label><br>
             <?php
             } ?>
-            <p class="description"><?php _e('Bezogenen Webseiten werden im Sprachwechsler angezeigt.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p class="description"><?php _e('Bezogenen Webseiten werden im Sprachwechsler angezeigt.', 'cms-workflow'); ?></p>
         <?php else : ?>
-            <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar', 'cms-workflow'); ?></p>
         <?php endif;
     }
 
@@ -167,8 +174,6 @@ class Workflow_Translation extends Workflow_Module
 
     private function current_related_sites()
     {
-        global $cms_workflow;
-
         $current_blog_id = get_current_blog_id();
         $current_network_related_sites = $this->current_network_related_sites();
         $current_related_sites = (array) $this->module->options->related_sites;
@@ -187,18 +192,15 @@ class Workflow_Translation extends Workflow_Module
             $related_sites[$blog_id] = $blog;
         }
 
-        $cms_workflow->update_module_option($this->module->name, 'related_sites', $related_sites);
+        $this->main->update_module_option($this->module->name, 'related_sites', $related_sites);
 
         return $related_sites;
     }
 
     private function current_network_related_sites()
     {
-        global $cms_workflow;
-
-        $current_blog_id = get_current_blog_id();
-        $current_network_connections = (array) $cms_workflow->network->module->options->network_connections;
-        $current_parent_site = $cms_workflow->network->module->options->parent_site;
+        $current_network_connections = (array) $this->main->network->module->options->network_connections;
+        $current_parent_site = $this->main->network->module->options->parent_site;
 
         $network_connections = array();
         $related_sites = array();
@@ -212,7 +214,7 @@ class Workflow_Translation extends Workflow_Module
                     'sitelang' => self::get_locale()
                 );
 
-                $module_options = get_option($cms_workflow->network->module->workflow_options_name);
+                $module_options = get_option($this->main->network->module->workflow_options_name);
                 $network_connections = (array) $module_options->network_connections;
                 restore_current_blog();
             }
@@ -280,7 +282,7 @@ class Workflow_Translation extends Workflow_Module
             return;
         }
 
-        add_meta_box('workflow-translate', __('Übersetzung', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'translate_inner_box'), $post_type, 'normal');
+        add_meta_box('workflow-translate', __('Übersetzung', 'cms-workflow'), array($this, 'translate_inner_box'), $post_type, 'normal');
     }
 
     public function translate_inner_box($post)
@@ -304,9 +306,9 @@ class Workflow_Translation extends Workflow_Module
             $translate_to_lang == 'en_US';
         }
 
-        $html = '<label>' . __('Aus der Sprache:', CMS_WORKFLOW_TEXTDOMAIN) . '&nbsp;';
+        $html = '<label>' . __('Aus der Sprache:', 'cms-workflow') . '&nbsp;';
         $html .= '<select id="translate-from-lang" name="translate_from_lang">';
-        $html .= '<option value="0">' . __('Wählen', CMS_WORKFLOW_TEXTDOMAIN) . '</option>';
+        $html .= '<option value="0">' . __('Wählen', 'cms-workflow') . '</option>';
 
         foreach ($available_languages as $locale) {
             $language = self::get_language($locale);
@@ -315,9 +317,9 @@ class Workflow_Translation extends Workflow_Module
 
         $html .= '</select></label>&nbsp;';
 
-        $html .= '<label>' . __('In die Sprache:', CMS_WORKFLOW_TEXTDOMAIN) . '&nbsp;';
+        $html .= '<label>' . __('In die Sprache:', 'cms-workflow') . '&nbsp;';
         $html .= '<select id="translate-to-lang" name="translate_to_lang">';
-        $html .= '<option value="0">' . __('Wählen', CMS_WORKFLOW_TEXTDOMAIN) . '</option>';
+        $html .= '<option value="0">' . __('Wählen', 'cms-workflow') . '</option>';
 
         foreach ($available_languages as $locale) {
             $language = self::get_language($locale);
@@ -330,13 +332,13 @@ class Workflow_Translation extends Workflow_Module
             $download_link = $this->module_url . 'xliff-download.php';
             $download_link = add_query_arg('xliff-attachment', $post_id, $download_link);
 
-            $html .= sprintf('<p><a href="%1$s">%2$s</a> ', $download_link, __('XLIFF-Datei herunterladen', CMS_WORKFLOW_TEXTDOMAIN));
+            $html .= sprintf('<p><a href="%1$s">%2$s</a> ', $download_link, __('XLIFF-Datei herunterladen', 'cms-workflow'));
 
-            $html .= '<p class="label">' . __('XLIFF-Datei hochladen:', CMS_WORKFLOW_TEXTDOMAIN) . '&nbsp;';
+            $html .= '<p class="label">' . __('XLIFF-Datei hochladen:', 'cms-workflow') . '&nbsp;';
             $html .= '<input type="file" id="translate_xliff_attachment" name="translate_xliff_attachment" value="" size="25">';
             $html .= '</p>';
         } else {
-            $html .= '<p class="description">' . __('Bitte wählen Sie die Übersetzungssprachen aus', CMS_WORKFLOW_TEXTDOMAIN) . '</p>';
+            $html .= '<p class="description">' . __('Bitte wählen Sie die Übersetzungssprachen aus', 'cms-workflow') . '</p>';
         }
 
         echo $html;
@@ -393,7 +395,7 @@ class Workflow_Translation extends Workflow_Module
                     }
                     add_action('save_post', array($this, 'save_translate_meta_data'), 999);
                 } else {
-                    $this->flash_admin_notice(__('Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+                    $this->flash_admin_notice(__('Der Dateityp, die Sie hochgeladen haben, ist nicht eine XLIFF.', 'cms-workflow'), 'error');
                 }
             }
         }
@@ -402,14 +404,14 @@ class Workflow_Translation extends Workflow_Module
     public function import_xliff($post_id, $file)
     {
         if (!function_exists('simplexml_load_string')) {
-            return new WP_Error('xml_missing', __('Die "Simple XML"-Bibliothek fehlt.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('xml_missing', __('Die "Simple XML"-Bibliothek fehlt.', 'cms-workflow'));
         }
 
         $post = get_post($post_id);
         $filename = $file['tmp_name'] ?? '';
 
         if (!$filename) {
-            return new WP_Error('xml_file_does_not_exists', __('Die XLIFF-Datei existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('xml_file_does_not_exists', __('Die XLIFF-Datei existiert nicht.', 'cms-workflow'));
         }
 
         $filesize = $file['size'] ?? 0;
@@ -423,18 +425,18 @@ class Workflow_Translation extends Workflow_Module
         $xml = simplexml_load_string($data);
 
         if (!$xml) {
-            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $filename));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', 'cms-workflow'), $filename));
         }
 
         $file_attributes = $xml->file->attributes();
         if (!$file_attributes || !isset($file_attributes['original'])) {
-            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', CMS_WORKFLOW_TEXTDOMAIN), $filename));
+            return new WP_Error('not_xml_file', sprintf(__('Die XLIFF-Datei (%s) konnte nicht gelesen werden.', 'cms-workflow'), $filename));
         }
 
         $original = (string) $file_attributes['original'];
 
         if ($original != sanitize_file_name(sprintf('%1$s-%2$s', $post->post_title, $post->ID))) {
-            $this->flash_admin_notice(__('Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+            $this->flash_admin_notice(__('Warnung. Die hochgeladene XLIFF-Datei stimmt nicht mit dem Dokument überein.', 'cms-workflow'), 'error');
         }
 
         $post_array = array('ID' => $post_id);
@@ -460,7 +462,7 @@ class Workflow_Translation extends Workflow_Module
         }
 
         if (!wp_update_post($post_array)) {
-            return new WP_Error('post_update_error', __('Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht gespeichert werden.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('post_update_error', __('Ein unbekannter Fehler ist aufgetreten. Das Dokument konnte nicht gespeichert werden.', 'cms-workflow'));
         }
 
         $post_meta = get_post_meta($post_id);
@@ -495,7 +497,7 @@ class Workflow_Translation extends Workflow_Module
     public function register_widgets()
     {
         if ($this->module_activated('network')) {
-            register_widget('Workflow_Translation_Lang_Switcher');
+            register_widget(__NAMESPACE__ . '\Widget');
         }
     }
 
@@ -539,8 +541,6 @@ class Workflow_Translation extends Workflow_Module
 
     public static function get_related_posts($args = '', $arialabel = '')
     {
-        global $cms_workflow;
-
         $defaults = array(
             'linktext' => 'text',
             'order' => 'blogid',
@@ -587,7 +587,6 @@ class Workflow_Translation extends Workflow_Module
         }
         $related_posts_output .= '><ul>';
 
-
         foreach ($related_sites as $site) {
             $language = self::get_language($site['sitelang']);
             $hreflang = $language['iso'][1];
@@ -615,7 +614,7 @@ class Workflow_Translation extends Workflow_Module
                 if ($widget = get_option('widget_workflow_translation_lang_switcher')) {
                     $widgetValues = array_values($widget);
                     $widgetShift = array_shift($widgetValues);
-                    $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);    
+                    $href = empty($widgetShift['widget_redirect_page_id']) ? $remoteSiteUrl : get_permalink($widgetShift['widget_redirect_page_id']);
                 }
                 restore_current_blog();
             }
@@ -713,7 +712,7 @@ class Workflow_Translation extends Workflow_Module
 
         $related_posts[$current_blog_id] = $current_post_id;
 
-        if ($remote_parent_post_meta = get_post_meta($current_post_id, Workflow_Post_Versioning::version_remote_parent_post_meta)) {
+        if ($remote_parent_post_meta = get_post_meta($current_post_id, Versioning::version_remote_parent_post_meta)) {
             foreach ($remote_parent_post_meta as $parent_post_meta) {
                 if (isset($parent_post_meta['blog_id']) && isset($parent_post_meta['post_id']) && $parent_post_meta['blog_id'] != $current_blog_id) {
                     $related_posts[$parent_post_meta['blog_id']] = (int) $parent_post_meta['post_id'];
@@ -721,7 +720,7 @@ class Workflow_Translation extends Workflow_Module
             }
         }
 
-        if ($remote_post_meta = get_post_meta($current_post_id, Workflow_Post_Versioning::version_remote_post_meta)) {
+        if ($remote_post_meta = get_post_meta($current_post_id, Versioning::version_remote_post_meta)) {
             foreach ($remote_post_meta as $post_meta) {
                 if (isset($post_meta['blog_id']) && isset($post_meta['post_id'])) {
                     $remote_posts[$post_meta['blog_id']] = (int) $post_meta['post_id'];
@@ -735,7 +734,7 @@ class Workflow_Translation extends Workflow_Module
                     continue;
                 }
 
-                $remote_parent_post_meta = get_post_meta($post_id, Workflow_Post_Versioning::version_remote_parent_post_meta);
+                $remote_parent_post_meta = get_post_meta($post_id, Versioning::version_remote_parent_post_meta);
 
                 foreach ($remote_parent_post_meta as $parent_post_meta) {
                     if (isset($parent_post_meta['blog_id']) && isset($parent_post_meta['post_id'])) {

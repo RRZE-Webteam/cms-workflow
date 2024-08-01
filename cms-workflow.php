@@ -4,7 +4,7 @@
 Plugin Name:     CMS-Workflow
 Plugin URI:      https://github.com/RRZE-Webteam/cms-workflow
 Description:     Redaktioneller Workflow.
-Version:         1.18.5
+Version:         2.0.0
 Author:          RRZE Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -13,404 +13,150 @@ Domain Path:     /languages
 Text Domain:     cms-workflow
 */
 
-add_action('plugins_loaded', array('CMS_Workflow', 'instance'));
+namespace RRZE\Workflow;
 
-register_activation_hook(__FILE__, array('CMS_Workflow', 'activation_hook'));
+defined('ABSPATH') || exit;
 
-register_deactivation_hook(__FILE__, array('CMS_Workflow', 'deactivation_hook'));
+const RRZE_PHP_VERSION = '8.2';
+const RRZE_WP_VERSION = '6.5';
 
-class CMS_Workflow
+/**
+ * SPL Autoloader (PSR-4).
+ * @param string $class The fully-qualified class name.
+ * @return void
+ */
+spl_autoload_register(function ($class) {
+    $prefix = __NAMESPACE__;
+    $baseDir = __DIR__ . '/includes/';
+
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        return;
+    }
+
+    $relativeClass = substr($class, $len);
+    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
+// Register plugin hooks.
+register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
+register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
+
+add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+
+/**
+ * Loads a plugin’s translated strings.
+ */
+function loadTextdomain()
 {
+    load_plugin_textdomain('cms-workflow', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
 
-    const version = '1.18.5'; // Plugin-Version
-    const textdomain = 'cms-workflow';
-    const php_version = '8.0'; // Minimal erforderliche PHP-Version
-    const wp_version = '6.2'; // Minimal erforderliche WordPress-Version
-
-    public $workflow_options = '_cms_workflow_';
-    public $workflow_options_name = '_cms_workflow_options';
-
-    private static $instance;
-
-    public $modules;
-    public $workflow_module;
-
-    public static function instance()
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new CMS_Workflow;
-
-            global $cms_workflow;
-            $cms_workflow = self::$instance;
-
-            self::$instance->init();
-        }
-
-        return self::$instance;
-    }
-
-    public static function activation_hook()
-    {
-        self::verify_requirements();
-    }
-
-    public static function deactivation_hook($network_wide)
-    {
-        self::register_hook('deactivation', $network_wide);
-    }
-
-    public static function verify_requirements()
-    {
-        $error = '';
-
-        if (version_compare(PHP_VERSION, self::php_version, '<')) {
-            $error = sprintf(__('Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die PHP-Version %s.', self::textdomain), PHP_VERSION, self::php_version);
-        }
-
-        if (version_compare($GLOBALS['wp_version'], self::wp_version, '<')) {
-            $error = sprintf(__('Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s.', self::textdomain), $GLOBALS['wp_version'], self::wp_version);
-        }
-
-        if (!empty($error)) {
-            deactivate_plugins(plugin_basename(__FILE__), false, true);
-            wp_die($error);
-        }
-    }
-
-    private static function register_hook($register, $network_wide)
-    {
-        global $wpdb, $cms_workflow;
-
-        if (is_multisite() && $network_wide) {
-
-            $old_blog = $wpdb->blogid;
-            $blogids = $wpdb->get_col("SELECT blog_id FROM {$wpdb->blogs}");
-
-            foreach ($blogids as $blog_id) {
-                switch_to_blog($blog_id);
-                $cms_workflow->$register(true);
-            }
-
-            switch_to_blog($old_blog);
-
-            return;
-        }
-
-        $cms_workflow->$register(false);
-    }
-
-    private function deactivation($network_wide)
-    {
-        foreach ($this->modules as $mod_name => $mod_data) {
-            if ($mod_data->options->activated) {
-                foreach ($this->modules as $mod_name => $mod_data) {
-                    if (method_exists($this->$mod_name, 'deactivation')) {
-                        $this->$mod_name->deactivation($network_wide);
-                    }
-                }
-            }
-        }
-    }
-
-    private function init()
-    {
-        define('CMS_WORKFLOW_VERSION', self::version);
-        define('CMS_WORKFLOW_TEXTDOMAIN', self::textdomain);
-
-        define('CMS_WORKFLOW_PLUGIN', __FILE__);
-        define('CMS_WORKFLOW_PLUGIN_BASENAME', plugin_basename(CMS_WORKFLOW_PLUGIN));
-        define('CMS_WORKFLOW_PLUGIN_NAME', trim(dirname(CMS_WORKFLOW_PLUGIN_BASENAME), '/'));
-
-        define('CMS_WORKFLOW_PLUGIN_PATH', dirname(CMS_WORKFLOW_PLUGIN));
-        define('CMS_WORKFLOW_PLUGIN_URL', plugins_url('/', CMS_WORKFLOW_PLUGIN));
-
-        load_plugin_textdomain(CMS_WORKFLOW_TEXTDOMAIN, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
-        include_once ABSPATH . 'wp-admin/includes/plugin.php';
-        // If rrze-multilang plugin is active unregister network & translation modules.
-        if (
-            is_plugin_active('rrze-multilang/rrze-multilang.php')
-            || is_plugin_active_for_network('rrze-multilang/rrze-multilang.php')
-        ) {
-            add_filter('cms_workflow_unregister_modules', function ($modules) {
-                return array_merge(['network', 'translation'], $modules);
-            });
-        }
-
-        $this->modules = new stdClass();
-
-        $this->set_modules();
-        $this->set_post_types();
-
-        add_action('admin_init', array($this, 'admin_init'));
-        add_filter('plugin_action_links', array($this, 'plugin_action_links'), 10, 2);
-    }
-
-    public function set_modules()
-    {
-
-        $this->load_modules();
-
-        $this->load_module_options();
-
-        foreach ($this->modules as $mod_name => $mod_data) {
-            if (!isset($mod_data->options->activated)) {
-                if (method_exists($this->$mod_name, 'activation')) {
-                    $this->$mod_name->activation();
-                }
-
-                $this->update_module_option($mod_name, 'activated', true);
-                $mod_data->options->activated = true;
-            }
-
-            if ($mod_data->options->activated) {
-                $this->$mod_name->init();
-            }
-        }
-    }
-
-    public function set_post_types()
-    {
-        foreach ($this->modules as $mod_name => $mod_data) {
-            if (isset($this->modules->$mod_name->options->post_types)) {
-                $this->modules->$mod_name->options->post_types = $this->workflow_module->clean_post_type_options($this->modules->$mod_name->options->post_types, $mod_data->post_type_support);
-            }
-
-            $this->$mod_name->module = $this->modules->$mod_name;
-        }
-    }
-
-    public function plugin_action_links($links, $file)
-    {
-        if ($file != CMS_WORKFLOW_PLUGIN_BASENAME) {
-            return $links;
-        }
-
-        $settings_link = '<a href="' . menu_page_url('workflow-settings', false) . '">' . esc_html(__('Einstellungen', CMS_WORKFLOW_TEXTDOMAIN)) . '</a>';
-        array_unshift($links, $settings_link);
-
-        return $links;
-    }
-
-    public function admin_init()
-    {
-
-        $version = get_option($this->workflow_options . 'version');
-
-        if ($version && version_compare($version, CMS_WORKFLOW_VERSION, '<')) {
-            foreach ($this->modules as $mod_name => $mod_data) {
-                if (method_exists($this->$mod_name, 'update')) {
-                    $this->$mod_name->upgrade();
-                }
-            }
-
-            update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
-        } elseif (!$version) {
-            update_option($this->workflow_options . 'version', CMS_WORKFLOW_VERSION);
-        }
-
-        wp_register_style('jquery-multiselect', CMS_WORKFLOW_PLUGIN_URL . 'css/jquery.multiple.select.css', false, '1.1.0', 'all');
-        wp_register_script('jquery-multiselect', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.multiple.select.js', array('jquery'), '1.13', true);
-        wp_register_style('jquery-listfilterizer', CMS_WORKFLOW_PLUGIN_URL . 'css/jquery.listfilterizer.css', false, CMS_WORKFLOW_VERSION, 'all');
-        wp_register_script('jquery-listfilterizer', CMS_WORKFLOW_PLUGIN_URL . 'js/jquery.listfilterizer.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
-        wp_register_script('sprintf', CMS_WORKFLOW_PLUGIN_URL . 'js/sprintf.js', false, CMS_WORKFLOW_VERSION, true);
-
-        wp_enqueue_style('workflow-common', CMS_WORKFLOW_PLUGIN_URL . 'css/common.css', false, CMS_WORKFLOW_VERSION, 'all');
-    }
-
-    public function register_module($name, $args = array())
-    {
-
-        if (!isset($args['title'], $name)) {
-            return false;
-        }
-
-        $defaults = array(
-            'title' => '',
-            'description' => '',
-            'slug' => '',
-            'post_type_support' => '',
-            'default_options' => array(),
-            'options' => false,
-            'configure_callback' => false,
-            'configure_link_text' => __('Konfigurieren', CMS_WORKFLOW_TEXTDOMAIN),
-            'messages' => array(
-                'settings-updated' => __('Einstellungen gespeichert.', CMS_WORKFLOW_TEXTDOMAIN),
-                'form-error' => __('Bitte korrigieren Sie den Formularfehler unten und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN),
-                'nonce-failed' => __('Schummeln, was?', CMS_WORKFLOW_TEXTDOMAIN),
-                'invalid-permissions' => __('Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen.', CMS_WORKFLOW_TEXTDOMAIN),
-                'missing-post' => __('Das Dokument existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN),
-            ),
-            'autoload' => false,
+/**
+ * System requirements verification.
+ * @return string Return an error message.
+ */
+function systemRequirements(): string
+{
+    global $wp_version;
+    // Strip off any -alpha, -RC, -beta, -src suffixes.
+    list($wpVersion) = explode('-', $wp_version);
+    $phpVersion = phpversion();
+    $error = '';
+    if (!is_php_version_compatible(RRZE_PHP_VERSION)) {
+        $error = sprintf(
+            /* translators: 1: Server PHP version number, 2: Required PHP version number. */
+            __('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'cms-workflow'),
+            $phpVersion,
+            RRZE_PHP_VERSION
         );
-
-        if (isset($args['multisite']) && !is_multisite()) {
-            return false;
-        }
-
-        if (isset($args['messages'])) {
-            $args['messages'] = array_merge((array) $args['messages'], $defaults['messages']);
-        }
-
-        $args = array_merge($defaults, $args);
-        $args['name'] = $name;
-        $args['workflow_options_name'] = sprintf('%s%s_options', $this->workflow_options, $name);
-
-        if (!isset($args['settings_slug'])) {
-            $args['settings_slug'] = sprintf('workflow-%s-settings', $args['slug']);
-        }
-
-        if (empty($args['post_type_support'])) {
-            $args['post_type_support'] = sprintf('workflow_%s', $name);
-        }
-
-        $this->modules->$name = (object) $args;
-
-        return $this->modules->$name;
-    }
-
-    private function load_modules()
-    {
-
-        if (!class_exists('WP_List_Table')) {
-            require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
-        }
-
-        require_once(CMS_WORKFLOW_PLUGIN_PATH . '/includes/workflow-module.php');
-
-        $module_dirs = scandir(CMS_WORKFLOW_PLUGIN_PATH . '/modules/');
-        $class_names = array();
-        foreach ($module_dirs as $module_dir) {
-            $filename = CMS_WORKFLOW_PLUGIN_PATH . "/modules/{$module_dir}/$module_dir.php";
-            if (file_exists($filename)) {
-                include_once($filename);
-
-                $tmp = explode('-', $module_dir);
-                $class_name = '';
-                $slug_name = '';
-
-                foreach ($tmp as $word) {
-                    $class_name .= ucfirst($word) . '_';
-                    $slug_name .= $word . '_';
-                }
-
-                $slug_name = rtrim($slug_name, '_');
-                $class_names[$slug_name] = 'Workflow_' . rtrim($class_name, '_');
-            }
-        }
-
-        $this->workflow_module = new Workflow_Module();
-
-        foreach ($class_names as $slug => $class_name) {
-            if (class_exists($class_name)) {
-                $this->$slug = new $class_name();
-            }
-        }
-    }
-
-    private function load_module_options()
-    {
-
-        foreach ($this->modules as $mod_name => $mod_data) {
-
-            $this->modules->$mod_name->options = get_option($this->workflow_options . $mod_name . '_options', new stdClass);
-            foreach ($mod_data->default_options as $default_key => $default_value) {
-                if (!isset($this->modules->$mod_name->options->$default_key)) {
-                    $this->modules->$mod_name->options->$default_key = $default_value;
-                }
-            }
-
-            if (isset($this->modules->$mod_name->options->post_types)) {
-                $this->modules->$mod_name->options->post_types = $this->workflow_module->clean_post_type_options($this->modules->$mod_name->options->post_types, $mod_data->post_type_support);
-            }
-
-            $this->$mod_name->module = $this->modules->$mod_name;
-        }
-    }
-
-    public function get_module_by($key, $value)
-    {
-        $module = false;
-        foreach ($this->modules as $mod_name => $mod_data) {
-
-            if ($key == 'name' && $value == $mod_name) {
-                $module = $this->modules->$mod_name;
-            } else {
-                foreach ($mod_data as $mod_data_key => $mod_data_value) {
-                    if ($mod_data_key == $key && $mod_data_value == $value) {
-                        $module = $this->modules->$mod_name;
-                    }
-                }
-            }
-        }
-        return $module;
-    }
-
-    public function update_module_option($mod_name, $key, $value)
-    {
-        $this->modules->$mod_name->options->$key = $value;
-        $this->$mod_name->module = $this->modules->$mod_name;
-
-        return update_option($this->workflow_options . $mod_name . '_options', $this->modules->$mod_name->options);
-    }
-
-    public function update_all_module_options($mod_name, $new_options)
-    {
-        if (is_array($new_options)) {
-            $new_options = (object) $new_options;
-        }
-
-        $this->modules->$mod_name->options = $new_options;
-        $this->$mod_name->module = $this->modules->$mod_name;
-
-        return update_option($this->workflow_options . $mod_name . '_options', $this->modules->$mod_name->options);
-    }
-
-    /**
-     * Debug
-     *
-     * @param $input
-     * @param string $level
-     * @return void
-     */
-    public function debug($input, string $level = 'i')
-    {
-        if (!WP_DEBUG) {
-            return;
-        }
-        if (in_array(strtolower((string) WP_DEBUG_LOG), ['true', '1'], true)) {
-            $logPath = WP_CONTENT_DIR . '/debug.log';
-        } elseif (is_string(WP_DEBUG_LOG)) {
-            $logPath = WP_DEBUG_LOG;
-        } else {
-            return;
-        }
-        if (is_array($input) || is_object($input)) {
-            $input = print_r($input, true);
-        }
-        switch (strtolower($level)) {
-            case 'e':
-            case 'error':
-                $level = 'Error';
-                break;
-            case 'i':
-            case 'info':
-                $level = 'Info';
-                break;
-            case 'd':
-            case 'debug':
-                $level = 'Debug';
-                break;
-            default:
-                $level = 'Info';
-        }
-        error_log(
-            date("[d-M-Y H:i:s \U\T\C]")
-                . " WP $level: "
-                . basename(__FILE__) . ' '
-                . $input
-                . PHP_EOL,
-            3,
-            $logPath
+    } elseif (!is_wp_version_compatible(RRZE_WP_VERSION)) {
+        $error = sprintf(
+            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
+            __('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'cms-workflow'),
+            $wpVersion,
+            RRZE_WP_VERSION
         );
     }
+    return $error;
+}
+
+/**
+ * Activation callback function.
+ */
+function activation()
+{
+    loadTextdomain();
+    if ($error = systemRequirements()) {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_die(
+            sprintf(
+                /* translators: 1: The plugin name, 2: The error string. */
+                __('Plugins: %1$s: %2$s', 'cms-workflow'),
+                plugin_basename(__FILE__),
+                $error
+            )
+        );
+    }
+}
+
+/**
+ * Deactivation callback function.
+ */
+function deactivation()
+{
+    Module::resetEditorRole();
+    Module::resetAuthorRole();
+}
+
+/**
+ * Instantiate Plugin class.
+ * @return object Plugin
+ */
+function plugin()
+{
+    static $instance;
+    if (null === $instance) {
+        $instance = new Plugin(__FILE__);
+    }
+    return $instance;
+}
+
+/**
+ * Execute on 'plugins_loaded' API/action.
+ * @return void
+ */
+function loaded()
+{
+    loadTextdomain();
+    plugin()->loaded();
+    $error = systemRequirements();
+    if (!$error && is_plugin_active_for_network(plugin()->getBaseName())) {
+        $error = __('This plugin cannot be activated network-wide.', 'cms-workflow');
+    }
+    if ($error) {
+        add_action('admin_init', function () use ($error) {
+            if (current_user_can('activate_plugins')) {
+                $pluginData = get_plugin_data(plugin()->getFile());
+                $pluginName = $pluginData['Name'];
+                $tag = is_plugin_active_for_network(plugin()->getBaseName()) ? 'network_admin_notices' : 'admin_notices';
+                add_action($tag, function () use ($pluginName, $error) {
+                    printf(
+                        '<div class="notice notice-error"><p>' .
+                            /* translators: 1: The plugin name, 2: The error string. */
+                            __('Plugins: %1$s: %2$s', 'cms-workflow') .
+                            '</p></div>',
+                        esc_html($pluginName),
+                        esc_html($error)
+                    );
+                });
+            }
+        });
+        return;
+    }
+    new Main;
 }

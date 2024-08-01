@@ -1,8 +1,15 @@
 <?php
 
-class Workflow_Post_Versioning extends Workflow_Module
-{
+namespace RRZE\Workflow\Modules\Versioning;
 
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+use function RRZE\Workflow\plugin;
+
+class Versioning extends Module
+{
     public $module_url;
 
     const source_post_id = '_source_post_id';
@@ -14,17 +21,16 @@ class Workflow_Post_Versioning extends Workflow_Module
 
     public $module;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Versionierung', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Versionierung', 'cms-workflow'),
+            'description' => __('Neue Version bzw. eine Kopie aus einem vorhandenen Dokument erstellen.', 'cms-workflow'),
             'module_url' => $this->module_url,
-            'slug' => 'post-versioning',
+            'slug' => 'versioning',
             'default_options' => array(
                 'post_types' => array(
                     'post' => true,
@@ -35,7 +41,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             'configure_callback' => 'print_configure_view'
         );
 
-        $this->module = $cms_workflow->register_module('post_versioning', $args);
+        $this->module = $this->main->register_module('versioning', $args);
     }
 
     public function init()
@@ -72,29 +78,33 @@ class Workflow_Post_Versioning extends Workflow_Module
 
     public function admin_enqueue_scripts()
     {
-        wp_enqueue_style('workflow-post-versioning', $this->module_url . 'post-versioning.css', false, CMS_WORKFLOW_VERSION, 'all');
+        wp_enqueue_style(
+            'workflow-versioning',
+            $this->module_url . 'versioning.css',
+            false,
+            plugin()->getVersion(),
+            'all'
+        );
     }
 
     public function register_settings()
     {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
-        add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('post_types', __('Freigabe', 'cms-workflow'), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
 
         if ($this->module_activated('network')) {
-            add_settings_field('network_connections', __('Bezogenen Webseiten', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+            add_settings_field('network_connections', __('Bezogenen Webseiten', 'cms-workflow'), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
         }
     }
 
     public function settings_post_types_option()
     {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module);
+        $this->main->settings->custom_post_type_option($this->module);
     }
 
     public function settings_network_posts_types_option()
     {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module, 'network_posts_types');
+        $this->main->settings->custom_post_type_option($this->module, 'network_posts_types');
     }
 
     public function settings_network_connections_option()
@@ -124,15 +134,14 @@ class Workflow_Post_Versioning extends Workflow_Module
             <?php
             }
             ?>
-            <p class="description"><?php _e('Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) angelegt werden.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p class="description"><?php _e('Lokale Dokumente können in diesen Webseiten als neue Version (Entwurf) angelegt werden.', 'cms-workflow'); ?></p>
         <?php else : ?>
-            <p><?php _e('Nicht verfügbar', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar', 'cms-workflow'); ?></p>
         <?php endif;
     }
 
     public function settings_validate($new_options)
     {
-
         if (!isset($new_options['post_types'])) {
             $new_options['post_types'] = array();
         }
@@ -165,8 +174,6 @@ class Workflow_Post_Versioning extends Workflow_Module
 
     private function current_related_sites()
     {
-        global $cms_workflow;
-
         $network_related_sites = $this->current_network_related_sites();
         $current_related_sites = (array) $this->module->options->related_sites;
         $related_sites = array();
@@ -177,17 +184,15 @@ class Workflow_Post_Versioning extends Workflow_Module
             }
         }
 
-        $cms_workflow->update_module_option($this->module->name, 'related_sites', $related_sites);
+        $this->main->update_module_option($this->module->name, 'related_sites', $related_sites);
 
         return $related_sites;
     }
 
     private function current_network_related_sites()
     {
-        global $cms_workflow;
-
-        $connections = $cms_workflow->network->site_connections();
-        $network_connections = $cms_workflow->network->network_connections($connections);
+        $connections = $this->main->network->site_connections();
+        $network_connections = $this->main->network->network_connections($connections);
         $current_network_related_sites = array();
 
         foreach ($network_connections as $blog_id) {
@@ -216,9 +221,7 @@ class Workflow_Post_Versioning extends Workflow_Module
 
     private function is_author($user_id, $post_id)
     {
-        global $cms_workflow;
-
-        if ($this->module_activated('authors') && $cms_workflow->authors->is_post_author($user_id, $post_id)) {
+        if ($this->module_activated('authors') && $this->main->authors->is_post_author($user_id, $post_id)) {
             return true;
         }
 
@@ -235,14 +238,14 @@ class Workflow_Post_Versioning extends Workflow_Module
 
         if (current_user_can($cap->edit_posts) && !get_post_meta($post->ID, self::version_post_id, true) && $post->post_status != 'trash') {
             $actions['edit_as_new_draft'] = '<a href="' . admin_url('admin.php?action=copy_as_new_post_draft&post=' . $post->ID) . '" title="'
-                . esc_attr(__('Dieses Element als neuen Entwurf kopieren', CMS_WORKFLOW_TEXTDOMAIN))
-                . '">' . __('Kopieren', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
+                . esc_attr(__('Dieses Element als neuen Entwurf kopieren', 'cms-workflow'))
+                . '">' . __('Kopieren', 'cms-workflow') . '</a>';
         }
 
         if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
             $actions['edit_as_version'] = '<a href="' . admin_url('admin.php?action=version_as_new_post_draft&post=' . $post->ID) . '" title="'
-                . esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
-                . '">' . __('Neue Version', CMS_WORKFLOW_TEXTDOMAIN) . '</a>';
+                . esc_attr(__('Dieses Element als neue Version duplizieren', 'cms-workflow'))
+                . '">' . __('Neue Version', 'cms-workflow') . '</a>';
         }
 
         return $actions;
@@ -269,28 +272,28 @@ class Workflow_Post_Versioning extends Workflow_Module
     public function version_as_new_post_draft()
     {
         if (!(isset($_GET['post']) || isset($_POST['post']))) {
-            wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Es wurde kein Element geliefert.', 'cms-workflow'));
         }
 
         $post_id = (int) isset($_GET['post']) ? $_GET['post'] : $_POST['post'];
         $post = get_post($post_id);
 
         if (is_null($post)) {
-            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', 'cms-workflow'));
         }
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish' || (!$this->is_author(get_current_user_id(), $post->ID) && !current_user_can('manage_options'))) {
-            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', 'cms-workflow'));
         }
 
         if (!$this->is_post_type_enabled($post->post_type)) {
-            wp_die(__('Diese Aktion ist nicht erlaubt.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Diese Aktion ist nicht erlaubt.', 'cms-workflow'));
         }
 
         if ($post->post_status != 'publish') {
-            wp_die(__('Nur veröffentlichte Dokumente können als neue Version erstellt werden.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Nur veröffentlichte Dokumente können als neue Version erstellt werden.', 'cms-workflow'));
         }
 
         if ($results = $this->has_version($post->ID, $post->post_type)) {
@@ -301,7 +304,7 @@ class Workflow_Post_Versioning extends Workflow_Module
                 $permalink = get_permalink($version->ID);
                 $post_title = get_the_title($version->ID);
 
-                $this->flash_admin_notice(sprintf(__('Lokale Version &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; vom Dokument &bdquo;<a href="%3$s" target="__blank">%4$s</a>&ldquo; existiert bereits.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $src_permalink, $src_post_title), 'error');
+                $this->flash_admin_notice(sprintf(__('Lokale Version &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; vom Dokument &bdquo;<a href="%3$s" target="__blank">%4$s</a>&ldquo; existiert bereits.', 'cms-workflow'), $permalink, $post_title, $src_permalink, $src_post_title), 'error');
             }
 
             wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
@@ -354,7 +357,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             }
         }
 
-        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', 'cms-workflow'), 'error');
         wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
         exit;
     }
@@ -370,7 +373,7 @@ class Workflow_Post_Versioning extends Workflow_Module
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (!current_user_can($cap->edit_posts)) {
-            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', 'cms-workflow'));
         }
 
         add_filter('workflow_version_post_replace_on_publish', '__return_true');
@@ -391,7 +394,7 @@ class Workflow_Post_Versioning extends Workflow_Module
 
         wp_update_post($new_post, TRUE);
         if (is_wp_error($version_post_id)) {
-            $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+            $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', 'cms-workflow'), 'error');
             wp_update_post(array(
                 'ID' => $post_id,
                 'post_status' => 'pending'
@@ -452,9 +455,9 @@ class Workflow_Post_Versioning extends Workflow_Module
                 $post_title = get_the_title($old_post_id);
 
                 if (current_user_can('manage_categories')) {
-                    $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie das ursprüngliche Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title));
+                    $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie das ursprüngliche Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', 'cms-workflow'), $permalink, $post_title));
                 } else {
-                    $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title));
+                    $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', 'cms-workflow'), $permalink, $post_title));
                 }
             } elseif (is_multisite() && $this->module_activated('network')) {
                 $current_related_sites = $this->current_related_sites();
@@ -477,7 +480,7 @@ class Workflow_Post_Versioning extends Workflow_Module
                             $blog_name = get_bloginfo('name');
                             $blog_lang = self::get_language(self::get_locale());
                             $post_title = get_the_title($post_meta['post_id']);
-                            echo $this->show_admin_notice(sprintf(__('Netzwerkweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
+                            echo $this->show_admin_notice(sprintf(__('Netzwerkweite Versionierung vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s.', 'cms-workflow'), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
                         }
 
                         restore_current_blog();
@@ -492,24 +495,24 @@ class Workflow_Post_Versioning extends Workflow_Module
     public function copy_as_new_post_draft()
     {
         if (!(isset($_GET['post']) || isset($_POST['post']))) {
-            wp_die(__('Es wurde kein Element geliefert.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Es wurde kein Element geliefert.', 'cms-workflow'));
         }
 
         $post_id = (int) isset($_GET['post']) ? $_GET['post'] : $_POST['post'];
         $post = get_post($post_id);
 
         if (is_null($post)) {
-            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Es wurde kein Element mit der angegebenen ID gefunden.', 'cms-workflow'));
         }
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
         if (!current_user_can($cap->edit_posts) || get_post_meta($post_id, self::version_post_id, true) || $post->post_status == 'trash') {
-            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Kopie zu erstellen.', 'cms-workflow'));
         }
 
         if (in_array($post->post_type, array('revision', 'attachment'))) {
-            wp_die(__('Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte kehren Sie zurück und versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Sie haben versucht ein Element zu bearbeiten, das nicht erlaubt ist. Bitte kehren Sie zurück und versuchen Sie es erneut.', 'cms-workflow'));
         }
 
         $post_author = get_current_user_id();
@@ -542,14 +545,13 @@ class Workflow_Post_Versioning extends Workflow_Module
             exit;
         }
 
-        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', CMS_WORKFLOW_TEXTDOMAIN), 'error');
+        $this->flash_admin_notice(__('Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', 'cms-workflow'), 'error');
         wp_safe_redirect(admin_url('edit.php?post_type=' . $post->post_type));
         exit;
     }
 
     public function network_connections_meta_box($post_type, $post)
     {
-
         if (!current_user_can('manage_categories')) {
             return;
         }
@@ -593,7 +595,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             add_action('post_submitbox_start', array($this, 'network_connections_post_submitbox'));
         }
 
-        add_meta_box('network-connections', __('Netzwerkweite Webseiten', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'network_connections_post_meta'), $post_type, 'normal', 'high');
+        add_meta_box('network-connections', __('Netzwerkweite Webseiten', 'cms-workflow'), array($this, 'network_connections_post_meta'), $post_type, 'normal', 'high');
     }
 
     public function network_connections_post_submitbox()
@@ -601,7 +603,7 @@ class Workflow_Post_Versioning extends Workflow_Module
     ?>
         <p>
             <input type="checkbox" id="network_connections_version" name="network_connections_version" <?php checked(false, true); ?>>
-            <label for="network_connections_version"><?php _e('Netzwerkweite Versionierung', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+            <label for="network_connections_version"><?php _e('Netzwerkweite Versionierung', 'cms-workflow'); ?></label>
         </p>
     <?php
     }
@@ -648,15 +650,15 @@ class Workflow_Post_Versioning extends Workflow_Module
 
                         if (!empty($posts)) {
                             $output = '';
-                            $post_status = array('draft' => __('Entwurf', CMS_WORKFLOW_TEXTDOMAIN), 'publish' => __('Veröffentlicht', CMS_WORKFLOW_TEXTDOMAIN));
+                            $post_status = array('draft' => __('Entwurf', 'cms-workflow'), 'publish' => __('Veröffentlicht', 'cms-workflow'));
                             $selected_post = $this->is_remote_parent_post_selected($blog_id, $posts, $remote_parent_post_meta);
                             if (!empty($selected_post)) {
                                 $output .= "<input type=\"hidden\" name=\"network_related_post_$blog_id\" value=\"" . $selected_post->ID . "\">" . PHP_EOL;
                                 $output .= sprintf('<span class="related-postdetail">%1$d. <a href="%2$s" target="__blank">%3$s</a></span>', $selected_post->ID, get_permalink($selected_post->ID), esc_html($selected_post->post_title)) . PHP_EOL;
                             } elseif (in_array($blog_id, $network_connections)) {
-                                $output = "<p><strong>" . __('Bezogenes Dokument', CMS_WORKFLOW_TEXTDOMAIN) . "</strong></p>" . PHP_EOL;
+                                $output = "<p><strong>" . __('Bezogenes Dokument', 'cms-workflow') . "</strong></p>" . PHP_EOL;
                                 $output = "<select name=\"network_add_related_post_$blog_id\">" . PHP_EOL;
-                                $output .= "<option value=\"0\">" . __('— Kein Dokument —', CMS_WORKFLOW_TEXTDOMAIN) . "</option>" . PHP_EOL;
+                                $output .= "<option value=\"0\">" . __('— Kein Dokument —', 'cms-workflow') . "</option>" . PHP_EOL;
                                 foreach ($posts as $p) {
                                     $remote_post_meta = (array) get_post_meta($p->ID, self::version_remote_post_meta);
                                     if (!$this->in_remote_post_meta($current_blog_id, $remote_post_meta)) {
@@ -680,9 +682,9 @@ class Workflow_Post_Versioning extends Workflow_Module
                                 <?php if ($connected && !empty($posts) && $allowed_post_type) : ?>
                                     <?php echo $output; ?>
                                 <?php elseif (!$allowed_post_type) : ?>
-                                    <span class="related-postdetail"><?php _e('Keine Versionierungsfreigabe.', CMS_WORKFLOW_TEXTDOMAIN); ?></span>
+                                    <span class="related-postdetail"><?php _e('Keine Versionierungsfreigabe.', 'cms-workflow'); ?></span>
                                 <?php elseif ($connected) : ?>
-                                    <span class="related-postdetail"><?php _e('Kein Dokument zur Auswahl.', CMS_WORKFLOW_TEXTDOMAIN); ?></span>
+                                    <span class="related-postdetail"><?php _e('Kein Dokument zur Auswahl.', 'cms-workflow'); ?></span>
                                 <?php endif; ?>
                             </label>
                         </li>
@@ -814,7 +816,7 @@ class Workflow_Post_Versioning extends Workflow_Module
 
             if (!current_user_can('manage_categories')) {
                 restore_current_blog();
-                $this->flash_admin_notice(sprintf(__('Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite Versionierung durchführen zu können. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                $this->flash_admin_notice(sprintf(__('Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite Versionierung durchführen zu können. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                 continue;
             }
 
@@ -828,7 +830,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             if ($add_post_meta) {
                 if ($remote_post->post_status != 'publish') {
                     restore_current_blog();
-                    $this->flash_admin_notice(sprintf(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                    $this->flash_admin_notice(sprintf(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                     continue;
                 }
                 $permalink = get_permalink($remote_post_id);
@@ -838,13 +840,13 @@ class Workflow_Post_Versioning extends Workflow_Module
 
                 restore_current_blog();
                 add_post_meta($post_id, self::version_remote_parent_post_meta, array('blog_id' => $blog_id, 'post_id' => $remote_post_id));
-                $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
+                $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', 'cms-workflow'), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
             } else {
                 delete_post_meta($remote_post_id, self::version_remote_post_meta);
 
                 restore_current_blog();
                 delete_post_meta($post_id, self::version_remote_parent_post_meta);
-                $this->flash_admin_notice(__('Netzwerkweite Beziehung des Dokumentes wurde entfernt.', CMS_WORKFLOW_TEXTDOMAIN));
+                $this->flash_admin_notice(__('Netzwerkweite Beziehung des Dokumentes wurde entfernt.', 'cms-workflow'));
             }
         }
     }
@@ -930,7 +932,7 @@ class Workflow_Post_Versioning extends Workflow_Module
 
             if (!current_user_can('manage_categories')) {
                 restore_current_blog();
-                $this->flash_admin_notice(sprintf(__('Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite Versionierung durchführen zu können. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                $this->flash_admin_notice(sprintf(__('Sie verfügen nicht über ausreichende Berechtigungen, um eine netzwerkweite Versionierung durchführen zu können. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                 continue;
             }
 
@@ -948,7 +950,7 @@ class Workflow_Post_Versioning extends Workflow_Module
 
                 if (empty($remote_post) || $remote_post->post_status != 'publish') {
                     restore_current_blog();
-                    $this->flash_admin_notice(sprintf(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                    $this->flash_admin_notice(sprintf(__('Zieldokument ist nicht veröffentlicht. Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                     continue;
                 }
 
@@ -978,10 +980,10 @@ class Workflow_Post_Versioning extends Workflow_Module
                     $post_title = get_the_title($draft_id);
 
                     restore_current_blog();
-                    $this->flash_admin_notice(sprintf(__('Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
+                    $this->flash_admin_notice(sprintf(__('Neue Version vom Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; - %3$s - %4$s wurde erfolgreich erstellt.', 'cms-workflow'), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
                 } else {
                     restore_current_blog();
-                    $this->flash_admin_notice(sprintf(__('Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                    $this->flash_admin_notice(sprintf(__('Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                 }
             } else {
 
@@ -1010,14 +1012,14 @@ class Workflow_Post_Versioning extends Workflow_Module
 
                     restore_current_blog();
                     add_post_meta($post_id, self::version_remote_parent_post_meta, array('blog_id' => $blog_id, 'post_id' => $new_remote_post_id));
-                    $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; (%3$s - %4$s) wurde erfolgreich erstellt.', CMS_WORKFLOW_TEXTDOMAIN), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
+                    $this->flash_admin_notice(sprintf(__('Das Zieldokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo; (%3$s - %4$s) wurde erfolgreich erstellt.', 'cms-workflow'), $permalink, $post_title, $blog_name, $blog_lang['native_name']));
 
                     switch_to_blog($blog_id);
                     add_post_meta($new_remote_post_id, self::version_remote_post_meta, array('blog_id' => $current_blog_id, 'post_id' => $post_id));
                     restore_current_blog();
                 } else {
                     restore_current_blog();
-                    $this->flash_admin_notice(sprintf(__('Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', CMS_WORKFLOW_TEXTDOMAIN), $blog_name, $blog_lang['native_name']), 'error');
+                    $this->flash_admin_notice(sprintf(__('Netzwerkweite Versionierung fehlgeschlagen. (%1$s - %2$s)', 'cms-workflow'), $blog_name, $blog_lang['native_name']), 'error');
                 }
             }
         }
@@ -1050,7 +1052,6 @@ class Workflow_Post_Versioning extends Workflow_Module
 
     private function add_network_taxonomies($blog_id, $post_id, $post)
     {
-
         $taxonomies = get_object_taxonomies($post->post_type);
         $filtered_taxonomies = apply_filters('workflow_post_versioning_filtered_network_taxonomies', array());
 
@@ -1210,7 +1211,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             $columns = array_slice($columns, 0, $position + 1, true) + array('post-id' => '') + array_slice($columns, $position, count($columns) - $position, true);
         }
 
-        $columns['post-id'] = __('Nr.', CMS_WORKFLOW_TEXTDOMAIN);
+        $columns['post-id'] = __('Nr.', 'cms-workflow');
 
         $position = array_search('comments', array_keys($columns));
         if ($position === false) {
@@ -1224,7 +1225,7 @@ class Workflow_Post_Versioning extends Workflow_Module
             $columns = array_slice($columns, 0, $position, true) + array('version' => '') + array_slice($columns, $position, count($columns) - $position, true);
         }
 
-        $columns['version'] = __('Version', CMS_WORKFLOW_TEXTDOMAIN);
+        $columns['version'] = __('Version', 'cms-workflow');
 
         return $columns;
     }
@@ -1253,17 +1254,8 @@ class Workflow_Post_Versioning extends Workflow_Module
         if ($version_post_id) {
             $permalink = get_permalink($version_post_id);
             if ($permalink) {
-
-                $translate_to_lang = get_post_meta($version_post_id, '_translate_to_lang_post_meta', true);
-                if (empty($translate_to_lang)) {
-                    $translate_to_lang = self::get_locale();
-                }
-
-                $language = self::get_language($translate_to_lang);
-                $translate_to_lang = !empty($translate_to_lang) ? sprintf(' - <span class="translation">%s</span></a>', $language['native_name']) : '';
-
                 $post_title = get_the_title($version_post_id);
-                $documents[] = sprintf('<a href="%1$s" target="__blank">%2$s%3$s</a>', $permalink, $post_title, $translate_to_lang);
+                $documents[] = sprintf('<a href="%1$s" target="__blank">%2$s</a>', $permalink, $post_title);
             }
         }
 
@@ -1375,11 +1367,11 @@ class Workflow_Post_Versioning extends Workflow_Module
         $args = array(
             'parent' => 'new-content',
             'id'     => 'new-version',
-            'title' => __('Version', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Version', 'cms-workflow'),
             'href'  => admin_url('admin.php?action=version_as_new_post_draft&amp;post=' . $post->ID),
             'meta'  => array(
                 'class' => 'new-version',
-                'title' => esc_attr(__('Dieses Element als neue Version duplizieren', CMS_WORKFLOW_TEXTDOMAIN))
+                'title' => esc_attr(__('Dieses Element als neue Version duplizieren', 'cms-workflow'))
             )
         );
 

@@ -1,23 +1,30 @@
 <?php
 
-class Workflow_User_Groups extends Workflow_Module
-{
+namespace RRZE\Workflow\Modules\UserGroups;
 
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+use WP_Error;
+use function RRZE\Workflow\plugin;
+
+class UserGroups extends Module
+{
     const taxonomy_key = 'workflow_usergroup';
     const term_prefix = 'workflow-usergroup-';
 
     public $module;
     public $module_url;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Benutzer nach Abteilung oder Funktion organisieren.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Benutzergruppen', 'cms-workflow'),
+            'description' => __('Benutzer nach Abteilung oder Funktion organisieren.', 'cms-workflow'),
             'module_url' => $this->module_url,
             'slug' => 'user-groups',
             'default_options' => array(
@@ -27,16 +34,16 @@ class Workflow_User_Groups extends Workflow_Module
                 ),
             ),
             'messages' => array(
-                'usergroup-added' => __('Die Benutzergruppe wurde erstellt.', CMS_WORKFLOW_TEXTDOMAIN),
-                'usergroup-updated' => __('Die Benutzergruppe wurde aktualisiert.', CMS_WORKFLOW_TEXTDOMAIN),
-                'usergroup-missing' => __('Die Benutzergruppe existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN),
-                'usergroup-deleted' => __('Die Benutzergruppe wurde gelöscht.', CMS_WORKFLOW_TEXTDOMAIN),
+                'usergroup-added' => __('Die Benutzergruppe wurde erstellt.', 'cms-workflow'),
+                'usergroup-updated' => __('Die Benutzergruppe wurde aktualisiert.', 'cms-workflow'),
+                'usergroup-missing' => __('Die Benutzergruppe existiert nicht.', 'cms-workflow'),
+                'usergroup-deleted' => __('Die Benutzergruppe wurde gelöscht.', 'cms-workflow'),
             ),
             'configure_callback' => 'print_configure_view',
-            'configure_link_text' => __('Gruppen verwalten', CMS_WORKFLOW_TEXTDOMAIN)
+            'configure_link_text' => __('Gruppen verwalten', 'cms-workflow')
         );
 
-        $this->module = $cms_workflow->register_module('user_groups', $args);
+        $this->module = $this->main->register_module('user_groups', $args);
     }
 
     public function init()
@@ -71,7 +78,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function register_taxonomies()
     {
-
         $allowed_post_types = $this->get_post_types($this->module);
 
         $args = array(
@@ -86,28 +92,44 @@ class Workflow_User_Groups extends Workflow_Module
     public function enqueue_admin_scripts()
     {
         wp_enqueue_script('jquery-listfilterizer');
-        wp_enqueue_script('workflow-user-groups', $this->module_url . 'user-groups.js', array('jquery', 'jquery-listfilterizer'), CMS_WORKFLOW_VERSION, true);
+        wp_enqueue_script(
+            'workflow-user-groups',
+            $this->module_url . 'user-groups.js',
+            array('jquery', 'jquery-listfilterizer'),
+            plugin()->getVersion(),
+            true
+        );
 
         if ($this->is_settings_view()) {
-            wp_enqueue_script('workflow-user-groups-inline-edit', $this->module_url . 'inline-edit-min.js', array('jquery'), CMS_WORKFLOW_VERSION, true);
+            wp_enqueue_script(
+                'workflow-user-groups-inline-edit',
+                $this->module_url . 'inline-edit-min.js',
+                array('jquery'),
+                plugin()->getVersion(),
+                true
+            );
         }
 
         wp_localize_script('workflow-user-groups', 'user_groups_vars', array(
-            'filters_label_1' => __('Alle', CMS_WORKFLOW_TEXTDOMAIN),
-            'filters_label_2' => __('Ausgewählt', CMS_WORKFLOW_TEXTDOMAIN),
-            'placeholder' => __('Suchen...', CMS_WORKFLOW_TEXTDOMAIN),
+            'filters_label_1' => __('Alle', 'cms-workflow'),
+            'filters_label_2' => __('Ausgewählt', 'cms-workflow'),
+            'placeholder' => __('Suchen...', 'cms-workflow'),
         ));
     }
 
     public function enqueue_admin_styles()
     {
         wp_enqueue_style('jquery-listfilterizer');
-        wp_enqueue_style('workflow-user-groups', $this->module_url . 'user-groups.css', false, CMS_WORKFLOW_VERSION);
+        wp_enqueue_style(
+            'workflow-user-groups',
+            $this->module_url . 'user-groups.css',
+            false,
+            plugin()->getVersion(),
+        );
     }
 
     public function handle_add_usergroup()
     {
-
         if (!isset($_POST['submit'], $_POST['form_action'], $_GET['page']) || $_GET['page'] != $this->module->settings_slug || $_POST['form_action'] != 'add-usergroup') {
             return;
         }
@@ -126,19 +148,19 @@ class Workflow_User_Groups extends Workflow_Module
         $_REQUEST['form-errors'] = array();
 
         if (empty($name)) {
-            $_REQUEST['form-errors']['name'] = __('Bitte geben Sie einen Namen für die Benutzergruppe an.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Bitte geben Sie einen Namen für die Benutzergruppe an.', 'cms-workflow');
         }
 
         if ($this->get_usergroup_by('name', $name)) {
-            $_REQUEST['form-errors']['name'] = __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', 'cms-workflow');
         }
 
         if ($this->get_usergroup_by('slug', sanitize_title($name))) {
-            $_REQUEST['form-errors']['name'] = __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', 'cms-workflow');
         }
 
         if (strlen($name) > 40) {
-            $_REQUEST['form-errors']['name'] = __('Der Name einer Benutzergruppe darf maximal 40 Zeichen lang sein. Bitte verwenden Sie einen kürzeren Namen.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Der Name einer Benutzergruppe darf maximal 40 Zeichen lang sein. Bitte verwenden Sie einen kürzeren Namen.', 'cms-workflow');
         }
 
         if (count($_REQUEST['form-errors'])) {
@@ -153,7 +175,7 @@ class Workflow_User_Groups extends Workflow_Module
 
         $usergroup = $this->add_usergroup($args);
         if (is_wp_error($usergroup)) {
-            wp_die(__('Fehler beim Hinzufügen einer Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Fehler beim Hinzufügen einer Benutzergruppe.', 'cms-workflow'));
         }
 
         $args = array(
@@ -168,7 +190,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function handle_edit_usergroup()
     {
-
         if (!isset($_POST['submit'], $_POST['form_action'], $_GET['page']) || $_GET['page'] != $this->module->settings_slug || $_POST['form_action'] != 'edit-usergroup') {
             return;
         }
@@ -191,21 +212,21 @@ class Workflow_User_Groups extends Workflow_Module
         $_REQUEST['form-errors'] = array();
 
         if (empty($name)) {
-            $_REQUEST['form-errors']['name'] = __('Bitte geben Sie einen Namen für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Bitte geben Sie einen Namen für die Benutzergruppe.', 'cms-workflow');
         }
 
         $search_term = $this->get_usergroup_by('name', $name);
         if (is_object($search_term) && $search_term->term_id != $existing_usergroup->term_id) {
-            $_REQUEST['form-errors']['name'] = __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', 'cms-workflow');
         }
 
         $search_term = $this->get_usergroup_by('slug', sanitize_title($name));
         if (is_object($search_term) && $search_term->term_id != $existing_usergroup->term_id) {
-            $_REQUEST['form-errors']['name'] = __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', 'cms-workflow');
         }
 
         if (strlen($name) > 40) {
-            $_REQUEST['form-errors']['name'] = __('Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie einen kürzeren Namen.', CMS_WORKFLOW_TEXTDOMAIN);
+            $_REQUEST['form-errors']['name'] = __('Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie einen kürzeren Namen.', 'cms-workflow');
         }
 
         if (count($_REQUEST['form-errors'])) {
@@ -224,7 +245,7 @@ class Workflow_User_Groups extends Workflow_Module
         $usergroup = $this->update_usergroup($existing_usergroup->term_id, $args, $users);
 
         if (is_wp_error($usergroup)) {
-            wp_die(__('Fehler bei der Aktualisierung der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Fehler bei der Aktualisierung der Benutzergruppe.', 'cms-workflow'));
         }
 
         $args = array(
@@ -251,7 +272,7 @@ class Workflow_User_Groups extends Workflow_Module
 
         $result = $this->delete_usergroup((int) $_GET['usergroup-id']);
         if (!$result || is_wp_error($result)) {
-            wp_die(__('Fehler beim Löschen der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN));
+            wp_die(__('Fehler beim Löschen der Benutzergruppe.', 'cms-workflow'));
         }
 
         $redirect_url = $this->get_link(array('message' => 'usergroup-deleted'));
@@ -269,21 +290,18 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function rest_insert_post($post)
     {
-        global $cms_workflow;
-
         $usergroups = get_terms(self::taxonomy_key);
         if (!empty($usergroups)) {
             $usergroup_ids = [];
             foreach ($usergroups as $group) {
                 $usergroup_ids[] = $group->term_id;
             }
-            $cms_workflow->authors->add_post_usergroups($post, $usergroup_ids);
+            $this->main->authors->add_post_usergroups($post, $usergroup_ids);
         }
     }
 
     public function handle_ajax_inline_save_usergroup()
     {
-
         if (!wp_verify_nonce($_POST['inline_edit'], 'usergroups-inline-edit-nonce')) {
             die($this->module->messages['nonce-failed']);
         }
@@ -301,24 +319,24 @@ class Workflow_User_Groups extends Workflow_Module
         $description = strip_tags(trim($_POST['description']));
 
         if (empty($name)) {
-            $change_error = new WP_Error('invalid', __('Bitte geben Sie einen Namen für die Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN));
+            $change_error = new WP_Error('invalid', __('Bitte geben Sie einen Namen für die Benutzergruppe.', 'cms-workflow'));
             die($change_error->get_error_message());
         }
 
         $search_term = $this->get_usergroup_by('name', $name);
         if (is_object($search_term) && $search_term->term_id != $existing_term->term_id) {
-            $change_error = new WP_Error('invalid', __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', CMS_WORKFLOW_TEXTDOMAIN));
+            $change_error = new WP_Error('invalid', __('Name wird bereits verwendet. Bitte wählen Sie einen anderen.', 'cms-workflow'));
             die($change_error->get_error_message());
         }
 
         $search_term = $this->get_usergroup_by('slug', sanitize_title($name));
         if (is_object($search_term) && $search_term->term_id != $existing_term->term_id) {
-            $change_error = new WP_Error('invalid', __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', CMS_WORKFLOW_TEXTDOMAIN));
+            $change_error = new WP_Error('invalid', __('Name steht in Konflikt mit einem reservierten Namen. Bitte wählen Sie erneut.', 'cms-workflow'));
             die($change_error->get_error_message());
         }
 
         if (strlen($name) > 40) {
-            $change_error = new WP_Error('invalid', __('Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie einen kürzeren Namen.', CMS_WORKFLOW_TEXTDOMAIN));
+            $change_error = new WP_Error('invalid', __('Benutzergruppe Name darf maximal 40 Zeichen lang sein. Bitte versuchen Sie einen kürzeren Namen.', 'cms-workflow'));
             die($change_error->get_error_message());
         }
 
@@ -329,12 +347,12 @@ class Workflow_User_Groups extends Workflow_Module
 
         $return = $this->update_usergroup($existing_term->term_id, $args);
         if (!is_wp_error($return)) {
-            $wp_list_table = new Workflow_Usergroups_List_Table();
+            $wp_list_table = new UserGroupsListTable($this->main);
             $wp_list_table->prepare_items();
             echo $wp_list_table->single_row($return);
             die();
         } else {
-            $change_error = new WP_Error('invalid', sprintf(__('Die Benutzergruppe <strong>&bdquo;%s&rdquo;</strong> konnte nicht aktualisiert werden.', CMS_WORKFLOW_TEXTDOMAIN), $name));
+            $change_error = new WP_Error('invalid', sprintf(__('Die Benutzergruppe <strong>&bdquo;%s&rdquo;</strong> konnte nicht aktualisiert werden.', 'cms-workflow'), $name));
             die($change_error->get_error_message());
         }
     }
@@ -342,13 +360,13 @@ class Workflow_User_Groups extends Workflow_Module
     public function register_settings()
     {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
-        add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('post_types', __('Freigabe', 'cms-workflow'), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
     }
 
     public function settings_post_types_option()
     {
-        global $cms_workflow;
-        $cms_workflow->settings->custom_post_type_option($this->module);
+
+        $this->main->settings->custom_post_type_option($this->module);
     }
 
     public function settings_validate($new_options)
@@ -364,8 +382,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function print_configure_view()
     {
-        global $cms_workflow;
-
         if (isset($_GET['action'], $_GET['usergroup-id']) && $_GET['action'] == 'edit-usergroup') :
             $usergroup_id = (int) $_GET['usergroup-id'];
             $usergroup = $this->get_usergroup_by('id', $usergroup_id);
@@ -382,7 +398,7 @@ class Workflow_User_Groups extends Workflow_Module
                 <div id="col-right">
                     <div class="col-wrap">
                         <div id="workflow-usergroup-users" class="wrap">
-                            <h4><?php _e('Benutzer', CMS_WORKFLOW_TEXTDOMAIN); ?></h4>
+                            <h4><?php _e('Benutzer', 'cms-workflow'); ?></h4>
                             <?php
                             $select_form_args = array(
                                 'list_class' => 'workflow-groups-list',
@@ -404,17 +420,17 @@ class Workflow_User_Groups extends Workflow_Module
                             wp_nonce_field('edit-usergroup');
                             ?>
                             <div class="form-field form-required">
-                                <label for="name"><?php _e('Name', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                                <label for="name"><?php _e('Name', 'cms-workflow'); ?></label>
                                 <input name="name" id="name" type="text" value="<?php echo esc_attr($name); ?>" size="40" maxlength="40" aria-required="true" />
-                                <?php $cms_workflow->settings->print_error_or_description('name', __('Der Name der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN)); ?>
+                                <?php $this->main->settings->print_error_or_description('name', __('Der Name der Benutzergruppe.', 'cms-workflow')); ?>
                             </div>
                             <div class="form-field">
-                                <label for="description"><?php _e('Beschreibung', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                                <label for="description"><?php _e('Beschreibung', 'cms-workflow'); ?></label>
                                 <textarea name="description" id="description" rows="5" cols="40"><?php echo esc_html($description); ?></textarea>
-                                <?php $cms_workflow->settings->print_error_or_description('description', __('Die Beschreibung der Benutzergruppe.', CMS_WORKFLOW_TEXTDOMAIN)); ?>
+                                <?php $this->main->settings->print_error_or_description('description', __('Die Beschreibung der Benutzergruppe.', 'cms-workflow')); ?>
                             </div>
                             <p class="submit">
-                                <?php submit_button(__('Aktualisieren', CMS_WORKFLOW_TEXTDOMAIN), 'primary', 'submit', false); ?>
+                                <?php submit_button(__('Aktualisieren', 'cms-workflow'), 'primary', 'submit', false); ?>
                             </p>
                         </div>
                     </div>
@@ -422,7 +438,7 @@ class Workflow_User_Groups extends Workflow_Module
             </form>
         <?php
         else :
-            $wp_list_table = new Workflow_Usergroups_List_Table();
+            $wp_list_table = new UserGroupsListTable($this->main);
             $wp_list_table->prepare_items();
         ?>
             <div id="col-right">
@@ -434,8 +450,8 @@ class Workflow_User_Groups extends Workflow_Module
                 <div class="col-wrap">
                     <div class="form-wrap usergroups-wrap">
                         <h2 class="nav-tab-wrapper">
-                            <a href="<?php echo esc_url($this->get_link()); ?>" class="nav-tab<?php if (!isset($_GET['action']) || $_GET['action'] != 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
-                            <a href="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>" class="nav-tab<?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Einstellungen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
+                            <a href="<?php echo esc_url($this->get_link()); ?>" class="nav-tab<?php if (!isset($_GET['action']) || $_GET['action'] != 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a>
+                            <a href="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>" class="nav-tab<?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Einstellungen', 'cms-workflow'); ?></a>
                         </h2>
                         <?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') : ?>
                             <p class="description">Die Freigabeeinstellungen gelten für alle Benutzergruppen.</p>
@@ -448,18 +464,18 @@ class Workflow_User_Groups extends Workflow_Module
                         <?php else : ?>
                             <form class="add:the-list:" action="<?php echo esc_url($this->get_link()); ?>" method="post" id="addusergroup" name="addusergroup">
                                 <div class="form-field form-required">
-                                    <label for="name"><?php _e('Name', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                                    <label for="name"><?php _e('Name', 'cms-workflow'); ?></label>
                                     <input type="text" aria-required="true" id="name" name="name" maxlength="40" value="<?php if (!empty($_POST['name'])) echo esc_attr($_POST['name']); ?>" />
-                                    <?php $cms_workflow->settings->print_error_or_description('name', __('Der Name wird verwendet um die Benutzergruppe zu identifizieren.', CMS_WORKFLOW_TEXTDOMAIN)); ?>
+                                    <?php $this->main->settings->print_error_or_description('name', __('Der Name wird verwendet um die Benutzergruppe zu identifizieren.', 'cms-workflow')); ?>
                                 </div>
                                 <div class="form-field">
-                                    <label for="description"><?php _e('Beschreibung', CMS_WORKFLOW_TEXTDOMAIN); ?></label>
+                                    <label for="description"><?php _e('Beschreibung', 'cms-workflow'); ?></label>
                                     <textarea cols="40" rows="5" id="description" name="description"><?php if (!empty($_POST['description'])) echo esc_html($_POST['description']) ?></textarea>
-                                    <?php $cms_workflow->settings->print_error_or_description('description', __('Die Beschreibung ist für administrative Zwecke vorhanden.', CMS_WORKFLOW_TEXTDOMAIN)); ?>
+                                    <?php $this->main->settings->print_error_or_description('description', __('Die Beschreibung ist für administrative Zwecke vorhanden.', 'cms-workflow')); ?>
                                 </div>
                                 <?php wp_nonce_field('add-usergroup'); ?>
                                 <?php echo '<input id="form-action" name="form_action" type="hidden" value="add-usergroup" />'; ?>
-                                <p class="submit"><?php submit_button(__('Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN), 'primary', 'submit', false); ?></p>
+                                <p class="submit"><?php submit_button(__('Neue Benutzergruppe hinzufügen', 'cms-workflow'), 'primary', 'submit', false); ?></p>
                             </form>
                         <?php endif; ?>
                     </div>
@@ -472,13 +488,12 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function user_profile_page()
     {
-        global $user_id, $profileuser;
+        global $user_id;
 
         if (!$user_id || !current_user_can('manage_categories')) {
             return;
         }
 
-        $usergroups = $this->get_usergroups();
         $selected_usergroups = $this->get_usergroups_for_user($user_id);
         $usergroups_form_args = array('input_id' => 'workflow-usergroups');
         ?>
@@ -486,11 +501,11 @@ class Workflow_User_Groups extends Workflow_Module
             <tbody>
                 <tr>
                     <th>
-                        <h3><?php _e('Benutzergruppen', CMS_WORKFLOW_TEXTDOMAIN) ?></h3>
+                        <h3><?php _e('Benutzergruppen', 'cms-workflow') ?></h3>
                         <?php if ($user_id === wp_get_current_user()->ID) : ?>
-                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen Sie gerne teilnehmen würden:', CMS_WORKFLOW_TEXTDOMAIN) ?></p>
+                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen Sie gerne teilnehmen würden:', 'cms-workflow') ?></p>
                         <?php else : ?>
-                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen dieser Benutzer teilnehmen sollte:', CMS_WORKFLOW_TEXTDOMAIN) ?></p>
+                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen dieser Benutzer teilnehmen sollte:', 'cms-workflow') ?></p>
                         <?php endif; ?>
                     </th>
                     <td>
@@ -505,7 +520,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function user_profile_update($errors, $update, $user)
     {
-
         if (!$update) {
             return array(&$errors, $update, &$user);
         }
@@ -558,7 +572,7 @@ class Workflow_User_Groups extends Workflow_Module
         $usergroups = $this->get_usergroups();
     ?>
         <?php if (empty($usergroups)) : ?>
-            <p><?php _e('Keine Benutzergruppen gefunden.', CMS_WORKFLOW_TEXTDOMAIN) ?> <a href="<?php echo esc_url($this->get_link()); ?>" title="<?php _e('Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN) ?>" target="_blank"><?php _e('Neue Benutzergruppe hinzufügen', CMS_WORKFLOW_TEXTDOMAIN); ?></a></p>
+            <p><?php _e('Keine Benutzergruppen gefunden.', 'cms-workflow') ?> <a href="<?php echo esc_url($this->get_link()); ?>" title="<?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow') ?>" target="_blank"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a></p>
         <?php else : ?>
             <ul class="<?php echo $list_class ?>">
                 <?php foreach ($usergroups as $usergroup) :
@@ -578,7 +592,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function get_usergroups($args = array())
     {
-
         if (!isset($args['hide_empty'])) {
             $args['hide_empty'] = 0;
         }
@@ -598,7 +611,6 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function get_usergroup_by($field, $value)
     {
-
         $usergroup = get_term_by($field, $value, self::taxonomy_key);
 
         if (!$usergroup || is_wp_error($usergroup)) {
@@ -618,9 +630,8 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function add_usergroup($args = array(), $user_ids = array())
     {
-
         if (!isset($args['name'])) {
-            return new WP_Error('invalid', __('Eine neue Benutzergruppe muss einen Namen haben.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('invalid', __('Eine neue Benutzergruppe muss einen Namen haben.', 'cms-workflow'));
         }
 
         $name = $args['name'];
@@ -647,10 +658,9 @@ class Workflow_User_Groups extends Workflow_Module
 
     public function update_usergroup($id, $args = array(), $users = null)
     {
-
         $existing_usergroup = $this->get_usergroup_by('id', $id);
         if (is_wp_error($existing_usergroup)) {
-            return new WP_Error('invalid', __('Die Benutzergruppe existiert nicht.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('invalid', __('Die Benutzergruppe existiert nicht.', 'cms-workflow'));
         }
 
         $args_to_encode = array();
@@ -679,7 +689,7 @@ class Workflow_User_Groups extends Workflow_Module
     {
 
         if (!is_array($user_ids_or_logins)) {
-            return new WP_Error('invalid', __('Ungültige Benutzervariable.', CMS_WORKFLOW_TEXTDOMAIN));
+            return new WP_Error('invalid', __('Ungültige Benutzervariable.', 'cms-workflow'));
         }
 
         $usergroup = $this->get_usergroup_by('id', $id);
@@ -778,141 +788,5 @@ class Workflow_User_Groups extends Workflow_Module
         } else {
             return false;
         }
-    }
-}
-
-class Workflow_Usergroups_List_Table extends WP_List_Table
-{
-
-    public $callback_args;
-
-    public function __construct()
-    {
-
-        parent::__construct(array(
-            'screen' => 'edit-usergroup',
-            'plural' => 'user groups',
-            'singular' => 'user group',
-            'ajax' => true
-        ));
-    }
-
-    public function prepare_items()
-    {
-        global $cms_workflow;
-
-        $columns = $this->get_columns();
-        $hidden = array();
-        $sortable = array();
-
-        $this->_column_headers = array($columns, $hidden, $sortable);
-
-        $this->items = $cms_workflow->user_groups->get_usergroups();
-
-        $this->set_pagination_args(array(
-            'total_items' => !empty($this->items) ? count($this->items) : 0,
-            'per_page' => !empty($this->items) ? count($this->items) : 0,
-        ));
-    }
-
-    public function no_items()
-    {
-        _e('Keine Benutzergruppen gefunden.', CMS_WORKFLOW_TEXTDOMAIN);
-    }
-
-    public function get_columns()
-    {
-
-        $columns = array(
-            'name' => __('Name', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Beschreibung', CMS_WORKFLOW_TEXTDOMAIN),
-            'users' => __('Benutzer', CMS_WORKFLOW_TEXTDOMAIN),
-        );
-
-        return $columns;
-    }
-
-    public function column_default($usergroup, $column_name)
-    {
-    }
-
-    public function column_name($usergroup)
-    {
-        global $cms_workflow;
-
-        $output = '<strong><a href="' . esc_url($cms_workflow->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id))) . '">' . esc_html($usergroup->name) . '</a></strong>';
-
-        $actions = array();
-        $actions['edit edit-usergroup'] = sprintf('<a href="%1$s">' . __('Bearbeiten', CMS_WORKFLOW_TEXTDOMAIN) . '</a>', $cms_workflow->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id)));
-        $actions['inline hide-if-no-js'] = '<a href="#" class="editinline">' . __('QuickEdit') . '</a>';
-        $actions['delete delete-usergroup'] = sprintf('<a href="%1$s">' . __('Löschen', CMS_WORKFLOW_TEXTDOMAIN) . '</a>', $cms_workflow->user_groups->get_link(array('action' => 'delete-usergroup', 'usergroup-id' => $usergroup->term_id)));
-
-        $output .= $this->row_actions($actions, false);
-        $output .= '<div class="hidden" id="inline_' . $usergroup->term_id . '">';
-        $output .= '<div class="name">' . esc_html($usergroup->name) . '</div>';
-        $output .= '<div class="description">' . esc_html($usergroup->description) . '</div>';
-        $output .= '</div>';
-
-        return $output;
-    }
-
-    public function column_description($usergroup)
-    {
-        return esc_html($usergroup->description);
-    }
-
-    public function column_users($usergroup)
-    {
-        global $cms_workflow;
-        return '<a href="' . esc_url($cms_workflow->user_groups->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup->term_id))) . '">' . count($usergroup->user_ids) . '</a>';
-    }
-
-    public function single_row($usergroup)
-    {
-        static $row_class = '';
-        $row_class = ($row_class == '' ? ' class="alternate"' : '');
-
-        echo '<tr id="usergroup-' . $usergroup->term_id . '"' . $row_class . '>';
-        echo $this->single_row_columns($usergroup);
-        echo '</tr>';
-    }
-
-    public function inline_edit()
-    {
-        global $cms_workflow;
-        ?>
-        <form method="get" action="">
-            <table style="display: none">
-                <tbody id="inlineedit">
-                    <tr id="inline-edit" class="inline-edit-row" style="display: none">
-                        <td colspan="<?php echo $this->get_column_count(); ?>" class="colspanchange">
-                            <fieldset>
-                                <div class="inline-edit-col">
-                                    <h4><?php _e('QuickEdit', CMS_WORKFLOW_TEXTDOMAIN); ?></h4>
-                                    <label>
-                                        <span class="title"><?php _e('Name', CMS_WORKFLOW_TEXTDOMAIN); ?></span>
-                                        <span class="input-text-wrap"><input type="text" name="name" class="ptitle" value="" maxlength="40" /></span>
-                                    </label>
-                                    <label>
-                                        <span class="title"><?php _e('Beschreibung', CMS_WORKFLOW_TEXTDOMAIN); ?></span>
-                                        <span class="input-text-wrap"><input type="text" name="description" class="pdescription" value="" /></span>
-                                    </label>
-                                </div>
-                            </fieldset>
-                            <p class="inline-edit-save submit">
-                                <a accesskey="c" href="#inline-edit" title="<?php _e('Abbrechen', CMS_WORKFLOW_TEXTDOMAIN); ?>" class="cancel button-secondary alignleft"><?php _e('Abbrechen', CMS_WORKFLOW_TEXTDOMAIN); ?></a>
-                                <?php $update_text = __('Benutzergruppe aktualisieren', CMS_WORKFLOW_TEXTDOMAIN); ?>
-                                <a accesskey="s" href="#inline-edit" title="<?php echo esc_attr($update_text); ?>" class="save button-primary alignright"><?php echo $update_text; ?></a>
-                                <img class="waiting" style="display:none;" src="<?php echo esc_url(admin_url('images/wpspin_light.gif')); ?>" alt="" />
-                                <span class="error" style="display:none;"></span>
-                                <?php wp_nonce_field('usergroups-inline-edit-nonce', 'inline_edit', false); ?>
-                                <br class="clear" />
-                            </p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-<?php
     }
 }

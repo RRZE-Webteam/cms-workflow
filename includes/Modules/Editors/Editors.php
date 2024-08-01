@@ -1,8 +1,15 @@
 <?php
 
-class Workflow_Editors extends Workflow_Module
-{
+namespace RRZE\Workflow\Modules\Editors;
 
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+use function RRZE\Workflow\plugin;
+
+class Editors extends Module
+{
     const role = 'editor';
 
     private $wp_post_caps = array();
@@ -11,40 +18,39 @@ class Workflow_Editors extends Workflow_Module
     public $module;
     public $module_url;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $this->wp_post_caps = array(
-            'edit_others_posts' => __('Andere Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_pages' => __('Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_others_pages' => __('Andere Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_published_pages' => __('Veröffentlichte Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'publish_pages' => __('Seiten veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_pages' => __('Seiten löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_others_pages' => __('Andere Seiten löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_published_pages' => __('Veröffentlichte Seiten löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_others_posts' => __('Andere Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_private_posts' => __('Private Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_private_posts' => __('Private Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'read_private_posts' => __('Private Beiträge lesen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_private_pages' => __('Private Seiten löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_private_pages' => __('Private Seiten bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'read_private_pages' => __('Private Seiten lesen', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'publish_posts' => __('Beiträge veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_published_posts' => __('Veröffentlichte Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN),
-            'edit_posts' => __('Beiträge bearbeiten', CMS_WORKFLOW_TEXTDOMAIN),
-            'delete_posts' => __('Beiträge löschen', CMS_WORKFLOW_TEXTDOMAIN)
+            'edit_others_posts' => __('Andere Beiträge bearbeiten', 'cms-workflow'),
+            'edit_pages' => __('Seiten bearbeiten', 'cms-workflow'),
+            'edit_others_pages' => __('Andere Seiten bearbeiten', 'cms-workflow'),
+            'edit_published_pages' => __('Veröffentlichte Seiten bearbeiten', 'cms-workflow'),
+            'publish_pages' => __('Seiten veröffentlichen', 'cms-workflow'),
+            'delete_pages' => __('Seiten löschen', 'cms-workflow'),
+            'delete_others_pages' => __('Andere Seiten löschen', 'cms-workflow'),
+            'delete_published_pages' => __('Veröffentlichte Seiten löschen', 'cms-workflow'),
+            'delete_others_posts' => __('Andere Beiträge löschen', 'cms-workflow'),
+            'delete_private_posts' => __('Private Beiträge löschen', 'cms-workflow'),
+            'edit_private_posts' => __('Private Beiträge bearbeiten', 'cms-workflow'),
+            'read_private_posts' => __('Private Beiträge lesen', 'cms-workflow'),
+            'delete_private_pages' => __('Private Seiten löschen', 'cms-workflow'),
+            'edit_private_pages' => __('Private Seiten bearbeiten', 'cms-workflow'),
+            'read_private_pages' => __('Private Seiten lesen', 'cms-workflow'),
+            'edit_published_posts' => __('Veröffentlichte Beiträge bearbeiten', 'cms-workflow'),
+            'publish_posts' => __('Beiträge veröffentlichen', 'cms-workflow'),
+            'delete_published_posts' => __('Veröffentlichte Beiträge löschen', 'cms-workflow'),
+            'edit_posts' => __('Beiträge bearbeiten', 'cms-workflow'),
+            'delete_posts' => __('Beiträge löschen', 'cms-workflow')
         );
 
         $this->wp_role_caps = array_keys($this->wp_post_caps);
 
         $args = array(
-            'title' => __('Redakteure', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Verwaltung der Redakteure.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Redakteure', 'cms-workflow'),
+            'description' => __('Verwaltung der Redakteure.', 'cms-workflow'),
             'module_url' => $this->module_url,
             'slug' => 'editors',
             'default_options' => array(
@@ -82,7 +88,7 @@ class Workflow_Editors extends Workflow_Module
             'configure_callback' => 'print_configure_view'
         );
 
-        $this->module = $cms_workflow->register_module('editors', $args);
+        $this->module = $this->main->register_module('editors', $args);
     }
 
     public function init()
@@ -94,7 +100,7 @@ class Workflow_Editors extends Workflow_Module
 
     public function deactivation($network_wide = false)
     {
-        $this->repopulate_role(self::role);
+        $this->resetRole(self::role);
     }
 
     public function activation()
@@ -138,49 +144,54 @@ class Workflow_Editors extends Workflow_Module
             }
 
             if (isset($args->cap->edit_posts)) {
-                $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->edit_posts] = sprintf(__('%s bearbeiten', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->publish_posts)) {
-                $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->publish_posts] = sprintf(__('%s veröffentlichen', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->delete_posts)) {
-                $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->delete_posts] = sprintf(__('%s löschen', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->edit_published_posts)) {
-                $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->edit_published_posts] = sprintf(__('Veröffentlichte %s bearbeiten', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->delete_published_posts)) {
-                $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->read_private_posts)) {
-                $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->read_private_posts] = sprintf(__('Private %s lesen', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->edit_private_posts)) {
-                $this->role_caps[$args->cap->edit_private_posts] = sprintf(__('Private %s bearbeiten', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->edit_private_posts] = sprintf(__('Private %s bearbeiten', 'cms-workflow'), $label);
             }
 
             if (isset($args->cap->delete_private_posts)) {
-                $this->role_caps[$args->cap->delete_private_posts] = sprintf(__('Private %s löschen', CMS_WORKFLOW_TEXTDOMAIN), $label);
+                $this->role_caps[$args->cap->delete_private_posts] = sprintf(__('Private %s löschen', 'cms-workflow'), $label);
             }
         }
     }
 
     public function enqueue_admin_styles()
     {
-        wp_enqueue_style('workflow-editors', $this->module->module_url . 'editors.css', false, CMS_WORKFLOW_VERSION);
+        wp_enqueue_style(
+            'workflow-editors', 
+            $this->module->module_url . 'editors.css', 
+            false, 
+            plugin()->getVersion(),
+        );
     }
 
     public function register_settings()
     {
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
-        add_settings_field('post_types', __('Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
-        add_settings_field('role_caps', __('Redakteurerechte', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_role_caps_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('post_types', __('Freigabe', 'cms-workflow'), array($this, 'settings_post_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('role_caps', __('Redakteurerechte', 'cms-workflow'), array($this, 'settings_role_caps_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
     }
 
     public function settings_post_types_option()
@@ -228,7 +239,7 @@ class Workflow_Editors extends Workflow_Module
                     echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($labels) . '</label>';
 
                     if (post_type_supports($post_type, $this->module->post_type_support)) {
-                        echo '&nbsp;<span class="description">' . sprintf(__('Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', CMS_WORKFLOW_TEXTDOMAIN), $post_type, $this->module->post_type_support) . '</span>';
+                        echo '&nbsp;<span class="description">' . sprintf(__('Deaktiviert, da die Funktion add_post_type_support( \'%1$s\', \'%2$s\' ) in einer geladenen Datei enthalten ist.', 'cms-workflow'), $post_type, $this->module->post_type_support) . '</span>';
                     }
                     echo '<br>';
                 }

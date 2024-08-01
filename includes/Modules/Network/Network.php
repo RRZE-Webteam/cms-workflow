@@ -1,22 +1,27 @@
 <?php
 
-class Workflow_Network extends Workflow_Module
-{
+namespace RRZE\Workflow\Modules\Network;
 
+defined('ABSPATH') || exit;
+
+use RRZE\Workflow\Main;
+use RRZE\Workflow\Module;
+
+class Network extends Module
+{
     const site_connections = 'cms_workflow_site_connections';
 
     public $module;
     public $module_url;
 
-    public function __construct()
+    public function __construct(Main $main)
     {
-        global $cms_workflow;
-
+        parent::__construct($main);
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Netzwerk', CMS_WORKFLOW_TEXTDOMAIN),
-            'description' => __('Netzwerkweite Verbindungen zwischen Webseiten.', CMS_WORKFLOW_TEXTDOMAIN),
+            'title' => __('Netzwerk', 'cms-workflow'),
+            'description' => __('Netzwerkweite Verbindungen zwischen Webseiten.', 'cms-workflow'),
             'multisite' => true,
             'module_url' => $this->module_url,
             'slug' => 'network',
@@ -31,7 +36,7 @@ class Workflow_Network extends Workflow_Module
             'configure_callback' => 'print_configure_view'
         );
 
-        $this->module = $cms_workflow->register_module('network', $args);
+        $this->module = $this->main->register_module('network', $args);
     }
 
     public function init()
@@ -41,8 +46,6 @@ class Workflow_Network extends Workflow_Module
 
     public function deactivation()
     {
-        global $cms_workflow;
-
         $connections = get_site_option(self::site_connections, array());
         $current_blog_id = get_current_blog_id();
 
@@ -51,27 +54,25 @@ class Workflow_Network extends Workflow_Module
             update_site_option(self::site_connections, $connections);
         }
 
-        $cms_workflow->update_module_option($this->module->name, 'network_connections', array());
-        $cms_workflow->update_module_option($this->module->name, 'parent_site', array());
+        $this->main->update_module_option($this->module->name, 'network_connections', array());
+        $this->main->update_module_option($this->module->name, 'parent_site', array());
     }
 
     public function register_settings()
     {
-        global $cms_workflow;
-
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
 
-        add_settings_field('posts_types', __('Netzwerkweite Freigabe', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_posts_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+        add_settings_field('posts_types', __('Netzwerkweite Freigabe', 'cms-workflow'), array($this, 'settings_posts_types_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
 
         $post_types = $this->module->options->post_types;
         if (array_filter($post_types)) {
             if ($this->module->options->parent_site) {
-                add_settings_field('parent_site', __('Autorisierte Webseite', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_parent_site_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+                add_settings_field('parent_site', __('Autorisierte Webseite', 'cms-workflow'), array($this, 'settings_parent_site_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
             } else {
-                add_settings_field('add_parent_site', __('Autorisierte Webseite hinzufügen', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_add_parent_site_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+                add_settings_field('add_parent_site', __('Autorisierte Webseite hinzufügen', 'cms-workflow'), array($this, 'settings_add_parent_site_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
             }
         } else {
-            add_settings_field('network_connections', __('Bestehende netzwerkweite Freigaben', CMS_WORKFLOW_TEXTDOMAIN), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
+            add_settings_field('network_connections', __('Bestehende netzwerkweite Freigaben', 'cms-workflow'), array($this, 'settings_network_connections_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
         }
     }
 
@@ -79,7 +80,7 @@ class Workflow_Network extends Workflow_Module
     {
         $blog_id = $this->module->options->parent_site;
         if (empty($blog_id)) : ?>
-            <p><?php _e('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar.', 'cms-workflow'); ?></p>
         <?php
         else :
             if (!switch_to_blog($blog_id)) {
@@ -137,18 +138,18 @@ class Workflow_Network extends Workflow_Module
             $site_url = $blog->siteurl;
             $language = self::get_language($sitelang);
 
-            $user_blogs[$blog_id] = sprintf(__('%1$s (%2$s) (%3$s)', CMS_WORKFLOW_TEXTDOMAIN), $site_name, $site_url, $language['native_name']);
+            $user_blogs[$blog_id] = sprintf(__('%1$s (%2$s) (%3$s)', 'cms-workflow'), $site_name, $site_url, $language['native_name']);
         }
 
         if (!empty($user_blogs)) {
             $output = "<select name=\"" . $this->module->workflow_options_name . "[add_parent_site]\" id=\"workflow-network-select\">" . PHP_EOL;
-            $output .= "\t<option value=\"-1\">" . __('Website auswählen', CMS_WORKFLOW_TEXTDOMAIN) . "</option>" . PHP_EOL;
+            $output .= "\t<option value=\"-1\">" . __('Website auswählen', 'cms-workflow') . "</option>" . PHP_EOL;
             foreach ($user_blogs as $blog_id => $name) {
                 $output .= "\t<option value=\"$blog_id\">$name</option>" . PHP_EOL;
             }
             $output .= "</select>" . PHP_EOL;
         } else {
-            $output = __('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN);
+            $output = __('Nicht verfügbar.', 'cms-workflow');
         }
 
         echo $output;
@@ -156,16 +157,14 @@ class Workflow_Network extends Workflow_Module
 
     public function settings_posts_types_option()
     {
-        global $cms_workflow;
-
         $connections = $this->site_connections();
         $network_connections = $this->network_connections($connections);
 
         if (empty($network_connections)) {
-            $cms_workflow->settings->custom_post_type_option($this->module);
+            $this->main->settings->custom_post_type_option($this->module);
         } else {
         ?>
-            <p><?php _e('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar.', 'cms-workflow'); ?></p>
             <?php
         }
     }
@@ -210,7 +209,7 @@ class Workflow_Network extends Workflow_Module
         }
 
         if (!$has_connection) : ?>
-            <p><?php _e('Nicht verfügbar.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Nicht verfügbar.', 'cms-workflow'); ?></p>
         <?php endif;
     }
 
@@ -343,8 +342,6 @@ class Workflow_Network extends Workflow_Module
 
     public function network_connections($connections = array())
     {
-        global $cms_workflow;
-
         $current_network_connections = (array) $this->module->options->network_connections;
         $network_connections = array();
 
@@ -354,7 +351,7 @@ class Workflow_Network extends Workflow_Module
             }
         }
 
-        $cms_workflow->update_module_option($this->module->name, 'network_connections', $network_connections);
+        $this->main->update_module_option($this->module->name, 'network_connections', $network_connections);
 
         return $network_connections;
     }

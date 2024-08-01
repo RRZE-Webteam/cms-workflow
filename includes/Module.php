@@ -1,25 +1,34 @@
 <?php
 
-class Workflow_Module
+namespace RRZE\Workflow;
+
+defined('ABSPATH') || exit;
+
+use const WPLANG;
+
+class Module
 {
+    public $main;
+
     public $module;
+
+    public function __construct(Main $main)
+    {
+        $this->main = $main;
+    }
 
     public function module_exist($name)
     {
-        global $cms_workflow;
-
-        return isset($cms_workflow->$name);
+        return isset($this->main->$name);
     }
 
     public function module_activated($name)
     {
-        global $cms_workflow;
-
         if (!$this->module_exist($name)) {
             return false;
         }
 
-        return isset($cms_workflow->$name->module->options->activated) && $cms_workflow->$name->module->options->activated;
+        return isset($this->main->$name->module->options->activated) && $this->main->$name->module->options->activated;
     }
 
     public function clean_post_type_options($module_post_types = array(), $post_type_support = null)
@@ -30,8 +39,6 @@ class Workflow_Module
         array_push($custom_post_types, 'post', 'page', 'attachment');
 
         $all_post_types = array_merge($custom_post_types, array_keys($module_post_types));
-
-        $available_post_types = $this->get_available_post_types();
 
         foreach ($all_post_types as $post_type) {
             if ((isset($module_post_types[$post_type]) && $module_post_types[$post_type]) || post_type_supports($post_type, $post_type_support)) {
@@ -95,12 +102,12 @@ class Workflow_Module
         $status_friendly_name = '';
 
         $builtin_status = array(
-            'publish' => __('Veröffentlicht', CMS_WORKFLOW_TEXTDOMAIN),
-            'draft' => __('Entwurf', CMS_WORKFLOW_TEXTDOMAIN),
-            'future' => __('Geplant', CMS_WORKFLOW_TEXTDOMAIN),
-            'private' => __('Privat', CMS_WORKFLOW_TEXTDOMAIN),
-            'pending' => __('Ausstehender Review', CMS_WORKFLOW_TEXTDOMAIN),
-            'trash' => __('Papierkorb', CMS_WORKFLOW_TEXTDOMAIN),
+            'publish' => __('Veröffentlicht', 'cms-workflow'),
+            'draft' => __('Entwurf', 'cms-workflow'),
+            'future' => __('Geplant', 'cms-workflow'),
+            'private' => __('Privat', 'cms-workflow'),
+            'pending' => __('Ausstehender Review', 'cms-workflow'),
+            'trash' => __('Papierkorb', 'cms-workflow'),
         );
 
         if (array_key_exists($status, $builtin_status)) {
@@ -284,20 +291,20 @@ class Workflow_Module
                 <?php endforeach; ?>
             </ul>
         <?php else : ?>
-            <p><?php _e('Kein Benutzer gefunden.', CMS_WORKFLOW_TEXTDOMAIN); ?></p>
+            <p><?php _e('Kein Benutzer gefunden.', 'cms-workflow'); ?></p>
         <?php endif; ?>
     <?php
     }
 
     public function is_settings_view($module_name = null)
     {
-        global $pagenow, $cms_workflow;
+        global $pagenow;
 
         if ($pagenow != 'admin.php' || !isset($_GET['page'])) {
             return false;
         }
 
-        foreach ($cms_workflow->modules as $mod_name => $mod_data) {
+        foreach ($this->main->modules as $mod_name => $mod_data) {
             if ($mod_data->options->activated && $mod_data->configure_callback) {
                 $settings_view_slugs[] = $mod_data->settings_slug;
             }
@@ -307,7 +314,7 @@ class Workflow_Module
             return false;
         }
 
-        if ($module_name && $cms_workflow->modules->$module_name->settings_slug != $_GET['page']) {
+        if ($module_name && $this->main->modules->$module_name->settings_slug != $_GET['page']) {
             return false;
         }
 
@@ -445,87 +452,83 @@ class Workflow_Module
         return substr($locale, 0, 5);
     }
 
-    public function repopulate_role($role = '')
+    public function resetRole($role = '')
     {
-        $allowed_roles = array('editor', 'author');
-
-        if (!in_array($role, $allowed_roles)) {
-            return false;
+        switch ($role) {
+            case 'editor':
+                self::resetEditorRole();
+                break;
+            case 'author':
+                $this->resetAuthorRole();
+                break;
+            default:
+                break;
         }
-
-        remove_role($role);
-
-        $populate_role = sprintf('populate_%s_role', $role);
-        $this->$populate_role();
     }
 
-    private function populate_editor_role()
+    public static function resetEditorRole()
     {
+        // Define the default capabilities for the 'editor' role
+        $capabilities = [
+            'delete_others_pages'    => true,
+            'delete_others_posts'    => true,
+            'delete_pages'           => true,
+            'delete_posts'           => true,
+            'delete_private_pages'   => true,
+            'delete_private_posts'   => true,
+            'delete_published_pages' => true,
+            'delete_published_posts' => true,
+            'edit_others_pages'      => true,
+            'edit_others_posts'      => true,
+            'edit_pages'             => true,
+            'edit_posts'             => true,
+            'edit_private_pages'     => true,
+            'edit_private_posts'     => true,
+            'edit_published_pages'   => true,
+            'edit_published_posts'   => true,
+            'manage_categories'      => true,
+            'manage_links'           => true,
+            'moderate_comments'      => true,
+            'publish_pages'          => true,
+            'publish_posts'          => true,
+            'read'                   => true,
+            'read_private_pages'     => true,
+            'read_private_posts'     => true,
+            'upload_files'           => true,
+        ];
+
+        // Remove the 'editor' role if it exists
+        remove_role('editor');
+
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
         _x('Editor', 'User role');
 
-        add_role('editor', 'Editor');
-
-        // Add caps for Editor role
-        $role = get_role('editor');
-        $role->add_cap('moderate_comments');
-        $role->add_cap('manage_categories');
-        $role->add_cap('manage_links');
-        $role->add_cap('upload_files');
-        $role->add_cap('unfiltered_html');
-        $role->add_cap('edit_posts');
-        $role->add_cap('edit_others_posts');
-        $role->add_cap('edit_published_posts');
-        $role->add_cap('publish_posts');
-        $role->add_cap('edit_pages');
-        $role->add_cap('read');
-        $role->add_cap('level_7');
-        $role->add_cap('level_6');
-        $role->add_cap('level_5');
-        $role->add_cap('level_4');
-        $role->add_cap('level_3');
-        $role->add_cap('level_2');
-        $role->add_cap('level_1');
-        $role->add_cap('level_0');
-
-        $role->add_cap('edit_others_pages');
-        $role->add_cap('edit_published_pages');
-        $role->add_cap('publish_pages');
-        $role->add_cap('delete_pages');
-        $role->add_cap('delete_others_pages');
-        $role->add_cap('delete_published_pages');
-        $role->add_cap('delete_posts');
-        $role->add_cap('delete_others_posts');
-        $role->add_cap('delete_published_posts');
-        $role->add_cap('delete_private_posts');
-        $role->add_cap('edit_private_posts');
-        $role->add_cap('read_private_posts');
-        $role->add_cap('delete_private_pages');
-        $role->add_cap('edit_private_pages');
-        $role->add_cap('read_private_pages');
+        // Add the 'editor' role with the defined capabilities
+        add_role('editor', 'Editor', $capabilities);
     }
 
-    private function populate_author_role()
+    public static function resetAuthorRole()
     {
+        // Define the default capabilities for the 'author' role
+        $capabilities = [
+            'delete_posts'           => true,
+            'delete_published_posts' => true,
+            'edit_posts'             => true,
+            'edit_published_posts'   => true,
+            'publish_posts'          => true,
+            'upload_files'           => true,
+            'read'                   => true,
+        ];
+
+        // Remove the 'author' role if it exists
+        remove_role('author');
+
         // Dummy gettext calls to get strings in the catalog.
         /* translators: user role */
         _x('Author', 'User role');
 
-        add_role('author', 'Author');
-
-        // Add caps for Author role
-        $role = get_role('author');
-        $role->add_cap('upload_files');
-        $role->add_cap('edit_posts');
-        $role->add_cap('edit_published_posts');
-        $role->add_cap('publish_posts');
-        $role->add_cap('read');
-        $role->add_cap('level_2');
-        $role->add_cap('level_1');
-        $role->add_cap('level_0');
-
-        $role->add_cap('delete_posts');
-        $role->add_cap('delete_published_posts');
+        // Add the 'author' role with the defined capabilities
+        add_role('author', 'Author', $capabilities);
     }
 }
