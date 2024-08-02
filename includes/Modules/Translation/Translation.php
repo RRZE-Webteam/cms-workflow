@@ -678,7 +678,7 @@ class Translation extends Module
     {
         global $wp_query;
 
-        if (!$this->module_activated('network') || !$this->module_activated('post_versioning')) {
+        if (!$this->module_activated('network') || !$this->module_activated('versioning')) {
             return false;
         }
 
