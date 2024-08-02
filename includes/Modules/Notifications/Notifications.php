@@ -633,7 +633,7 @@ class Notifications extends Module
             add_settings_field('post_diff_notify', __('Änderungen des Dokumentinhaltes benachrichtigen?', 'cms-workflow'), array($this, 'settings_post_diff_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_authors');
         }
 
-        if ($this->module_activated('post_versioning')) {
+        if ($this->module_activated('versioning')) {
             add_settings_section($this->module->workflow_options_name . '_versioning', __('Versionierung', 'cms-workflow'), '__return_false', $this->module->workflow_options_name);
             add_settings_field('post_versioning_new_notify', __('Neue Version eines Dokuments benachrichtigen?', 'cms-workflow'), array($this, 'settings_post_versioning_new_notify_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_versioning');
         }
