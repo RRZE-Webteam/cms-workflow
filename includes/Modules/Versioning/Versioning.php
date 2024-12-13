@@ -245,7 +245,7 @@ class Versioning extends Module
                 . '">' . __('Kopieren', 'cms-workflow') . '</a>';
         }
 
-        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
+        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('edit_published_posts'))) {
             $actions['edit_as_version'] = '<a href="' . admin_url('admin.php?action=version_as_new_post_draft&post=' . $post->ID) . '" title="'
                 . esc_attr(__('Dieses Element als neue Version duplizieren', 'cms-workflow'))
                 . '">' . __('Neue Version', 'cms-workflow') . '</a>';
@@ -287,7 +287,7 @@ class Versioning extends Module
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
 
-        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish' || (!$this->is_author(get_current_user_id(), $post->ID) && !current_user_can('manage_options'))) {
+        if (!current_user_can($cap->edit_posts) || $post->post_status != 'publish' || (!$this->is_author(get_current_user_id(), $post->ID) && !current_user_can('edit_published_posts'))) {
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', 'cms-workflow'));
         }
 
@@ -457,7 +457,7 @@ class Versioning extends Module
                 $permalink = get_permalink($old_post_id);
                 $post_title = get_the_title($old_post_id);
 
-                if (current_user_can('manage_categories')) {
+                if (current_user_can('edit_published_posts')) {
                     $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;. Überschreiben Sie das ursprüngliche Dokument, indem Sie auf &bdquo;Veröffentlichen&rdquo; klicken.', 'cms-workflow'), $permalink, $post_title));
                 } else {
                     $this->show_admin_notice(sprintf(__('Lokale Version vom Dokument &bdquo;<a href="%1$s" target="__blank">%2$s</a>&ldquo;.', 'cms-workflow'), $permalink, $post_title));
@@ -1362,7 +1362,7 @@ class Versioning extends Module
         }
 
         $cap = $this->get_available_post_types($post->post_type)->cap;
-        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('manage_options'))) {
+        if (current_user_can($cap->edit_posts) && $post->post_status == 'publish' && ($this->is_author(get_current_user_id(), $post->ID) || current_user_can('edit_published_posts'))) {
         } else {
             return;
         }
