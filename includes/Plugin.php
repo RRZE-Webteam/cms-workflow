@@ -31,18 +31,19 @@ class Plugin
     protected $url;
 
     /**
-     * The version of the plugin.
-     * @var string
+     * The data of the plugin.
+     * @var array
      */
-    protected $version;
+    protected $data;
 
     /**
-     * __construct method
+     * Constructor.
      * @param string $pluginFile The full path and filename of the plugin.
      */
     public function __construct(string $pluginFile)
     {
         $this->pluginFile = $pluginFile;
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
 
     /**
@@ -53,11 +54,10 @@ class Plugin
         $this->setBasename()
             ->setDirectory()
             ->setUrl()
-            ->setVersion();
+            ->setData();
     }
 
     /**
-     * getFile method
      * Get the full path and filename of the plugin.
      * @return string The full path and filename.
      */
@@ -67,7 +67,6 @@ class Plugin
     }
 
     /**
-     * getBasename method
      * Get the basename of the plugin.
      * @return string The basename.
      */
@@ -77,7 +76,6 @@ class Plugin
     }
 
     /**
-     * setBasename method
      * Set the basename of the plugin.
      * @return object This Plugin object.
      */
@@ -88,7 +86,6 @@ class Plugin
     }
 
     /**
-     * getDirectory method
      * Get the filesystem directory path (with trailing slash) for the plugin.
      * @return string The filesystem directory path.
      */
@@ -98,29 +95,26 @@ class Plugin
     }
 
     /**
-     * setDirectory method
      * Set the filesystem directory path (with trailing slash) for the plugin.
      * @return object This Plugin object.
      */
     public function setDirectory(): object
     {
-        $this->directory = rtrim(plugin_dir_path($this->pluginFile), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->directory = rtrim(plugin_dir_path($this->pluginFile), '/') . '/';
         return $this;
     }
 
     /**
-     * getPath method
      * Get the filesystem directory path (with trailing slash) for the plugin.
      * @param string $path The path name.
      * @return string The filesystem directory path.
      */
     public function getPath(string $path = ''): string
     {
-        return $this->directory . ($path ? trim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR : '');
+        return $this->directory . ($path ? trim($path, '/') . '/' : '');
     }
 
     /**
-     * getUrl method
      * Get the URL directory path (with trailing slash) for the plugin.
      * @param string $path The path name.
      * @return string The URL directory path.
@@ -131,7 +125,6 @@ class Plugin
     }
 
     /**
-     * setUrl method
      * Set the URL directory path (with trailing slash) for the plugin.
      * @return object This Plugin object.
      */
@@ -142,7 +135,6 @@ class Plugin
     }
 
     /**
-     * getSlug method
      * Get the slug of the plugin.
      * @return string The slug.
      */
@@ -152,31 +144,58 @@ class Plugin
     }
 
     /**
-     * getVersion method
+     * Set the data of the plugin.
+     * @return object This Plugin object.
+     */
+    public function setData(): object
+    {
+        $this->data = get_plugin_data($this->pluginFile, false, false);
+        return $this;
+    }
+
+    /**
+     * Get the data of the plugin.
+     * @return array The data.
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get the name of the plugin.
+     * @return string The name.
+     */
+    public function getName(): string
+    {
+        return $this->data['Name'];
+    }
+
+    /**
      * Get the version of the plugin.
      * @return string The version.
      */
     public function getVersion(): string
     {
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            return bin2hex(random_bytes(4));
-        }
-        return $this->version;
+        return $this->data['Version'];
     }
 
     /**
-     * getVersion method
-     * Set the version of the plugin.
-     * @return object This Plugin object.
+     * Get the required WordPress version of the plugin.
+     * @return string The required WordPress version.
      */
-    public function setVersion(): object
+    public function getRequiresWP(): string
     {
-        $headers = ['Version' => 'Version'];
-        $fileData = get_file_data($this->pluginFile, $headers, 'plugin');
-        if (isset($fileData['Version'])) {
-            $this->version = $fileData['Version'];
-        };
-        return $this;
+        return $this->data['RequiresWP'];
+    }
+
+    /**
+     * Get the required PHP version of the plugin.
+     * @return string The required PHP version.
+     */
+    public function getRequiresPHP(): string
+    {
+        return $this->data['RequiresPHP'];
     }
 
     /**
@@ -187,15 +206,6 @@ class Plugin
     {
         if (!method_exists($this, $name)) {
             $message = sprintf('Call to undefined method %1$s::%2$s', __CLASS__, $name);
-            do_action(
-                'rrze.log.error',
-                $message,
-                [
-                    'class' => __CLASS__,
-                    'method' => $name,
-                    'arguments' => $arguments
-                ]
-            );
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 throw new \Exception($message);
             }
