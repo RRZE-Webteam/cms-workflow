@@ -198,6 +198,9 @@ class Module
         $enabled_post_types = array();
         $available_post_types = $this->get_available_post_types();
         foreach ($available_post_types as $pt => $args) {
+            if (is_array($args->capability_type)) {
+                $args->capability_type = $args->capability_type[0] ?? '';
+            }
             if (in_array($args->capability_type, $allowed_post_types)) {
                 $enabled_post_types[] = $pt;
             }
