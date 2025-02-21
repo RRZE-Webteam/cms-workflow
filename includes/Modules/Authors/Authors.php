@@ -186,11 +186,13 @@ class Authors extends Module
     {
         wp_enqueue_script('jquery-listfilterizer');
         wp_enqueue_script(
-            'workflow-authors', 
-            $this->module_url . 'authors.js', 
-            array('jquery', 
-            'jquery-listfilterizer'), 
-            plugin()->getVersion(), 
+            'workflow-authors',
+            $this->module_url . 'authors.js',
+            array(
+                'jquery',
+                'jquery-listfilterizer'
+            ),
+            plugin()->getVersion(),
             true
         );
 
@@ -205,9 +207,9 @@ class Authors extends Module
     {
         wp_enqueue_style('jquery-listfilterizer');
         wp_enqueue_style(
-            'workflow-authors', 
-            $this->module->module_url . 'authors.css', 
-            false, 
+            'workflow-authors',
+            $this->module->module_url . 'authors.css',
+            false,
             plugin()->getVersion(),
         );
     }
@@ -229,7 +231,7 @@ class Authors extends Module
 
     public function authors_meta_box($post)
     {
-         ?>
+?>
         <div id="workflow-post-authors-box">
             <p><?php _e('Wählen Sie die Autoren zum Dokument', 'cms-workflow'); ?></p>
             <div id="workflow-post-authors-inside">
@@ -416,7 +418,7 @@ class Authors extends Module
 
     public function add_post_usergroups($post, $usergroups, $append = true)
     {
-        
+
 
         if (!$this->module_activated('user_groups')) {
             return;
@@ -604,6 +606,14 @@ class Authors extends Module
         $user_id = isset($args[1]) ? $args[1] : 0;
         $post_id = isset($args[2]) ? $args[2] : 0;
 
+        if (is_a($post_id, 'WP_Block_Editor_Context')) {
+            $post_id = $post_id->post->ID;
+        }
+
+        if (!is_int($post_id) || $post_id == 0) {
+            return $allcaps;
+        }
+
         if ($revision_parent_id = wp_is_post_revision($post_id)) {
             $post_id = $revision_parent_id;
         }
@@ -616,7 +626,7 @@ class Authors extends Module
 
         $post_type_obj = get_post_type_object($post_type);
 
-        if (!$post_type_obj) {
+        if (is_null($post_type_obj)) {
             return $allcaps;
         }
 
@@ -630,6 +640,13 @@ class Authors extends Module
             return $allcaps;
         }
 
+        $status = get_post_status($post_id);
+
+        if ($status == 'publish' && isset($allcaps["edit_published_{$post_type}s"]) && !isset($allcaps["publish_{$post_type}s"])) {
+            $allcaps["publish_{$post_type}s"] = true;
+            $current_user->allcaps["publish_{$post_type}s"] = true;
+        }
+
         if (isset($post_type_obj->cap->edit_others_posts) && !empty($current_user->allcaps[$post_type_obj->cap->edit_posts])) {
             $allcaps[$post_type_obj->cap->edit_others_posts] = true;
         }
@@ -638,6 +655,10 @@ class Authors extends Module
             $allcaps[$post_type_obj->cap->delete_others_posts] = true;
         }
 
+        // error_log($current_user->user_login);
+        // error_log(print_r($allcaps, true));
+        // error_log(print_r($current_user->allcaps, true));
+        // error_log(print_r($post_type_obj->cap, true));
         return $allcaps;
     }
 
@@ -980,7 +1001,7 @@ class Authors extends Module
 
     private function get_authors_usergroups($post_id, $return = 'all')
     {
-        
+
 
         if ($return == 'slugs') {
             $fields = 'all';
