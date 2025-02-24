@@ -606,11 +606,12 @@ class Authors extends Module
         $user_id = isset($args[1]) ? $args[1] : 0;
         $post_id = isset($args[2]) ? $args[2] : 0;
 
+        // Damn workaround for the block editor!
         if (is_a($post_id, 'WP_Block_Editor_Context')) {
             $post_id = $post_id->post->ID;
         }
 
-        if (!is_int($post_id) || $post_id == 0) {
+        if (absint($post_id) == 0) {
             return $allcaps;
         }
 
@@ -640,11 +641,13 @@ class Authors extends Module
             return $allcaps;
         }
 
-        $status = get_post_status($post_id);
-
-        if ($status == 'publish' && isset($allcaps["edit_published_{$post_type}s"]) && !isset($allcaps["publish_{$post_type}s"])) {
-            $allcaps["publish_{$post_type}s"] = true;
-            $current_user->allcaps["publish_{$post_type}s"] = true;
+        // Damn workaround for the block editor!
+        if (use_block_editor_for_post($post_id)) {
+            $status = get_post_status($post_id);
+            if ($status == 'publish' && isset($allcaps["edit_published_{$post_type}s"]) && !isset($allcaps["publish_{$post_type}s"])) {
+                $allcaps["publish_{$post_type}s"] = true;
+                $current_user->allcaps["publish_{$post_type}s"] = true;
+            }
         }
 
         if (isset($post_type_obj->cap->edit_others_posts) && !empty($current_user->allcaps[$post_type_obj->cap->edit_posts])) {
