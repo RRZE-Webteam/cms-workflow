@@ -611,10 +611,6 @@ class Authors extends Module
             $post_id = $post_id->post->ID;
         }
 
-        if (absint($post_id) == 0) {
-            return $allcaps;
-        }
-
         if ($revision_parent_id = wp_is_post_revision($post_id)) {
             $post_id = $revision_parent_id;
         }
