@@ -606,6 +606,11 @@ class Authors extends Module
         $user_id = isset($args[1]) ? $args[1] : 0;
         $post_id = isset($args[2]) ? $args[2] : 0;
 
+        // Damn workaround for the block editor!
+        if (is_a($post_id, 'WP_Block_Editor_Context')) {
+            $post_id = $post_id->post->ID;
+        }
+
         if ($revision_parent_id = wp_is_post_revision($post_id)) {
             $post_id = $revision_parent_id;
         }
