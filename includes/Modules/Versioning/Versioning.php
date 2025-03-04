@@ -407,7 +407,8 @@ class Versioning extends Module
         }
 
         // Update revision
-        $latest_revision = array_shift(wp_get_post_revisions($version_post_id));
+        $post_revisions = wp_get_post_revisions($version_post_id);
+        $latest_revision = array_shift($post_revisions);
         wp_update_post(array(
             'ID' => $latest_revision->ID,
             'post_author' => $post->post_author
@@ -429,6 +430,10 @@ class Versioning extends Module
                 $_POST['ID'] = $version_post_id;
                 $_POST['post_type'] = $post->post_type;
             }
+            return;
+        }
+
+        if (defined('REST_REQUEST') && REST_REQUEST) {
             return;
         }
 
