@@ -9,6 +9,10 @@ use RRZE\Workflow\Module;
 use RRZE\Workflow\Modules\Authors\Authors;
 use Text_Diff;
 
+/**
+ * Notifications Module
+ * @package RRZE\Workflow\Modules\Notifications
+ */
 class Notifications extends Module
 {
     public $schedule_notifications = false;
@@ -16,6 +20,9 @@ class Notifications extends Module
     public $module_url;
     private $alt_body;
 
+    /**
+     * Constructor
+     */
     public function __construct(Main $main)
     {
         parent::__construct($main);
@@ -47,6 +54,9 @@ class Notifications extends Module
         }
     }
 
+    /**
+     * Initialize module
+     */
     public function init()
     {
         add_action('post_updated', array($this, 'notification_post_updated'), 10, 3);
@@ -58,13 +68,21 @@ class Notifications extends Module
         add_action('admin_init', array($this, 'register_settings'));
     }
 
+    /**
+     * Notify post updated
+     * @param int $post_id
+     * @param WP_Post $post_after
+     * @param WP_Post $post_before
+     * @return void
+     */
     public function notification_post_updated($post_id, $post_after, $post_before)
     {
         if (!$this->module->options->post_diff_notify) {
             return;
         }
 
-        if (!$this->is_post_type_enabled($post_before->post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($post_after->post_type, $allowed_post_types)) {
             return;
         }
 
@@ -76,14 +94,15 @@ class Notifications extends Module
             return;
         }
 
-        // If this is a new post, set an empty title for $post_before so that it appears in the diff.
-        $child_posts = wp_get_post_revisions($post_id, array('numberposts' => 1));
-        if (count($child_posts) == 0) {
-            $post_before->post_title = '';
-        }
-
         if (!$post_before || !$post_after) {
             return;
+        }
+
+        // If this is a new post, set an empty title for $post_before so that it appears in the diff.
+        $is_new = ('0000-00-00 00:00:00' === $post_before->post_modified_gmt);
+        $child_posts = wp_get_post_revisions($post_id, array('numberposts' => 1));
+        if ($is_new || count($child_posts) == 0) {
+            $post_before->post_title = '';
         }
 
         $html_diffs = array();
@@ -287,15 +306,21 @@ class Notifications extends Module
         $this->send_email('post-updated', $post_before, $subject, $body);
     }
 
+    /**
+     * Notify status change
+     * @param string $new_status
+     * @param string $old_status
+     * @param WP_Post $post
+     * @return void
+     */
     public function notification_status_change($new_status, $old_status, $post)
     {
-
-
         if (!$this->module->options->post_status_notify) {
             return;
         }
 
-        if (!$this->is_post_type_enabled($post->post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($post->post_type, $allowed_post_types)) {
             return;
         }
 
@@ -400,6 +425,12 @@ class Notifications extends Module
         $this->send_email('post-status-change', $post, $subject, $body);
     }
 
+    /**
+     * Notify post versioning new
+     * @param int $post_id
+     * @param int $original_post_id
+     * @return void
+     */
     public function notification_post_versioning_new($post_id, $original_post_id)
     {
         if (!$this->module->options->post_versioning_new_notify) {
@@ -408,13 +439,15 @@ class Notifications extends Module
 
         $post = get_post($post_id);
 
-        if (!$this->is_post_type_enabled($post->post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($post->post_type, $allowed_post_types)) {
             return;
         }
 
         $original_post = get_post($original_post_id);
 
-        if (!$this->is_post_type_enabled($original_post->post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($original_post->post_type, $allowed_post_types)) {
             return;
         }
 
@@ -487,6 +520,11 @@ class Notifications extends Module
         $this->send_email('post-versioning-new', $post, $subject, $body);
     }
 
+    /**
+     * Get notification footer
+     * @param WP_Post $post
+     * @return string
+     */
     public function get_notification_footer($post)
     {
         $body = "";
@@ -496,11 +534,25 @@ class Notifications extends Module
         return $body;
     }
 
+    /**
+     * PHPMailer init
+     * @param PHPMailer $phpmailer
+     * @return void
+     */
     public function phpmailer_init(&$phpmailer)
     {
         $phpmailer->AltBody = $this->alt_body;
     }
 
+    /**
+     * Send email
+     * @param string $action
+     * @param WP_Post $post
+     * @param string $subject
+     * @param string $message
+     * @param string|array $headers
+     * @return void
+     */
     public function send_email($action, $post, $subject, $message, $headers = '')
     {
         $subject = sprintf('%1$s %2$s', $this->module->options->subject_prefix, $subject);
@@ -528,6 +580,15 @@ class Notifications extends Module
         }
     }
 
+    /**
+     * Schedule emails
+     * @param array $recipients
+     * @param string $subject
+     * @param string $message
+     * @param string|array $headers
+     * @param int $time_offset
+     * @return void
+     */
     public function schedule_emails($recipients, $subject, $message, $headers = '', $time_offset = 1)
     {
         $recipients = (array) $recipients;
@@ -540,11 +601,25 @@ class Notifications extends Module
         }
     }
 
+    /**
+     * Send single email
+     * @param string $to
+     * @param string $subject
+     * @param string $message
+     * @param string|array $headers
+     * @return void
+     */
     public function send_single_email($to, $subject, $message, $headers = '')
     {
         wp_mail($to, $subject, $message, $headers);
     }
 
+    /**
+     * Get notification recipients
+     * @param WP_Post $post
+     * @param bool $string
+     * @return array|string
+     */
     private function get_notification_recipients($post, $string = false)
     {
 
@@ -596,6 +671,11 @@ class Notifications extends Module
         }
     }
 
+    /**
+     * Get authors emails
+     * @param int $post_id
+     * @return array
+     */
     private function get_authors_emails($post_id)
     {
         $users = Authors::get_authors($post_id, 'user_email');
@@ -606,6 +686,11 @@ class Notifications extends Module
         return $users;
     }
 
+    /**
+     * Get authors details
+     * @param int $post_id
+     * @return array
+     */
     private function get_authors_details($post_id)
     {
         $users = Authors::get_authors($post_id);
@@ -620,6 +705,10 @@ class Notifications extends Module
         return $users;
     }
 
+    /**
+     * Register settings
+     * @return void
+     */
     public function register_settings()
     {
         add_settings_section($this->module->workflow_options_name . '_general', __('Allgemein', 'cms-workflow'), '__return_false', $this->module->workflow_options_name);
@@ -639,12 +728,20 @@ class Notifications extends Module
         }
     }
 
+    /**
+     * Post types option display callback
+     * @return void
+     */
     public function settings_post_types_option()
     {
 
         $this->main->settings->custom_post_type_option($this->module);
     }
 
+    /**
+     * Always notify admin option display callback
+     * @return void
+     */
     public function settings_always_notify_admin_option()
     {
         $options = array(
@@ -660,6 +757,10 @@ class Notifications extends Module
         echo '</select>';
     }
 
+    /**
+     * Subject prefix option display callback
+     * @return void
+     */
     public function settings_subject_prefix_option()
     {
 ?>
@@ -668,6 +769,11 @@ class Notifications extends Module
     <?php
     }
 
+    /**
+     * Settings validate callback
+     * @param array $new_options
+     * @return array
+     */
     public function settings_validate($new_options)
     {
 
@@ -686,6 +792,10 @@ class Notifications extends Module
         return $new_options;
     }
 
+    /**
+     * Post status notify option display callback
+     * @return void
+     */
     public function settings_post_status_notify_option()
     {
         $options = array(
@@ -701,6 +811,10 @@ class Notifications extends Module
         echo '</select>';
     }
 
+    /**
+     * Post diff notify option display callback
+     * @return void
+     */
     public function settings_post_diff_notify_option()
     {
         $options = array(
@@ -716,6 +830,10 @@ class Notifications extends Module
         echo '</select>';
     }
 
+    /**
+     * Post versioning new notify option display callback
+     * @return void
+     */
     public function settings_post_versioning_new_notify_option()
     {
         $options = array(
@@ -731,6 +849,10 @@ class Notifications extends Module
         echo '</select>';
     }
 
+    /**
+     * Print configure view
+     * @return void
+     */
     public function print_configure_view()
     {
     ?>
@@ -745,11 +867,23 @@ class Notifications extends Module
 <?php
     }
 
+    /**
+     * Draft or post title
+     * @param string $post_title
+     * @return string
+     */
     private function draft_or_post_title($post_title)
     {
         return !empty($post_title) ? $post_title : __('(Kein Titel)', 'cms-workflow');
     }
 
+    /**
+     * Text diff
+     * @param string $left_string
+     * @param string $right_string
+     * @param array|null $args
+     * @return string
+     */
     private function text_diff($left_string, $right_string, $args = null)
     {
         $defaults = array(
