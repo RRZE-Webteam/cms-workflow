@@ -3,7 +3,7 @@
 /*
 Plugin Name:        CMS-Workflow
 Plugin URI:         https://github.com/RRZE-Webteam/cms-workflow
-Version:            2.0.7
+Version:            2.0.8
 Description:        Redaktioneller Workflow.
 Author:             RRZE-Webteam
 Author URI:         https://blogs.fau.de/webworking/
@@ -11,7 +11,7 @@ License:            GNU General Public License Version 3
 License URI:        https://www.gnu.org/licenses/gpl-3.0.html
 Text Domain:        cms-workflow
 Domain Path:        /languages
-Requires at least:  6.7
+Requires at least:  6.8
 Requires PHP:       8.2
 */
 
