@@ -10,16 +10,15 @@ use function RRZE\Workflow\plugin;
 
 class Versioning extends Module
 {
-    public $module_url;
-
     const source_post_id = '_source_post_id';
     const version_post_id = '_version_post_id';
     const version_remote_parent_post_meta = '_version_remote_parent_post_meta';
     const version_remote_post_meta = '_version_remote_post_meta';
 
-    protected $not_filtered_post_meta = array();
-
     public $module;
+    public $module_url;
+
+    protected $not_filtered_post_meta = array();
 
     public function __construct(Main $main)
     {
@@ -291,7 +290,8 @@ class Versioning extends Module
             wp_die(__('Sie haben nicht die erforderlichen Rechte, um eine neue Version zu erstellen.', 'cms-workflow'));
         }
 
-        if (!$this->is_post_type_enabled($post->post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($post->post_type, $allowed_post_types)) {
             wp_die(__('Diese Aktion ist nicht erlaubt.', 'cms-workflow'));
         }
 
@@ -564,7 +564,8 @@ class Versioning extends Module
             return;
         }
 
-        if (!$this->is_post_type_enabled($post_type)) {
+        $allowed_post_types = $this->get_post_types($this->module);
+        if (!in_array($post_type, $allowed_post_types)) {
             return;
         }
 
