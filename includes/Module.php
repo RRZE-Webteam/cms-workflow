@@ -79,6 +79,11 @@ class Module
         return $available_post_types;
     }
 
+    /**
+     * Get enabled post types for a module.
+     * @param object $module Module object
+     * @return array Enabled post types
+     */
     public function get_post_types($module)
     {
         if (is_multisite() && ms_is_switched()) {
