@@ -3,7 +3,7 @@
 /*
 Plugin Name:        CMS-Workflow
 Plugin URI:         https://github.com/RRZE-Webteam/cms-workflow
-Version:            2.0.8
+Version:            2.0.9
 Description:        Redaktioneller Workflow.
 Author:             RRZE-Webteam
 Author URI:         https://blogs.fau.de/webworking/
