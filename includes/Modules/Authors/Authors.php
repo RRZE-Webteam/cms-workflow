@@ -249,7 +249,7 @@ class Authors extends Module
                 $this->users_select_form($authors, $args); ?>
             </div>
 
-            <?php if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) : ?>
+            <?php if ($this->module_activated('user_groups') && in_array($post->post_type, $this->get_post_types($this->main->user_groups->module))) : ?>
                 <div id="workflow-post-authors-usergroups-box">
                     <h4><?php _e('Benutzergruppe', 'cms-workflow') ?></h4>
                     <?php
@@ -288,7 +288,7 @@ class Authors extends Module
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->save_post_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) {
+            if ($this->module_activated('user_groups') && in_array($post->post_type, $this->get_post_types($this->main->user_groups->module))) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->save_post_authors_usergroups($post, $usergroups);
             }
@@ -311,7 +311,7 @@ class Authors extends Module
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
             $this->edit_attachment_authors($post, $users);
 
-            if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) {
+            if ($this->module_activated('user_groups') && in_array($post->post_type, $this->get_post_types($this->main->user_groups->module))) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
                 $this->edit_attachment_authors_usergroups($post, $usergroups);
             }
