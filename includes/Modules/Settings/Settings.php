@@ -63,9 +63,9 @@ class Settings extends Module
     public function action_admin_print_styles()
     {
         wp_enqueue_style(
-            'workflow-settings', 
-            $this->module_url . 'settings.css', 
-            false, 
+            'workflow-settings',
+            $this->module_url . 'settings.css',
+            false,
             plugin()->getVersion()
         );
     }
@@ -81,7 +81,7 @@ class Settings extends Module
 
     public function settings_page_controller()
     {
-        
+
 
         $requested_module = $this->main->get_module_by('settings_slug', $_GET['page']);
         if (!$requested_module) {
@@ -100,8 +100,6 @@ class Settings extends Module
 
     public function print_default_view($current_module)
     {
-        
-
         if (isset($_GET['message'])) {
             $message = $_GET['message'];
         } elseif (isset($_REQUEST['message'])) {
@@ -160,8 +158,6 @@ class Settings extends Module
 
     public function register_settings()
     {
-        
-
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
 
         if (!$this->countValid($this->main->modules)) {
@@ -243,7 +239,7 @@ class Settings extends Module
 
     public function print_settings()
     {
-        ?>
+    ?>
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
             <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
             <?php settings_fields($this->module->workflow_options_name); ?>
