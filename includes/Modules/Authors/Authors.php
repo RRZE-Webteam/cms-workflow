@@ -7,6 +7,7 @@ defined('ABSPATH') || exit;
 use RRZE\Workflow\Main;
 use RRZE\Workflow\Module;
 use RRZE\Workflow\Modules\UserGroups\UserGroups;
+use RRZE\Workflow\WSFormHelper;
 use function RRZE\Workflow\plugin;
 
 class Authors extends Module
@@ -18,6 +19,7 @@ class Authors extends Module
     private $wp_post_caps = array();
     private $wp_role_caps = array();
     public $role_caps = array();
+    private $ws_form_capability_groups = array();
     public $module;
     public $module_url;
     public $having_terms = '';
@@ -161,6 +163,18 @@ class Authors extends Module
 
             if (isset($args->cap->delete_published_posts)) {
                 $this->role_caps[$args->cap->delete_published_posts] = sprintf(__('Veröffentlichte %s löschen', 'cms-workflow'), $label);
+            }
+        }
+
+        $this->ws_form_capability_groups = array();
+
+        if (WSFormHelper::is_ws_form_pro_active()) {
+            $this->ws_form_capability_groups = WSFormHelper::get_ws_form_capability_groups();
+
+            foreach ($this->ws_form_capability_groups as $group) {
+                foreach ($group['caps'] as $cap => $cap_args) {
+                    $this->role_caps[$cap] = $cap_args['label'];
+                }
             }
         }
     }
@@ -1171,6 +1185,30 @@ class Authors extends Module
                 }
             }
         }
+        if (empty($this->ws_form_capability_groups) && WSFormHelper::is_ws_form_pro_active()) {
+            $this->ws_form_capability_groups = WSFormHelper::get_ws_form_capability_groups();
+        }
+
+        if (!empty($this->ws_form_capability_groups)) {
+            foreach ($this->ws_form_capability_groups as $group) {
+                echo '<dt>' . esc_html($group['label']) . '</dt>';
+                foreach ($group['caps'] as $cap => $cap_args) {
+                    echo '<dd>';
+                    echo '<label for="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($cap) . '">';
+                    echo '<input id="' . esc_attr($this->module->workflow_options_name) . '_' . esc_attr($cap) . '" name="'
+                        . $this->module->workflow_options_name . '[role_caps][' . esc_attr($cap) . ']"';
+                    if (isset($this->module->options->role_caps[$cap])) {
+                        checked(true, true);
+                    }
+                    echo ' type="checkbox" />&nbsp;&nbsp;&nbsp;' . esc_html($cap_args['label']);
+                    if (!empty($cap_args['description'])) {
+                        echo '<span class="description"> ' . esc_html($cap_args['description']) . '</span>';
+                    }
+                    echo '</label>';
+                    echo '</dd>';
+                }
+            }
+        }
         echo '</dl>';
     }
 
@@ -1224,6 +1262,15 @@ class Authors extends Module
 
                 $delete_published_posts = isset($args->cap->delete_published_posts) && !empty($new_options['role_caps'][$args->cap->delete_published_posts]) ? 1 : 0;
                 $new_role_caps["delete_published_{$args->capability_type}s"] = $delete_published_posts;
+            }
+        }
+
+        if (WSFormHelper::is_ws_form_pro_active()) {
+            foreach (WSFormHelper::get_ws_form_capability_groups() as $group) {
+                foreach ($group['caps'] as $cap => $cap_args) {
+                    $has_cap = !empty($new_options['role_caps'][$cap]) ? 1 : 0;
+                    $new_role_caps[$cap] = $has_cap;
+                }
             }
         }
 
