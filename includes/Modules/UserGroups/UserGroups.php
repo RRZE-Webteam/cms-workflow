@@ -23,24 +23,24 @@ class UserGroups extends Module
         $this->module_url = $this->get_module_url(__FILE__);
 
         $args = array(
-            'title' => __('Benutzergruppen', 'cms-workflow'),
-            'description' => __('Benutzer nach Abteilung oder Funktion organisieren.', 'cms-workflow'),
-            'module_url' => $this->module_url,
-            'slug' => 'user-groups',
-            'default_options' => array(
-                'post_types' => array(
-                    'post' => true,
-                    'page' => true,
+                'title' => __('Benutzergruppen', 'cms-workflow'),
+                'description' => __('Benutzer nach Abteilung oder Funktion organisieren.', 'cms-workflow'),
+                'module_url' => $this->module_url,
+                'slug' => 'user-groups',
+                'default_options' => array(
+                        'post_types' => array(
+                                'post' => true,
+                                'page' => true,
+                        ),
                 ),
-            ),
-            'messages' => array(
-                'usergroup-added' => __('Die Benutzergruppe wurde erstellt.', 'cms-workflow'),
-                'usergroup-updated' => __('Die Benutzergruppe wurde aktualisiert.', 'cms-workflow'),
-                'usergroup-missing' => __('Die Benutzergruppe existiert nicht.', 'cms-workflow'),
-                'usergroup-deleted' => __('Die Benutzergruppe wurde gelöscht.', 'cms-workflow'),
-            ),
-            'configure_callback' => 'print_configure_view',
-            'configure_link_text' => __('Gruppen verwalten', 'cms-workflow')
+                'messages' => array(
+                        'usergroup-added' => __('Die Benutzergruppe wurde erstellt.', 'cms-workflow'),
+                        'usergroup-updated' => __('Die Benutzergruppe wurde aktualisiert.', 'cms-workflow'),
+                        'usergroup-missing' => __('Die Benutzergruppe existiert nicht.', 'cms-workflow'),
+                        'usergroup-deleted' => __('Die Benutzergruppe wurde gelöscht.', 'cms-workflow'),
+                ),
+                'configure_callback' => 'print_configure_view',
+                'configure_link_text' => __('Gruppen verwalten', 'cms-workflow')
         );
 
         $this->module = $this->main->register_module('user_groups', $args);
@@ -81,9 +81,9 @@ class UserGroups extends Module
         $allowed_post_types = $this->get_post_types($this->module);
 
         $args = array(
-            'public' => false,
-            'rewrite' => false,
-            'show_in_rest' => true
+                'public' => false,
+                'rewrite' => false,
+                'show_in_rest' => true
         );
 
         register_taxonomy(self::taxonomy_key, $allowed_post_types, $args);
@@ -93,27 +93,27 @@ class UserGroups extends Module
     {
         wp_enqueue_script('jquery-listfilterizer');
         wp_enqueue_script(
-            'workflow-user-groups',
-            $this->module_url . 'user-groups.js',
-            array('jquery', 'jquery-listfilterizer'),
-            plugin()->getVersion(),
-            true
+                'workflow-user-groups',
+                $this->module_url . 'user-groups.js',
+                array('jquery', 'jquery-listfilterizer'),
+                plugin()->getVersion(),
+                true
         );
 
         if ($this->is_settings_view()) {
             wp_enqueue_script(
-                'workflow-user-groups-inline-edit',
-                $this->module_url . 'inline-edit-min.js',
-                array('jquery'),
-                plugin()->getVersion(),
-                true
+                    'workflow-user-groups-inline-edit',
+                    $this->module_url . 'inline-edit-min.js',
+                    array('jquery'),
+                    plugin()->getVersion(),
+                    true
             );
         }
 
         wp_localize_script('workflow-user-groups', 'user_groups_vars', array(
-            'filters_label_1' => __('Alle', 'cms-workflow'),
-            'filters_label_2' => __('Ausgewählt', 'cms-workflow'),
-            'placeholder' => __('Suchen...', 'cms-workflow'),
+                'filters_label_1' => __('Alle', 'cms-workflow'),
+                'filters_label_2' => __('Ausgewählt', 'cms-workflow'),
+                'placeholder' => __('Suchen...', 'cms-workflow'),
         ));
     }
 
@@ -121,10 +121,10 @@ class UserGroups extends Module
     {
         wp_enqueue_style('jquery-listfilterizer');
         wp_enqueue_style(
-            'workflow-user-groups',
-            $this->module_url . 'user-groups.css',
-            false,
-            plugin()->getVersion(),
+                'workflow-user-groups',
+                $this->module_url . 'user-groups.css',
+                false,
+                plugin()->getVersion(),
         );
     }
 
@@ -169,8 +169,8 @@ class UserGroups extends Module
         }
 
         $args = array(
-            'name' => $name,
-            'description' => $description,
+                'name' => $name,
+                'description' => $description,
         );
 
         $usergroup = $this->add_usergroup($args);
@@ -179,9 +179,9 @@ class UserGroups extends Module
         }
 
         $args = array(
-            'action' => 'edit-usergroup',
-            'usergroup-id' => $usergroup->term_id,
-            'message' => 'usergroup-added'
+                'action' => 'edit-usergroup',
+                'usergroup-id' => $usergroup->term_id,
+                'message' => 'usergroup-added'
         );
         $redirect_url = $this->get_link($args);
         wp_redirect($redirect_url);
@@ -202,7 +202,7 @@ class UserGroups extends Module
             wp_die($this->module->messages['invalid-permissions']);
         }
 
-        if (!$existing_usergroup = $this->get_usergroup_by('id', (int) $_POST['usergroup_id'])) {
+        if (!$existing_usergroup = $this->get_usergroup_by('id', (int)$_POST['usergroup_id'])) {
             wp_die($this->module->messsage['usergroup-error']);
         }
 
@@ -235,11 +235,11 @@ class UserGroups extends Module
         }
 
         $args = array(
-            'name' => $name,
-            'description' => $description,
+                'name' => $name,
+                'description' => $description,
         );
 
-        $users = isset($_POST['usergroup_users']) ? (array) $_POST['usergroup_users'] : array();
+        $users = isset($_POST['usergroup_users']) ? (array)$_POST['usergroup_users'] : array();
         $users = array_map('intval', $users);
 
         $usergroup = $this->update_usergroup($existing_usergroup->term_id, $args, $users);
@@ -249,7 +249,7 @@ class UserGroups extends Module
         }
 
         $args = array(
-            'message' => 'usergroup-updated',
+                'message' => 'usergroup-updated',
         );
         $redirect_url = $this->get_link($args);
         wp_redirect($redirect_url);
@@ -270,7 +270,7 @@ class UserGroups extends Module
             wp_die($this->module->messages['invalid-permissions']);
         }
 
-        $result = $this->delete_usergroup((int) $_GET['usergroup-id']);
+        $result = $this->delete_usergroup((int)$_GET['usergroup-id']);
         if (!$result || is_wp_error($result)) {
             wp_die(__('Fehler beim Löschen der Benutzergruppe.', 'cms-workflow'));
         }
@@ -290,14 +290,13 @@ class UserGroups extends Module
 
     public function rest_insert_post($post)
     {
-        $usergroups = get_terms(self::taxonomy_key);
-        if (!empty($usergroups)) {
-            $usergroup_ids = [];
-            foreach ($usergroups as $group) {
-                $usergroup_ids[] = $group->term_id;
-            }
-            $this->main->authors->add_post_usergroups($post, $usergroup_ids);
+        $usergroup_ids = wp_get_object_terms($post->ID, self::taxonomy_key, array('fields' => 'ids'));
+        if (is_wp_error($usergroup_ids)) {
+            return;
         }
+
+        $usergroup_ids = array_map('intval', $usergroup_ids);
+        $this->main->authors->add_post_usergroups($post, $usergroup_ids, false);
     }
 
     public function handle_ajax_inline_save_usergroup()
@@ -310,7 +309,7 @@ class UserGroups extends Module
             die($this->module->messages['invalid-permissions']);
         }
 
-        $usergroup_id = (int) $_POST['usergroup_id'];
+        $usergroup_id = (int)$_POST['usergroup_id'];
         if (!$existing_term = $this->get_usergroup_by('id', $usergroup_id)) {
             die($this->module->messsage['usergroup-error']);
         }
@@ -341,8 +340,8 @@ class UserGroups extends Module
         }
 
         $args = array(
-            'name' => $name,
-            'description' => $description,
+                'name' => $name,
+                'description' => $description,
         );
 
         $return = $this->update_usergroup($existing_term->term_id, $args);
@@ -399,7 +398,7 @@ class UserGroups extends Module
 
                     echo '<label for="post_types' . '_' . esc_attr($post_type) . '">';
                     echo '<input id="post_types' . '_' . esc_attr($post_type) . '" name="'
-                        . $this->module->workflow_options_name . '[post_types][' . esc_attr($post_type) . ']"';
+                            . $this->module->workflow_options_name . '[post_types][' . esc_attr($post_type) . ']"';
                     if (!empty($this->module->options->post_types[$post_type])) {
                         checked($this->module->options->post_types[$post_type], true);
                     }
@@ -430,7 +429,7 @@ class UserGroups extends Module
     public function print_configure_view()
     {
         if (isset($_GET['action'], $_GET['usergroup-id']) && $_GET['action'] == 'edit-usergroup') :
-            $usergroup_id = (int) $_GET['usergroup-id'];
+            $usergroup_id = (int)$_GET['usergroup-id'];
             $usergroup = $this->get_usergroup_by('id', $usergroup_id);
 
             if (!$usergroup) {
@@ -440,17 +439,18 @@ class UserGroups extends Module
 
             $name = (isset($_POST['name'])) ? stripslashes($_POST['name']) : $usergroup->name;
             $description = (isset($_POST['description'])) ? stripslashes($_POST['description']) : $usergroup->description;
-?>
-            <form method="post" action="<?php echo esc_url($this->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup_id))); ?>">
+            ?>
+            <form method="post"
+                  action="<?php echo esc_url($this->get_link(array('action' => 'edit-usergroup', 'usergroup-id' => $usergroup_id))); ?>">
                 <div id="col-right">
                     <div class="col-wrap">
                         <div id="workflow-usergroup-users" class="wrap">
                             <h4><?php _e('Benutzer', 'cms-workflow'); ?></h4>
                             <?php
                             $select_form_args = array(
-                                'list_class' => 'workflow-groups-list',
-                                'input_id' => 'usergroup-users',
-                                'input_name' => 'usergroup_users'
+                                    'list_class' => 'workflow-groups-list',
+                                    'input_id' => 'usergroup-users',
+                                    'input_name' => 'usergroup_users'
                             );
                             ?>
                             <?php $this->users_select_form($usergroup->user_ids, $select_form_args); ?>
@@ -460,20 +460,22 @@ class UserGroups extends Module
                 <div id="col-left">
                     <div class="col-wrap">
                         <div class="form-wrap">
-                            <input type="hidden" name="form_action" value="edit-usergroup" />
-                            <input type="hidden" name="usergroup_id" value="<?php echo esc_attr($usergroup_id); ?>" />
+                            <input type="hidden" name="form_action" value="edit-usergroup"/>
+                            <input type="hidden" name="usergroup_id" value="<?php echo esc_attr($usergroup_id); ?>"/>
                             <?php
                             wp_original_referer_field();
                             wp_nonce_field('edit-usergroup');
                             ?>
                             <div class="form-field form-required">
                                 <label for="name"><?php _e('Name', 'cms-workflow'); ?></label>
-                                <input name="name" id="name" type="text" value="<?php echo esc_attr($name); ?>" size="40" maxlength="40" aria-required="true" />
+                                <input name="name" id="name" type="text" value="<?php echo esc_attr($name); ?>"
+                                       size="40" maxlength="40" aria-required="true"/>
                                 <?php $this->main->settings->print_error_or_description('name', __('Der Name der Benutzergruppe.', 'cms-workflow')); ?>
                             </div>
                             <div class="form-field">
                                 <label for="description"><?php _e('Beschreibung', 'cms-workflow'); ?></label>
-                                <textarea name="description" id="description" rows="5" cols="40"><?php echo esc_html($description); ?></textarea>
+                                <textarea name="description" id="description" rows="5"
+                                          cols="40"><?php echo esc_html($description); ?></textarea>
                                 <?php $this->main->settings->print_error_or_description('description', __('Die Beschreibung der Benutzergruppe.', 'cms-workflow')); ?>
                             </div>
                             <p class="submit">
@@ -487,7 +489,7 @@ class UserGroups extends Module
         else :
             $wp_list_table = new UserGroupsListTable($this->main);
             $wp_list_table->prepare_items();
-        ?>
+            ?>
             <div id="col-right">
                 <div class="col-wrap">
                     <?php $wp_list_table->display(); ?>
@@ -497,27 +499,34 @@ class UserGroups extends Module
                 <div class="col-wrap">
                     <div class="form-wrap usergroups-wrap">
                         <h2 class="nav-tab-wrapper">
-                            <a href="<?php echo esc_url($this->get_link()); ?>" class="nav-tab<?php if (!isset($_GET['action']) || $_GET['action'] != 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a>
-                            <a href="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>" class="nav-tab<?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Einstellungen', 'cms-workflow'); ?></a>
+                            <a href="<?php echo esc_url($this->get_link()); ?>"
+                               class="nav-tab<?php if (!isset($_GET['action']) || $_GET['action'] != 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a>
+                            <a href="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>"
+                               class="nav-tab<?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') echo ' nav-tab-active'; ?>"><?php _e('Einstellungen', 'cms-workflow'); ?></a>
                         </h2>
                         <?php if (isset($_GET['action']) && $_GET['action'] == 'change-options') : ?>
                             <p class="description">Die Freigabeeinstellungen gelten für alle Benutzergruppen.</p>
-                            <form class="basic-settings form-user-groups" action="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>" method="post">
+                            <form class="basic-settings form-user-groups"
+                                  action="<?php echo esc_url($this->get_link(array('action' => 'change-options'))); ?>"
+                                  method="post">
                                 <?php settings_fields($this->module->workflow_options_name); ?>
                                 <?php do_settings_sections($this->module->workflow_options_name); ?>
                                 <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
                                 <?php submit_button(); ?>
                             </form>
                         <?php else : ?>
-                            <form class="add:the-list:" action="<?php echo esc_url($this->get_link()); ?>" method="post" id="addusergroup" name="addusergroup">
+                            <form class="add:the-list:" action="<?php echo esc_url($this->get_link()); ?>" method="post"
+                                  id="addusergroup" name="addusergroup">
                                 <div class="form-field form-required">
                                     <label for="name"><?php _e('Name', 'cms-workflow'); ?></label>
-                                    <input type="text" aria-required="true" id="name" name="name" maxlength="40" value="<?php if (!empty($_POST['name'])) echo esc_attr($_POST['name']); ?>" />
+                                    <input type="text" aria-required="true" id="name" name="name" maxlength="40"
+                                           value="<?php if (!empty($_POST['name'])) echo esc_attr($_POST['name']); ?>"/>
                                     <?php $this->main->settings->print_error_or_description('name', __('Der Name wird verwendet um die Benutzergruppe zu identifizieren.', 'cms-workflow')); ?>
                                 </div>
                                 <div class="form-field">
                                     <label for="description"><?php _e('Beschreibung', 'cms-workflow'); ?></label>
-                                    <textarea cols="40" rows="5" id="description" name="description"><?php if (!empty($_POST['description'])) echo esc_html($_POST['description']) ?></textarea>
+                                    <textarea cols="40" rows="5" id="description"
+                                              name="description"><?php if (!empty($_POST['description'])) echo esc_html($_POST['description']) ?></textarea>
                                     <?php $this->main->settings->print_error_or_description('description', __('Die Beschreibung ist für administrative Zwecke vorhanden.', 'cms-workflow')); ?>
                                 </div>
                                 <?php wp_nonce_field('add-usergroup'); ?>
@@ -546,23 +555,23 @@ class UserGroups extends Module
         ?>
         <table id="workflow-user-usergroups" class="form-table">
             <tbody>
-                <tr>
-                    <th>
-                        <h3><?php _e('Benutzergruppen', 'cms-workflow') ?></h3>
-                        <?php if ($user_id === wp_get_current_user()->ID) : ?>
-                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen Sie gerne teilnehmen würden:', 'cms-workflow') ?></p>
-                        <?php else : ?>
-                            <p><?php _e('Wählen Sie die Benutzergruppen, an denen dieser Benutzer teilnehmen sollte:', 'cms-workflow') ?></p>
-                        <?php endif; ?>
-                    </th>
-                    <td>
-                        <?php $this->usergroups_select_form($selected_usergroups, $usergroups_form_args); ?>
-                    </td>
-                </tr>
+            <tr>
+                <th>
+                    <h3><?php _e('Benutzergruppen', 'cms-workflow') ?></h3>
+                    <?php if ($user_id === wp_get_current_user()->ID) : ?>
+                        <p><?php _e('Wählen Sie die Benutzergruppen, an denen Sie gerne teilnehmen würden:', 'cms-workflow') ?></p>
+                    <?php else : ?>
+                        <p><?php _e('Wählen Sie die Benutzergruppen, an denen dieser Benutzer teilnehmen sollte:', 'cms-workflow') ?></p>
+                    <?php endif; ?>
+                </th>
+                <td>
+                    <?php $this->usergroups_select_form($selected_usergroups, $usergroups_form_args); ?>
+                </td>
+            </tr>
             </tbody>
         </table>
         <?php wp_nonce_field('workflow_edit_profile_usergroups_nonce', 'workflow_edit_profile_usergroups_nonce'); ?>
-    <?php
+        <?php
     }
 
     public function user_profile_update($errors, $update, $user)
@@ -572,7 +581,7 @@ class UserGroups extends Module
         }
 
         if (current_user_can('manage_categories') && wp_verify_nonce($_POST['workflow_edit_profile_usergroups_nonce'], 'workflow_edit_profile_usergroups_nonce')) {
-            $usergroups = isset($_POST['groups_usergroups']) ? array_map('intval', (array) $_POST['groups_usergroups']) : array();
+            $usergroups = isset($_POST['groups_usergroups']) ? array_map('intval', (array)$_POST['groups_usergroups']) : array();
             $all_usergroups = $this->get_usergroups();
             foreach ($all_usergroups as $usergroup) {
                 if (in_array($usergroup->term_id, $usergroups)) {
@@ -609,32 +618,39 @@ class UserGroups extends Module
     public function usergroups_select_form($selected = array(), $args = null)
     {
         $defaults = array(
-            'list_class' => 'workflow-groups-list',
-            'input_id' => 'groups-usergroups',
-            'input_name' => 'groups_usergroups'
+                'list_class' => 'workflow-groups-list',
+                'input_id' => 'groups-usergroups',
+                'input_name' => 'groups_usergroups'
         );
 
         $parsed_args = wp_parse_args($args, $defaults);
         extract($parsed_args, EXTR_SKIP);
         $usergroups = $this->get_usergroups();
-    ?>
+        ?>
         <?php if (empty($usergroups)) : ?>
-            <p><?php _e('Keine Benutzergruppen gefunden.', 'cms-workflow') ?> <a href="<?php echo esc_url($this->get_link()); ?>" title="<?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow') ?>" target="_blank"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a></p>
-        <?php else : ?>
-            <ul class="<?php echo $list_class ?>">
-                <?php foreach ($usergroups as $usergroup) :
-                    $checked = (in_array($usergroup->term_id, $selected)) ? ' checked="checked"' : '';
+        <p><?php _e('Keine Benutzergruppen gefunden.', 'cms-workflow') ?> <a
+                    href="<?php echo esc_url($this->get_link()); ?>"
+                    title="<?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow') ?>"
+                    target="_blank"><?php _e('Neue Benutzergruppe hinzufügen', 'cms-workflow'); ?></a></p>
+    <?php else : ?>
+        <ul class="<?php echo $list_class ?>">
+            <?php foreach ($usergroups as $usergroup) :
+                $checked = (in_array($usergroup->term_id, $selected)) ? ' checked="checked"' : '';
                 ?>
-                    <li>
-                        <label for="<?php echo $input_id . '-' . esc_attr($usergroup->term_id); ?>" title="<?php echo esc_attr($usergroup->description) ?>">
-                            <input type="checkbox" id="<?php echo $input_id . '-' . esc_attr($usergroup->term_id) ?>" name="<?php echo $input_name ?>[]" value="<?php echo esc_attr($usergroup->term_id) ?>" <?php echo $checked ?> />
-                            <span class="workflow-usergroup-name"><?php echo esc_html($usergroup->name); ?></span>
-                            <span class="workflow-usergroup-description" title="<?php echo esc_attr($usergroup->description) ?>"><?php echo (strlen($usergroup->description) >= 50) ? substr_replace(esc_html($usergroup->description), '...', 50) : esc_html($usergroup->description); ?></span>
-                        </label>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif;
+                <li>
+                    <label for="<?php echo $input_id . '-' . esc_attr($usergroup->term_id); ?>"
+                           title="<?php echo esc_attr($usergroup->description) ?>">
+                        <input type="checkbox" id="<?php echo $input_id . '-' . esc_attr($usergroup->term_id) ?>"
+                               name="<?php echo $input_name ?>[]"
+                               value="<?php echo esc_attr($usergroup->term_id) ?>" <?php echo $checked ?> />
+                        <span class="workflow-usergroup-name"><?php echo esc_html($usergroup->name); ?></span>
+                        <span class="workflow-usergroup-description"
+                              title="<?php echo esc_attr($usergroup->description) ?>"><?php echo (strlen($usergroup->description) >= 50) ? substr_replace(esc_html($usergroup->description), '...', 50) : esc_html($usergroup->description); ?></span>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif;
     }
 
     public function get_usergroups($args = array())
@@ -683,15 +699,15 @@ class UserGroups extends Module
 
         $name = $args['name'];
         $default = array(
-            'name' => '',
-            'slug' => self::term_prefix . sanitize_title($name),
-            'description' => '',
+                'name' => '',
+                'slug' => self::term_prefix . sanitize_title($name),
+                'description' => '',
         );
         $args = array_merge($default, $args);
 
         $args_to_encode = array(
-            'description' => $args['description'],
-            'user_ids' => array_unique($user_ids),
+                'description' => $args['description'],
+                'user_ids' => array_unique($user_ids),
         );
         $encoded_description = $this->get_encoded_description($args_to_encode);
         $args['description'] = $encoded_description;
@@ -748,11 +764,11 @@ class UserGroups extends Module
         }
 
         $new_users = array();
-        foreach ((array) $user_ids_or_logins as $user_id_or_login) {
+        foreach ((array)$user_ids_or_logins as $user_id_or_login) {
             if (!is_numeric($user_id_or_login)) {
                 $new_users[] = get_user_by('login', $user_id_or_login)->ID;
             } else {
-                $new_users[] = (int) $user_id_or_login;
+                $new_users[] = (int)$user_id_or_login;
             }
         }
 
@@ -770,10 +786,10 @@ class UserGroups extends Module
         if (!is_numeric($user_id_or_login)) {
             $user_id = get_user_by('login', $user_id_or_login)->ID;
         } else {
-            $user_id = (int) $user_id_or_login;
+            $user_id = (int)$user_id_or_login;
         }
 
-        foreach ((array) $ids as $usergroup_id) {
+        foreach ((array)$ids as $usergroup_id) {
             $usergroup = $this->get_usergroup_by('id', $usergroup_id);
             $usergroup->user_ids[] = $user_id;
             $retval = $this->update_usergroup($usergroup_id, null, $usergroup->user_ids);
@@ -790,10 +806,10 @@ class UserGroups extends Module
         if (!is_numeric($user_id_or_login)) {
             $user_id = get_user_by('login', $user_id_or_login)->ID;
         } else {
-            $user_id = (int) $user_id_or_login;
+            $user_id = (int)$user_id_or_login;
         }
 
-        foreach ((array) $ids as $usergroup_id) {
+        foreach ((array)$ids as $usergroup_id) {
             $usergroup = $this->get_usergroup_by('id', $usergroup_id);
             foreach ($usergroup->user_ids as $key => $usergroup_user_id) {
                 if ($usergroup_user_id == $user_id) {
@@ -814,7 +830,7 @@ class UserGroups extends Module
         if (!is_numeric($user_id_or_login)) {
             $user_id = get_user_by('login', $user_id_or_login)->ID;
         } else {
-            $user_id = (int) $user_id_or_login;
+            $user_id = (int)$user_id_or_login;
         }
 
         $all_usergroups = $this->get_usergroups();
@@ -826,7 +842,7 @@ class UserGroups extends Module
                 }
 
                 if ($ids_or_objects == 'ids') {
-                    $usergroup_objects_or_ids[] = (int) $usergroup->term_id;
+                    $usergroup_objects_or_ids[] = (int)$usergroup->term_id;
                 } elseif ($ids_or_objects == 'objects') {
                     $usergroup_objects_or_ids[] = $usergroup;
                 }
