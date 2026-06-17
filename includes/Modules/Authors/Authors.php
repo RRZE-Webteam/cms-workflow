@@ -14,6 +14,7 @@ class Authors extends Module
 {
     const taxonomy_key = 'workflow_author';
     const role = 'author';
+    const usergroups_author_meta_key = '_workflow_usergroups_author_ids';
 
     public $main;
     private $wp_post_caps = array();
@@ -252,8 +253,11 @@ class Authors extends Module
                 <h4><?php _e('Benutzer', 'cms-workflow'); ?></h4>
                 <?php
                 $authors = self::get_authors($post->ID, 'id');
+                if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) {
+                    $authors = array_diff($authors, $this->get_post_usergroup_author_ids($post->ID));
+                }
                 $authors[$post->post_author] = $post->post_author;
-                $authors = array_unique($authors);
+                $authors = array_unique(array_map('intval', $authors));
 
                 $args = array(
                     'list_class' => 'workflow-post-authors-list',
@@ -300,11 +304,12 @@ class Authors extends Module
 
         if (!wp_is_post_revision($post) && !wp_is_post_autosave($post) && isset($_POST['workflow_save_authors']) && !$version_post_replace_on_publish) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
-            $this->save_post_authors($post, $users);
 
             if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
-                $this->save_post_authors_usergroups($post, $usergroups);
+                $this->save_post_authors_with_usergroups($post, $users, $usergroups);
+            } else {
+                $this->save_post_authors($post, $users);
             }
         }
     }
@@ -323,11 +328,12 @@ class Authors extends Module
 
         if (isset($_POST['workflow_save_authors'])) {
             $users = isset($_POST['workflow_selected_authors']) ? $_POST['workflow_selected_authors'] : array();
-            $this->edit_attachment_authors($post, $users);
 
             if ($this->module_activated('user_groups') && $this->is_post_type_enabled($post->post_type, $this->main->user_groups->module)) {
                 $usergroups = isset($_POST['authors_usergroups']) ? $_POST['authors_usergroups'] : array();
-                $this->edit_attachment_authors_usergroups($post, $usergroups);
+                $this->edit_attachment_authors_with_usergroups($post, $users, $usergroups);
+            } else {
+                $this->edit_attachment_authors($post, $users);
             }
         }
     }
@@ -356,15 +362,29 @@ class Authors extends Module
         $this->add_post_users($post, $users, false);
     }
 
-    private function save_post_authors_usergroups($post, $usergroups = null)
+    private function save_post_authors_with_usergroups($post, $users = null, $usergroups = null)
     {
-        if (empty($usergroups)) {
-            $usergroups = array();
+        if (!is_array($users)) {
+            $users = array();
         }
 
-        $usergroups = array_unique(array_map('intval', $usergroups));
+        $post_id = $post->ID;
+        $current_user = wp_get_current_user();
+        $current_user_id = $current_user->ID;
+        $author_user_id = $post->post_author;
 
-        $this->add_post_usergroups($post, $usergroups, false);
+        $users[] = $current_user_id;
+
+        $users = array_unique(array_map('intval', $users));
+        $all_users = array_unique(array_merge($users, $this->get_usergroup_user_ids($usergroups)));
+
+        if (!in_array($author_user_id, $all_users)) {
+            remove_action('save_post', array($this, 'save_post'), 10, 2);
+            wp_update_post(array('ID' => $post_id, 'post_author' => $current_user_id));
+            add_action('save_post', array($this, 'save_post'), 10, 2);
+        }
+
+        $this->add_post_usergroups($post, $usergroups, false, $users);
     }
 
     private function edit_attachment_authors($post, $users = null)
@@ -391,9 +411,29 @@ class Authors extends Module
         $this->add_post_users($post, $users, false);
     }
 
-    private function edit_attachment_authors_usergroups($post, $usergroups = null)
+    private function edit_attachment_authors_with_usergroups($post, $users = null, $usergroups = null)
     {
-        $this->save_post_authors_usergroups($post, $usergroups);
+        if (!is_array($users)) {
+            $users = array();
+        }
+
+        $attachment_id = $post->ID;
+        $current_user = wp_get_current_user();
+        $current_user_id = $current_user->ID;
+        $author_user_id = $post->post_author;
+
+        $users[] = $current_user->ID;
+
+        $users = array_unique(array_map('intval', $users));
+        $all_users = array_unique(array_merge($users, $this->get_usergroup_user_ids($usergroups)));
+
+        if (!in_array($author_user_id, $all_users)) {
+            remove_action('edit_attachment', array($this, 'edit_attachment'));
+            wp_update_post(array('ID' => $attachment_id, 'post_author' => $current_user_id));
+            add_action('edit_attachment', array($this, 'edit_attachment'));
+        }
+
+        $this->add_post_usergroups($post, $usergroups, false, $users);
     }
 
     private function add_post_users($post, $users, $append = true)
@@ -430,38 +470,105 @@ class Authors extends Module
         return;
     }
 
-    public function add_post_usergroups($post, $usergroups, $append = true)
+    public function add_post_usergroups($post, $usergroups, $append = true, $post_users = null, $usergroup_user_ids = null)
     {
-
-
         if (!$this->module_activated('user_groups')) {
             return;
         }
 
         $post_id = is_int($post) ? $post : $post->ID;
+        $usergroups = $this->normalize_ids($usergroups);
+        $usergroup_user_ids = is_array($usergroup_user_ids) ? $this->normalize_ids($usergroup_user_ids) : $this->get_usergroup_user_ids($usergroups);
 
-        if (!empty($usergroups)) {
-            $authors = self::get_authors($post->ID, 'id');
-
-            $users = array();
-            foreach ($usergroups as $usergroup) {
-                $usergroup_data = $this->main->user_groups->get_usergroup_by('id', $usergroup);
-                if ($usergroup_data && !empty($usergroup_data->user_ids)) {
-                    foreach ($usergroup_data->user_ids as $key => $value) {
-                        $users[] = $value;
-                    }
-                }
+        if (is_array($post_users)) {
+            $direct_users = $this->normalize_ids($post_users);
+        } else {
+            $direct_users = self::get_authors($post_id, 'id');
+            if (!$append) {
+                $direct_users = array_diff($direct_users, $this->get_post_usergroup_author_ids($post_id));
             }
+            $direct_users = $this->normalize_ids($direct_users);
+        }
 
-            $users = array_merge($users, $authors);
-            $users = array_unique(array_map('intval', $users));
+        $users = array_unique(array_merge($direct_users, $usergroup_user_ids));
+        $usergroup_author_ids = array_diff($usergroup_user_ids, $direct_users);
 
+        if (!$append || !empty($usergroup_user_ids) || is_array($post_users)) {
             $this->add_post_users($post, $users, false);
         }
 
         $usergroups_taxonomy = UserGroups::taxonomy_key;
 
         wp_set_object_terms($post_id, $usergroups, $usergroups_taxonomy, $append);
+        if (!$append || !empty($usergroups)) {
+            $this->update_post_usergroup_author_ids($post_id, $usergroup_author_ids, $append, !empty($usergroups));
+        }
+    }
+
+    private function get_usergroup_user_ids($usergroups)
+    {
+        $usergroups = $this->normalize_ids($usergroups);
+        $users = array();
+
+        foreach ($usergroups as $usergroup) {
+            $usergroup_data = $this->main->user_groups->get_usergroup_by('id', $usergroup);
+            if ($usergroup_data && !is_wp_error($usergroup_data) && !empty($usergroup_data->user_ids)) {
+                $users = array_merge($users, $usergroup_data->user_ids);
+            }
+        }
+
+        return $this->normalize_ids($users);
+    }
+
+    private function get_post_usergroup_author_ids($post_id)
+    {
+        $user_ids = get_post_meta($post_id, self::usergroups_author_meta_key, true);
+        if (is_array($user_ids)) {
+            return $this->normalize_ids($user_ids);
+        }
+
+        $usergroups = $this->get_authors_usergroups($post_id, 'ids');
+        if (empty($usergroups) || is_wp_error($usergroups)) {
+            return array();
+        }
+
+        return $this->get_usergroup_user_ids($usergroups);
+    }
+
+    private function update_post_usergroup_author_ids($post_id, $user_ids, $append = false, $has_usergroups = false)
+    {
+        $user_ids = $this->normalize_ids($user_ids);
+        if ($append) {
+            $user_ids = array_unique(array_merge($this->get_post_usergroup_author_ids($post_id), $user_ids));
+        }
+
+        if (empty($user_ids)) {
+            if ($has_usergroups) {
+                update_post_meta($post_id, self::usergroups_author_meta_key, array());
+                return;
+            }
+
+            delete_post_meta($post_id, self::usergroups_author_meta_key);
+            return;
+        }
+
+        update_post_meta($post_id, self::usergroups_author_meta_key, $user_ids);
+    }
+
+    private function normalize_ids($ids)
+    {
+        if (empty($ids) || is_wp_error($ids)) {
+            return array();
+        }
+
+        if (!is_array($ids)) {
+            $ids = array($ids);
+        }
+
+        $ids = array_map('intval', $ids);
+        $ids = array_filter($ids);
+
+        return array_values(array_unique($ids));
     }
 
     public function delete_user_action($user_id)
