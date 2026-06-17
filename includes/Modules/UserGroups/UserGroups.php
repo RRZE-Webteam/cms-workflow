@@ -722,14 +722,19 @@ class UserGroups extends Module
     public function update_usergroup($id, $args = array(), $users = null)
     {
         $existing_usergroup = $this->get_usergroup_by('id', $id);
-        if (is_wp_error($existing_usergroup)) {
+        if (!$existing_usergroup || is_wp_error($existing_usergroup)) {
             return new WP_Error('invalid', __('Die Benutzergruppe existiert nicht.', 'cms-workflow'));
         }
 
+        if (!is_array($args)) {
+            $args = array();
+        }
+
+        $existing_user_ids = $this->normalize_user_ids($existing_usergroup->user_ids);
         $args_to_encode = array();
         $args_to_encode['description'] = (isset($args['description'])) ? $args['description'] : $existing_usergroup->description;
         $args_to_encode['user_ids'] = (is_array($users)) ? $users : $existing_usergroup->user_ids;
-        $args_to_encode['user_ids'] = array_unique($args_to_encode['user_ids']);
+        $args_to_encode['user_ids'] = $this->normalize_user_ids($args_to_encode['user_ids']);
         $encoded_description = $this->get_encoded_description($args_to_encode);
         $args['description'] = $encoded_description;
 
@@ -738,14 +743,139 @@ class UserGroups extends Module
             return $usergroup;
         }
 
+        clean_term_cache($id, self::taxonomy_key);
+
+        if ($this->user_ids_changed($existing_user_ids, $args_to_encode['user_ids'])) {
+            $this->resync_posts_for_usergroup($id, $args_to_encode['user_ids']);
+        }
+
         return $this->get_usergroup_by('id', $usergroup['term_id']);
     }
 
     public function delete_usergroup($id)
     {
+        $post_ids = $this->get_post_ids_for_usergroup($id);
 
         $retval = wp_delete_term($id, self::taxonomy_key);
+        if ($retval && !is_wp_error($retval)) {
+            $this->resync_posts_usergroups($post_ids);
+        }
+
         return $retval;
+    }
+
+    private function normalize_user_ids($user_ids)
+    {
+        if (empty($user_ids) || is_wp_error($user_ids)) {
+            return array();
+        }
+
+        if (!is_array($user_ids)) {
+            $user_ids = array($user_ids);
+        }
+
+        $user_ids = array_map('intval', $user_ids);
+        $user_ids = array_filter($user_ids);
+
+        return array_values(array_unique($user_ids));
+    }
+
+    private function user_ids_changed($old_user_ids, $new_user_ids)
+    {
+        $old_user_ids = $this->normalize_user_ids($old_user_ids);
+        $new_user_ids = $this->normalize_user_ids($new_user_ids);
+
+        sort($old_user_ids);
+        sort($new_user_ids);
+
+        return $old_user_ids !== $new_user_ids;
+    }
+
+    private function get_post_ids_for_usergroup($usergroup_id)
+    {
+        $post_ids = get_objects_in_term((int)$usergroup_id, self::taxonomy_key);
+        if (empty($post_ids) || is_wp_error($post_ids)) {
+            return array();
+        }
+
+        $post_ids = array_map('intval', $post_ids);
+        $post_ids = array_filter($post_ids);
+
+        return array_values(array_unique($post_ids));
+    }
+
+    private function resync_posts_for_usergroup($usergroup_id, $user_ids = null)
+    {
+        $updated_usergroups = is_array($user_ids) ? array((int)$usergroup_id => $this->normalize_user_ids($user_ids)) : array();
+
+        $this->resync_posts_usergroups($this->get_post_ids_for_usergroup($usergroup_id), $updated_usergroups);
+    }
+
+    private function resync_posts_usergroups($post_ids, $updated_usergroups = array())
+    {
+        if (!$this->module_activated('authors') || !isset($this->main->authors)) {
+            return;
+        }
+
+        $post_ids = array_map('intval', (array)$post_ids);
+        $post_ids = array_filter($post_ids);
+        $updated_usergroups = $this->normalize_usergroup_user_ids($updated_usergroups);
+
+        foreach (array_unique($post_ids) as $post_id) {
+            $post = get_post($post_id);
+            if (!$post) {
+                continue;
+            }
+
+            $usergroup_ids = wp_get_object_terms($post_id, self::taxonomy_key, array('fields' => 'ids'));
+            if (is_wp_error($usergroup_ids)) {
+                continue;
+            }
+
+            $usergroup_ids = array_map('intval', $usergroup_ids);
+            $usergroup_user_ids = $this->get_user_ids_for_usergroups($usergroup_ids, $updated_usergroups);
+
+            $this->main->authors->add_post_usergroups($post, $usergroup_ids, false, null, $usergroup_user_ids);
+        }
+    }
+
+    private function normalize_usergroup_user_ids($usergroup_user_ids)
+    {
+        $normalized = array();
+        foreach ((array)$usergroup_user_ids as $usergroup_id => $user_ids) {
+            $usergroup_id = (int)$usergroup_id;
+            if (!$usergroup_id) {
+                continue;
+            }
+
+            $normalized[$usergroup_id] = $this->normalize_user_ids($user_ids);
+        }
+
+        return $normalized;
+    }
+
+    private function get_user_ids_for_usergroups($usergroup_ids, $updated_usergroups = array())
+    {
+        $user_ids = array();
+
+        foreach ((array)$usergroup_ids as $usergroup_id) {
+            $usergroup_id = (int)$usergroup_id;
+            if (!$usergroup_id) {
+                continue;
+            }
+
+            if (isset($updated_usergroups[$usergroup_id])) {
+                $user_ids = array_merge($user_ids, $updated_usergroups[$usergroup_id]);
+                continue;
+            }
+
+            $usergroup = $this->get_usergroup_by('id', $usergroup_id);
+            if ($usergroup && !is_wp_error($usergroup) && !empty($usergroup->user_ids)) {
+                $user_ids = array_merge($user_ids, $usergroup->user_ids);
+            }
+        }
+
+        return $this->normalize_user_ids($user_ids);
     }
 
     public function add_users_to_usergroup($user_ids_or_logins, $id, $reset = true)

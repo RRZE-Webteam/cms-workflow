@@ -470,7 +470,7 @@ class Authors extends Module
         return;
     }
 
-    public function add_post_usergroups($post, $usergroups, $append = true, $post_users = null)
+    public function add_post_usergroups($post, $usergroups, $append = true, $post_users = null, $usergroup_user_ids = null)
     {
         if (!$this->module_activated('user_groups')) {
             return;
@@ -478,7 +478,7 @@ class Authors extends Module
 
         $post_id = is_int($post) ? $post : $post->ID;
         $usergroups = $this->normalize_ids($usergroups);
-        $usergroup_user_ids = $this->get_usergroup_user_ids($usergroups);
+        $usergroup_user_ids = is_array($usergroup_user_ids) ? $this->normalize_ids($usergroup_user_ids) : $this->get_usergroup_user_ids($usergroups);
 
         if (is_array($post_users)) {
             $direct_users = $this->normalize_ids($post_users);
