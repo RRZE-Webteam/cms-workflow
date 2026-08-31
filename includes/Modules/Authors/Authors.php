@@ -15,6 +15,7 @@ class Authors extends Module
     const taxonomy_key = 'workflow_author';
     const role = 'author';
     const usergroups_author_meta_key = '_workflow_usergroups_author_ids';
+    const excluded_post_types = array('rrze_synonym');
 
     public $main;
     private $wp_post_caps = array();
@@ -100,6 +101,17 @@ class Authors extends Module
 
         add_filter('workflow_post_versioning_filtered_taxonomies', array($this, 'filtered_taxonomies'));
         add_filter('workflow_post_versioning_filtered_network_taxonomies', array($this, 'filtered_taxonomies'));
+    }
+
+    public function get_custom_post_types()
+    {
+        $post_types = parent::get_custom_post_types();
+
+        foreach (self::excluded_post_types as $post_type) {
+            unset($post_types[$post_type]);
+        }
+
+        return $post_types;
     }
 
     public function deactivation($network_wide = false)
@@ -843,6 +855,10 @@ class Authors extends Module
             $authors = $this->get_post_authors($post_id);
 
             foreach ($authors as $author) {
+                if (!$author instanceof \WP_User) {
+                    continue;
+                }
+
                 $args = array();
 
                 if (!in_array($post->post_type, array('post', 'attachment'))) {
