@@ -1,0 +1,48 @@
+.cms-workflow-authors-description {
+    margin-top: 0;
+}
+
+.cms-workflow-authors-search {
+    margin-bottom: 8px;
+}
+
+.cms-workflow-authors-search .components-base-control__field {
+    margin-bottom: 0;
+}
+
+.cms-workflow-authors-filters {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.cms-workflow-authors-list {
+    max-height: 300px;
+    margin-bottom: 24px;
+    overflow-y: auto;
+    border-top: 1px solid #ddd;
+}
+
+.cms-workflow-authors-list .components-checkbox-control {
+    margin: 0;
+    padding: 10px 4px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cms-workflow-authors-list .components-checkbox-control:hover {
+    background: #f0f6fc;
+}
+
+.cms-workflow-authors-list .components-base-control__field {
+    margin-bottom: 0;
+}
+
+.cms-workflow-authors-list .components-base-control__help {
+    margin: 3px 0 0 32px;
+    overflow-wrap: anywhere;
+}
+
+.cms-workflow-authors-empty {
+    margin-bottom: 24px;
+    color: #757575;
+}

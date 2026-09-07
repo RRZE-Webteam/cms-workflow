@@ -72,6 +72,7 @@ class Authors extends Module
         add_action('admin_init', array($this, 'set_role_caps'));
 
         add_action('init', array($this, 'register_taxonomies'));
+        add_action('rest_api_init', array($this, 'register_rest_fields'));
 
         add_action('add_meta_boxes', array($this, 'add_post_meta_box'), 9);
 
@@ -88,6 +89,7 @@ class Authors extends Module
 
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('enqueue_block_editor_assets', array($this, 'enqueue_block_editor_assets'));
 
         add_filter('user_has_cap', array($this, 'filter_user_has_cap'), 10, 3);
 
@@ -211,6 +213,10 @@ class Authors extends Module
 
     public function enqueue_admin_scripts()
     {
+        if ($this->is_block_editor_screen()) {
+            return;
+        }
+
         wp_enqueue_script('jquery-listfilterizer');
         wp_enqueue_script(
             'workflow-authors',
@@ -232,6 +238,10 @@ class Authors extends Module
 
     public function enqueue_admin_styles()
     {
+        if ($this->is_block_editor_screen()) {
+            return;
+        }
+
         wp_enqueue_style('jquery-listfilterizer');
         wp_enqueue_style(
             'workflow-authors',
@@ -251,9 +261,278 @@ class Authors extends Module
             return;
         }
 
+        if ($this->is_block_editor_screen()) {
+            return;
+        }
+
         remove_meta_box('authordiv', get_post_type(), 'normal');
 
         add_meta_box('workflow-authors', __('Autoren', 'cms-workflow'), [$this, 'authors_meta_box'], $post_type);
+    }
+
+    /**
+     * Register the author settings exposed to the block editor.
+     */
+    public function register_rest_fields()
+    {
+        foreach ($this->get_available_post_types() as $post_type => $post_type_object) {
+            if (!$this->is_post_type_enabled($post_type) || !$post_type_object->show_in_rest) {
+                continue;
+            }
+
+            register_rest_field(
+                $post_type,
+                'workflow_author_settings',
+                array(
+                    'get_callback' => array($this, 'get_rest_author_settings'),
+                    'update_callback' => array($this, 'update_rest_author_settings'),
+                    'schema' => array(
+                        'description' => __('Die dem Dokument zugeordneten Autoren und Benutzergruppen.', 'cms-workflow'),
+                        'type' => 'object',
+                        'context' => array('edit'),
+                        'properties' => array(
+                            'users' => array(
+                                'type' => 'array',
+                                'items' => array('type' => 'integer'),
+                            ),
+                            'groups' => array(
+                                'type' => 'array',
+                                'items' => array('type' => 'integer'),
+                            ),
+                        ),
+                    ),
+                )
+            );
+        }
+    }
+
+    /**
+     * Return author settings for the block editor REST response.
+     *
+     * @param array $object REST post data.
+     * @return array
+     */
+    public function get_rest_author_settings($object)
+    {
+        $post = get_post((int) ($object['id'] ?? 0));
+
+        if (!$post || !$this->is_post_type_enabled($post->post_type)) {
+            return array('users' => array(), 'groups' => array());
+        }
+
+        return $this->get_editor_author_settings($post);
+    }
+
+    /**
+     * Save author settings submitted with a block editor REST request.
+     *
+     * @param mixed    $value Submitted field value.
+     * @param \WP_Post $post Updated post.
+     * @return bool|\WP_Error
+     */
+    public function update_rest_author_settings($value, $post)
+    {
+        if (!$post instanceof \WP_Post || !$this->is_post_type_enabled($post->post_type)) {
+            return new \WP_Error(
+                'workflow_invalid_post',
+                __('Das Dokument existiert nicht.', 'cms-workflow'),
+                array('status' => 400)
+            );
+        }
+
+        if (!current_user_can('edit_post', $post->ID)) {
+            return new \WP_Error(
+                'workflow_cannot_edit_post',
+                __('Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen.', 'cms-workflow'),
+                array('status' => 403)
+            );
+        }
+
+        if (!$this->module->options->author_can_assign_others && !current_user_can('manage_categories')) {
+            return new \WP_Error(
+                'workflow_cannot_assign_authors',
+                __('Sie haben nicht die erforderlichen Rechte, um diese Aktion durchzuführen.', 'cms-workflow'),
+                array('status' => 403)
+            );
+        }
+
+        if (!is_array($value)) {
+            return new \WP_Error(
+                'workflow_invalid_authors',
+                __('Die Autorenauswahl ist ungültig.', 'cms-workflow'),
+                array('status' => 400)
+            );
+        }
+
+        $users = $this->normalize_ids($value['users'] ?? array());
+        $has_usergroups = $this->has_editor_usergroups($post->post_type);
+
+        if ($has_usergroups) {
+            $usergroups = $this->normalize_ids($value['groups'] ?? array());
+            $this->save_post_authors_with_usergroups($post, $users, $usergroups);
+        } else {
+            $this->save_post_authors($post, $users);
+        }
+
+        return true;
+    }
+
+    /**
+     * Load the dedicated Authors sidebar in the block editor.
+     */
+    public function enqueue_block_editor_assets()
+    {
+        $screen = get_current_screen();
+        $post = get_post();
+
+        if (!$screen || !$post || !$this->is_block_editor_screen() || !$this->is_post_type_enabled($post->post_type)) {
+            return;
+        }
+
+        if (!$this->module->options->author_can_assign_others && !current_user_can('manage_categories')) {
+            return;
+        }
+
+        $script_path = __DIR__ . '/authors-editor.js';
+        $style_path = __DIR__ . '/authors-editor.css';
+
+        wp_enqueue_script(
+            'workflow-authors-editor',
+            $this->module_url . 'authors-editor.js',
+            array('wp-components', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-plugins'),
+            file_exists($script_path) ? (string) filemtime($script_path) : plugin()->getVersion(),
+            true
+        );
+
+        if (function_exists('wp_set_script_translations')) {
+            wp_set_script_translations('workflow-authors-editor', 'cms-workflow', plugin()->getPath('languages'));
+        }
+
+        if (file_exists($style_path)) {
+            wp_enqueue_style(
+                'workflow-authors-editor',
+                $this->module_url . 'authors-editor.css',
+                array('wp-components'),
+                (string) filemtime($style_path)
+            );
+        }
+
+        $config = array(
+            'settings' => $this->get_editor_author_settings($post),
+            'users' => $this->get_editor_users(),
+            'groups' => $this->get_editor_usergroups($post->post_type),
+            'hasUserGroups' => $this->has_editor_usergroups($post->post_type),
+            'i18n' => array(
+                'title' => __('Autoren', 'cms-workflow'),
+                'description' => __('Wählen Sie die Autoren zum Dokument', 'cms-workflow'),
+                'users' => __('Benutzer', 'cms-workflow'),
+                'groups' => __('Benutzergruppe', 'cms-workflow'),
+                'search' => __('Suchen...', 'cms-workflow'),
+                'all' => __('Alle', 'cms-workflow'),
+                'selected' => __('Ausgewählt', 'cms-workflow'),
+                'noUsers' => __('Kein Benutzer gefunden.', 'cms-workflow'),
+                'noGroups' => __('Keine Benutzergruppen gefunden.', 'cms-workflow'),
+            ),
+        );
+
+        wp_add_inline_script(
+            'workflow-authors-editor',
+            'window.CMSWorkflowAuthorsConfig = ' . wp_json_encode($config, JSON_UNESCAPED_SLASHES) . ';',
+            'before'
+        );
+    }
+
+    /**
+     * Whether the current admin screen uses the block editor.
+     */
+    private function is_block_editor_screen()
+    {
+        $screen = get_current_screen();
+
+        return $screen && method_exists($screen, 'is_block_editor') && $screen->is_block_editor();
+    }
+
+    /**
+     * Whether user groups are available for Authors on a post type.
+     */
+    private function has_editor_usergroups($post_type)
+    {
+        return $this->module_activated('user_groups')
+            && isset($this->main->user_groups)
+            && $this->is_post_type_enabled($post_type, $this->main->user_groups->module);
+    }
+
+    /**
+     * Build the current selection shared by REST and the editor bootstrap data.
+     */
+    private function get_editor_author_settings($post)
+    {
+        $authors = self::get_authors($post->ID, 'id');
+        $groups = array();
+
+        if ($this->has_editor_usergroups($post->post_type)) {
+            $authors = array_diff($authors, $this->get_post_usergroup_author_ids($post->ID));
+            $groups = $this->get_authors_usergroups($post->ID, 'ids');
+        }
+
+        $authors[$post->post_author] = $post->post_author;
+
+        return array(
+            'users' => array_values($this->normalize_ids($authors)),
+            'groups' => array_values($this->normalize_ids(is_wp_error($groups) ? array() : $groups)),
+        );
+    }
+
+    /**
+     * Return selectable users for the editor sidebar.
+     */
+    private function get_editor_users()
+    {
+        $users = get_users(
+            array(
+                'who' => 'contributors',
+                'fields' => array('ID', 'display_name', 'user_email'),
+                'orderby' => 'display_name',
+            )
+        );
+
+        return array_map(
+            static function ($user) {
+                return array(
+                    'id' => (int) $user->ID,
+                    'name' => $user->display_name,
+                    'description' => $user->user_email,
+                );
+            },
+            $users
+        );
+    }
+
+    /**
+     * Return selectable user groups for the editor sidebar.
+     */
+    private function get_editor_usergroups($post_type)
+    {
+        if (!$this->has_editor_usergroups($post_type)) {
+            return array();
+        }
+
+        $groups = $this->main->user_groups->get_usergroups();
+
+        if (empty($groups) || is_wp_error($groups)) {
+            return array();
+        }
+
+        return array_map(
+            static function ($group) {
+                return array(
+                    'id' => (int) $group->term_id,
+                    'name' => $group->name,
+                    'description' => (string) ($group->description ?? ''),
+                );
+            },
+            $groups
+        );
     }
 
     public function authors_meta_box($post)
