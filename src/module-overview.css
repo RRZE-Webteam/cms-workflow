@@ -1,0 +1,97 @@
+.workflow-overview {
+    max-width: 1120px;
+    margin-top: 8px;
+}
+
+.workflow-overview__intro {
+    margin-bottom: 24px;
+}
+
+.workflow-overview__intro h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.workflow-overview__intro p {
+    max-width: 720px;
+    margin: 0;
+    color: #50575e;
+    font-size: 14px;
+}
+
+.workflow-overview__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.workflow-overview .workflow-overview__card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.workflow-overview .workflow-overview__body {
+    flex: 1;
+    padding: 24px;
+}
+
+.workflow-overview__body h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.workflow-overview__body p {
+    margin: 0;
+    color: #50575e;
+    line-height: 1.6;
+}
+
+.workflow-overview .workflow-overview__footer {
+    flex-wrap: wrap;
+    gap: 16px;
+    min-height: 64px;
+    padding: 16px 24px;
+}
+
+.workflow-overview__footer .components-toggle-control {
+    margin: 0;
+}
+
+.workflow-overview__footer .components-button.is-link {
+    flex-shrink: 0;
+}
+
+.workflow-overview__footer .workflow-overview__pending {
+    flex-basis: 100%;
+    margin: 0;
+    color: #50575e;
+    font-size: 12px;
+}
+
+.workflow-overview__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+    padding-bottom: 24px;
+}
+
+.workflow-overview__actions [role="status"] {
+    color: #50575e;
+}
+
+@media (max-width: 782px) {
+    .workflow-overview__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .workflow-overview .workflow-overview__body,
+    .workflow-overview .workflow-overview__footer {
+        padding: 20px;
+    }
+}

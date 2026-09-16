@@ -18,6 +18,34 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SearchPath-0: ..\n"
 
+#: ../includes/Modules/Settings/Settings.php
+msgid "Workflow-Module"
+msgstr "Workflow modules"
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Wählen Sie die Funktionen für Ihren redaktionellen Workflow. Änderungen werden erst beim Speichern übernommen."
+msgstr "Choose the features for your editorial workflow. Changes only take effect when you save."
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Änderungen speichern"
+msgstr "Save changes"
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Sie haben ungespeicherte Änderungen."
+msgstr "You have unsaved changes."
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Keine ungespeicherten Änderungen."
+msgstr "No unsaved changes."
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Nach dem Speichern können Sie dieses Modul konfigurieren."
+msgstr "You can configure this module after saving."
+
+#: ../includes/Modules/Settings/Settings.php
+msgid "Es sind keine wählbaren Module verfügbar."
+msgstr "There are no selectable modules available."
+
 #: ../_tmp/old/modules/dashboard/dashboard.php:14
 #: ../modules/dashboard/dashboard.php:17
 msgid "Dashboard"

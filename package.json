@@ -1,0 +1,14 @@
+{
+  "name": "cms-workflow",
+  "version": "2.1.1",
+  "private": true,
+  "description": "Editorial workflow tools for WordPress.",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "build": "wp-scripts build src/module-overview.jsx",
+    "start": "wp-scripts start src/module-overview.jsx"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^35.0.0"
+  }
+}

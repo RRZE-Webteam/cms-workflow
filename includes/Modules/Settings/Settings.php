@@ -14,6 +14,8 @@ class Settings extends Module
     public $module;
     public $module_url;
 
+    private $overview_modules = [];
+
     public function __construct(Main $main)
     {
         parent::__construct($main);
@@ -39,6 +41,7 @@ class Settings extends Module
 
         add_action('admin_print_styles', array($this, 'action_admin_print_styles'));
         add_action('admin_print_scripts', array($this, 'action_admin_print_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_overview_assets'));
 
         add_action('admin_menu', array($this, 'action_admin_menu'));
 
@@ -77,6 +80,52 @@ class Settings extends Module
             var workflow_admin_url = '<?php echo get_admin_url(); ?>';
         </script>
     <?php
+    }
+
+    public function enqueue_overview_assets($hook_suffix)
+    {
+        if ($hook_suffix !== 'toplevel_page_' . $this->module->settings_slug || !current_user_can('manage_options')) {
+            return;
+        }
+
+        $build_path = plugin()->getPath('build');
+        $build_url = plugin()->getUrl('build');
+        if (!is_readable($build_path . 'module-overview.asset.php')) {
+            return;
+        }
+        $asset = require $build_path . 'module-overview.asset.php';
+
+        wp_enqueue_style(
+            'workflow-module-overview',
+            $build_url . 'module-overview.css',
+            ['wp-components'],
+            $asset['version']
+        );
+        wp_enqueue_script(
+            'workflow-module-overview',
+            $build_url . 'module-overview.js',
+            $asset['dependencies'],
+            $asset['version'],
+            true
+        );
+        wp_add_inline_script(
+            'workflow-module-overview',
+            'window.CMSWorkflowOverview = ' . wp_json_encode([
+                'modules' => $this->overview_modules,
+                'i18n' => [
+                    'title' => __('Workflow-Module', 'cms-workflow'),
+                    'description' => __('Wählen Sie die Funktionen für Ihren redaktionellen Workflow. Änderungen werden erst beim Speichern übernommen.', 'cms-workflow'),
+                    'enabled' => __('Aktiviert', 'cms-workflow'),
+                    'disabled' => __('Deaktiviert', 'cms-workflow'),
+                    'save' => __('Änderungen speichern', 'cms-workflow'),
+                    'unsaved' => __('Sie haben ungespeicherte Änderungen.', 'cms-workflow'),
+                    'unchanged' => __('Keine ungespeicherten Änderungen.', 'cms-workflow'),
+                    'activationPending' => __('Nach dem Speichern können Sie dieses Modul konfigurieren.', 'cms-workflow'),
+                    'empty' => __('Es sind keine wählbaren Module verfügbar.', 'cms-workflow'),
+                ],
+            ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';',
+            'before'
+        );
     }
 
     public function settings_page_controller()
@@ -158,6 +207,7 @@ class Settings extends Module
 
     public function register_settings()
     {
+        $this->overview_modules = [];
         add_settings_section($this->module->workflow_options_name . '_general', false, '__return_false', $this->module->workflow_options_name);
 
         if (!$this->countValid($this->main->modules)) {
@@ -186,6 +236,20 @@ class Settings extends Module
                     'description' => $mod_data->description
                 );
 
+                // Use the same filtered module list for the React view and the PHP fallback.
+                $this->overview_modules[] = [
+                    'slug' => $mod_data->slug,
+                    'title' => wp_strip_all_tags($mod_data->title),
+                    'description' => wp_strip_all_tags($mod_data->description),
+                    'name' => $args['name'],
+                    'activated' => (bool) $mod_data->options->activated,
+                    'configurable' => (bool) $mod_data->configure_callback,
+                    'configureLabel' => wp_strip_all_tags($mod_data->configure_link_text),
+                    'configureUrl' => $mod_data->options->activated && $mod_data->configure_callback
+                        ? add_query_arg('page', $mod_data->settings_slug, admin_url('admin.php'))
+                        : '',
+                ];
+
                 add_settings_field($mod_data->slug, esc_html($mod_data->title), array($this, 'settings_fields'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general', $args);
             }
         }
@@ -204,7 +268,7 @@ class Settings extends Module
             echo '>' . esc_html($label) . '</option>';
         }
         echo '</select>';
-        echo '<p class="description">' . $args['description'];
+        echo '<p class="description">' . $args['description'] . '</p>';
     }
 
     public function settings_validate($new_options)
@@ -243,8 +307,10 @@ class Settings extends Module
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
             <?php echo '<input id="cms_workflow_module_name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
             <?php settings_fields($this->module->workflow_options_name); ?>
-            <?php do_settings_sections($this->module->workflow_options_name); ?>
-            <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
+            <div id="cms-workflow-module-overview">
+                <?php do_settings_sections($this->module->workflow_options_name); ?>
+                <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
+            </div>
         </form>
         <?php
     }
