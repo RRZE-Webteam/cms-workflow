@@ -89,6 +89,7 @@ class Authors extends Module
 
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueue_settings_assets'));
         add_action('enqueue_block_editor_assets', array($this, 'enqueue_block_editor_assets'));
 
         add_filter('user_has_cap', array($this, 'filter_user_has_cap'), 10, 3);
@@ -1482,6 +1483,121 @@ class Authors extends Module
         add_settings_field('author_can_assign_others', __('Mitautoren', 'cms-workflow'), array($this, 'settings_author_can_assign_others_option'), $this->module->workflow_options_name, $this->module->workflow_options_name . '_general');
     }
 
+    public function enqueue_settings_assets($hook_suffix)
+    {
+        if ($hook_suffix !== get_plugin_page_hookname($this->module->settings_slug, 'workflow-settings') || !current_user_can('manage_options')) {
+            return;
+        }
+
+        $build_path = plugin()->getPath('build');
+        $build_url = plugin()->getUrl('build');
+        if (!is_readable($build_path . 'authors-settings.asset.php')) {
+            return;
+        }
+        $asset = require $build_path . 'authors-settings.asset.php';
+
+        wp_enqueue_style('workflow-authors-settings', $build_url . 'authors-settings.css', ['wp-components'], $asset['version']);
+        wp_style_add_data('workflow-authors-settings', 'rtl', 'replace');
+        wp_enqueue_script('workflow-authors-settings', $build_url . 'authors-settings.js', $asset['dependencies'], $asset['version'], true);
+        wp_add_inline_script(
+            'workflow-authors-settings',
+            'window.CMSWorkflowAuthorsSettings = ' . wp_json_encode($this->get_settings_config(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';',
+            'before'
+        );
+    }
+
+    public function get_settings_config()
+    {
+        $grouped_types = [];
+        foreach ($this->get_available_post_types() as $post_type => $args) {
+            if ($post_type !== 'attachment') {
+                $grouped_types[$args->capability_type][$post_type] = $args;
+            }
+        }
+
+        $cap_labels = [
+            'edit_posts' => __('%s bearbeiten', 'cms-workflow'),
+            'delete_posts' => __('%s löschen', 'cms-workflow'),
+            'publish_posts' => __('%s veröffentlichen', 'cms-workflow'),
+            'edit_published_posts' => __('Veröffentlichte %s bearbeiten', 'cms-workflow'),
+            'delete_published_posts' => __('Veröffentlichte %s löschen', 'cms-workflow'),
+        ];
+        $post_types = [];
+        foreach ($grouped_types as $capability_type => $types) {
+            // Match the existing form's grouping of types that share capabilities.
+            if (!isset($types[$capability_type])) {
+                continue;
+            }
+            $args = $types[$capability_type];
+            $related = [];
+            foreach ($types as $post_type => $type) {
+                if ($post_type !== $capability_type) {
+                    $related[] = wp_strip_all_tags($type->label);
+                }
+            }
+            sort($related);
+            $capabilities = [];
+            foreach ($cap_labels as $property => $label) {
+                if (isset($args->cap->$property)) {
+                    $cap = $args->cap->$property;
+                    $capabilities[] = [
+                        'id' => $cap,
+                        'label' => sprintf($label, wp_strip_all_tags($args->label)),
+                        'checked' => isset($this->module->options->role_caps[$cap]),
+                    ];
+                }
+            }
+            $locked = post_type_supports($capability_type, $this->module->post_type_support);
+            $post_types[] = [
+                'id' => $capability_type,
+                'label' => wp_strip_all_tags($args->label),
+                'related' => $related ? sprintf(__('Gilt auch für: %s', 'cms-workflow'), implode(', ', $related)) : '',
+                'checked' => $locked || !empty($this->module->options->post_types[$capability_type]),
+                'locked' => $locked,
+                'capabilities' => $capabilities,
+            ];
+        }
+
+        $additional_groups = [];
+        if (WSFormHelper::is_ws_form_pro_active()) {
+            foreach (WSFormHelper::get_ws_form_capability_groups() as $index => $group) {
+                $capabilities = [];
+                foreach ($group['caps'] as $cap => $args) {
+                    $capabilities[] = [
+                        'id' => $cap,
+                        'label' => wp_strip_all_tags($args['label']),
+                        'description' => wp_strip_all_tags($args['description'] ?? ''),
+                        'checked' => isset($this->module->options->role_caps[$cap]),
+                    ];
+                }
+                $additional_groups[] = ['id' => 'ws-form-' . $index, 'label' => $group['label'], 'capabilities' => $capabilities];
+            }
+        }
+
+        return [
+            'optionName' => $this->module->workflow_options_name,
+            'postTypes' => $post_types,
+            'additionalGroups' => $additional_groups,
+            'assignOthers' => (bool) $this->module->options->author_can_assign_others,
+            'i18n' => [
+                'title' => __('Autoren-Einstellungen', 'cms-workflow'),
+                'description' => __('Legen Sie fest, wo Autoren zusammenarbeiten und welche Aktionen sie ausführen dürfen. Änderungen werden erst beim Speichern übernommen.', 'cms-workflow'),
+                'postTypes' => __('Inhaltstypen', 'cms-workflow'),
+                'postTypesHelp' => __('Wählen Sie die Inhaltstypen für die Autorenverwaltung. Inhaltstypen mit gemeinsamen Rechten werden zusammengefasst.', 'cms-workflow'),
+                'locked' => __('Durch die Website-Konfiguration vorgegeben.', 'cms-workflow'),
+                'permissions' => __('Autorenrechte', 'cms-workflow'),
+                'permissionsHelp' => __('Legen Sie die erlaubten Aktionen für die ausgewählten Inhaltstypen fest.', 'cms-workflow'),
+                'noPermissions' => __('Wählen Sie einen Inhaltstyp aus, um dessen Autorenrechte festzulegen.', 'cms-workflow'),
+                'additionalPermissions' => __('WS Form-Berechtigungen', 'cms-workflow'),
+                'coauthors' => __('Mitautoren', 'cms-workflow'),
+                'assignOthers' => __('Mitautoren können dem Dokument weitere Autoren zuordnen.', 'cms-workflow'),
+                'save' => __('Änderungen speichern', 'cms-workflow'),
+                'unsaved' => __('Sie haben ungespeicherte Änderungen.', 'cms-workflow'),
+                'unchanged' => __('Keine ungespeicherten Änderungen.', 'cms-workflow'),
+            ],
+        ];
+    }
+
     public function settings_post_types_option()
     {
         $all_post_types = $this->get_available_post_types();
@@ -1697,10 +1813,12 @@ class Authors extends Module
     ?>
         <form class="basic-settings" action="<?php echo esc_url(menu_page_url($this->module->settings_slug, false)); ?>" method="post">
             <?php settings_fields($this->module->workflow_options_name); ?>
-            <?php do_settings_sections($this->module->workflow_options_name); ?>
             <?php
             echo '<input id="cms-workflow-module-name" name="cms_workflow_module_name" type="hidden" value="' . esc_attr($this->module->name) . '" />'; ?>
-            <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
+            <div id="cms-workflow-authors-settings">
+                <?php do_settings_sections($this->module->workflow_options_name); ?>
+                <p class="submit"><?php submit_button(null, 'primary', 'submit', false); ?></p>
+            </div>
         </form>
 <?php
     }

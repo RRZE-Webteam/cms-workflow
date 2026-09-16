@@ -1,0 +1,89 @@
+.workflow-authors-settings {
+    max-width: 1120px;
+    margin-top: 8px;
+}
+
+.workflow-authors-settings__intro {
+    margin-bottom: 24px;
+}
+
+.workflow-authors-settings__intro h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.workflow-authors-settings__intro p {
+    max-width: 760px;
+    margin: 0;
+    color: #50575e;
+    font-size: 14px;
+}
+
+.workflow-authors-settings .workflow-authors-settings__card {
+    margin-bottom: 20px;
+}
+
+.workflow-authors-settings__card > .components-card__body {
+    padding: 24px;
+}
+
+.workflow-authors-settings__card h3 {
+    margin: 0 0 20px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.workflow-authors-settings__card .workflow-authors-settings__description {
+    margin: -10px 0 24px;
+    color: #50575e;
+}
+
+.workflow-authors-settings__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 32px;
+}
+
+.workflow-authors-settings fieldset {
+    min-width: 0;
+    margin: 0;
+}
+
+.workflow-authors-settings legend {
+    margin-bottom: 16px;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.workflow-authors-settings__controls {
+    display: grid;
+    gap: 16px;
+}
+
+.workflow-authors-settings .components-base-control__help {
+    color: #50575e;
+}
+
+.workflow-authors-settings__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 4px 0 24px;
+}
+
+.workflow-authors-settings__actions [role="status"] {
+    color: #50575e;
+}
+
+@media (max-width: 782px) {
+    .workflow-authors-settings__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .workflow-authors-settings__card > .components-card__body {
+        padding: 20px;
+    }
+}

@@ -22,9 +22,10 @@ und -Beiträgen. Sie können damit das vorhandene Rollensystem von WordPress erw
 oder einschränken und automatische Benachrichtigungen bei Seitenänderungen versenden. 
 Auch die Verknüpfung mehrsprachiger Webauftritte ist mithilfe des Workflow-Plug-ins möglich.
 
-## Entwicklung der Modulübersicht
+## Entwicklung der Einstellungsseiten
 
-Die React-Oberfläche wird in `src/module-overview.jsx` gepflegt. `@wordpress/scripts`
+Die Modulübersicht wird in `src/module-overview.jsx`, die Autoren-Einstellungen
+in `src/authors-settings.jsx` gepflegt. `@wordpress/scripts`
 übersetzt JSX und erstellt JavaScript, CSS und die PHP-Datei mit den Abhängigkeiten
 unter `build/`. React und die WordPress-Komponenten werden von WordPress geladen.
 

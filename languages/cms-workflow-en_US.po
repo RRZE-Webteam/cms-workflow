@@ -22,6 +22,42 @@ msgstr ""
 msgid "Workflow-Module"
 msgstr "Workflow modules"
 
+#: ../includes/Modules/Authors/Authors.php
+msgid "Autoren-Einstellungen"
+msgstr "Authors settings"
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Legen Sie fest, wo Autoren zusammenarbeiten und welche Aktionen sie ausführen dürfen. Änderungen werden erst beim Speichern übernommen."
+msgstr "Choose where authors collaborate and which actions they may perform. Changes only take effect when you save."
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Inhaltstypen"
+msgstr "Content types"
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Wählen Sie die Inhaltstypen für die Autorenverwaltung. Inhaltstypen mit gemeinsamen Rechten werden zusammengefasst."
+msgstr "Choose the content types for author management. Content types that share permissions are grouped together."
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Gilt auch für: %s"
+msgstr "Also applies to: %s"
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Durch die Website-Konfiguration vorgegeben."
+msgstr "Required by the site configuration."
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Legen Sie die erlaubten Aktionen für die ausgewählten Inhaltstypen fest."
+msgstr "Set the allowed actions for the selected content types."
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "Wählen Sie einen Inhaltstyp aus, um dessen Autorenrechte festzulegen."
+msgstr "Select a content type to configure its author permissions."
+
+#: ../includes/Modules/Authors/Authors.php
+msgid "WS Form-Berechtigungen"
+msgstr "WS Form permissions"
+
 #: ../includes/Modules/Settings/Settings.php
 msgid "Wählen Sie die Funktionen für Ihren redaktionellen Workflow. Änderungen werden erst beim Speichern übernommen."
 msgstr "Choose the features for your editorial workflow. Changes only take effect when you save."

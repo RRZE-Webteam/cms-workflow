@@ -5,8 +5,8 @@
   "description": "Editorial workflow tools for WordPress.",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "wp-scripts build src/module-overview.jsx",
-    "start": "wp-scripts start src/module-overview.jsx"
+    "build": "wp-scripts build src/module-overview.jsx src/authors-settings.jsx",
+    "start": "wp-scripts start src/module-overview.jsx src/authors-settings.jsx"
   },
   "devDependencies": {
     "@wordpress/scripts": "^35.0.0"
